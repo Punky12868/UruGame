@@ -19,7 +19,8 @@ public class LookAtObject : MonoBehaviour
     private void Update()
     {
         // scenario and player only
-        Vector3 pos = (player.position - scenario.position).normalized;
+        Vector3 pos = (player.position + scenario.position) / 2;
+        pos.y = transform.position.y;
 
         if (transform.position != pos)
         {
