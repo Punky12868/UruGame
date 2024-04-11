@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using Rewired;
 
-public class InputDirection : MonoBehaviour
+public class InputController : MonoBehaviour
 {
     // PlaceHolder for InputDirection
 
-    public static InputDirection instance;
+    public static InputController instance;
     private Player player;
 
     [Tooltip("Is used to determine the threshold for the direction when the player is moving upwards or downwards, " +
         "so the returning string is more accurate about the direction the player is moving")]
     [SerializeField] float directionThreshold = 0.2f;
+    string lastSavedDirection;
+    Vector2 lastDirection;
 
     private void Awake()
     {
@@ -26,7 +28,26 @@ public class InputDirection : MonoBehaviour
 
     public Vector2 GetDirection()
     {
-        return new Vector2(player.GetAxisRaw("Horizontal"), player.GetAxisRaw("Vertical"));
+        Vector2 direction = new Vector2(player.GetAxisRaw("Horizontal"), player.GetAxisRaw("Vertical"));
+
+        if(direction.sqrMagnitude > directionThreshold)
+        {
+            if (direction != Vector2.zero)
+            {
+                lastDirection = direction;
+            }
+
+            return direction;
+        }
+        else
+        {
+            return Vector2.zero;
+        }
+    }
+
+    public Vector2 GetLastDirection()
+    {
+        return lastDirection;
     }
 
     public string GetDirectionString()
