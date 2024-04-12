@@ -231,7 +231,7 @@ MonoBehaviour:
   canBeParried: 1
   canBeParryStunned: 0
   lightParryStunWindowTime: {x: 0.5, y: 1.5}
-  canParryChargeAttack: 0
+  canParryChargeAttack: 1
   chargedParryStunWindowTime: {x: 0.5, y: 1.5}
   speed: 1
   stunTime: 2
@@ -266,7 +266,7 @@ MonoBehaviour:
   - EnemyDeath
   debugTools: 1
   drawHitboxes: 1
-  drawHitboxesOnGameplay: 1
+  drawHitboxesOnGameplay: 0
   debugDrawCenter: {fileID: 249308210}
   runRageColor: {r: 1, g: 0, b: 1, a: 1}
   tooCloseColor: {r: 0, g: 1, b: 0, a: 1}
@@ -288,7 +288,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 1
-  m_Constraints: 112
+  m_Constraints: 116
   m_CollisionDetection: 1
 --- !u!136 &249308208
 CapsuleCollider:
@@ -1030,9 +1030,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3.5
-  CooldownTime: 0.5
+  resetAttackTime: 0.5
+  resetAttackTimeAfterCombo: 0.5
+  parryTimeWindow: {x: 0, y: 0}
   attackForce: 7.5
   rollForce: 2
+  hitboxCenter: {fileID: 934431436}
+  attackHitboxAppearTime: {x: 0.2, y: 0.5}
+  attackHitboxPos: {x: -0.25, y: 0.283, z: 0}
+  attackHitboxSize: {x: 0.5, y: 0.56, z: 0.5}
+  parryHitboxAppearTime: {x: 0.2, y: 0.5}
+  parryHitboxPos: {x: -0.25, y: 0.283, z: 0}
+  parryHitboxSize: {x: 0.5, y: 0.56, z: 0.5}
   animationIDs:
   - Player_RunUp
   - Player_RunUpRight
@@ -1061,7 +1070,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 1
-  m_Constraints: 112
+  m_Constraints: 116
   m_CollisionDetection: 1
 --- !u!136 &934431439
 CapsuleCollider:
@@ -1168,7 +1177,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.212558, y: -0.000000008406593, z: 0.0000000018286765, w: 0.9771485}
+  m_LocalRotation: {x: 0.212558, y: 0.000000008406596, z: -0.0000000018286773, w: 0.9771485}
   m_LocalPosition: {x: 0, y: 4.11, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1803,7 +1812,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1332516484}
-  m_LocalRotation: {x: 0.212558, y: -0.000000008406593, z: 0.0000000018286765, w: 0.9771485}
+  m_LocalRotation: {x: 0.212558, y: 0.000000008406596, z: -0.0000000018286773, w: 0.9771485}
   m_LocalPosition: {x: 0, y: 4.11, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

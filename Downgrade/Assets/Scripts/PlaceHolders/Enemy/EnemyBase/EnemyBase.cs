@@ -32,7 +32,7 @@ public class EnemyBase : MonoBehaviour
     [HideInInspector] public bool isInvokedNormalOverlapAttack;
     [HideInInspector] public bool isInvokedChargedOverlapAttack;
     [HideInInspector] public bool isStunned; // TO DO
-    [HideInInspector] public bool isParried; // TO DO  DOING...
+    [HideInInspector] public bool isParried; // TO DO / DOING...
     [HideInInspector] public bool isSpriteFlipped;
     [HideInInspector] public bool isOnCooldown;
     [HideInInspector] public bool decidedChargeAttack;
@@ -121,6 +121,10 @@ public class EnemyBase : MonoBehaviour
         clips = anim.runtimeAnimatorController.animationClips;
 
         target = GameObject.FindGameObjectWithTag("Player").transform;
+
+        if (debugDrawCenter == null)
+            debugDrawCenter = this.transform;
+
         isAnimationDone = true;
         CheckStatus();
 
