@@ -167,6 +167,103 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0371505b081c0f64a96e8d9a59140c57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &91605933
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 91605937}
+  - component: {fileID: 91605936}
+  - component: {fileID: 91605935}
+  - component: {fileID: 91605934}
+  m_Layer: 6
+  m_Name: Cube
+  m_TagString: Enemy
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!65 &91605934
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 91605933}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &91605935
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 91605933}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &91605936
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 91605933}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &91605937
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 91605933}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.863967, y: 0.0002875328, z: 0.05599284}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 16
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &249308205
 GameObject:
   m_ObjectHideFlags: 0
@@ -185,7 +282,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &249308206
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -204,7 +301,6 @@ MonoBehaviour:
   target: {fileID: 0}
   lastTargetDir: {x: 0, y: 0, z: 0}
   animClipLength: 0
-  animTimer: 0
   isAnimationDone: 0
   isSpawning: 0
   isMoving: 0
@@ -381,6 +477,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   directionThreshold: 0.1
+  lastSavedDirection: 
+  lastDirection: {x: 0, y: 0}
 --- !u!4 &318363184
 Transform:
   m_ObjectHideFlags: 0
@@ -1030,32 +1128,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3.5
-  resetAttackTime: 0.5
-  resetAttackTimeAfterCombo: 0.5
-  parryTimeWindow: {x: 0, y: 0}
-  attackForce: 7.5
-  rollForce: 2
-  hitboxCenter: {fileID: 934431436}
-  attackHitboxAppearTime: {x: 0.2, y: 0.5}
-  attackHitboxPos: {x: -0.25, y: 0.283, z: 0}
-  attackHitboxSize: {x: 0.5, y: 0.56, z: 0.5}
-  parryHitboxAppearTime: {x: 0.2, y: 0.5}
-  parryHitboxPos: {x: -0.25, y: 0.283, z: 0}
-  parryHitboxSize: {x: 0.5, y: 0.56, z: 0.5}
+  attackDamage: 5
+  directionThreshold: 0.1
+  comboWindowTime: 0.55
+  parryWindowTime: {x: 0.35, y: 0.3}
+  hitboxPos: {x: -0.067, y: 0.216, z: 0}
+  hitboxSize: {x: 0.5, y: 0.5, z: 0.5}
   animationIDs:
-  - Player_RunUp
+  - Player_RelaxDown
   - Player_RunUpRight
   - Player_RunUpLeft
-  - Player_RunDown
+  - Player_RunUp
   - Player_RunDownRight
   - Player_RunDownLeft
-  - Player_RelaxUpRight
-  - Player_RelaxUpLeft
-  - Player_RelaxUp
-  - Player_RelaxDown
-  - Player_RelaxDownRight
-  - Player_RelaxDownLeft
+  - Player_RunDown
   - Player_Attack
+  - Player_Attack
+  - 
+  - 
+  debugTools: 1
+  drawHitbox: 1
+  drawHitboxOnGameplay: 1
+  attackHitboxTime: 0.25
+  attackHitboxColor: {r: 1, g: 0, b: 0, a: 1}
+  parryHitboxColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!54 &934431438
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1065,7 +1161,7 @@ Rigidbody:
   m_GameObject: {fileID: 934431433}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 10
+  m_Drag: 20
   m_AngularDrag: 0.05
   m_UseGravity: 0
   m_IsKinematic: 0
@@ -1177,7 +1273,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.212558, y: 0.000000008406596, z: -0.0000000018286773, w: 0.9771485}
+  m_LocalRotation: {x: 0.212558, y: -0.000000008406593, z: 0.0000000018286765, w: 0.9771485}
   m_LocalPosition: {x: 0, y: 4.11, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1713,6 +1809,39 @@ MonoBehaviour:
         _modifierKey1: 0
         _modifierKey2: 0
         _modifierKey3: 0
+      - _actionCategoryId: 0
+        _actionId: 2
+        _elementType: 1
+        _elementIdentifierId: -1
+        _axisRange: 0
+        _invert: 0
+        _axisContribution: 0
+        _keyboardKeyCode: 106
+        _modifierKey1: 0
+        _modifierKey2: 0
+        _modifierKey3: 0
+      - _actionCategoryId: 0
+        _actionId: 4
+        _elementType: 1
+        _elementIdentifierId: -1
+        _axisRange: 0
+        _invert: 0
+        _axisContribution: 0
+        _keyboardKeyCode: 107
+        _modifierKey1: 0
+        _modifierKey2: 0
+        _modifierKey3: 0
+      - _actionCategoryId: 0
+        _actionId: 3
+        _elementType: 1
+        _elementIdentifierId: -1
+        _axisRange: 0
+        _invert: 0
+        _axisContribution: 0
+        _keyboardKeyCode: 108
+        _modifierKey1: 0
+        _modifierKey2: 0
+        _modifierKey3: 0
     mouseMaps: []
     customControllerMaps: []
     customControllers: []
@@ -1812,7 +1941,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1332516484}
-  m_LocalRotation: {x: 0.212558, y: 0.000000008406596, z: -0.0000000018286773, w: 0.9771485}
+  m_LocalRotation: {x: 0.212558, y: -0.000000008406593, z: 0.0000000018286765, w: 0.9771485}
   m_LocalPosition: {x: 0, y: 4.11, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2010,7 +2139,6 @@ MonoBehaviour:
   target: {fileID: 0}
   lastTargetDir: {x: 0, y: 0, z: 0}
   animClipLength: 0
-  animTimer: 0
   isAnimationDone: 0
   isSpawning: 0
   isMoving: 0

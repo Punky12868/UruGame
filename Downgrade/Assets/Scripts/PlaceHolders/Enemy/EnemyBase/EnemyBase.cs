@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyBase : MonoBehaviour
@@ -20,7 +19,6 @@ public class EnemyBase : MonoBehaviour
     [HideInInspector] public Vector3 lastTargetDir;
 
     [HideInInspector] public float animClipLength;
-    [HideInInspector] public float animTimer;
     [HideInInspector] public bool isAnimationDone;
 
     [HideInInspector] public bool isSpawning;
@@ -253,7 +251,7 @@ public class EnemyBase : MonoBehaviour
             temp.x *= -1;
         }
 
-        Collider[] hitColliders = Physics.OverlapBox(transform.position + debugDrawCenter.TransformDirection(temp), normalAttackHitboxSize / 2, Quaternion.identity);
+        Collider[] hitColliders = Physics.OverlapBox(transform.position + debugDrawCenter.TransformDirection(temp), normalAttackHitboxSize, Quaternion.identity);
         foreach (Collider hitCollider in hitColliders)
         {
             if (hitCollider.CompareTag("Player"))
@@ -281,7 +279,7 @@ public class EnemyBase : MonoBehaviour
             temp.x *= -1;
         }
 
-        Collider[] hitColliders = Physics.OverlapBox(transform.position + debugDrawCenter.TransformDirection(temp), chargedAttackHitboxSize / 2, Quaternion.identity);
+        Collider[] hitColliders = Physics.OverlapBox(transform.position + debugDrawCenter.TransformDirection(temp), chargedAttackHitboxSize, Quaternion.identity);
         foreach (Collider hitCollider in hitColliders)
         {
             if (hitCollider.CompareTag("Player"))
@@ -451,7 +449,6 @@ public class EnemyBase : MonoBehaviour
     {
         isAnimationDone = true;
         animClipLength = 0;
-        animTimer = 0;
 
         if (isSpawning)
             isSpawning = false;

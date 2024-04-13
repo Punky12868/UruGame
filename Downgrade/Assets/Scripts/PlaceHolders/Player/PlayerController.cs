@@ -2,320 +2,180 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Rewired;
+using System.Diagnostics.Tracing;
 
 public class PlayerController : MonoBehaviour
 {
     // PlaceHolder for the PlayerController
-    private Player player;
-    Rigidbody rb;
+    private Player input;
+    private Rigidbody rb;
+    private Animator anim;
 
-    [SerializeField] float speed = 5f;
+    private Vector2 direction;
 
-    [SerializeField] float resetAttackTime = 0.5f;
-    [SerializeField] float resetAttackTimeAfterCombo = 0.5f;
-    [SerializeField] Vector2 parryTimeWindow;
-    [SerializeField] float attackForce = 1f;
-    [SerializeField] float rollForce = 2f;
+    [Header("Movement")]
+    [SerializeField] private float speed = 5f;
 
-    private bool isFacingRight;
-    private bool isAttacking;
-    private bool usedComboAttack;
-    private bool isParrying;
-    private bool isDoingParry;
-    private bool isParryingInvoked;
+    [Header("Fighting")]
+    [SerializeField] private float attackDamage = 5;
 
-    private bool drawAttackHitbox = true;
-    private bool drawParryHitbox = true;
+    [Header("Input")]
+    [SerializeField] private float directionThreshold = 0.1f;
+    [SerializeField] private float comboWindowTime;
+    [SerializeField] private Vector2 parryWindowTime;
 
-    [SerializeField] Transform hitboxCenter;
-    [SerializeField] Vector2 attackHitboxAppearTime = new Vector2(0.2f, 0.5f);
-    [SerializeField] Vector3 attackHitboxPos = new Vector3(0, 0, 0);
-    [SerializeField] Vector3 attackHitboxSize = new Vector3(0.5f, 0.5f, 0.5f);
-
-    [SerializeField] Vector2 parryHitboxAppearTime = new Vector2(0.2f, 0.5f);
-    [SerializeField] Vector3 parryHitboxPos = new Vector3(0, 0, 0);
-    [SerializeField] Vector3 parryHitboxSize = new Vector3(0.5f, 0.5f, 0.5f);
-
-    private string status;
+    [SerializeField] private Vector3 hitboxPos = new Vector3(0, 0, 0);
+    [SerializeField] private Vector3 hitboxSize = new Vector3(0.5f, 0.5f, 0.5f);
 
     [Header("Animation")]
-    Animator anim;
+    [SerializeField] private string[] animationIDs;
+    private AnimationClip[] clips;
+    private bool isAnimationDone = true;
+    private float animClipLength;
 
-    bool isAnimationDone = true;
-    float animClipLength;
+    [Header("Debug")]
+    [SerializeField] private bool debugTools = true;
+    [ShowIf("debugTools", true, true)] [SerializeField] private bool drawHitbox = true;
+    [ShowIf("debugTools", true, true)] [ShowIf("drawHitbox", true, true)] [SerializeField] private bool drawHitboxOnGameplay = true;
+    [ShowIf("debugTools", true, true)] [ShowIf("drawHitbox", true, true)] [SerializeField] private float attackHitboxTime = 0.2f;
+    [ShowIf("debugTools", true, true)] [ShowIf("drawHitbox", true, true)] [SerializeField] private Color attackHitboxColor = new Color(1, 0, 0, 1);
+    [ShowIf("debugTools", true, true)] [ShowIf("drawHitbox", true, true)] [SerializeField] private Color parryHitboxColor = new Color(0, 1, 0, 1);
 
-    public string[] animationIDs;
-    string lastSavedDirection;
-    AnimationClip[] clips;
+    //[Header("PlayerStatus")]
+    private bool isFacingRight;
+
+    private bool canCombo = false;
+    private bool drawingAttackHitbox = false;
+
+    private bool isParrying = false;
+    private bool isRolling = false;
+
+    private bool wasParryPressed = false;
+    private bool wasParryInvoked = false;
 
     private void Awake()
     {
-        player = ReInput.players.GetPlayer(0);
+        input = ReInput.players.GetPlayer(0);
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
-
         clips = anim.runtimeAnimatorController.animationClips;
-    }
-
-    private void FixedUpdate()
-    {
-        if (!isAnimationDone)
-        {
-            return;
-        }
-
-        Vector2 direction = InputController.instance.GetDirection().normalized;
-        rb.velocity = new Vector3(direction.x, 0, direction.y) * speed;
     }
 
     private void Update()
     {
-        Actions();
-        MovementAnimations();
+        Inputs();
+        PlayerAnimations();
 
-        if (isParryingInvoked && isParrying)
-            DoParryOverlapCollider(parryHitboxAppearTime.y);
-
-        drawAttackHitbox = isAttacking;
-        drawParryHitbox = isParrying;
+        if(isParrying)
+            OverlapParry();
     }
 
-    private void Actions()
+    private void FixedUpdate()
     {
-        if (!isAnimationDone)
+        if (direction.sqrMagnitude > directionThreshold)
         {
-            return;
+            rb.velocity = new Vector3(direction.x, 0, direction.y) * speed;
+        }
+    }
+
+    private void Inputs()
+    {
+        direction = new Vector2(input.GetAxisRaw("Horizontal"), input.GetAxisRaw("Vertical"));
+
+        if (input.GetButtonDown("Attack"))
+        {
+            OverlapAttack();
         }
 
-        if (player.GetButtonDown("Attack"))
+        if (input.GetButtonDown("Parry"))
         {
-            Attacking();
-        }
-
-        if (player.GetButtonDown("Parry"))
-        {
-            if (!isParryingInvoked)
+            if (!wasParryPressed)
             {
-                isParryingInvoked = true;
-                Invoke("Parrying", parryHitboxAppearTime.x);
+                wasParryPressed = true;
+                Invoke("ActivateParry", parryWindowTime.x);
             }
         }
 
-        if (player.GetButtonDown("Roll"))
+        if (input.GetButtonDown("Roll"))
         {
-            Rolling();
-        }
-
-        if (player.GetButtonDown("Ability"))
-        {
-            Ability();
         }
     }
 
-    private void Attacking()
+    #region Invokes
+    private void ActivateParry()
     {
-        PlayAnimation(animationIDs[12], true);
-        rb.velocity = Vector3.zero;
-        Vector2 direction = InputController.instance.GetLastDirection().normalized;
-        rb.velocity = new Vector3(direction.x, 0, direction.y) * attackForce;
-
-        if (!isAttacking)
-        {
-            DoAttackOverlapCollider(resetAttackTime);
-        }
-        else if (!usedComboAttack)
-        {
-            DoAttackOverlapCollider(resetAttackTimeAfterCombo);
-        }
-    }
-
-    private void Parrying()
-    {
-        /*PlayAnimation(animationIDs[13], true);
-        rb.velocity = Vector3.zero;*/
-
         isParrying = true;
-    }
-
-    private void Rolling()
-    {
-        /*PlayAnimation(animationIDs[14], true);
-        rb.velocity = Vector3.zero;
-        Vector2 direction = InputController.instance.GetLastDirection().normalized;
-        rb.velocity = new Vector3(direction.x, 0, direction.y) * rollForce;*/
-    }
-
-    private void Ability()
-    {
-        /*PlayAnimation(animationIDs[15], true);
-        rb.velocity = Vector3.zero;*/
-    }
-
-    #region Hitboxes
-    public void DoAttackOverlapCollider(float invokeTime)
-    {
-        if (!isAttacking)
-        {
-            isAttacking = true;
-            Invoke("ResetAttack", invokeTime);
-        }
-        else if (!usedComboAttack)
-        {
-            isAttacking = true;
-            usedComboAttack = true;
-            Invoke("ResetCombo", invokeTime);
-        }
-
-        Vector3 temp = attackHitboxPos;
-        if (isFacingRight)
-        {
-            temp.x *= -1;
-        }
-
-        Collider[] hitColliders = Physics.OverlapBox(transform.position + hitboxCenter.TransformDirection(temp), attackHitboxSize / 2, Quaternion.identity);
-        foreach (Collider hitCollider in hitColliders)
-        {
-            if (hitCollider.CompareTag("Enemy"))
-            {
-                Debug.Log("Hit enemy");
-            }
-        }
-    }
-
-    public void ResetAttack()
-    {
-        if (usedComboAttack)
-            return;
-
-        isAttacking = false;
-    }
-
-    public void ResetCombo()
-    {
-        isAttacking = false;
-        usedComboAttack = false;
-    }
-
-    public void DoParryOverlapCollider(float invokeResetTime)
-    {
-        if (!isDoingParry)
-        {
-            isDoingParry = true;
-            Invoke("ResetParry", invokeResetTime);
-        }
-
-        Vector3 temp = attackHitboxPos;
-        if (isFacingRight)
-        {
-            temp.x *= -1;
-        }
-
-        Collider[] hitColliders = Physics.OverlapBox(transform.position + hitboxCenter.TransformDirection(temp), attackHitboxSize / 2, Quaternion.identity);
-        foreach (Collider hitCollider in hitColliders)
-        {
-            if (hitCollider.CompareTag("Enemy"))
-            {
-                Debug.Log("Hit enemy");
-            }
-        }
     }
 
     private void ResetParry()
     {
         isParrying = false;
-        isDoingParry = false;
-        isParryingInvoked = false;
+        wasParryInvoked = false;
+        wasParryPressed = false;
     }
 
-    public string PlayerStatus()
+    private void DrawingAttackHitbox()
     {
-        return status;
+        drawingAttackHitbox = false;
+    }
+
+    private void ResetCombo()
+    {
+        canCombo = false;
     }
     #endregion
 
     #region Animation
-    public void MovementAnimations()
+    private void PlayerAnimations()
     {
-        if (InputController.instance.GetDirection() != Vector2.zero)
+        if (direction == Vector2.zero)
         {
-            switch (InputController.instance.GetDirectionString())
-            {
-                case "Up":
-                    PlayAnimation(animationIDs[0]);
-                    break;
-                case "UpRight":
-                    PlayAnimation(animationIDs[1]);
-                    isFacingRight = true;
-                    break;
-                case "UpLeft":
-                    PlayAnimation(animationIDs[2]);
-                    isFacingRight = false;
-                    break;
-                case "Down":
-                    PlayAnimation(animationIDs[3]);
-                    break;
-                case "DownRight":
-                    PlayAnimation(animationIDs[4]);
-                    isFacingRight = true;
-                    break;
-                case "DownLeft":
-                    PlayAnimation(animationIDs[5]);
-                    isFacingRight = false;
-                    break;
-                case "Right":
-                    PlayAnimation(animationIDs[6]);
-                    isFacingRight = true;
-                    break;
-                case "Left":
-                    PlayAnimation(animationIDs[7]);
-                    isFacingRight = false;
-                    break;
-                default:
-                    break;
-            }
-
-            lastSavedDirection = InputController.instance.GetDirectionString();
+            PlayAnimation(animationIDs[0]); // Idle
         }
         else
         {
-            switch (lastSavedDirection)
+            if (direction.x < 0 && direction.y == 0)
             {
-                case "Up":
-                    PlayAnimation(animationIDs[8]);
-                    break;
-                case "UpRight":
-                    PlayAnimation(animationIDs[8]);
-                    isFacingRight = true;
-                    break;
-                case "UpLeft":
-                    PlayAnimation(animationIDs[8]);
-                    isFacingRight = false;
-                    break;
-                case "Down":
-                    PlayAnimation(animationIDs[9]);
-                    break;
-                case "DownRight":
-                    PlayAnimation(animationIDs[10]);
-                    isFacingRight = true;
-                    break;
-                case "DownLeft":
-                    PlayAnimation(animationIDs[11]);
-                    isFacingRight = false;
-                    break;
-                case "Right":
-                    PlayAnimation(animationIDs[10]);
-                    isFacingRight = true;
-                    break;
-                case "Left":
-                    PlayAnimation(animationIDs[11]);
-                    isFacingRight = false;
-                    break;
-                default:
-                    break;
+                PlayAnimation(animationIDs[5]); // WalkLeft
+                isFacingRight = false;
+            }
+            else if (direction.x > 0 && direction.y == 0)
+            {
+                PlayAnimation(animationIDs[4]); // WalkRight
+                isFacingRight = true;
+            }
+            else if (direction.y > 0 && direction.x == 0)
+            {
+                PlayAnimation(animationIDs[3]); // WalkUp
+            }
+            else if (direction.y < 0 && direction.x == 0)
+            {
+                PlayAnimation(animationIDs[6]); // WalkDown
+            }
+            else if (direction.x < 0 && direction.y > 0)
+            {
+                PlayAnimation(animationIDs[2]); // WalkLeftUp
+                isFacingRight = false;
+            }
+            else if (direction.x > 0 && direction.y > 0)
+            {
+                PlayAnimation(animationIDs[1]); // WalkRightUp
+                isFacingRight = true;
+            }
+            else if (direction.x < 0 && direction.y < 0)
+            {
+                PlayAnimation(animationIDs[5]); // WalkLeftDown
+                isFacingRight = false;
+            }
+            else if (direction.x > 0 && direction.y < 0)
+            {
+                PlayAnimation(animationIDs[4]); // WalkRightDown
+                isFacingRight = true;
             }
         }
     }
 
+    #region AnimationController
     public void PlayAnimation(string animName)
     {
         if (!isAnimationDone)
@@ -368,38 +228,127 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
-    #region Debug
-    public void DrawAttackHitbox()
+    #endregion
+
+    #region Overlap Hitbox
+    private void OverlapAttack()
     {
-        Vector3 normalTemp = attackHitboxPos;
-        if (isFacingRight)
-        {
-            normalTemp.x *= -1;
-        }
-
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(transform.position + hitboxCenter.TransformDirection(normalTemp), attackHitboxSize);
-    }
-
-    public void DrawParryHitbox()
-    {
-        Vector3 normalTemp = parryHitboxPos;
-        if (isFacingRight)
-        {
-            normalTemp.x *= -1;
-        }
-
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireCube(transform.position + hitboxCenter.TransformDirection(normalTemp), parryHitboxSize);
-    }
-
-    void OnDrawGizmos()
-    {
-        if (drawParryHitbox)
-            DrawParryHitbox();
         
-        if (drawAttackHitbox)
-            DrawAttackHitbox();
+        if (!isAnimationDone)
+        {
+            return;
+        }
+
+        if (!drawingAttackHitbox)
+        {
+            drawingAttackHitbox = true;
+            Invoke("DrawingAttackHitbox", attackHitboxTime);
+        }
+
+
+        if (!canCombo)
+        {
+            PlayAnimation(animationIDs[7], true); // Attack
+            canCombo = true;
+            Invoke("ResetCombo", comboWindowTime);
+            Debug.Log("Attack");
+        }
+        else
+        {
+            PlayAnimation(animationIDs[8], true); // Attack
+            Debug.Log("Combo");
+        }
+
+        Vector3 temp = hitboxPos;
+        if (isFacingRight)
+        {
+            temp.x *= -1;
+        }
+
+        Collider[] hitColliders = Physics.OverlapBox(transform.position + transform.TransformDirection(temp), hitboxSize, Quaternion.identity);
+
+        foreach (Collider hit in hitColliders)
+        {
+            if (hit.CompareTag("Enemy"))
+            {
+                Debug.Log("Hit");
+                //hit.GetComponent<EnemyBase>().TakeDamage(attackDamage);
+            }
+        }
+    }
+
+    private void OverlapParry()
+    {
+        if (!wasParryInvoked)
+        {
+            wasParryInvoked = true;
+            Invoke("ResetParry", parryWindowTime.y);
+        }
+
+        Vector3 temp = hitboxPos;
+        if (isFacingRight)
+        {
+            temp.x *= -1;
+        }
+
+        Collider[] hitColliders = Physics.OverlapBox(transform.position + transform.TransformDirection(temp), hitboxSize, Quaternion.identity);
+
+        foreach (Collider hit in hitColliders)
+        {
+            if (hit.CompareTag("Enemy"))
+            {
+                Debug.Log("Parry");
+                //hit.GetComponent<EnemyBase>().StunEnemy(1);
+            }
+        }
+
+        PlayAnimation(animationIDs[9], true); // Parry
+    }
+    #endregion
+
+    #region Debug
+    private void DrawAttackHitbox()
+    {
+        Vector3 temp = hitboxPos;
+        if (isFacingRight)
+        {
+            temp.x *= -1;
+        }
+
+        Gizmos.color = attackHitboxColor;
+        Gizmos.DrawWireCube(transform.position + transform.TransformDirection(temp), hitboxSize);
+    }
+
+    private void DrawParryHitbox()
+    {
+        Vector3 temp = hitboxPos;
+        if (isFacingRight)
+        {
+            temp.x *= -1;
+        }
+
+        Gizmos.color = parryHitboxColor;
+        Gizmos.DrawWireCube(transform.position + transform.TransformDirection(temp), hitboxSize);
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (drawHitbox)
+        {
+            if (drawHitboxOnGameplay)
+            {
+                if (drawingAttackHitbox)
+                    DrawAttackHitbox();
+
+                if (isParrying)
+                    DrawParryHitbox();
+            }
+            else
+            {
+                DrawAttackHitbox();
+                DrawParryHitbox();
+            }
+        }
     }
     #endregion
 }
