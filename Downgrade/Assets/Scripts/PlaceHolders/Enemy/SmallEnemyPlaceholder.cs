@@ -118,13 +118,6 @@ public class SmallEnemyPlaceholder : EnemyBase
         rb.velocity = lastTargetDir * moveOnChargeAttackForce;
     }
 
-    public override void StunEnemy(float time)
-    {
-        isStunned = true;
-        PlayAnimation(animationIDs[1], false);
-        Invoke("ResetStun", time);
-    }
-
     public override void OnCooldown()
     {
         if (!isOnCooldown)

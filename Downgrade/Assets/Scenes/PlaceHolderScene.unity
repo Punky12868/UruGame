@@ -282,7 +282,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &249308206
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -298,8 +298,8 @@ MonoBehaviour:
   anim: {fileID: 0}
   rb: {fileID: 0}
   pivot: {fileID: 0}
-  target: {fileID: 0}
   lastTargetDir: {x: 0, y: 0, z: 0}
+  target: {fileID: 934431436}
   animClipLength: 0
   isAnimationDone: 0
   isSpawning: 0
@@ -312,29 +312,33 @@ MonoBehaviour:
   isInvokedChargedOverlapAttack: 0
   isStunned: 0
   isParried: 0
+  isDead: 0
   isSpriteFlipped: 0
   isOnCooldown: 0
   decidedChargeAttack: 0
   chargeAttackedConsidered: 0
   avoidingTarget: 0
   health: 100
-  damage: 5
+  currentHealth: 0
+  normalAttackdamage: 5
+  chargeAttackDamage: 5
   walkingSpeed: 1
   canRun: 0
   reverseRunLogic: 0
   runSpeed: 2
   runRange: 0.8
   canBeParried: 1
-  canBeParryStunned: 0
-  lightParryStunWindowTime: {x: 0.5, y: 1.5}
+  canBeParryStunned: 1
   canParryChargeAttack: 1
-  chargedParryStunWindowTime: {x: 0.5, y: 1.5}
+  parryStunTime: 3
   speed: 1
   stunTime: 2
   tooClose: 0.3
   maxOdds: 1000
   oddsToChargeAttack: 250
   isMelee: 1
+  hitboxCenter: {fileID: 1287296681}
+  hitboxOffset: 0.3
   hasChargeAttack: 1
   closeAttackRange: 0.8
   farAttackRange: 2
@@ -343,11 +347,9 @@ MonoBehaviour:
   moveOnChargeAttackForce: 60
   chargeMoveAttackActivationTime: 0.65
   normalAttackHitboxAppearTime: {x: 0.5, y: 0.2}
-  normalAttackHitboxPos: {x: 0.085, y: 0.533, z: 0}
-  normalAttackHitboxSize: {x: 1.2, y: 1.06, z: 1.2}
+  normalAttackHitboxSize: {x: 0.25, y: 0.5, z: 0.25}
   chargedAttackHitboxAppearTime: {x: 0.6, y: 0.25}
-  chargedAttackHitboxPos: {x: -0.065, y: 0.433, z: 0}
-  chargedAttackHitboxSize: {x: 1.5, y: 0.87, z: 1.2}
+  chargedAttackHitboxSize: {x: 0.25, y: 0.5, z: 0.35}
   attackCooldown: 0.5
   chargeDecitionCooldown: 2.5
   avoidTarget: 0
@@ -362,7 +364,7 @@ MonoBehaviour:
   - EnemyDeath
   debugTools: 1
   drawHitboxes: 1
-  drawHitboxesOnGameplay: 0
+  drawHitboxesOnGameplay: 1
   debugDrawCenter: {fileID: 249308210}
   runRageColor: {r: 1, g: 0, b: 1, a: 1}
   tooCloseColor: {r: 0, g: 1, b: 0, a: 1}
@@ -408,11 +410,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 249308205}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.6081741, y: 0.0002875626, z: -2.097072}
+  m_LocalPosition: {x: -2.16, y: 0.0002, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2059183484}
+  - {fileID: 1287296681}
   m_Father: {fileID: 0}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -476,9 +479,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 124d28e79ce7b1847ac95a931a953c66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  directionThreshold: 0.1
-  lastSavedDirection: 
-  lastDirection: {x: 0, y: 0}
 --- !u!4 &318363184
 Transform:
   m_ObjectHideFlags: 0
@@ -1108,7 +1108,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 934431433}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.94, y: 0, z: -0.12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1127,10 +1127,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21ae7ca1a6daa6242ad2a43285e5410c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  health: 100
   speed: 3.5
-  attackDamage: 5
+  attackDamage: 49
+  cooldownTime: 0.5
+  comboCooldownTime: 1
   directionThreshold: 0.1
-  comboWindowTime: 0.55
+  comboWindowTime: {x: 0.15, y: 0.45}
   parryWindowTime: {x: 0.35, y: 0.3}
   hitboxPos: {x: -0.067, y: 0.216, z: 0}
   hitboxSize: {x: 0.5, y: 0.5, z: 0.5}
@@ -1273,7 +1276,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.212558, y: -0.000000008406593, z: 0.0000000018286765, w: 0.9771485}
+  m_LocalRotation: {x: 0.212558, y: 0.000000008406596, z: -0.0000000018286773, w: 0.9771485}
   m_LocalPosition: {x: 0, y: 4.11, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1879,6 +1882,37 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1287296680
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1287296681}
+  m_Layer: 6
+  m_Name: HitboxCenter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1287296681
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1287296680}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 249308210}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1332516484
 GameObject:
   m_ObjectHideFlags: 0
@@ -1941,7 +1975,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1332516484}
-  m_LocalRotation: {x: 0.212558, y: -0.000000008406593, z: 0.0000000018286765, w: 0.9771485}
+  m_LocalRotation: {x: 0.212558, y: 0.000000008406596, z: -0.0000000018286773, w: 0.9771485}
   m_LocalPosition: {x: 0, y: 4.11, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2136,8 +2170,8 @@ MonoBehaviour:
   anim: {fileID: 0}
   rb: {fileID: 0}
   pivot: {fileID: 0}
-  target: {fileID: 0}
   lastTargetDir: {x: 0, y: 0, z: 0}
+  target: {fileID: 1581416136}
   animClipLength: 0
   isAnimationDone: 0
   isSpawning: 0
@@ -2150,13 +2184,16 @@ MonoBehaviour:
   isInvokedChargedOverlapAttack: 0
   isStunned: 0
   isParried: 0
+  isDead: 0
   isSpriteFlipped: 0
   isOnCooldown: 0
   decidedChargeAttack: 0
   chargeAttackedConsidered: 0
   avoidingTarget: 0
   health: 100
-  damage: 5
+  currentHealth: 0
+  normalAttackdamage: 5
+  chargeAttackDamage: 5
   walkingSpeed: 1
   canRun: 1
   reverseRunLogic: 1
@@ -2164,15 +2201,16 @@ MonoBehaviour:
   runRange: 1.5
   canBeParried: 1
   canBeParryStunned: 0
-  lightParryStunWindowTime: {x: 0.5, y: 1.5}
   canParryChargeAttack: 0
-  chargedParryStunWindowTime: {x: 0.5, y: 1.5}
+  parryStunTime: 3
   speed: 1
   stunTime: 2
   tooClose: 0.3
   maxOdds: 1000
   oddsToChargeAttack: 250
   isMelee: 1
+  hitboxCenter: {fileID: 1581416136}
+  hitboxOffset: 0
   hasChargeAttack: 0
   closeAttackRange: 0.5
   farAttackRange: 2
@@ -2181,10 +2219,8 @@ MonoBehaviour:
   moveOnChargeAttackForce: 60
   chargeMoveAttackActivationTime: 0
   normalAttackHitboxAppearTime: {x: 0.2, y: 0.5}
-  normalAttackHitboxPos: {x: 0, y: 0, z: 0}
   normalAttackHitboxSize: {x: 0.5, y: 0.5, z: 0.5}
   chargedAttackHitboxAppearTime: {x: 0.2, y: 0.5}
-  chargedAttackHitboxPos: {x: 0, y: 0, z: 0}
   chargedAttackHitboxSize: {x: 1, y: 1, z: 1}
   attackCooldown: 0.5
   chargeDecitionCooldown: 2.5

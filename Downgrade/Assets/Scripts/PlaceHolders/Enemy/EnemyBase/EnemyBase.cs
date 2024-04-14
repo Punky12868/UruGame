@@ -6,17 +6,14 @@ public class EnemyBase : MonoBehaviour
 {
     // PlaceHolder for the EnemyBase
 
-    // TO DO: Add Stunned and Parried behaviour
     // TO DO: Add a way to avoid the player and attack from a distance
-    // TO DO: Add a way for the enemy to damage the player / half way done, make the player get damaged when the enemy attacks
-    // TO DO: Add a way for the enemy to take damage from the player
 
     #region Variables
     [HideInInspector] public Animator anim;
     [HideInInspector] public Rigidbody rb;
     [HideInInspector] public Transform pivot;
-    [HideInInspector] public Transform target;
     [HideInInspector] public Vector3 lastTargetDir;
+    [HideInInspector] public Transform target;
 
     [HideInInspector] public float animClipLength;
     [HideInInspector] public bool isAnimationDone;
@@ -29,8 +26,9 @@ public class EnemyBase : MonoBehaviour
     [HideInInspector] public bool isChargedOverlapAttack;
     [HideInInspector] public bool isInvokedNormalOverlapAttack;
     [HideInInspector] public bool isInvokedChargedOverlapAttack;
-    [HideInInspector] public bool isStunned; // TO DO
-    [HideInInspector] public bool isParried; // TO DO / DOING...
+    [HideInInspector] public bool isStunned;
+    [HideInInspector] public bool isParried;
+    [HideInInspector] public bool isDead;
     [HideInInspector] public bool isSpriteFlipped;
     [HideInInspector] public bool isOnCooldown;
     [HideInInspector] public bool decidedChargeAttack;
@@ -39,7 +37,9 @@ public class EnemyBase : MonoBehaviour
 
     [Header("AI Stats")]
     public float health = 100;
-    public int damage = 5;
+    [HideInInspector] public float currentHealth;
+    public int normalAttackdamage = 5;
+    [ShowIf("isMelee", true, true)][ShowIf("hasChargeAttack", true, true)][ShowIf("isMelee", true, true)][ShowIf("hasChargeAttack", true, true)] public int chargeAttackDamage = 5;
     public float walkingSpeed = 1;
     public bool canRun;
     [ShowIf("canRun", true, true)] public bool reverseRunLogic;
@@ -48,10 +48,8 @@ public class EnemyBase : MonoBehaviour
 
     public bool canBeParried = true;
     [ShowIf("canBeParried", true, true)] public bool canBeParryStunned;
-    [ShowIf("canBeParried", true, true)] public Vector2 lightParryStunWindowTime = new Vector2(0.5f, 1.5f);
-
     [ShowIf("canBeParried", true, true)] public bool canParryChargeAttack;
-    [ShowIf("canBeParried", true, true)] [ShowIf("canParryChargeAttack", true, true)] public Vector2 chargedParryStunWindowTime = new Vector2(0.5f, 1.5f);
+    [ShowIf("canBeParried", true, true)] public float parryStunTime = 3;
 
     [HideInInspector] public float speed;
 
@@ -67,9 +65,11 @@ public class EnemyBase : MonoBehaviour
 
     [Header("AI Attack variables")]
     [ShowIf("avoidTarget", false, true)] public bool isMelee;
+    [ShowIf("isMelee", true, true)] [SerializeField] Transform hitboxCenter;
+    [ShowIf("isMelee", true, true)] [SerializeField] float hitboxOffset;
     [ShowIf("isMelee", true, true)] public bool hasChargeAttack;
     [ShowIf("isMelee", true, true)] public float closeAttackRange = 0.8f;
-    [ShowIf("isMelee", true, true)][ShowIf("hasChargeAttack", true, true)] public float farAttackRange = 2;
+    [ShowIf("isMelee", true, true)] [ShowIf("hasChargeAttack", true, true)] public float farAttackRange = 2;
 
     [Header("AI Attack impulse")]
     [ShowIf("isMelee", true, true)] public float moveOnNormalAttackForce = 10;
@@ -79,11 +79,9 @@ public class EnemyBase : MonoBehaviour
     [ShowIf("isMelee", true, true)] [ShowIf("hasChargeAttack", true, true)] public float chargeMoveAttackActivationTime = 0;
 
     public Vector2 normalAttackHitboxAppearTime = new Vector2(0.2f, 0.5f);
-    public Vector3 normalAttackHitboxPos = new Vector3(0, 0, 0);
     public Vector3 normalAttackHitboxSize = new Vector3(0.5f, 0.5f, 0.5f);
 
     [ShowIf("isMelee", true, true)] [ShowIf("hasChargeAttack", true, true)] public Vector2 chargedAttackHitboxAppearTime = new Vector2(0.2f, 0.5f);
-    [ShowIf("isMelee", true, true)] [ShowIf("hasChargeAttack", true, true)] public Vector3 chargedAttackHitboxPos = new Vector3(0, 0, 0);
     [ShowIf("isMelee", true, true)] [ShowIf("hasChargeAttack", true, true)] public Vector3 chargedAttackHitboxSize = new Vector3(1, 1, 1);
 
     [Header("AI Cooldown")]
@@ -109,6 +107,7 @@ public class EnemyBase : MonoBehaviour
     [ShowIf("debugTools", true, true)] [SerializeField] private Color farAttackColor = new Color(1, 0.5f, 0, 1);
     [ShowIf("debugTools", true, true)] [SerializeField] private Color avoidRangeColor = new Color(1, 1, 0, 1);
     [ShowIf("debugTools", true, true)] [SerializeField] private int segments = 8; // Number of line segments to approximate the circle
+
     #endregion
 
     public virtual void Awake()
@@ -119,6 +118,9 @@ public class EnemyBase : MonoBehaviour
         clips = anim.runtimeAnimatorController.animationClips;
 
         target = GameObject.FindGameObjectWithTag("Player").transform;
+
+        speed = walkingSpeed;
+        currentHealth = health;
 
         if (debugDrawCenter == null)
             debugDrawCenter = this.transform;
@@ -142,20 +144,16 @@ public class EnemyBase : MonoBehaviour
     {
         DoNormalAttackOverlapCollider(normalAttackHitboxAppearTime.y);
         DoChargeAttackOverlapCollider(chargedAttackHitboxAppearTime.y);
+        ResetAnimClipUpdate();
+        RotateHitboxCentreToFaceThePlayer();
     }
 
     public virtual void Movement()
     {
     }
 
-    public void TakeDamage(float damage)
+    public virtual void TakeDamage(float damage)
     {
-        health -= damage;
-
-        if (health <= 0)
-        {
-            RemoveComponentsOnDeath();
-        }
     }
 
     public virtual void Death()
@@ -165,7 +163,7 @@ public class EnemyBase : MonoBehaviour
     #region Attack Behaviour
     public void Attack()
     {
-        if (isStunned || !isAnimationDone || isOnCooldown || decidedChargeAttack)
+        if (isStunned || isParried || !isAnimationDone || isOnCooldown || decidedChargeAttack)
         {
             return;
         }
@@ -207,6 +205,9 @@ public class EnemyBase : MonoBehaviour
 
     public virtual void AvoidBehaviour()
     {
+        if (isStunned || isParried)
+            return;
+
         // Check if the player is in range, if its in the avoid range, move away from the player
         if (Vector3.Distance(target.position, transform.position) <= avoidRange)
         {
@@ -245,18 +246,25 @@ public class EnemyBase : MonoBehaviour
             Invoke("RemoveAttackHitboxes", removeTime);
         }
 
-        Vector3 temp = normalAttackHitboxPos;
-        if (isSpriteFlipped)
-        {
-            temp.x *= -1;
-        }
+        //Collider[] hitColliders = Physics.OverlapBox(hitboxCenter.position, chargedAttackHitboxSize, Quaternion.identity);
+        Collider[] hitColliders = Physics.OverlapBox(hitboxCenter.position, normalAttackHitboxSize, Quaternion.LookRotation(lastTargetDir));
+        //VisualizeBox.DisplayBox(hitboxCenter.position, normalAttackHitboxSize, Quaternion.LookRotation(direction), closeAttackColor);
 
-        Collider[] hitColliders = Physics.OverlapBox(transform.position + debugDrawCenter.TransformDirection(temp), normalAttackHitboxSize, Quaternion.identity);
         foreach (Collider hitCollider in hitColliders)
         {
             if (hitCollider.CompareTag("Player"))
             {
-                Debug.Log("Player normal hit");
+                if (hitCollider.GetComponent<PlayerController>().GetPlayerState() == "Parry" && canBeParried)
+                {
+                    ParriedEnemy(parryStunTime);
+                    Debug.Log("Player parried hit");
+                }
+                else
+                {
+                    hitCollider.GetComponent<PlayerController>().TakeDamage(normalAttackdamage);
+                    Debug.Log("Player normal hit");
+                }
+
                 RemoveAttackHitboxes();
             }
         }
@@ -273,21 +281,39 @@ public class EnemyBase : MonoBehaviour
             Invoke("RemoveAttackHitboxes", removeTime);
         }
 
-        Vector3 temp = chargedAttackHitboxPos;
-        if (isSpriteFlipped)
-        {
-            temp.x *= -1;
-        }
+        //Collider[] hitColliders = Physics.OverlapBox(hitboxCenter.position, chargedAttackHitboxSize, Quaternion.identity);
+        // rotate the hitbox to the direction of the player
+        Collider[] hitColliders = Physics.OverlapBox(hitboxCenter.position, chargedAttackHitboxSize, Quaternion.LookRotation(lastTargetDir));
+        //VisualizeBox.DisplayBox(hitboxCenter.position, chargedAttackHitboxSize, Quaternion.LookRotation(direction), farAttackColor);
 
-        Collider[] hitColliders = Physics.OverlapBox(transform.position + debugDrawCenter.TransformDirection(temp), chargedAttackHitboxSize, Quaternion.identity);
         foreach (Collider hitCollider in hitColliders)
         {
             if (hitCollider.CompareTag("Player"))
             {
-                Debug.Log("Player charged hit");
+                if (hitCollider.GetComponent<PlayerController>().GetPlayerState() == "Parry" && canBeParried && canParryChargeAttack)
+                {
+                    ParriedEnemy(parryStunTime);
+                    Debug.Log("Player parried charged hit");
+                }
+                else
+                {
+                    hitCollider.GetComponent<PlayerController>().TakeDamage(chargeAttackDamage);
+                    Debug.Log("Player normal charged hit");
+                }
+
                 RemoveAttackHitboxes();
             }
         }
+
+        /*Gizmos.color = Color.red;
+
+        Vector3 direction = (target.position - transform.position).normalized;
+        Quaternion rotation = Quaternion.LookRotation(direction);
+        Gizmos.matrix = Matrix4x4.TRS(hitboxCenter.position, rotation, Vector3.one);
+
+        Gizmos.DrawWireCube(Vector3.zero, normalAttackHitboxSize);
+
+        Gizmos.matrix = Matrix4x4.identity;*/
     }
 
     public void ActivateNormalAttackHitbox(float time)
@@ -326,17 +352,44 @@ public class EnemyBase : MonoBehaviour
     #region Stun
     public virtual void StunEnemy(float time)
     {
+        isStunned = true;
+        PlayAnimation(animationIDs[1], false, false, true);
+        Debug.Log("Stunned");
+        Invoke("ResetStun", time);
+    }
+
+    public virtual void ParriedEnemy(float time)
+    {
+        if (canBeParryStunned)
+        {
+            isStunned = true;
+        }
+        isParried = true;
+        PlayAnimation(animationIDs[1], false, false, true);
+        Debug.Log("Parried");
+        Invoke("ResetParried", time);
     }
 
     public void ResetStun()
     {
         isStunned = false;
     }
+
+    public void ResetParried()
+    {
+        isStunned = false;
+        isParried = false;
+    }
     #endregion
 
     #region Cooldown
     public void StartCooldown()
     {
+        if (isStunned || isParried)
+        {
+            return;
+        }
+
         isOnCooldown = true;
         Invoke("ResetCooldown", attackCooldown);
 
@@ -402,8 +455,6 @@ public class EnemyBase : MonoBehaviour
                         }
                     }
                 }
-
-                Invoke("ResetAnimClipLenght", animClipLength);
                 return;
             }
         }
@@ -433,7 +484,42 @@ public class EnemyBase : MonoBehaviour
                     }
                 }
 
-                Invoke("ResetAnimClipLenght", animClipLength);
+                if (activateCooldown)
+                {
+                    Invoke("StartCooldown", animClipLength);
+                }
+
+                return;
+            }
+        }
+    }
+
+    public void PlayAnimation(string animName, bool hasExitTime, bool activateCooldown, bool bypassExitTime)
+    {
+        if (bypassExitTime)
+            isAnimationDone = true;
+
+        if (!isAnimationDone)
+            return;
+
+        for (int i = 0; i < animationIDs.Length; i++)
+        {
+            if (animName == animationIDs[i])
+            {
+                anim.Play(animName);
+
+                if (hasExitTime)
+                {
+                    isAnimationDone = false;
+
+                    foreach (AnimationClip clip in clips)
+                    {
+                        if (clip.name == animName)
+                        {
+                            animClipLength = clip.length;
+                        }
+                    }
+                }
 
                 if (activateCooldown)
                 {
@@ -445,13 +531,20 @@ public class EnemyBase : MonoBehaviour
         }
     }
 
-    public void ResetAnimClipLenght()
+    public void ResetAnimClipUpdate()
     {
-        isAnimationDone = true;
-        animClipLength = 0;
+        if (animClipLength <= 0)
+        {
+            isAnimationDone = true;
 
-        if (isSpawning)
-            isSpawning = false;
+            if (isSpawning)
+                isSpawning = false;
+        }
+        else
+        {
+            animClipLength -= Time.deltaTime;
+            isAnimationDone = false;
+        }
     }
     #endregion
 
@@ -460,12 +553,13 @@ public class EnemyBase : MonoBehaviour
     {
         Destroy(rb);
         Destroy(GetComponent<Collider>());
-        this.enabled = false;
+        Destroy(this);
+        //this.enabled = false;
     }
 
     public void FlipPivot()
     {
-        if (isStunned || !isAnimationDone || isAttacking)
+        if (isStunned || isParried || !isAnimationDone || isAttacking)
             return;
 
         Vector3 direction = (target.position - transform.position).normalized;
@@ -473,6 +567,7 @@ public class EnemyBase : MonoBehaviour
         if (direction.x > 0)
         {
             pivot.localScale = new Vector3(1, 1, 1);
+            //GetComponentInChildren<SpriteRenderer>().flipX = false;
 
             if (isSpriteFlipped)
                 isSpriteFlipped = false;
@@ -480,6 +575,7 @@ public class EnemyBase : MonoBehaviour
         else
         {
             pivot.localScale = new Vector3(-1, 1, 1);
+            //GetComponentInChildren<SpriteRenderer>().flipX = true;
 
             if (!isSpriteFlipped)
                 isSpriteFlipped = true;
@@ -509,55 +605,33 @@ public class EnemyBase : MonoBehaviour
         if (health <= 0)
             Debug.LogError("Health is missing!");
 
-        if (damage <= 0)
+        if (normalAttackdamage <= 0)
             Debug.LogError("Damage is missing!");
 
         if (speed <= 0)
             Debug.LogError("Speed is missing!");
     }
 
-    public void DrawHitboxes()
+    public void RotateHitboxCentreToFaceThePlayer()
     {
-        Vector3 normalTemp = normalAttackHitboxPos;
-        Vector3 chargedTemp = chargedAttackHitboxPos;
-        if (isSpriteFlipped)
-        {
-            normalTemp.x *= -1;
-            chargedTemp.x *= -1;
-        }
+        if (!isMelee || isAttacking)
+            return;
 
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(transform.position + debugDrawCenter.TransformDirection(normalTemp), normalAttackHitboxSize);
-
-        if (hasChargeAttack)
-        {
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireCube(transform.position + debugDrawCenter.TransformDirection(chargedTemp), chargedAttackHitboxSize);
-        }
+        Vector3 direction = (target.position - transform.position).normalized * hitboxOffset;
+        Vector3 desiredPosition = transform.position + direction;
+        Quaternion rotation = Quaternion.LookRotation(direction);
+        hitboxCenter.rotation = rotation;
+        hitboxCenter.position = new Vector3(desiredPosition.x, hitboxCenter.position.y, desiredPosition.z);
     }
 
     public void DrawNormalAttackHitbox()
     {
-        Vector3 temp = normalAttackHitboxPos;
-        if (isSpriteFlipped)
-        {
-            temp.x *= -1;
-        }
-
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(transform.position + debugDrawCenter.TransformDirection(temp), normalAttackHitboxSize);
+        VisualizeBox.DisplayBox(hitboxCenter.position, normalAttackHitboxSize, Quaternion.LookRotation(lastTargetDir), closeAttackColor);
     }
 
     public void DrawChargedAttackHitbox()
     {
-        Vector3 temp = chargedAttackHitboxPos;
-        if (isSpriteFlipped)
-        {
-            temp.x *= -1;
-        }
-
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireCube(transform.position + debugDrawCenter.TransformDirection(temp), chargedAttackHitboxSize);
+        VisualizeBox.DisplayBox(hitboxCenter.position, chargedAttackHitboxSize, Quaternion.LookRotation(lastTargetDir), farAttackColor);
     }
 
     public void DrawCloseAttackRange()
@@ -670,7 +744,7 @@ public class EnemyBase : MonoBehaviour
         if (debugDrawCenter == null || !debugTools)
             return;
 
-        if (drawHitboxes)
+        if (drawHitboxes && target != null)
         {
             if (drawHitboxesOnGameplay)
             {
@@ -682,7 +756,8 @@ public class EnemyBase : MonoBehaviour
             }
             else
             {
-                DrawHitboxes();
+                DrawNormalAttackHitbox();
+                DrawChargedAttackHitbox();
             }
         }
 

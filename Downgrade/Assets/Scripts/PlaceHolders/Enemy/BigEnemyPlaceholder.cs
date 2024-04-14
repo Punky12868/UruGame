@@ -16,7 +16,7 @@ public class BigEnemyPlaceholder : EnemyBase
 
     public override void Movement()
     {
-        if (isStunned || !isAnimationDone || isOnCooldown)
+        if (isStunned || isParried || !isAnimationDone || isOnCooldown)
         {
             return;
         }
@@ -30,7 +30,9 @@ public class BigEnemyPlaceholder : EnemyBase
             Vector3 targetPos = new Vector3(target.position.x, transform.position.y, target.position.z);
             Vector3 enemyPos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
             Vector3 dir = (targetPos - enemyPos).normalized;
-            rb.MovePosition(transform.position + dir * speed * Time.deltaTime);
+            // dont used rb.MovePosition, it will cause the enemy to teleport and dont use rb.velocity, it will cause the enemy to slide, use transform.position instead
+            transform.position += dir * speed * Time.deltaTime;
+
             isMoving = true;
 
             PlayAnimation(animationIDs[2], false);
@@ -41,9 +43,27 @@ public class BigEnemyPlaceholder : EnemyBase
         }
     }
 
+    public override void TakeDamage(float damage)
+    {
+        if (isDead)
+            return;
+
+        currentHealth -= damage;
+
+        if (currentHealth <= 0)
+        {
+            //RemoveComponentsOnDeath();
+            Death();
+        }
+        else
+        {
+            //HIT ANIMATION
+        }
+    }
+
     public override void Death()
     {
-        PlayAnimation(animationIDs[6], false);
+        PlayAnimation(animationIDs[6], false, false, true);
         RemoveComponentsOnDeath();
     }
 
@@ -104,13 +124,6 @@ public class BigEnemyPlaceholder : EnemyBase
     public override void MoveOnChargeAttack()
     {
         rb.velocity = lastTargetDir * moveOnChargeAttackForce;
-    }
-
-    public override void StunEnemy(float time)
-    {
-        isStunned = true;
-        PlayAnimation(animationIDs[1], false);
-        Invoke("ResetStun", time);
     }
 
     public override void OnCooldown()
