@@ -179,6 +179,7 @@ GameObject:
   - component: {fileID: 91605936}
   - component: {fileID: 91605935}
   - component: {fileID: 91605934}
+  - component: {fileID: 91605938}
   m_Layer: 6
   m_Name: Cube
   m_TagString: Enemy
@@ -264,6 +265,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &91605938
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 91605933}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &249308205
 GameObject:
   m_ObjectHideFlags: 0
@@ -1276,7 +1293,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.212558, y: 0.000000008406596, z: -0.0000000018286773, w: 0.9771485}
+  m_LocalRotation: {x: 0.212558, y: -0.000000008406593, z: 0.0000000018286765, w: 0.9771485}
   m_LocalPosition: {x: 0, y: 4.11, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1975,7 +1992,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1332516484}
-  m_LocalRotation: {x: 0.212558, y: 0.000000008406596, z: -0.0000000018286773, w: 0.9771485}
+  m_LocalRotation: {x: 0.212558, y: -0.000000008406593, z: 0.0000000018286765, w: 0.9771485}
   m_LocalPosition: {x: 0, y: 4.11, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

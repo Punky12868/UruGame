@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float attackDamage = 5;
     [SerializeField] private float cooldownTime = 0.5f;
     [SerializeField] private float comboCooldownTime = 0.5f;
+    [SerializeField] private float attackForce;
 
     private float comboTime;
 
@@ -396,6 +397,7 @@ public class PlayerController : MonoBehaviour
             temp.x *= -1;
         }
 
+        rb.AddForce(transform.TransformDirection(temp) * attackForce, ForceMode.Impulse);
         Collider[] hitColliders = Physics.OverlapBox(transform.position + transform.TransformDirection(temp), hitboxSize, Quaternion.identity);
 
         foreach (Collider hit in hitColliders)
