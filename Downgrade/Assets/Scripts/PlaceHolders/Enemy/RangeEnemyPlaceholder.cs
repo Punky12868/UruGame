@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SmallEnemyPlaceholder : EnemyBase
+public class RangeEnemyPlaceholder : EnemyBase
 {
-    // PlaceHolder for a Small Enemy
+    // PlaceHolder for a Big Enemy
 
     public void FixedUpdate()
     {
@@ -21,11 +21,23 @@ public class SmallEnemyPlaceholder : EnemyBase
             return;
         }
 
-        if (!isAttacking && Vector3.Distance(target.position, transform.position) < tooClose)
+        if (isStatic)
+        {
+            PlayAnimation(animationIDs[1], false);
+
+            if (isMoving)
+            {
+                isMoving = false;
+            }
+
+            return;
+        }
+
+        if (!isAttacking && Vector3.Distance(target.position, transform.position) > avoidRange)
         {
             PlayAnimation(animationIDs[1], false);
         }
-        else if (!isAttacking && Vector3.Distance(target.position, transform.position) > tooClose)
+        else if (!isAttacking && Vector3.Distance(target.position, transform.position) < avoidRange)
         {
             if (canRun)
             {
@@ -69,8 +81,8 @@ public class SmallEnemyPlaceholder : EnemyBase
             }
 
             Vector3 targetPos = new Vector3(target.position.x, transform.position.y, target.position.z);
-            Vector3 enemyPos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
-            Vector3 dir = (targetPos - enemyPos).normalized;
+            Vector3 enemyPos = new Vector3(transform.position.x, transform.position.y, transform.position.y);
+            Vector3 dir = -(targetPos - enemyPos).normalized;
             rb.MovePosition(transform.position + dir * speed * Time.deltaTime);
             isMoving = true;
         }
@@ -80,38 +92,70 @@ public class SmallEnemyPlaceholder : EnemyBase
         }
     }
 
+    public override void TakeDamage(float damage)
+    {
+        if (isDead)
+            return;
+
+        currentHealth -= damage;
+
+        if (currentHealth <= 0)
+        {
+            //RemoveComponentsOnDeath();
+            Death();
+        }
+        else
+        {
+            //HIT ANIMATION
+            if (!isAttacking)
+            {
+                PlayAnimation(animationIDs[5], true);
+            }
+        }
+    }
+
     public override void Death()
     {
         PlayAnimation(animationIDs[7], false);
         RemoveComponentsOnDeath();
     }
 
-    public override void MeleeBehaviour()
+    public override void AvoidBehaviour()
     {
         // Check if the player is in range, if its  in the close attack range, attack.
         // if its in the far attack range, decide if attack or move to the player. if its out of range, move to the player
 
-        if (Vector3.Distance(target.position, transform.position) <= closeAttackRange)
+        if (isStatic)
         {
-            // Attack the player
-            Invoke("MoveOnNormalAttack", normalMoveAttackActivationTime);
-            ActivateNormalAttackHitbox(normalAttackHitboxAppearTime.x);
+            Invoke("SummonProjectile", projectileSpawnTime);
             isAttacking = true;
             PlayAnimation(animationIDs[4], true, true);
         }
         else
         {
-            // Move to the player
-            if (isAttacking == true)
+            if (Vector3.Distance(target.position, transform.position) >= avoidRange)
             {
-                isAttacking = false;
+                // Attacks the player
+
+                Invoke("MoveOnNormalAttack", projectileSpawnTime);
+                Invoke("SummonProjectile", projectileSpawnTime);
+                isAttacking = true;
+                PlayAnimation(animationIDs[4], true, true);
+            }
+            else
+            {
+                // Moves Away
+                if (isAttacking == true)
+                {
+                    isAttacking = false;
+                }
             }
         }
     }
 
     public override void MoveOnNormalAttack()
     {
-        rb.velocity = lastTargetDir * moveOnNormalAttackForce;
+        rb.velocity = -targetDir * moveOnNormalAttackForce;
     }
 
     public override void OnCooldown()
@@ -119,7 +163,7 @@ public class SmallEnemyPlaceholder : EnemyBase
         if (!isOnCooldown)
             return;
 
-        if (!avoidingTarget)
+        if (!avoidingTarget || isStatic)
         {
             PlayAnimation(animationIDs[1], true);
         }
@@ -127,7 +171,7 @@ public class SmallEnemyPlaceholder : EnemyBase
         {
             Vector3 targetPos = new Vector3(target.position.x, transform.position.y, target.position.z);
             Vector3 enemyPos = new Vector3(transform.position.x, transform.position.y, transform.position.y);
-            Vector3 dir = -(targetPos - enemyPos).normalized;
+            Vector3 dir = (targetPos - enemyPos).normalized;
             rb.MovePosition(transform.position + dir * speed * Time.deltaTime);
             isMoving = true;
 

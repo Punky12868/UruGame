@@ -90,8 +90,11 @@ public class PlayerController : MonoBehaviour
     {
         if (direction.sqrMagnitude > directionThreshold)
         {
-            rb.velocity = new Vector3(direction.x, 0, direction.y) * speed;
-        }
+            rb.velocity = new Vector3(direction.x, 0, direction.y).normalized * speed;
+
+            /*if (rb.velocity.magnitude > speed)
+                rb.velocity = rb.velocity.normalized * speed;*/
+        } 
     }
 
     private void Inputs()
@@ -194,6 +197,97 @@ public class PlayerController : MonoBehaviour
     private void ResetCooldown(float time)
     {
         comboTime = time;
+    }
+    #endregion
+
+    #region Overlap Hitbox
+    private void OverlapAttack()
+    {
+        bool isCombo = false;
+        if (canCombo)
+        {
+            PlayAnimation(animationIDs[8], true, true); // Attack
+            ActivateCooldown();
+            ResetCooldown(comboCooldownTime);
+            ResetCombo();
+            Debug.Log("Combo");
+            isCombo = true;
+        }
+        else
+        {
+            isCombo = false;
+        }
+
+        if (!isAnimationDone || isOnCooldown)
+        {
+            if (!isCombo)
+            {
+                return;
+            }
+        }
+
+        if (!drawingAttackHitbox)
+        {
+            drawingAttackHitbox = true;
+            Invoke("DrawingAttackHitbox", attackHitboxTime);
+        }
+
+
+        if (!canCombo && !isCombo)
+        {
+            PlayAnimation(animationIDs[7], true); // Attack
+            ActivateCooldown();
+            ResetCooldown(cooldownTime);
+            Invoke("ActivateCombo", comboWindowTime.x);
+            Invoke("ResetCombo", comboWindowTime.y);
+            Debug.Log("Attack");
+        }
+
+        Vector3 temp = hitboxPos;
+        if (isFacingRight)
+        {
+            temp.x *= -1;
+        }
+
+        rb.AddForce(transform.TransformDirection(temp) * attackForce, ForceMode.Impulse);
+        Collider[] hitColliders = Physics.OverlapBox(transform.position + transform.TransformDirection(temp), hitboxSize, Quaternion.identity);
+
+        foreach (Collider hit in hitColliders)
+        {
+            if (hit.CompareTag("Enemy"))
+            {
+                Debug.Log("Hit");
+                hit.GetComponent<EnemyBase>().TakeDamage(attackDamage);
+            }
+        }
+    }
+
+    private void OverlapParry()
+    {
+        if (!wasParryInvoked)
+        {
+            wasParryInvoked = true;
+            Invoke("ResetParry", parryWindowTime.y);
+        }
+
+        Vector3 temp = hitboxPos;
+        if (isFacingRight)
+        {
+            temp.x *= -1;
+        }
+
+        Collider[] hitColliders = Physics.OverlapBox(transform.position + transform.TransformDirection(temp), hitboxSize, Quaternion.identity);
+
+        foreach (Collider hit in hitColliders)
+        {
+            if (hit.CompareTag("Enemy"))
+            {
+                Debug.Log("Parry");
+                //hit.GetComponent<EnemyBase>().StunEnemy(1);
+            }
+        }
+
+        PlayAnimation(animationIDs[9], true); // Parry
     }
     #endregion
 
@@ -346,97 +440,6 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
-    #endregion
-
-    #region Overlap Hitbox
-    private void OverlapAttack()
-    {
-        bool isCombo = false;
-        if (canCombo)
-        {
-            PlayAnimation(animationIDs[8], true, true); // Attack
-            ActivateCooldown();
-            ResetCooldown(comboCooldownTime);
-            ResetCombo();
-            Debug.Log("Combo");
-            isCombo = true;
-        }
-        else
-        {
-            isCombo = false;
-        }
-
-        if (!isAnimationDone || isOnCooldown)
-        {
-            if (!isCombo)
-            {
-                return;
-            }
-        }
-
-        if (!drawingAttackHitbox)
-        {
-            drawingAttackHitbox = true;
-            Invoke("DrawingAttackHitbox", attackHitboxTime);
-        }
-
-
-        if (!canCombo && !isCombo)
-        {
-            PlayAnimation(animationIDs[7], true); // Attack
-            ActivateCooldown();
-            ResetCooldown(cooldownTime);
-            Invoke("ActivateCombo", comboWindowTime.x);
-            Invoke("ResetCombo", comboWindowTime.y);
-            Debug.Log("Attack");
-        }
-
-        Vector3 temp = hitboxPos;
-        if (isFacingRight)
-        {
-            temp.x *= -1;
-        }
-
-        rb.AddForce(transform.TransformDirection(temp) * attackForce, ForceMode.Impulse);
-        Collider[] hitColliders = Physics.OverlapBox(transform.position + transform.TransformDirection(temp), hitboxSize, Quaternion.identity);
-
-        foreach (Collider hit in hitColliders)
-        {
-            if (hit.CompareTag("Enemy"))
-            {
-                Debug.Log("Hit");
-                hit.GetComponent<EnemyBase>().TakeDamage(attackDamage);
-            }
-        }
-    }
-
-    private void OverlapParry()
-    {
-        if (!wasParryInvoked)
-        {
-            wasParryInvoked = true;
-            Invoke("ResetParry", parryWindowTime.y);
-        }
-
-        Vector3 temp = hitboxPos;
-        if (isFacingRight)
-        {
-            temp.x *= -1;
-        }
-
-        Collider[] hitColliders = Physics.OverlapBox(transform.position + transform.TransformDirection(temp), hitboxSize, Quaternion.identity);
-
-        foreach (Collider hit in hitColliders)
-        {
-            if (hit.CompareTag("Enemy"))
-            {
-                Debug.Log("Parry");
-                //hit.GetComponent<EnemyBase>().StunEnemy(1);
-            }
-        }
-
-        PlayAnimation(animationIDs[9], true); // Parry
-    }
     #endregion
 
     #region Utility

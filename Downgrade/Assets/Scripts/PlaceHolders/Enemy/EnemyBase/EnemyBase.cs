@@ -12,8 +12,9 @@ public class EnemyBase : MonoBehaviour
     [HideInInspector] public Animator anim;
     [HideInInspector] public Rigidbody rb;
     [HideInInspector] public Transform pivot;
-    [HideInInspector] public Vector3 lastTargetDir;
     [HideInInspector] public Transform target;
+    [HideInInspector] public Vector3 lastTargetDir;
+    [HideInInspector] public Vector3 targetDir;
 
     [HideInInspector] public float animClipLength;
     [HideInInspector] public bool isAnimationDone;
@@ -40,28 +41,35 @@ public class EnemyBase : MonoBehaviour
     [HideInInspector] public float currentHealth;
     public int normalAttackdamage = 5;
     [ShowIf("isMelee", true, true)][ShowIf("hasChargeAttack", true, true)][ShowIf("isMelee", true, true)][ShowIf("hasChargeAttack", true, true)] public int chargeAttackDamage = 5;
+    [HideInInspector] public float speed;
     public float walkingSpeed = 1;
     public bool canRun;
     [ShowIf("canRun", true, true)] public bool reverseRunLogic;
     [ShowIf("canRun", true, true)] public float runSpeed = 1.5f;
     [ShowIf("canRun", true, true)] public float runRange = 1.5f;
 
-    public bool canBeParried = true;
-    [ShowIf("canBeParried", true, true)] public bool canBeParryStunned;
-    [ShowIf("canBeParried", true, true)] public bool canParryChargeAttack;
-    [ShowIf("canBeParried", true, true)] public float parryStunTime = 3;
+    [ShowIf("isMelee", false, true)] public bool isStatic ;
+    [ShowIf("isMelee", false, true)] public float projectileSpawnTime;
+    [ShowIf("isMelee", false, true)] public float projectileLifeTime;
+    [ShowIf("isMelee", false, true)] public float projectileSpeed;
+    [ShowIf("isMelee", false, true)] public GameObject projectile;
+    [ShowIf("isMelee", false, true)] public Transform projectileSpawnPoint;
 
-    [HideInInspector] public float speed;
+    public bool canBeParried = true;
+    [ShowIf("canBeParried", true, true)] public bool projectileCanBeParried = false;
+    [ShowIf("isMelee", true, true)] [ShowIf("canBeParried", true, true)] [ShowIf("projectileCanBeParried", false, true)] public bool canBeParryStunned;
+    [ShowIf("isMelee", true, true)] [ShowIf("canBeParried", true, true)] [ShowIf("projectileCanBeParried", false, true)] public bool canParryChargeAttack;
+    [ShowIf("isMelee", true, true)] [ShowIf("canBeParried", true, true)] [ShowIf("projectileCanBeParried", false, true)] public float parryStunTime = 3;
 
     [Header("AI StunTime")]
-    public float stunTime = 2;
+    [ShowIf("canBeParryStunned", true, true)]  public float stunTime = 2;
 
     [Header("AI Stop range from player")]
     public float tooClose = 0.3f;
 
     [Header("AI Odds for charge attack")]
-    public int maxOdds = 1000;
-    public int oddsToChargeAttack = 250;
+    [ShowIf("isMelee", true, true)] [ShowIf("hasChargeAttack", true, true)] public int maxOdds = 1000;
+    [ShowIf("isMelee", true, true)] [ShowIf("hasChargeAttack", true, true)] public int oddsToChargeAttack = 250;
 
     [Header("AI Attack variables")]
     [ShowIf("avoidTarget", false, true)] public bool isMelee;
@@ -72,14 +80,14 @@ public class EnemyBase : MonoBehaviour
     [ShowIf("isMelee", true, true)] [ShowIf("hasChargeAttack", true, true)] public float farAttackRange = 2;
 
     [Header("AI Attack impulse")]
-    [ShowIf("isMelee", true, true)] public float moveOnNormalAttackForce = 10;
+    public float moveOnNormalAttackForce = 10;
     [ShowIf("isMelee", true, true)] public float normalMoveAttackActivationTime = 0;
 
     [ShowIf("isMelee", true, true)] [ShowIf("hasChargeAttack", true, true)] public float moveOnChargeAttackForce = 60;
     [ShowIf("isMelee", true, true)] [ShowIf("hasChargeAttack", true, true)] public float chargeMoveAttackActivationTime = 0;
 
-    public Vector2 normalAttackHitboxAppearTime = new Vector2(0.2f, 0.5f);
-    public Vector3 normalAttackHitboxSize = new Vector3(0.5f, 0.5f, 0.5f);
+    [ShowIf("isMelee", true, true)] public Vector2 normalAttackHitboxAppearTime = new Vector2(0.2f, 0.5f);
+    [ShowIf("isMelee", true, true)] public Vector3 normalAttackHitboxSize = new Vector3(0.5f, 0.5f, 0.5f);
 
     [ShowIf("isMelee", true, true)] [ShowIf("hasChargeAttack", true, true)] public Vector2 chargedAttackHitboxAppearTime = new Vector2(0.2f, 0.5f);
     [ShowIf("isMelee", true, true)] [ShowIf("hasChargeAttack", true, true)] public Vector3 chargedAttackHitboxSize = new Vector3(1, 1, 1);
@@ -89,8 +97,8 @@ public class EnemyBase : MonoBehaviour
     [ShowIf("isMelee", true, true)][ShowIf("hasChargeAttack", true, true)] public float chargeDecitionCooldown = 2.5f;
 
     [Header("AI Avoidance")]
-    [ShowIf("isMelee", false, true)] public bool avoidTarget;
-    [ShowIf("isMelee", false, true)][ShowIf("avoidTarget", true, true)] public float avoidRange = 2;
+    [ShowIf("isMelee", false, true)][ShowIf("isStatic", false, true)] public bool avoidTarget;
+    [ShowIf("isMelee", false, true)][ShowIf("avoidTarget", true, true)][ShowIf("isStatic", false, true)] public float avoidRange = 2;
 
     [Header("AI Animations")]
     public string[] animationIDs;
@@ -107,7 +115,6 @@ public class EnemyBase : MonoBehaviour
     [ShowIf("debugTools", true, true)] [SerializeField] private Color farAttackColor = new Color(1, 0.5f, 0, 1);
     [ShowIf("debugTools", true, true)] [SerializeField] private Color avoidRangeColor = new Color(1, 1, 0, 1);
     [ShowIf("debugTools", true, true)] [SerializeField] private int segments = 8; // Number of line segments to approximate the circle
-
     #endregion
 
     public virtual void Awake()
@@ -119,13 +126,24 @@ public class EnemyBase : MonoBehaviour
 
         target = GameObject.FindGameObjectWithTag("Player").transform;
 
-        speed = walkingSpeed;
+        if (isStatic)
+        {
+            speed = 0;
+        }
+        else
+        {
+            speed = walkingSpeed;
+        }
+
         currentHealth = health;
 
         if (debugDrawCenter == null)
             debugDrawCenter = this.transform;
 
         isAnimationDone = true;
+
+        
+
         CheckStatus();
 
         isSpawning = true;
@@ -146,6 +164,15 @@ public class EnemyBase : MonoBehaviour
         DoChargeAttackOverlapCollider(chargedAttackHitboxAppearTime.y);
         ResetAnimClipUpdate();
         RotateHitboxCentreToFaceThePlayer();
+        SetTargetDirection();
+    }
+
+    public void SetTargetDirection()
+    {
+        Vector3 targetPos = new Vector3(target.position.x, transform.position.y, target.position.z);
+        Vector3 enemyPos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+        Vector3 dir = (targetPos - enemyPos).normalized;
+        targetDir = dir;
     }
 
     public virtual void Movement()
@@ -172,7 +199,7 @@ public class EnemyBase : MonoBehaviour
         {
             MeleeBehaviour();
         }
-        else if (avoidTarget)
+        else if (avoidTarget || isStatic)
         {
             AvoidBehaviour();
         }
@@ -205,7 +232,7 @@ public class EnemyBase : MonoBehaviour
 
     public virtual void AvoidBehaviour()
     {
-        if (isStunned || isParried)
+        /*if (isStunned || isParried)
             return;
 
         // Check if the player is in range, if its in the avoid range, move away from the player
@@ -224,7 +251,13 @@ public class EnemyBase : MonoBehaviour
             {
                 isAttacking = true;
             }
-        }
+        }*/
+    }
+
+    public virtual void SummonProjectile()
+    {
+        GameObject prjctl = Instantiate(projectile, projectileSpawnPoint.position, projectileSpawnPoint.rotation);
+        prjctl.GetComponent<ProjectileLogic>().SetVariables(projectileSpeed, normalAttackdamage, projectileLifeTime, projectileCanBeParried, targetDir /*lastTargetDir*/);
     }
 
     public virtual void MoveOnNormalAttack()
@@ -564,22 +597,65 @@ public class EnemyBase : MonoBehaviour
 
         Vector3 direction = (target.position - transform.position).normalized;
 
-        if (direction.x > 0)
+        if (avoidTarget)
         {
-            pivot.localScale = new Vector3(1, 1, 1);
-            //GetComponentInChildren<SpriteRenderer>().flipX = false;
+            if (avoidingTarget)
+            {
+                if (direction.x > 0)
+                {
+                    pivot.localScale = new Vector3(-1, 1, 1);
 
-            if (isSpriteFlipped)
-                isSpriteFlipped = false;
+                    if (isSpriteFlipped)
+                        isSpriteFlipped = true;
+                }
+                else
+                {
+                    pivot.localScale = new Vector3(1, 1, 1);
+
+                    if (!isSpriteFlipped)
+                        isSpriteFlipped = false;
+                }
+            }
+            else
+            {
+                if (direction.x > 0)
+                {
+                    pivot.localScale = new Vector3(1, 1, 1);
+                    //GetComponentInChildren<SpriteRenderer>().flipX = false;
+
+                    if (isSpriteFlipped)
+                        isSpriteFlipped = false;
+                }
+                else
+                {
+                    pivot.localScale = new Vector3(-1, 1, 1);
+                    //GetComponentInChildren<SpriteRenderer>().flipX = true;
+
+                    if (!isSpriteFlipped)
+                        isSpriteFlipped = true;
+                }
+            }
         }
         else
         {
-            pivot.localScale = new Vector3(-1, 1, 1);
-            //GetComponentInChildren<SpriteRenderer>().flipX = true;
+            if (direction.x > 0)
+            {
+                pivot.localScale = new Vector3(1, 1, 1);
+                //GetComponentInChildren<SpriteRenderer>().flipX = false;
 
-            if (!isSpriteFlipped)
-                isSpriteFlipped = true;
+                if (isSpriteFlipped)
+                    isSpriteFlipped = false;
+            }
+            else
+            {
+                pivot.localScale = new Vector3(-1, 1, 1);
+                //GetComponentInChildren<SpriteRenderer>().flipX = true;
+
+                if (!isSpriteFlipped)
+                    isSpriteFlipped = true;
+            }
         }
+        
     }
 
     public void CheckStatus()
@@ -757,7 +833,8 @@ public class EnemyBase : MonoBehaviour
             else
             {
                 DrawNormalAttackHitbox();
-                DrawChargedAttackHitbox();
+                if (hasChargeAttack)
+                    DrawChargedAttackHitbox();
             }
         }
 
