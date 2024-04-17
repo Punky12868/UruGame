@@ -6,8 +6,6 @@ public class EnemyBase : MonoBehaviour
 {
     // PlaceHolder for the EnemyBase
 
-    // TO DO: Add a way to avoid the player and attack from a distance
-
     #region Variables
     [HideInInspector] public Animator anim;
     [HideInInspector] public Rigidbody rb;
@@ -35,12 +33,15 @@ public class EnemyBase : MonoBehaviour
     [HideInInspector] public bool decidedChargeAttack;
     [HideInInspector] public bool chargeAttackedConsidered;
     [HideInInspector] public bool avoidingTarget;
+    [HideInInspector] public bool hasQueuedAnimation;
 
     [Header("AI Stats")]
     public float health = 100;
     [HideInInspector] public float currentHealth;
     public int normalAttackdamage = 5;
+    public int normalAttackKnockback = 5;
     [ShowIf("isMelee", true, true)][ShowIf("hasChargeAttack", true, true)][ShowIf("isMelee", true, true)][ShowIf("hasChargeAttack", true, true)] public int chargeAttackDamage = 5;
+    [ShowIf("isMelee", true, true)][ShowIf("hasChargeAttack", true, true)][ShowIf("isMelee", true, true)][ShowIf("hasChargeAttack", true, true)] public int chargeAttackKnockback = 15;
     [HideInInspector] public float speed;
     public float walkingSpeed = 1;
     public bool canRun;
@@ -55,6 +56,8 @@ public class EnemyBase : MonoBehaviour
     [ShowIf("isMelee", false, true)] public GameObject projectile;
     [ShowIf("isMelee", false, true)] public Transform projectileSpawnPoint;
 
+    public bool hasKnockback;
+    [ShowIf("hasKnockback", true, true)] public float knockbackForce = 5.5f;
     public bool canBeParried = true;
     [ShowIf("canBeParried", true, true)] public bool projectileCanBeParried = false;
     [ShowIf("isMelee", true, true)] [ShowIf("canBeParried", true, true)] [ShowIf("projectileCanBeParried", false, true)] public bool canBeParryStunned;
@@ -97,10 +100,13 @@ public class EnemyBase : MonoBehaviour
     [ShowIf("isMelee", true, true)][ShowIf("hasChargeAttack", true, true)] public float chargeDecitionCooldown = 2.5f;
 
     [Header("AI Avoidance")]
+    [ShowIf("isStatic", false, true)] public float enemyAvoidanceRange = 0.5f;
+    [ShowIf("isStatic", false, true)] public float wallAvoidanceSpeed = 7.5f;
     [ShowIf("isMelee", false, true)][ShowIf("isStatic", false, true)] public bool avoidTarget;
     [ShowIf("isMelee", false, true)][ShowIf("avoidTarget", true, true)][ShowIf("isStatic", false, true)] public float avoidRange = 2;
 
     [Header("AI Animations")]
+    [HideInInspector] public string queueAnimation;
     public string[] animationIDs;
     AnimationClip[] clips;
 
@@ -111,6 +117,7 @@ public class EnemyBase : MonoBehaviour
     [ShowIf("debugTools", true, true)] [SerializeField] private Transform debugDrawCenter;
     [ShowIf("debugTools", true, true)] [SerializeField] private Color runRageColor = new Color(1, 0, 1,  1);
     [ShowIf("debugTools", true, true)] [SerializeField] private Color tooCloseColor = new Color(0, 1, 0, 1);
+    [ShowIf("debugTools", true, true)] [SerializeField] private Color wallAvoidanceColor = new Color(1, 1, 0, 1);
     [ShowIf("debugTools", true, true)] [SerializeField] private Color closeAttackColor = new Color(1, 0, 0, 1);
     [ShowIf("debugTools", true, true)] [SerializeField] private Color farAttackColor = new Color(1, 0.5f, 0, 1);
     [ShowIf("debugTools", true, true)] [SerializeField] private Color avoidRangeColor = new Color(1, 1, 0, 1);
@@ -165,6 +172,7 @@ public class EnemyBase : MonoBehaviour
         ResetAnimClipUpdate();
         RotateHitboxCentreToFaceThePlayer();
         SetTargetDirection();
+        QueueAnimation();
     }
 
     public void SetTargetDirection()
@@ -172,8 +180,72 @@ public class EnemyBase : MonoBehaviour
         Vector3 targetPos = new Vector3(target.position.x, transform.position.y, target.position.z);
         Vector3 enemyPos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
         Vector3 dir = (targetPos - enemyPos).normalized;
-        targetDir = dir;
+        GetNearestEnemy(dir);
     }
+
+    public void GetNearestEnemy(Vector3 dir)
+    {
+        if (avoidTarget && !isMelee)
+        {
+            targetDir = dir;
+            return;
+        }
+
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, enemyAvoidanceRange);
+
+        foreach (Collider c in hitColliders)
+        {
+            if (c.CompareTag("Enemy") && c != GetComponent<Collider>() || c.CompareTag("Wall"))
+            {
+                Vector3 enemyDirection = (c.transform.position - transform.position).normalized;
+                enemyDirection.y = 0f;
+
+                //targetDir = Vector3.Slerp(targetDir, -enemyDirection, Time.deltaTime * wallAvoidanceSpeed);
+                targetDir = -enemyDirection;
+            }
+            else
+            {
+                targetDir = dir;
+                targetDir = Vector3.Slerp(targetDir, dir, Time.deltaTime * wallAvoidanceSpeed);
+            }
+        }
+    }
+
+    /*public void GetNearestEnemy(Vector3 dir)
+    {
+        RaycastHit hit;
+        Vector3 rayDirection = dir;
+
+        if (avoidTarget && !isMelee)
+        {
+            targetDir = dir;
+            return;
+        }
+
+        if (Physics.Raycast(transform.position, rayDirection, out hit, wallAvoidanceRange))
+        {
+            if (hit.collider.CompareTag("Wall"))
+            {
+                Vector3 wallDirection = hit.point - transform.position;
+                wallDirection.y = 0f;
+
+                float dot = Vector3.Dot(transform.right, wallDirection);
+                if (dot > 0f)
+                {
+                    targetDir = Vector3.Slerp(targetDir, targetDir + Vector3.Cross(Vector3.up, wallDirection).normalized, Time.deltaTime * wallAvoidanceSpeed);
+                }
+                else
+                {
+                    targetDir = Vector3.Slerp(targetDir, targetDir + Vector3.Cross(wallDirection, Vector3.up).normalized, Time.deltaTime * wallAvoidanceSpeed);
+                }
+            }
+        }
+        else
+        {
+            targetDir = dir;
+            targetDir = Vector3.Slerp(targetDir, dir, Time.deltaTime * wallAvoidanceSpeed);
+        }
+    }*/
 
     public virtual void Movement()
     {
@@ -232,32 +304,12 @@ public class EnemyBase : MonoBehaviour
 
     public virtual void AvoidBehaviour()
     {
-        /*if (isStunned || isParried)
-            return;
-
-        // Check if the player is in range, if its in the avoid range, move away from the player
-        if (Vector3.Distance(target.position, transform.position) <= avoidRange)
-        {
-            // Move away from the player
-            if (isAttacking == true)
-            {
-                isAttacking = false;
-            }
-        }
-        else
-        {
-            // Attack the player
-            if (isAttacking == false)
-            {
-                isAttacking = true;
-            }
-        }*/
     }
 
     public virtual void SummonProjectile()
     {
         GameObject prjctl = Instantiate(projectile, projectileSpawnPoint.position, projectileSpawnPoint.rotation);
-        prjctl.GetComponent<ProjectileLogic>().SetVariables(projectileSpeed, normalAttackdamage, projectileLifeTime, projectileCanBeParried, targetDir /*lastTargetDir*/);
+        prjctl.GetComponent<ProjectileLogic>().SetVariables(projectileSpeed, normalAttackdamage, projectileLifeTime, normalAttackKnockback, projectileCanBeParried, targetDir /*lastTargetDir*/);
     }
 
     public virtual void MoveOnNormalAttack()
@@ -294,7 +346,7 @@ public class EnemyBase : MonoBehaviour
                 }
                 else
                 {
-                    hitCollider.GetComponent<PlayerController>().TakeDamage(normalAttackdamage);
+                    hitCollider.GetComponent<PlayerController>().TakeDamage(normalAttackdamage, normalAttackKnockback, -targetDir);
                     Debug.Log("Player normal hit");
                 }
 
@@ -330,7 +382,7 @@ public class EnemyBase : MonoBehaviour
                 }
                 else
                 {
-                    hitCollider.GetComponent<PlayerController>().TakeDamage(chargeAttackDamage);
+                    hitCollider.GetComponent<PlayerController>().TakeDamage(chargeAttackDamage, chargeAttackKnockback, -targetDir);
                     Debug.Log("Player normal charged hit");
                 }
 
@@ -393,14 +445,6 @@ public class EnemyBase : MonoBehaviour
 
     public virtual void ParriedEnemy(float time)
     {
-        if (canBeParryStunned)
-        {
-            isStunned = true;
-        }
-        isParried = true;
-        PlayAnimation(animationIDs[1], false, false, true);
-        Debug.Log("Parried");
-        Invoke("ResetParried", time);
     }
 
     public void ResetStun()
@@ -564,6 +608,59 @@ public class EnemyBase : MonoBehaviour
         }
     }
 
+    public void PlayAnimation(string animName, bool hasExitTime, bool activateCooldown, bool bypassExitTime, bool queuedAnimation)
+    {
+        if (bypassExitTime)
+            isAnimationDone = true;
+
+        if (queuedAnimation)
+        {
+            hasQueuedAnimation = true;
+            queueAnimation = animName;
+            return;
+        }
+
+        if (!isAnimationDone)
+            return;
+
+        for (int i = 0; i < animationIDs.Length; i++)
+        {
+            if (animName == animationIDs[i])
+            {
+                anim.Play(animName);
+
+                if (hasExitTime)
+                {
+                    isAnimationDone = false;
+
+                    foreach (AnimationClip clip in clips)
+                    {
+                        if (clip.name == animName)
+                        {
+                            animClipLength = clip.length;
+                        }
+                    }
+                }
+
+                if (activateCooldown)
+                {
+                    Invoke("StartCooldown", animClipLength);
+                }
+
+                return;
+            }
+        }
+    }
+
+    public void QueueAnimation()
+    {
+        if (hasQueuedAnimation && isAnimationDone)
+        {
+            PlayAnimation(queueAnimation, true, false);
+            hasQueuedAnimation = false;
+        }
+    }
+
     public void ResetAnimClipUpdate()
     {
         if (animClipLength <= 0)
@@ -584,6 +681,8 @@ public class EnemyBase : MonoBehaviour
     #region Utility
     public void RemoveComponentsOnDeath()
     {
+        isDead = true;
+        FindObjectOfType<WaveSystem>().UpdateDeadEnemies();
         Destroy(rb);
         Destroy(GetComponent<Collider>());
         Destroy(this);
@@ -684,7 +783,7 @@ public class EnemyBase : MonoBehaviour
         if (normalAttackdamage <= 0)
             Debug.LogError("Damage is missing!");
 
-        if (speed <= 0)
+        if (speed <= 0 && !isStatic)
             Debug.LogError("Speed is missing!");
     }
 
@@ -794,6 +893,13 @@ public class EnemyBase : MonoBehaviour
         Debug.DrawLine(prevPoint, center + new Vector3(tooClose, 0, 0), tooCloseColor);
     }
 
+    public void DrawWallAvoidance()
+    {
+        // draws a line in the direction of the wall the enemy is avoiding
+        Vector3 direction = targetDir;
+        Debug.DrawRay(transform.position, direction * enemyAvoidanceRange, wallAvoidanceColor);
+    }
+
     private void DrawRunRange()
     {
         Vector3 center = debugDrawCenter.position;
@@ -839,6 +945,7 @@ public class EnemyBase : MonoBehaviour
         }
 
         DrawTooCloseRange();
+        DrawWallAvoidance();
 
         if (canRun)
             DrawRunRange();
@@ -854,6 +961,9 @@ public class EnemyBase : MonoBehaviour
         {
             DrawAvoidRange();
         }
+
+        Gizmos.color = wallAvoidanceColor;
+        Gizmos.DrawWireSphere(transform.position, enemyAvoidanceRange);
     }
     #endregion
 }

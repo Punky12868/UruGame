@@ -68,10 +68,7 @@ public class SmallEnemyPlaceholder : EnemyBase
                 PlayAnimation(animationIDs[2], false);
             }
 
-            Vector3 targetPos = new Vector3(target.position.x, transform.position.y, target.position.z);
-            Vector3 enemyPos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
-            Vector3 dir = (targetPos - enemyPos).normalized;
-            rb.MovePosition(transform.position + dir * speed * Time.deltaTime);
+            rb.MovePosition(transform.position + targetDir * speed * Time.deltaTime);
             isMoving = true;
         }
         else
@@ -80,9 +77,46 @@ public class SmallEnemyPlaceholder : EnemyBase
         }
     }
 
+    public override void TakeDamage(float damage)
+    {
+        if (isDead)
+            return;
+
+        if (hasKnockback)
+        {
+            rb.AddForce((transform.position - target.position).normalized * knockbackForce, ForceMode.Impulse);
+        }
+
+        currentHealth -= damage;
+
+        if (currentHealth <= 0)
+        {
+            //RemoveComponentsOnDeath();
+            Death();
+        }
+        else
+        {
+            //HIT ANIMATION
+            PlayAnimation(animationIDs[5], true/*, false, true*/);
+        }
+    }
+
+    public override void ParriedEnemy(float time)
+    {
+        if (canBeParryStunned)
+        {
+            isStunned = true;
+        }
+        isParried = true;
+        PlayAnimation(animationIDs[5], false, false, true);
+        PlayAnimation(animationIDs[1], false, false, false, true);
+        Debug.Log("Parried");
+        Invoke("ResetParried", time);
+    }
+
     public override void Death()
     {
-        PlayAnimation(animationIDs[7], false);
+        PlayAnimation(animationIDs[7], false, false, true);
         RemoveComponentsOnDeath();
     }
 
@@ -125,10 +159,7 @@ public class SmallEnemyPlaceholder : EnemyBase
         }
         else
         {
-            Vector3 targetPos = new Vector3(target.position.x, transform.position.y, target.position.z);
-            Vector3 enemyPos = new Vector3(transform.position.x, transform.position.y, transform.position.y);
-            Vector3 dir = -(targetPos - enemyPos).normalized;
-            rb.MovePosition(transform.position + dir * speed * Time.deltaTime);
+            rb.MovePosition(transform.position + -targetDir * speed * Time.deltaTime);
             isMoving = true;
 
             PlayAnimation(animationIDs[2], false);

@@ -6,16 +6,18 @@ public class ProjectileLogic : MonoBehaviour
 {
     private float travelSpeed;
     private float damage;
+    private float knockbackForce;
     private bool canBeParried;
     private bool isParried;
     private Vector3 direction;
 
-    public void SetVariables(float speed, float dmg, float lftime, bool parry, Vector3 dir)
+    public void SetVariables(float speed, float dmg, float lftime, float knckbck, bool parry, Vector3 dir)
     {
         travelSpeed = speed;
         damage = dmg;
         direction = dir;
         canBeParried = parry;
+        knockbackForce = knckbck;
 
         Destroy(gameObject, lftime);
     }
@@ -32,10 +34,11 @@ public class ProjectileLogic : MonoBehaviour
             if (canBeParried && other.GetComponent<PlayerController>().GetPlayerState() == "Parry")
             {
                 direction *= -1;
+                isParried = true;
             }
             else
             {
-                other.GetComponent<PlayerController>().TakeDamage(damage);
+                other.GetComponent<PlayerController>().TakeDamage(damage, knockbackForce, transform.position);
                 Destroy(gameObject);
             }
             

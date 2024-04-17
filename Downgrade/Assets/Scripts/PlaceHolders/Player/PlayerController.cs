@@ -10,11 +10,15 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rb;
     private Animator anim;
 
-    private Vector2 direction;
+    private Vector3 direction;
+    private Vector3 lastDirection;
 
     [Header("Misc")]
     [SerializeField] private float health = 100;
     [SerializeField] private float speed = 5f;
+    [SerializeField] private float rollForce = 5f;
+    [SerializeField] private float rollInmunity = 1f;
+    [SerializeField] private float rollCooldown = 1f;
 
     float currentHealth;
 
@@ -22,7 +26,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float attackDamage = 5;
     [SerializeField] private float cooldownTime = 0.5f;
     [SerializeField] private float comboCooldownTime = 0.5f;
+    [SerializeField] private bool canBeStaggered = false;
+    [SerializeField] private float damagedCooldown = 0.35f;
     [SerializeField] private float attackForce;
+    //[SerializeField] private float knockbackForce;
 
     private float comboTime;
 
@@ -55,6 +62,8 @@ public class PlayerController : MonoBehaviour
     private bool canCombo = false;
     private bool drawingAttackHitbox = false;
 
+    private bool canMove = true;
+    private bool canBeDamaged = true;
     private bool isParrying = false;
     private bool isAttacking = false;
     private bool isRolling = false;
@@ -76,6 +85,9 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (!canMove)
+            return;
+
         Inputs();
         PlayerAnimations();
 
@@ -88,24 +100,27 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!canMove || isAttacking || isRolling)
+            return;
+
         if (direction.sqrMagnitude > directionThreshold)
         {
-            rb.velocity = new Vector3(direction.x, 0, direction.y).normalized * speed;
-
+            rb.velocity = direction.normalized * speed;
+            lastDirection = direction;
             /*if (rb.velocity.magnitude > speed)
                 rb.velocity = rb.velocity.normalized * speed;*/
-        } 
+        }
     }
 
     private void Inputs()
     {
         if (isAttacking || wasParryPressed)
         {
-            direction = Vector2.zero;
+            direction = Vector3.zero;
         }
         else
         {
-            direction = new Vector2(input.GetAxisRaw("Horizontal"), input.GetAxisRaw("Vertical"));
+            direction = new Vector3(input.GetAxisRaw("Horizontal"), 0, input.GetAxisRaw("Vertical"));
         }
 
         if (input.GetButtonDown("Attack"))
@@ -124,13 +139,43 @@ public class PlayerController : MonoBehaviour
 
         if (input.GetButtonDown("Roll"))
         {
+            Roll();
         }
     }
 
-    public void TakeDamage(float damage)
+    private void Roll()
     {
-        if (isDead)
+        if (isRolling || isAttacking)
             return;
+
+        if (direction == Vector3.zero)
+        {
+            rb.AddForce(lastDirection.normalized * rollForce, ForceMode.Impulse);
+        }
+        else
+        {
+            rb.AddForce(direction.normalized * rollForce, ForceMode.Impulse);
+        }
+
+        isRolling = true;
+        canBeDamaged = false;
+        Invoke("ResetDamage", rollInmunity);
+        Invoke("ResetRoll", rollCooldown);
+    }
+
+    public void TakeDamage(float damage, float knockbackForce, Vector3 damagePos)
+    {
+        if (isDead || !canBeDamaged)
+            return;
+
+        rb.AddForce(-damagePos.normalized * knockbackForce, ForceMode.Impulse);
+
+        if (canBeStaggered)
+        {
+            canMove = false;
+            Invoke("ActivateMovement", damagedCooldown);
+            PlayAnimation(animationIDs[0], false, true);
+        }
 
         currentHealth -= damage;
 
@@ -148,6 +193,11 @@ public class PlayerController : MonoBehaviour
     }
 
     #region Invokes
+    private void ActivateMovement()
+    {
+        canMove = true;
+    }
+
     private void ActivateParry()
     {
         isParrying = true;
@@ -197,6 +247,16 @@ public class PlayerController : MonoBehaviour
     private void ResetCooldown(float time)
     {
         comboTime = time;
+    }
+
+    private void ResetRoll()
+    {
+        isRolling = false;
+    }
+
+    private void ResetDamage()
+    {
+        canBeDamaged = true;
     }
     #endregion
 
@@ -249,7 +309,7 @@ public class PlayerController : MonoBehaviour
             temp.x *= -1;
         }
 
-        rb.AddForce(transform.TransformDirection(temp) * attackForce, ForceMode.Impulse);
+        rb.AddForce(lastDirection.normalized * attackForce, ForceMode.Impulse);
         Collider[] hitColliders = Physics.OverlapBox(transform.position + transform.TransformDirection(temp), hitboxSize, Quaternion.identity);
 
         foreach (Collider hit in hitColliders)
@@ -294,46 +354,46 @@ public class PlayerController : MonoBehaviour
     #region Animation
     private void PlayerAnimations()
     {
-        if (direction == Vector2.zero)
+        if (direction == Vector3.zero)
         {
             PlayAnimation(animationIDs[0]); // Idle
         }
         else
         {
-            if (direction.x < 0 && direction.y == 0)
+            if (direction.x < 0 && direction.z == 0)
             {
                 PlayAnimation(animationIDs[5]); // WalkLeft
                 isFacingRight = false;
             }
-            else if (direction.x > 0 && direction.y == 0)
+            else if (direction.x > 0 && direction.z == 0)
             {
                 PlayAnimation(animationIDs[4]); // WalkRight
                 isFacingRight = true;
             }
-            else if (direction.y > 0 && direction.x == 0)
+            else if (direction.z > 0 && direction.x == 0)
             {
                 PlayAnimation(animationIDs[3]); // WalkUp
             }
-            else if (direction.y < 0 && direction.x == 0)
+            else if (direction.z < 0 && direction.x == 0)
             {
                 PlayAnimation(animationIDs[6]); // WalkDown
             }
-            else if (direction.x < 0 && direction.y > 0)
+            else if (direction.x < 0 && direction.z > 0)
             {
                 PlayAnimation(animationIDs[2]); // WalkLeftUp
                 isFacingRight = false;
             }
-            else if (direction.x > 0 && direction.y > 0)
+            else if (direction.x > 0 && direction.z > 0)
             {
                 PlayAnimation(animationIDs[1]); // WalkRightUp
                 isFacingRight = true;
             }
-            else if (direction.x < 0 && direction.y < 0)
+            else if (direction.x < 0 && direction.z < 0)
             {
                 PlayAnimation(animationIDs[5]); // WalkLeftDown
                 isFacingRight = false;
             }
-            else if (direction.x > 0 && direction.y < 0)
+            else if (direction.x > 0 && direction.z < 0)
             {
                 PlayAnimation(animationIDs[4]); // WalkRightDown
                 isFacingRight = true;
