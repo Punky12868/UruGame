@@ -6,6 +6,12 @@ public class BigEnemyPlaceholder : EnemyBase
 {
     // PlaceHolder for a Big Enemy
 
+    public override void Awake()
+    {
+        isBigEnemy = true;
+        base.Awake();
+    }
+
     public void FixedUpdate()
     {
         OnCooldown();

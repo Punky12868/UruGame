@@ -17,6 +17,7 @@ public class EnemyBase : MonoBehaviour
     [HideInInspector] public float animClipLength;
     [HideInInspector] public bool isAnimationDone;
 
+    [HideInInspector] public bool isBigEnemy;
     [HideInInspector] public bool isSpawning;
     [HideInInspector] public bool isMoving;
     [HideInInspector] public bool isRunning;
@@ -130,7 +131,6 @@ public class EnemyBase : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         pivot = GetComponentInParent<Transform>();
         clips = anim.runtimeAnimatorController.animationClips;
-
         target = GameObject.FindGameObjectWithTag("Player").transform;
 
         if (isStatic)
@@ -210,42 +210,6 @@ public class EnemyBase : MonoBehaviour
             }
         }
     }
-
-    /*public void GetNearestEnemy(Vector3 dir)
-    {
-        RaycastHit hit;
-        Vector3 rayDirection = dir;
-
-        if (avoidTarget && !isMelee)
-        {
-            targetDir = dir;
-            return;
-        }
-
-        if (Physics.Raycast(transform.position, rayDirection, out hit, wallAvoidanceRange))
-        {
-            if (hit.collider.CompareTag("Wall"))
-            {
-                Vector3 wallDirection = hit.point - transform.position;
-                wallDirection.y = 0f;
-
-                float dot = Vector3.Dot(transform.right, wallDirection);
-                if (dot > 0f)
-                {
-                    targetDir = Vector3.Slerp(targetDir, targetDir + Vector3.Cross(Vector3.up, wallDirection).normalized, Time.deltaTime * wallAvoidanceSpeed);
-                }
-                else
-                {
-                    targetDir = Vector3.Slerp(targetDir, targetDir + Vector3.Cross(wallDirection, Vector3.up).normalized, Time.deltaTime * wallAvoidanceSpeed);
-                }
-            }
-        }
-        else
-        {
-            targetDir = dir;
-            targetDir = Vector3.Slerp(targetDir, dir, Time.deltaTime * wallAvoidanceSpeed);
-        }
-    }*/
 
     public virtual void Movement()
     {
@@ -341,8 +305,17 @@ public class EnemyBase : MonoBehaviour
             {
                 if (hitCollider.GetComponent<PlayerController>().GetPlayerState() == "Parry" && canBeParried)
                 {
-                    ParriedEnemy(parryStunTime);
-                    Debug.Log("Player parried hit");
+                    if (Vector3.Dot(hitCollider.GetComponent<PlayerController>().GetLastDirection(), targetDir) <= -0.5f && Vector3.Dot(hitCollider.GetComponent<PlayerController>().GetLastDirection(), targetDir) >= -1)
+                    {
+                        ParriedEnemy(parryStunTime);
+                        hitCollider.GetComponent<PlayerController>().GetParryReward(isBigEnemy, false);
+                        Debug.Log("Player parried hit");
+                    }
+                    else
+                    {
+                        hitCollider.GetComponent<PlayerController>().TakeDamage(normalAttackdamage, normalAttackKnockback, -targetDir);
+                        Debug.Log("Player normal hit - Failed Parry");
+                    }
                 }
                 else
                 {
@@ -377,8 +350,18 @@ public class EnemyBase : MonoBehaviour
             {
                 if (hitCollider.GetComponent<PlayerController>().GetPlayerState() == "Parry" && canBeParried && canParryChargeAttack)
                 {
-                    ParriedEnemy(parryStunTime);
-                    Debug.Log("Player parried charged hit");
+                    // dot product of the player direction and the enemy direction, if the player is facing the enemy, parry the charge attack
+                    if (Vector3.Dot(hitCollider.GetComponent<PlayerController>().GetLastDirection(), targetDir) > 0.5f)
+                    {
+                        ParriedEnemy(parryStunTime);
+                        hitCollider.GetComponent<PlayerController>().GetParryReward(isBigEnemy, true);
+                        Debug.Log("Player parried charged hit");
+                    }
+                    else
+                    {
+                        hitCollider.GetComponent<PlayerController>().TakeDamage(chargeAttackDamage, chargeAttackKnockback, -targetDir);
+                        Debug.Log("Player normal charged hit - Failed Parry");
+                    }
                 }
                 else
                 {

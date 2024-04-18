@@ -15,14 +15,28 @@ public class PlayerController : MonoBehaviour
 
     [Header("Misc")]
     [SerializeField] private float health = 100;
+    [SerializeField] private float healthBigEnemyReward = 10;
+    [SerializeField] private float healthBossReward = 45;
     [SerializeField] private float speed = 5f;
+    [SerializeField] private float stamina = 100;
+    [SerializeField] private float staminaCooldown = 1.5f;
+    [SerializeField] private float staminaRegenSpeed = 5;
+    [SerializeField] private float staminaNormalReward = 10;
+    [SerializeField] private float staminaBigEnemyReward = 20;
+    [SerializeField] private float staminaBossReward = 50;
+    [SerializeField] private float staminaUsageRoll;
+    [SerializeField] private float staminaUsageAttack;
     [SerializeField] private float rollForce = 5f;
     [SerializeField] private float rollInmunity = 1f;
     [SerializeField] private float rollCooldown = 1f;
 
     float currentHealth;
+    float currentStamina;
+    float staminaTimer;
 
     [Header("Fighting")]
+    [SerializeField] private Transform hitboxCenter;
+    [SerializeField] private float offset = 0.3f;
     [SerializeField] private float attackDamage = 5;
     [SerializeField] private float cooldownTime = 0.5f;
     [SerializeField] private float comboCooldownTime = 0.5f;
@@ -81,10 +95,13 @@ public class PlayerController : MonoBehaviour
         anim = GetComponent<Animator>();
         clips = anim.runtimeAnimatorController.animationClips;
         currentHealth = health;
+        currentStamina = stamina;
     }
 
     private void Update()
     {
+        Stamina();
+
         if (!canMove)
             return;
 
@@ -102,6 +119,8 @@ public class PlayerController : MonoBehaviour
     {
         if (!canMove || isAttacking || isRolling)
             return;
+
+        RotateHitboxCentreToFaceTheDirection();
 
         if (direction.sqrMagnitude > directionThreshold)
         {
@@ -143,9 +162,56 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void Roll()
+    private void Stamina()
     {
         if (isRolling || isAttacking)
+        {
+            staminaTimer = 0;
+        }
+        else
+        {
+            if (staminaTimer < staminaCooldown)
+            {
+                staminaTimer += Time.deltaTime;
+            }
+            else
+            {
+                if (currentStamina < stamina)
+                {
+                    currentStamina += staminaRegenSpeed * Time.deltaTime;
+                }
+            }
+        }
+    }
+
+    public void GetParryReward(bool isBigEnemy, bool isBoss)
+    {
+        if (isBigEnemy)
+        {
+            currentStamina += staminaBigEnemyReward;
+            currentHealth += healthBigEnemyReward;
+        }
+        else if (isBoss)
+        {
+            currentStamina += staminaBossReward;
+            currentHealth += healthBossReward;
+            // damage multiplier
+        }
+        else
+        {
+            currentStamina += staminaNormalReward;
+        }
+
+        if (currentStamina > stamina)
+            currentStamina = stamina;
+
+        if (currentHealth > health)
+            currentHealth = health;
+    }
+
+    private void Roll()
+    {
+        if (isRolling || isAttacking || currentStamina < staminaUsageRoll)
             return;
 
         if (direction == Vector3.zero)
@@ -157,6 +223,7 @@ public class PlayerController : MonoBehaviour
             rb.AddForce(direction.normalized * rollForce, ForceMode.Impulse);
         }
 
+        currentStamina -= staminaUsageRoll;
         isRolling = true;
         canBeDamaged = false;
         Invoke("ResetDamage", rollInmunity);
@@ -190,6 +257,18 @@ public class PlayerController : MonoBehaviour
         //Destroy(gameObject);
         isDead = true;
         playerState = "Dead";
+    }
+
+    private void RotateHitboxCentreToFaceTheDirection()
+    {
+        if (lastDirection == Vector3.zero)
+            return;
+
+        Vector3 direction = lastDirection.normalized;
+        Vector3 desiredPosition = transform.position + direction * offset;
+        Quaternion rotation = Quaternion.LookRotation(direction);
+        hitboxCenter.rotation = rotation;
+        hitboxCenter.position = new Vector3(desiredPosition.x, hitboxCenter.position.y, desiredPosition.z);
     }
 
     #region Invokes
@@ -263,6 +342,9 @@ public class PlayerController : MonoBehaviour
     #region Overlap Hitbox
     private void OverlapAttack()
     {
+        if (currentStamina < staminaUsageAttack)
+            return;
+
         bool isCombo = false;
         if (canCombo)
         {
@@ -303,14 +385,9 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Attack");
         }
 
-        Vector3 temp = hitboxPos;
-        if (isFacingRight)
-        {
-            temp.x *= -1;
-        }
-
+        currentStamina -= staminaUsageAttack;
         rb.AddForce(lastDirection.normalized * attackForce, ForceMode.Impulse);
-        Collider[] hitColliders = Physics.OverlapBox(transform.position + transform.TransformDirection(temp), hitboxSize, Quaternion.identity);
+        Collider[] hitColliders = Physics.OverlapBox(hitboxCenter.position, hitboxSize, Quaternion.LookRotation(lastDirection));
 
         foreach (Collider hit in hitColliders)
         {
@@ -330,13 +407,7 @@ public class PlayerController : MonoBehaviour
             Invoke("ResetParry", parryWindowTime.y);
         }
 
-        Vector3 temp = hitboxPos;
-        if (isFacingRight)
-        {
-            temp.x *= -1;
-        }
-
-        Collider[] hitColliders = Physics.OverlapBox(transform.position + transform.TransformDirection(temp), hitboxSize, Quaternion.identity);
+        Collider[] hitColliders = Physics.OverlapBox(hitboxCenter.position, hitboxSize, Quaternion.LookRotation(lastDirection));
 
         foreach (Collider hit in hitColliders)
         {
@@ -507,31 +578,36 @@ public class PlayerController : MonoBehaviour
     {
         return playerState;
     }
+
+    public Vector3 GetLastDirection()
+    {
+        return lastDirection;
+    }
     #endregion
 
     #region Debug
     private void DrawAttackHitbox()
     {
-        Vector3 temp = hitboxPos;
-        if (isFacingRight)
+        if (lastDirection == Vector3.zero)
         {
-            temp.x *= -1;
+            VisualizeBox.DisplayBox(hitboxPos + hitboxCenter.position, hitboxSize, Quaternion.identity, attackHitboxColor);
         }
-
-        Gizmos.color = attackHitboxColor;
-        Gizmos.DrawWireCube(transform.position + transform.TransformDirection(temp), hitboxSize);
+        else
+        {
+            VisualizeBox.DisplayBox(hitboxPos + hitboxCenter.position, hitboxSize, Quaternion.LookRotation(lastDirection), attackHitboxColor);
+        }
     }
 
     private void DrawParryHitbox()
     {
-        Vector3 temp = hitboxPos;
-        if (isFacingRight)
+        if (lastDirection == Vector3.zero)
         {
-            temp.x *= -1;
+            VisualizeBox.DisplayBox(hitboxPos + hitboxCenter.position, hitboxSize, Quaternion.identity, parryHitboxColor);
         }
-
-        Gizmos.color = parryHitboxColor;
-        Gizmos.DrawWireCube(transform.position + transform.TransformDirection(temp), hitboxSize);
+        else
+        {
+            VisualizeBox.DisplayBox(hitboxPos + hitboxCenter.position, hitboxSize, Quaternion.LookRotation(lastDirection), parryHitboxColor);
+        }
     }
 
     private void OnDrawGizmos()

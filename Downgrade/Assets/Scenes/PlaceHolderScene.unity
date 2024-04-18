@@ -167,6 +167,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0371505b081c0f64a96e8d9a59140c57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &111683974
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 111683975}
+  m_Layer: 3
+  m_Name: HitboxPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &111683975
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 111683974}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 934431436}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &183795812
 GameObject:
   m_ObjectHideFlags: 0
@@ -1382,7 +1413,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 111683975}
   m_Father: {fileID: 858613144}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1399,10 +1431,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
+  healthBigEnemyReward: 100
+  healthBossReward: 100
   speed: 2.5
+  stamina: 100
+  staminaCooldown: 1
+  staminaRegenSpeed: 20
+  staminaNormalReward: 200
+  staminaBigEnemyReward: 200
+  staminaBossReward: 50
+  staminaUsageRoll: 10
+  staminaUsageAttack: 20
   rollForce: 35
   rollInmunity: 0.5
   rollCooldown: 0.3
+  hitboxCenter: {fileID: 111683975}
+  offset: 0.3
   attackDamage: 49
   cooldownTime: 0.5
   comboCooldownTime: 0.5
@@ -1412,8 +1456,8 @@ MonoBehaviour:
   directionThreshold: 0.1
   comboWindowTime: {x: 0.15, y: 0.45}
   parryWindowTime: {x: 0.35, y: 0.3}
-  hitboxPos: {x: -0.067, y: 0.216, z: 0}
-  hitboxSize: {x: 0.5, y: 0.5, z: 0.5}
+  hitboxPos: {x: 0, y: 0.25, z: 0}
+  hitboxSize: {x: 0.1, y: 0.2, z: 0.25}
   animationIDs:
   - Player_RelaxDown
   - Player_RunUpRight
@@ -1428,7 +1472,7 @@ MonoBehaviour:
   - 
   debugTools: 1
   drawHitbox: 1
-  drawHitboxOnGameplay: 1
+  drawHitboxOnGameplay: 0
   attackHitboxTime: 0.25
   attackHitboxColor: {r: 1, g: 0, b: 0, a: 1}
   parryHitboxColor: {r: 0, g: 1, b: 0, a: 1}
@@ -1553,7 +1597,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.212558, y: 0.000000008406596, z: -0.0000000018286773, w: 0.9771485}
+  m_LocalRotation: {x: 0.212558, y: -0.000000008406593, z: 0.0000000018286765, w: 0.9771485}
   m_LocalPosition: {x: 0, y: 4.11, z: -18.83897}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2252,7 +2296,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1332516484}
-  m_LocalRotation: {x: 0.212558, y: 0.000000008406596, z: -0.0000000018286773, w: 0.9771485}
+  m_LocalRotation: {x: 0.212558, y: -0.000000008406593, z: 0.0000000018286765, w: 0.9771485}
   m_LocalPosition: {x: 0, y: 4.11, z: -18.83897}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
