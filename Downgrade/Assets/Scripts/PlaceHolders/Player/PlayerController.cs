@@ -96,6 +96,7 @@ public class PlayerController : MonoBehaviour
         clips = anim.runtimeAnimatorController.animationClips;
         currentHealth = health;
         currentStamina = stamina;
+        GetComponent<PlayerUI>().SetUI();
     }
 
     private void Update()
@@ -109,7 +110,7 @@ public class PlayerController : MonoBehaviour
         PlayerAnimations();
 
         if(isParrying)
-            OverlapParry();
+            ParryLogic();
 
         CooldownUpdate();
         ResetAnimClipUpdate();
@@ -399,25 +400,13 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OverlapParry()
+    private void ParryLogic()
     {
         if (!wasParryInvoked)
         {
             wasParryInvoked = true;
             Invoke("ResetParry", parryWindowTime.y);
         }
-
-        Collider[] hitColliders = Physics.OverlapBox(hitboxCenter.position, hitboxSize, Quaternion.LookRotation(lastDirection));
-
-        foreach (Collider hit in hitColliders)
-        {
-            if (hit.CompareTag("Enemy"))
-            {
-                Debug.Log("Parry");
-                //hit.GetComponent<EnemyBase>().StunEnemy(1);
-            }
-        }
-
         PlayAnimation(animationIDs[9], true); // Parry
     }
     #endregion
@@ -574,6 +563,16 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Utility
+    public float GetCurrentHealth()
+    {
+        return currentHealth;
+    }
+
+    public float GetCurrentStamina()
+    {
+        return currentStamina;
+    }
+
     public string GetPlayerState()
     {
         return playerState;
@@ -598,18 +597,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void DrawParryHitbox()
-    {
-        if (lastDirection == Vector3.zero)
-        {
-            VisualizeBox.DisplayBox(hitboxPos + hitboxCenter.position, hitboxSize, Quaternion.identity, parryHitboxColor);
-        }
-        else
-        {
-            VisualizeBox.DisplayBox(hitboxPos + hitboxCenter.position, hitboxSize, Quaternion.LookRotation(lastDirection), parryHitboxColor);
-        }
-    }
-
     private void OnDrawGizmos()
     {
         if (drawHitbox)
@@ -618,14 +605,10 @@ public class PlayerController : MonoBehaviour
             {
                 if (drawingAttackHitbox)
                     DrawAttackHitbox();
-
-                if (isParrying)
-                    DrawParryHitbox();
             }
             else
             {
                 DrawAttackHitbox();
-                DrawParryHitbox();
             }
         }
     }

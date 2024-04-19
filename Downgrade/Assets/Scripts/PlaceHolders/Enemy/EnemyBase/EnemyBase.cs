@@ -665,9 +665,9 @@ public class EnemyBase : MonoBehaviour
     public void RemoveComponentsOnDeath()
     {
         isDead = true;
-        FindObjectOfType<WaveSystem>().UpdateDeadEnemies();
         Destroy(rb);
         Destroy(GetComponent<Collider>());
+        FindObjectOfType<WaveSystem>().UpdateDeadEnemies();
         Destroy(this);
         //this.enabled = false;
     }

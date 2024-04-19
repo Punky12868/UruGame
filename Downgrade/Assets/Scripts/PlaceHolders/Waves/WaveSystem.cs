@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class WaveSystem : MonoBehaviour
 {
-    [SerializeField] private float timeForNextWave;
     [SerializeField] private float timerEnemySpawn;
     [SerializeField] private float timer;
     [SerializeField] private List<Wave> waves = new List<Wave>();
@@ -29,15 +28,7 @@ public class WaveSystem : MonoBehaviour
             timer += Time.deltaTime;
         }
 
-        if (timer >= timeForNextWave)
-        {
-            timer = 0;
-            timerEnemySpawn = 0;
-            isWaveFinished = false;
-            currentWave++;
-            currentWaveData = 0;
-        }
-        else if (isWaveFinished)
+        if (isWaveFinished)
         {
             timer = 0;
             timerEnemySpawn = 0;

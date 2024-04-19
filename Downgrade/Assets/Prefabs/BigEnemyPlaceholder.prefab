@@ -223,6 +223,7 @@ MonoBehaviour:
   targetDir: {x: 0, y: 0, z: 0}
   animClipLength: 0
   isAnimationDone: 0
+  isBigEnemy: 0
   isSpawning: 0
   isMoving: 0
   isRunning: 0
@@ -242,9 +243,9 @@ MonoBehaviour:
   hasQueuedAnimation: 0
   health: 100
   currentHealth: 0
-  normalAttackdamage: 5
+  normalAttackdamage: 25
   normalAttackKnockback: 25
-  chargeAttackDamage: 5
+  chargeAttackDamage: 40
   chargeAttackKnockback: 65
   speed: 1
   walkingSpeed: 1
