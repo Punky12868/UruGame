@@ -103,18 +103,27 @@ public class EnemyBase : MonoBehaviour
     [Header("AI Avoidance")]
     [ShowIf("isStatic", false, true)] public float enemyAvoidanceRange = 0.5f;
     [ShowIf("isStatic", false, true)] public float wallAvoidanceSpeed = 7.5f;
-    [ShowIf("isMelee", false, true)][ShowIf("isStatic", false, true)] public bool avoidTarget;
-    [ShowIf("isMelee", false, true)][ShowIf("avoidTarget", true, true)][ShowIf("isStatic", false, true)] public float avoidRange = 2;
+    [ShowIf("isMelee", false, true)] [ShowIf("isStatic", false, true)] public bool avoidTarget;
+    [ShowIf("isMelee", false, true)] [ShowIf("avoidTarget", true, true)] [ShowIf("isStatic", false, true)] public float avoidRange = 2;
 
     [Header("AI Animations")]
     [HideInInspector] public string queueAnimation;
     public string[] animationIDs;
     AnimationClip[] clips;
 
+    [Header ("AI Sounds")]
+    [HideInInspector] public AudioSource audioSource;
+    public AudioClip[] spawnSounds;
+    public AudioClip[] normalAttackSounds;
+    [ShowIf("hasChargeAttack", true, true)] public AudioClip[] chargedAttackSounds;
+    public AudioClip[] hitSounds;
+    public AudioClip[] deathSounds;
+    public AudioClip[] parrySounds;
+
     [Header("Debug")]
     [SerializeField] private bool debugTools = true;
     [ShowIf("debugTools", true, true)] [SerializeField] private bool drawHitboxes = true;
-    [ShowIf("debugTools", true, true)][ShowIf("drawHitboxes", true, true)] [SerializeField] private bool drawHitboxesOnGameplay = true;
+    [ShowIf("debugTools", true, true)] [ShowIf("drawHitboxes", true, true)] [SerializeField] private bool drawHitboxesOnGameplay = true;
     [ShowIf("debugTools", true, true)] [SerializeField] private Transform debugDrawCenter;
     [ShowIf("debugTools", true, true)] [SerializeField] private Color runRageColor = new Color(1, 0, 1,  1);
     [ShowIf("debugTools", true, true)] [SerializeField] private Color tooCloseColor = new Color(0, 1, 0, 1);
@@ -131,6 +140,7 @@ public class EnemyBase : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         pivot = GetComponentInParent<Transform>();
         clips = anim.runtimeAnimatorController.animationClips;
+        audioSource = GetComponent<AudioSource>();
         target = GameObject.FindGameObjectWithTag("Player").transform;
 
         if (isStatic)
@@ -154,6 +164,7 @@ public class EnemyBase : MonoBehaviour
         CheckStatus();
 
         isSpawning = true;
+        PlaySound(spawnSounds);
         PlayAnimation(animationIDs[0], true);
     }
 
@@ -213,6 +224,7 @@ public class EnemyBase : MonoBehaviour
 
     public virtual void Movement()
     {
+        
     }
 
     public virtual void TakeDamage(float damage)
@@ -273,7 +285,7 @@ public class EnemyBase : MonoBehaviour
     public virtual void SummonProjectile()
     {
         GameObject prjctl = Instantiate(projectile, projectileSpawnPoint.position, projectileSpawnPoint.rotation);
-        prjctl.GetComponent<ProjectileLogic>().SetVariables(projectileSpeed, normalAttackdamage, projectileLifeTime, normalAttackKnockback, projectileCanBeParried, targetDir /*lastTargetDir*/);
+        prjctl.GetComponent<ProjectileLogic>().SetVariables(projectileSpeed, normalAttackdamage, projectileLifeTime, normalAttackKnockback, projectileCanBeParried, targetDir, parrySounds, gameObject);
     }
 
     public virtual void MoveOnNormalAttack()
@@ -661,12 +673,28 @@ public class EnemyBase : MonoBehaviour
     }
     #endregion
 
+    #region Audio
+    public void PlaySound(AudioClip[] clip)
+    {
+        if (clip.Length > 0)
+        {
+            int random = Random.Range(0, hitSounds.Length);
+            AudioManager.instance.PlayCustomSFX(clip[random], audioSource);
+        }
+        else
+        {
+            AudioManager.instance.PlayCustomSFX(clip[0], audioSource);
+        }
+    }
+    #endregion
+
     #region Utility
     public void RemoveComponentsOnDeath()
     {
         isDead = true;
         Destroy(rb);
         Destroy(GetComponent<Collider>());
+        Destroy(audioSource);
         FindObjectOfType<WaveSystem>().UpdateDeadEnemies();
         Destroy(this);
         //this.enabled = false;

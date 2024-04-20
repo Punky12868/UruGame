@@ -9,15 +9,19 @@ public class ProjectileLogic : MonoBehaviour
     private float knockbackForce;
     private bool canBeParried;
     private bool isParried;
+    private GameObject originalEnemy;
     private Vector3 direction;
+    private AudioClip[] parrySounds;
 
-    public void SetVariables(float speed, float dmg, float lftime, float knckbck, bool parry, Vector3 dir)
+    public void SetVariables(float speed, float dmg, float lftime, float knckbck, bool parry, Vector3 dir, AudioClip[] prrySnd, GameObject orgnlEnemy)
     {
         travelSpeed = speed;
         damage = dmg;
         direction = dir;
         canBeParried = parry;
         knockbackForce = knckbck;
+        parrySounds = prrySnd;
+        originalEnemy = orgnlEnemy;
 
         Destroy(gameObject, lftime);
     }
@@ -35,6 +39,7 @@ public class ProjectileLogic : MonoBehaviour
             {
                 direction *= -1;
                 isParried = true;
+                originalEnemy.GetComponent<EnemyBase>().PlaySound(parrySounds);
             }
             else
             {

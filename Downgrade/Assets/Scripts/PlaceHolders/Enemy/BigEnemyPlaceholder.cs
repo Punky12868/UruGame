@@ -66,6 +66,7 @@ public class BigEnemyPlaceholder : EnemyBase
         else
         {
             //HIT ANIMATION
+            PlaySound(hitSounds);
         }
     }
 
@@ -75,6 +76,7 @@ public class BigEnemyPlaceholder : EnemyBase
         {
             isStunned = true;
         }
+        PlaySound(parrySounds);
         isParried = true;
         PlayAnimation(animationIDs[1], false, false, true);
         Debug.Log("Parried");
@@ -83,6 +85,7 @@ public class BigEnemyPlaceholder : EnemyBase
 
     public override void Death()
     {
+        PlaySound(deathSounds);
         PlayAnimation(animationIDs[6], false, false, true);
         RemoveComponentsOnDeath();
     }
@@ -138,11 +141,13 @@ public class BigEnemyPlaceholder : EnemyBase
 
     public override void MoveOnNormalAttack()
     {
+        PlaySound(normalAttackSounds);
         rb.velocity = lastTargetDir * moveOnNormalAttackForce;
     }
 
     public override void MoveOnChargeAttack()
     {
+        PlaySound(chargedAttackSounds);
         rb.velocity = lastTargetDir * moveOnChargeAttackForce;
     }
 

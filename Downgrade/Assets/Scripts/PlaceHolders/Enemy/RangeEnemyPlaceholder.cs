@@ -109,6 +109,7 @@ public class RangeEnemyPlaceholder : EnemyBase
         else
         {
             //HIT ANIMATION
+            PlaySound(hitSounds);
             PlayAnimation(animationIDs[5], true/*, false, true*/);
         }
     }
@@ -119,6 +120,7 @@ public class RangeEnemyPlaceholder : EnemyBase
         {
             isStunned = true;
         }
+        PlaySound(parrySounds);
         isParried = true;
         PlayAnimation(animationIDs[5], false, false, true);
         PlayAnimation(animationIDs[1], false, false, false, true);
@@ -128,6 +130,7 @@ public class RangeEnemyPlaceholder : EnemyBase
 
     public override void Death()
     {
+        PlaySound(deathSounds);
         PlayAnimation(animationIDs[7], false, false, true);
         RemoveComponentsOnDeath();
     }
@@ -167,6 +170,7 @@ public class RangeEnemyPlaceholder : EnemyBase
 
     public override void MoveOnNormalAttack()
     {
+        PlaySound(normalAttackSounds);
         rb.velocity = -targetDir * moveOnNormalAttackForce;
     }
 
