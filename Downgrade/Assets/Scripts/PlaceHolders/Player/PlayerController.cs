@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Rewired;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : Subject
 {
     // PlaceHolder for the PlayerController
     private Player input;
@@ -43,6 +43,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool canBeStaggered = false;
     [SerializeField] private float damagedCooldown = 0.35f;
     [SerializeField] private float attackForce;
+
+    [SerializeField] private float vfxSpeed = 1;
+    [SerializeField] private GameObject normalSlashVFX;
+    [SerializeField] private GameObject comboSlashVFX;
+    private float normalVfxTime;
+    private float comboVfxTime;
+    private bool isNormalVFXPlaying = false;
+    private bool isComboVFXPlaying = false;
     //[SerializeField] private float knockbackForce;
 
     private float comboTime;
@@ -60,6 +68,13 @@ public class PlayerController : MonoBehaviour
     private AnimationClip[] clips;
     private bool isAnimationDone = true;
     private float animClipLength;
+
+    [Header("AudioClips")]
+    [SerializeField] private AudioClip[] attackClips;
+    [SerializeField] private AudioClip[] rollClips;
+    [SerializeField] private AudioClip[] damagedClips;
+    [SerializeField] private AudioClip[] deathClips;
+    [HideInInspector] public AudioSource audioSource;
 
     [Header("Debug")]
     [SerializeField] private bool debugTools = true;
@@ -93,17 +108,27 @@ public class PlayerController : MonoBehaviour
         input = ReInput.players.GetPlayer(0);
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
         clips = anim.runtimeAnimatorController.animationClips;
         currentHealth = health;
         currentStamina = stamina;
         GetComponent<PlayerUI>().SetUI();
+        normalVfxTime = -1;
+        comboVfxTime = -1;
+
+        //NotifyObservers();
     }
 
     private void Update()
     {
         Stamina();
+        NormalSlashVFXController();
+        ComboSlashVFXController();
 
-        if (!canMove)
+        normalSlashVFX.GetComponent<Renderer>().material.SetFloat("_Status", normalVfxTime);
+        comboSlashVFX.GetComponent<Renderer>().material.SetFloat("_Status", comboVfxTime);
+
+        if (!canMove || isDead)
             return;
 
         Inputs();
@@ -225,8 +250,10 @@ public class PlayerController : MonoBehaviour
         }
 
         currentStamina -= staminaUsageRoll;
+        NotifyObservers(AllActions.LowStamina);
         isRolling = true;
         canBeDamaged = false;
+        PlaySound(rollClips);
         Invoke("ResetDamage", rollInmunity);
         Invoke("ResetRoll", rollCooldown);
     }
@@ -251,13 +278,23 @@ public class PlayerController : MonoBehaviour
         {
             Die();
         }
+        else
+        {
+            PlaySound(damagedClips);
+            NotifyObservers(AllActions.LowHealth);
+        }
     }
 
     private void Die()
     {
         //Destroy(gameObject);
+        Debug.Log("Dead");
         isDead = true;
         playerState = "Dead";
+
+        PlaySound(deathClips);
+        NotifyObservers(AllActions.Die);
+        FindObjectOfType<DeathScreen>().OnDeath();
     }
 
     private void RotateHitboxCentreToFaceTheDirection()
@@ -386,8 +423,19 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Attack");
         }
 
+        if (isCombo)
+        {
+            isComboVFXPlaying = true;
+        }
+        else
+        {
+            isNormalVFXPlaying = true;
+        }
+
         currentStamina -= staminaUsageAttack;
         rb.AddForce(lastDirection.normalized * attackForce, ForceMode.Impulse);
+        NotifyObservers(AllActions.LowStamina);
+        PlaySound(attackClips);
         Collider[] hitColliders = Physics.OverlapBox(hitboxCenter.position, hitboxSize, Quaternion.LookRotation(lastDirection));
 
         foreach (Collider hit in hitColliders)
@@ -397,6 +445,34 @@ public class PlayerController : MonoBehaviour
                 Debug.Log("Hit");
                 hit.GetComponent<EnemyBase>().TakeDamage(attackDamage);
             }
+        }
+    }
+
+    private void NormalSlashVFXController()
+    {
+        if (!isNormalVFXPlaying)
+            return;
+
+        normalVfxTime += Time.deltaTime * vfxSpeed;
+
+        if (normalVfxTime >= 1)
+        {
+            normalVfxTime = -1;
+            isNormalVFXPlaying = false;
+        }
+    }
+
+    private void ComboSlashVFXController()
+    {
+        if (!isComboVFXPlaying)
+            return;
+
+        comboVfxTime += Time.deltaTime * vfxSpeed;
+
+        if (comboVfxTime >= 1)
+        {
+            comboVfxTime = -1;
+            isComboVFXPlaying = false;
         }
     }
 
@@ -559,6 +635,19 @@ public class PlayerController : MonoBehaviour
         }
     }
     #endregion
+
+    public void PlaySound(AudioClip[] clip)
+    {
+        if (clip.Length > 0)
+        {
+            int random = Random.Range(0, clip.Length);
+            AudioManager.instance.PlayCustomSFX(clip[random], audioSource);
+        }
+        else
+        {
+            AudioManager.instance.PlayCustomSFX(clip[0], audioSource);
+        }
+    }
 
     #endregion
 

@@ -115,7 +115,7 @@ public class EnemyBase : MonoBehaviour
     [HideInInspector] public AudioSource audioSource;
     public AudioClip[] spawnSounds;
     public AudioClip[] normalAttackSounds;
-    [ShowIf("hasChargeAttack", true, true)] public AudioClip[] chargedAttackSounds;
+    public AudioClip[] chargedAttackSounds;
     public AudioClip[] hitSounds;
     public AudioClip[] deathSounds;
     public AudioClip[] parrySounds;
@@ -678,7 +678,7 @@ public class EnemyBase : MonoBehaviour
     {
         if (clip.Length > 0)
         {
-            int random = Random.Range(0, hitSounds.Length);
+            int random = Random.Range(0, clip.Length);
             AudioManager.instance.PlayCustomSFX(clip[random], audioSource);
         }
         else

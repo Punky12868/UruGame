@@ -13,9 +13,11 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioMixer mixer;
     [SerializeField] private AudioSource music;
     [SerializeField] private AudioSource sfx;
+    [SerializeField] private AudioSource voice;
 
     [SerializeField] private AudioClip[] musicClips;
     [SerializeField] private AudioClip[] sfxClips;
+    [SerializeField] private AudioClip[] voiceClips;
 
     private void Awake()
     {
@@ -30,6 +32,7 @@ public class AudioManager : MonoBehaviour
 
         music.outputAudioMixerGroup = mixer.FindMatchingGroups("Music")[0];
         sfx.outputAudioMixerGroup = mixer.FindMatchingGroups("SFX")[0];
+        voice.outputAudioMixerGroup = mixer.FindMatchingGroups("Voice")[0];
 
         if (playOnAwake)
         {
@@ -90,6 +93,14 @@ public class AudioManager : MonoBehaviour
     {
         source.outputAudioMixerGroup = sfx.outputAudioMixerGroup;
         source.PlayOneShot(clip);
+    }
+
+    public void PlayVoice(AudioClip voiceClip)
+    {
+        if (voice.isPlaying)
+            return;
+
+        voice.PlayOneShot(voiceClip);
     }
 
     public void StopSFX()
