@@ -66,6 +66,7 @@ public class WaveSystem : MonoBehaviour
             else
             {
                 Debug.Log("All waves are finished");
+                AudioManager.instance.PlaySFX(1);
                 GameManager.Instance.Victory();
             }
         }
