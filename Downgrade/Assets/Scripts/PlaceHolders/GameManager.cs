@@ -48,4 +48,9 @@ public class GameManager : MonoBehaviour
         // Load the previous scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
     }
+
+    public void Victory()
+    {
+        FindObjectOfType<DeathScreen>().OnVictory();
+    }
 }

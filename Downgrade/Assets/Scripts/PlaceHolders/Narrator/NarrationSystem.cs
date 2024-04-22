@@ -10,6 +10,7 @@ public class NarrationSystem : MonoBehaviour, IObserver
 
     [SerializeField] float aditionalTimeAfterNarration = 1f;
     [SerializeField] float lowHealthThreshold = 10f;
+    bool lowStaminaTriggered = false;
     [SerializeField] float lowStaminaThreshold = 10f;
     [SerializeField] int attackThresshold = 15;
     [SerializeField] int parryThreshold = 3;
@@ -20,7 +21,7 @@ public class NarrationSystem : MonoBehaviour, IObserver
 
     bool isWaiting = false;
 
-    [SerializeField] AudioClip[] narrationCLips;
+    [SerializeField] AudioClip[] narrationClips;
 
     [TextArea]
     [SerializeField] string[] subtitlesText;
@@ -40,20 +41,21 @@ public class NarrationSystem : MonoBehaviour, IObserver
                 Debug.Log("Game Ended");
                 break;
             case AllActions.LowHealth: //
-                if (FindObjectOfType<PlayerController>().GetCurrentHealth() < lowHealthThreshold)
+                if (FindObjectOfType<PlayerController>().GetCurrentHealth() < lowHealthThreshold && !lowStaminaTriggered)
                 {
-                    AudioManager.instance.PlayVoice(narrationCLips[0]);
-                    Instantiate(subtitles, subtitlesParent).GetComponentInChildren<Subtitles>().DisplaySubtitles(subtitlesText[0], narrationCLips[0].length);
-                    SetWaiting(narrationCLips[0].length);
+                    lowStaminaTriggered = true;
+                    AudioManager.instance.PlayVoice(narrationClips[0]);
+                    Instantiate(subtitles, subtitlesParent).GetComponentInChildren<Subtitles>().DisplaySubtitles(subtitlesText[0], narrationClips[0].length);
+                    SetWaiting(narrationClips[0].length);
                     Debug.Log("Low Health");
                 }
                 break;
             case AllActions.LowStamina: //
                 if (FindObjectOfType<PlayerController>().GetCurrentStamina() < lowStaminaThreshold)
                 {
-                    AudioManager.instance.PlayVoice(narrationCLips[1]);
-                    Instantiate(subtitles, subtitlesParent).GetComponentInChildren<Subtitles>().DisplaySubtitles(subtitlesText[1], narrationCLips[1].length);
-                    SetWaiting(narrationCLips[1].length);
+                    AudioManager.instance.PlayVoice(narrationClips[1]);
+                    Instantiate(subtitles, subtitlesParent).GetComponentInChildren<Subtitles>().DisplaySubtitles(subtitlesText[1], narrationClips[1].length);
+                    SetWaiting(narrationClips[1].length);
                     Debug.Log("Low Stamina");
                 }
                 break;
@@ -94,9 +96,9 @@ public class NarrationSystem : MonoBehaviour, IObserver
                 Debug.Log("Hit");
                 break;
             case AllActions.Die:
-                AudioManager.instance.PlayVoice(narrationCLips[2]);
-                Instantiate(subtitles, subtitlesParent).GetComponentInChildren<Subtitles>().DisplaySubtitles(subtitlesText[2], narrationCLips[2].length);
-                SetWaiting(narrationCLips[2].length);
+                AudioManager.instance.PlayVoice(narrationClips[2]);
+                Instantiate(subtitles, subtitlesParent).GetComponentInChildren<Subtitles>().DisplaySubtitles(subtitlesText[2], narrationClips[2].length);
+                SetWaiting(narrationClips[2].length);
                 Debug.Log("Died");
                 break;
             case AllActions.Victory:

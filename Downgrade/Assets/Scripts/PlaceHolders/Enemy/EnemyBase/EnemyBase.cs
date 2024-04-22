@@ -206,7 +206,7 @@ public class EnemyBase : MonoBehaviour
 
         foreach (Collider c in hitColliders)
         {
-            if (c.CompareTag("Enemy") && c != GetComponent<Collider>() || c.CompareTag("Wall"))
+            if (c.CompareTag("Enemy") && c != GetComponent<Collider>() || c.CompareTag("Wall") || c.CompareTag("Destructible"))
             {
                 Vector3 enemyDirection = (c.transform.position - transform.position).normalized;
                 enemyDirection.y = 0f;

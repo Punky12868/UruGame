@@ -7,6 +7,8 @@ public class PlayerController : Subject
 {
     // PlaceHolder for the PlayerController
     private Player input;
+    private PlayerInteraction interactions;
+    private Inventory inventory;
     private Rigidbody rb;
     private Animator anim;
 
@@ -72,7 +74,7 @@ public class PlayerController : Subject
     [Header("AudioClips")]
     [SerializeField] private AudioClip[] attackClips;
     [SerializeField] private AudioClip[] rollClips;
-    [SerializeField] private AudioClip[] damagedClips;
+    [SerializeField] private AudioClip[] hitClips;
     [SerializeField] private AudioClip[] deathClips;
     [HideInInspector] public AudioSource audioSource;
 
@@ -106,6 +108,8 @@ public class PlayerController : Subject
     private void Awake()
     {
         input = ReInput.players.GetPlayer(0);
+        interactions = GetComponent<PlayerInteraction>();
+        inventory = GetComponent<Inventory>();
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
@@ -186,6 +190,21 @@ public class PlayerController : Subject
         {
             Roll();
         }
+
+        if (input.GetButtonDown("Interact"))
+        {
+            interactions.Interact();
+        }
+
+        if (input.GetButtonDown("UseItem"))
+        {
+            inventory.UseItem();
+        }
+
+        if (input.GetButtonDown("DropItem"))
+        {
+            inventory.DropItem();
+        }
     }
 
     private void Stamina()
@@ -214,25 +233,19 @@ public class PlayerController : Subject
     {
         if (isBigEnemy)
         {
-            currentStamina += staminaBigEnemyReward;
-            currentHealth += healthBigEnemyReward;
+            GetStamina(staminaBigEnemyReward);
+            GetHealth(healthBigEnemyReward);
         }
         else if (isBoss)
         {
-            currentStamina += staminaBossReward;
-            currentHealth += healthBossReward;
+            GetStamina(staminaBossReward);
+            GetHealth(healthBossReward);
             // damage multiplier
         }
         else
         {
-            currentStamina += staminaNormalReward;
+            GetStamina(staminaNormalReward);
         }
-
-        if (currentStamina > stamina)
-            currentStamina = stamina;
-
-        if (currentHealth > health)
-            currentHealth = health;
     }
 
     private void Roll()
@@ -280,9 +293,25 @@ public class PlayerController : Subject
         }
         else
         {
-            PlaySound(damagedClips);
+            PlaySound(hitClips);
             NotifyObservers(AllActions.LowHealth);
         }
+    }
+
+    public void GetHealth(float healthReward)
+    {
+        currentHealth += healthReward;
+
+        if (currentHealth > health)
+            currentHealth = health;
+    }
+
+    public void GetStamina(float staminaReward)
+    {
+        currentStamina += staminaReward;
+
+        if (currentStamina > stamina)
+            currentStamina = stamina;
     }
 
     private void Die()
@@ -292,6 +321,8 @@ public class PlayerController : Subject
         isDead = true;
         playerState = "Dead";
 
+        direction = Vector3.zero;
+        lastDirection = Vector3.zero;
         PlaySound(deathClips);
         NotifyObservers(AllActions.Die);
         FindObjectOfType<DeathScreen>().OnDeath();
@@ -444,6 +475,11 @@ public class PlayerController : Subject
             {
                 Debug.Log("Hit");
                 hit.GetComponent<EnemyBase>().TakeDamage(attackDamage);
+            }
+
+            if (hit.CompareTag("Destructible"))
+            {
+                hit.GetComponent<Prop>().OnHit();
             }
         }
     }

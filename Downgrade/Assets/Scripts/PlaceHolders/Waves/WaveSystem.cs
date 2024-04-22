@@ -62,10 +62,11 @@ public class WaveSystem : MonoBehaviour
                         currentWaveData++;
                     }
                 }
-                /*else
-                {
-                    isWaveFinished = true;
-                }*/
+            }
+            else
+            {
+                Debug.Log("All waves are finished");
+                GameManager.Instance.Victory();
             }
         }
     }

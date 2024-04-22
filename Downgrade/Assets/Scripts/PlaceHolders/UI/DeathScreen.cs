@@ -10,6 +10,9 @@ public class DeathScreen : MonoBehaviour
     public float fadeSpeed = 1;
     public float timeToActivate = 1;
 
+    [SerializeField] private GameObject deadText;
+    [SerializeField] private GameObject victoryText;
+
     private void Awake()
     {
         canvasGroup = GetComponent<CanvasGroup>();
@@ -33,6 +36,17 @@ public class DeathScreen : MonoBehaviour
         if (!activated)
         {
             activated = true;
+            deadText.SetActive(true);
+            Invoke("Activate", timeToActivate);
+        }
+    }
+
+    public void OnVictory()
+    {
+        if (!activated)
+        {
+            activated = true;
+            victoryText.SetActive(true);
             Invoke("Activate", timeToActivate);
         }
     }
