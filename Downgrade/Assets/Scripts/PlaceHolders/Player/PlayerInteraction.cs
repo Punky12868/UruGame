@@ -4,40 +4,31 @@ using UnityEngine;
 
 public class PlayerInteraction : MonoBehaviour
 {
-    Item item;
-    bool canInteract;
+    [SerializeField] private float dropCooldown = 0.5f;
+    bool canPickup = true;
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
-        if (other.TryGetComponent(out IInteractable interactable))
+        if (GameManager.Instance.IsGamePaused())
+            return;
+
+        if (other.TryGetComponent(out IPickup pickup))
         {
-            interactable.CanInteract();
-            item = other.GetComponent<Item>();
-            canInteract = true;
-        }
-    }
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.TryGetComponent(out IInteractable interactable))
-        {
-            interactable.StopInteracting();
-            item = null;
-            canInteract = false;
+            if (!GetComponent<PlayerInventory>().HasItem() && canPickup)
+            {
+                pickup.CanPickup();
+            }
         }
     }
 
-    public void Interact()
+    public void SetPickUp()
     {
-        if (canInteract)
-        {
-            item.Interact();
-            item = null;
-            canInteract = false;
-        }
+        canPickup = false;
+        Invoke("ResetPickUp", dropCooldown);
     }
 
-    public bool GetInteractionStatus()
+    private void ResetPickUp()
     {
-        return canInteract;
+        canPickup = true;
     }
 }

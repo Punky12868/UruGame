@@ -1,115 +1,121 @@
+using Rewired;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Rewired;
 
-public class PlayerController : Subject
+[RequireComponent(typeof(PlayerInventory))]
+[RequireComponent(typeof(PlayerInteraction))]
+[RequireComponent(typeof(PlayerUI))]
+
+public class PlayerComponent : Subject
 {
-    // PlaceHolder for the PlayerController
-    private Player input;
-    private PlayerInteraction interactions;
-    private Inventory inventory;
-    private Rigidbody rb;
-    private Animator anim;
+    #region Variables
+    [HideInInspector] public Player input;
+    [HideInInspector] public PlayerInteraction interactions;
+    [HideInInspector] public PlayerInventory inventory;
+    [HideInInspector] public Rigidbody rb;
+    [HideInInspector] public Animator anim;
 
-    private Vector3 direction;
-    private Vector3 lastDirection;
+    [HideInInspector] public Vector3 direction;
+    [HideInInspector] public Vector3 lastDirection;
 
     [Header("Misc")]
-    [SerializeField] private float health = 100;
-    [SerializeField] private float healthBigEnemyReward = 10;
-    [SerializeField] private float healthBossReward = 45;
-    [SerializeField] private float speed = 5f;
-    [SerializeField] private float stamina = 100;
-    [SerializeField] private float staminaCooldown = 1.5f;
-    [SerializeField] private float staminaRegenSpeed = 5;
-    [SerializeField] private float staminaNormalReward = 10;
-    [SerializeField] private float staminaBigEnemyReward = 20;
-    [SerializeField] private float staminaBossReward = 50;
-    [SerializeField] private float staminaUsageRoll;
-    [SerializeField] private float staminaUsageAttack;
-    [SerializeField] private float rollForce = 5f;
-    [SerializeField] private float rollInmunity = 1f;
-    [SerializeField] private float rollCooldown = 1f;
+    public float health = 100;
+    public float healthBigEnemyReward = 10;
+    public float healthBossReward = 45;
+    public float speed = 5f;
+    public float stamina = 100;
+    public float staminaCooldown = 1.5f;
+    public float staminaRegenSpeed = 5;
+    public float staminaNormalReward = 10;
+    public float staminaBigEnemyReward = 20;
+    public float staminaBossReward = 50;
+    public float staminaUsageRoll;
+    public float staminaUsageAttack;
+    public float rollForce = 5f;
+    public float rollInmunity = 1f;
+    public float rollCooldown = 1f;
 
-    float currentHealth;
-    float currentStamina;
-    float staminaTimer;
+    [HideInInspector] public float currentHealth;
+    [HideInInspector] public float currentStamina;
+    [HideInInspector] public float staminaTimer;
 
     [Header("Fighting")]
-    [SerializeField] private Transform hitboxCenter;
-    [SerializeField] private float offset = 0.3f;
-    [SerializeField] private float attackDamage = 5;
-    [SerializeField] private float cooldownTime = 0.5f;
-    [SerializeField] private float comboCooldownTime = 0.5f;
-    [SerializeField] private bool canBeStaggered = false;
-    [SerializeField] private float damagedCooldown = 0.35f;
-    [SerializeField] private float attackForce;
+    public Transform hitboxCenter;
+    public float offset = 0.3f;
+    public float attackDamage = 5;
+    public float cooldownTime = 0.5f;
+    public float comboCooldownTime = 0.5f;
+    public bool canBeStaggered = false;
+    public float damagedCooldown = 0.35f;
+    public float attackForce;
 
-    [SerializeField] private float vfxSpeed = 1;
-    [SerializeField] private GameObject normalSlashVFX;
-    [SerializeField] private GameObject comboSlashVFX;
-    private float normalVfxTime;
-    private float comboVfxTime;
-    private bool isNormalVFXPlaying = false;
-    private bool isComboVFXPlaying = false;
+    public float vfxSpeed = 1;
+    public GameObject normalSlashVFX;
+    public GameObject comboSlashVFX;
+    [HideInInspector] public float normalVfxTime;
+    [HideInInspector] public float comboVfxTime;
+    [HideInInspector] public bool isNormalVFXPlaying = false;
+    [HideInInspector] public bool isComboVFXPlaying = false;
     //[SerializeField] private float knockbackForce;
 
-    private float comboTime;
+    [HideInInspector] public float comboTime;
 
     [Header("Input")]
-    [SerializeField] private float directionThreshold = 0.1f;
-    [SerializeField] private Vector2 comboWindowTime;
-    [SerializeField] private Vector2 parryWindowTime;
+    public float directionThreshold = 0.1f;
+    public Vector2 comboWindowTime;
+    public Vector2 parryWindowTime;
 
-    [SerializeField] private Vector3 hitboxPos = new Vector3(0, 0, 0);
-    [SerializeField] private Vector3 hitboxSize = new Vector3(0.5f, 0.5f, 0.5f);
+    public Vector3 hitboxPos = new Vector3(0, 0, 0);
+    public Vector3 hitboxSize = new Vector3(0.5f, 0.5f, 0.5f);
 
     [Header("Animation")]
-    [SerializeField] private string[] animationIDs;
-    private AnimationClip[] clips;
-    private bool isAnimationDone = true;
-    private float animClipLength;
+    public string[] animationIDs;
+    [HideInInspector] public AnimationClip[] clips;
+    [HideInInspector] public bool isAnimationDone = true;
+    [HideInInspector] public float animClipLength;
 
     [Header("AudioClips")]
-    [SerializeField] private AudioClip[] attackClips;
-    [SerializeField] private AudioClip[] rollClips;
-    [SerializeField] private AudioClip[] hitClips;
-    [SerializeField] private AudioClip[] deathClips;
+    public AudioClip[] attackClips;
+    public AudioClip[] rollClips;
+    public AudioClip[] hitClips;
+    public AudioClip[] deathClips;
     [HideInInspector] public AudioSource audioSource;
 
     [Header("Debug")]
-    [SerializeField] private bool debugTools = true;
-    [ShowIf("debugTools", true, true)] [SerializeField] private bool drawHitbox = true;
-    [ShowIf("debugTools", true, true)] [ShowIf("drawHitbox", true, true)] [SerializeField] private bool drawHitboxOnGameplay = true;
-    [ShowIf("debugTools", true, true)] [ShowIf("drawHitbox", true, true)] [SerializeField] private float attackHitboxTime = 0.2f;
-    [ShowIf("debugTools", true, true)] [ShowIf("drawHitbox", true, true)] [SerializeField] private Color attackHitboxColor = new Color(1, 0, 0, 1);
-    [ShowIf("debugTools", true, true)] [ShowIf("drawHitbox", true, true)] [SerializeField] private Color parryHitboxColor = new Color(0, 1, 0, 1);
+    public bool debugTools = true;
+    [ShowIf("debugTools", true, true)] public bool drawHitbox = true;
+    [ShowIf("debugTools", true, true)][ShowIf("drawHitbox", true, true)] public bool drawHitboxOnGameplay = true;
+    [ShowIf("debugTools", true, true)][ShowIf("drawHitbox", true, true)] public float attackHitboxTime = 0.2f;
+    [ShowIf("debugTools", true, true)][ShowIf("drawHitbox", true, true)] public Color attackHitboxColor = new Color(1, 0, 0, 1);
+    [ShowIf("debugTools", true, true)][ShowIf("drawHitbox", true, true)] public Color parryHitboxColor = new Color(0, 1, 0, 1);
 
     //[Header("PlayerStatus")]
-    private bool isFacingRight;
+    [HideInInspector] public bool isFacingRight;
 
-    private bool isOnCooldown = false;
-    private bool canCombo = false;
-    private bool drawingAttackHitbox = false;
+    [HideInInspector] public bool isOnCooldown = false;
+    [HideInInspector] public bool canCombo = false;
+    [HideInInspector] public bool drawingAttackHitbox = false;
 
-    private bool canMove = true;
-    private bool canBeDamaged = true;
-    private bool isParrying = false;
-    private bool isAttacking = false;
-    private bool isRolling = false;
+    [HideInInspector] public bool canMove = true;
+    [HideInInspector] public bool canBeDamaged = true;
+    [HideInInspector] public bool isParrying = false;
+    [HideInInspector] public bool isAttacking = false;
+    [HideInInspector] public bool isRolling = false;
 
-    private bool wasParryPressed = false;
-    private bool wasParryInvoked = false;
+    [HideInInspector] public bool wasParryPressed = false;
+    [HideInInspector] public bool wasParryInvoked = false;
 
-    private bool isDead = false;
-    private string playerState;
+    [HideInInspector] public bool isDead = false;
+    [HideInInspector] public string playerState;
+    #endregion
 
-    private void Awake()
+    #region Unity Methods
+    public void Awake()
     {
         input = ReInput.players.GetPlayer(0);
         interactions = GetComponent<PlayerInteraction>();
-        inventory = GetComponent<Inventory>();
+        inventory = GetComponent<PlayerInventory>();
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
@@ -123,7 +129,7 @@ public class PlayerController : Subject
         //NotifyObservers();
     }
 
-    private void Update()
+    public void Update()
     {
         Stamina();
         NormalSlashVFXController();
@@ -138,14 +144,14 @@ public class PlayerController : Subject
         Inputs();
         PlayerAnimations();
 
-        if(isParrying)
+        if (isParrying)
             ParryLogic();
 
         CooldownUpdate();
         ResetAnimClipUpdate();
     }
 
-    private void FixedUpdate()
+    public void FixedUpdate()
     {
         if (!canMove || isAttacking || isRolling)
             return;
@@ -156,12 +162,12 @@ public class PlayerController : Subject
         {
             rb.velocity = direction.normalized * speed;
             lastDirection = direction;
-            /*if (rb.velocity.magnitude > speed)
-                rb.velocity = rb.velocity.normalized * speed;*/
         }
     }
+    #endregion
 
-    private void Inputs()
+    #region Actions
+    public void Inputs()
     {
         if (isAttacking || wasParryPressed)
         {
@@ -191,11 +197,6 @@ public class PlayerController : Subject
             Roll();
         }
 
-        if (input.GetButtonDown("Interact"))
-        {
-            interactions.Interact();
-        }
-
         if (input.GetButtonDown("UseItem"))
         {
             inventory.UseItem();
@@ -207,48 +208,7 @@ public class PlayerController : Subject
         }
     }
 
-    private void Stamina()
-    {
-        if (isRolling || isAttacking)
-        {
-            staminaTimer = 0;
-        }
-        else
-        {
-            if (staminaTimer < staminaCooldown)
-            {
-                staminaTimer += Time.deltaTime;
-            }
-            else
-            {
-                if (currentStamina < stamina)
-                {
-                    currentStamina += staminaRegenSpeed * Time.deltaTime;
-                }
-            }
-        }
-    }
-
-    public void GetParryReward(bool isBigEnemy, bool isBoss)
-    {
-        if (isBigEnemy)
-        {
-            GetStamina(staminaBigEnemyReward);
-            GetHealth(healthBigEnemyReward);
-        }
-        else if (isBoss)
-        {
-            GetStamina(staminaBossReward);
-            GetHealth(healthBossReward);
-            // damage multiplier
-        }
-        else
-        {
-            GetStamina(staminaNormalReward);
-        }
-    }
-
-    private void Roll()
+    public void Roll()
     {
         if (isRolling || isAttacking || currentStamina < staminaUsageRoll)
             return;
@@ -270,146 +230,12 @@ public class PlayerController : Subject
         Invoke("ResetDamage", rollInmunity);
         Invoke("ResetRoll", rollCooldown);
     }
-
-    public void TakeDamage(float damage, float knockbackForce, Vector3 damagePos)
-    {
-        if (isDead || !canBeDamaged)
-            return;
-
-        rb.AddForce(-damagePos.normalized * knockbackForce, ForceMode.Impulse);
-
-        if (canBeStaggered)
-        {
-            canMove = false;
-            Invoke("ActivateMovement", damagedCooldown);
-            PlayAnimation(animationIDs[0], false, true);
-        }
-
-        currentHealth -= damage;
-
-        if (currentHealth <= 0)
-        {
-            Die();
-        }
-        else
-        {
-            PlaySound(hitClips);
-            NotifyObservers(AllActions.LowHealth);
-        }
-    }
-
-    public void GetHealth(float healthReward)
-    {
-        currentHealth += healthReward;
-
-        if (currentHealth > health)
-            currentHealth = health;
-    }
-
-    public void GetStamina(float staminaReward)
-    {
-        currentStamina += staminaReward;
-
-        if (currentStamina > stamina)
-            currentStamina = stamina;
-    }
-
-    private void Die()
-    {
-        //Destroy(gameObject);
-        Debug.Log("Dead");
-        isDead = true;
-        playerState = "Dead";
-
-        direction = Vector3.zero;
-        lastDirection = Vector3.zero;
-        PlaySound(deathClips);
-        NotifyObservers(AllActions.Die);
-        FindObjectOfType<DeathScreen>().OnDeath();
-    }
-
-    private void RotateHitboxCentreToFaceTheDirection()
-    {
-        if (lastDirection == Vector3.zero)
-            return;
-
-        Vector3 direction = lastDirection.normalized;
-        Vector3 desiredPosition = transform.position + direction * offset;
-        Quaternion rotation = Quaternion.LookRotation(direction);
-        hitboxCenter.rotation = rotation;
-        hitboxCenter.position = new Vector3(desiredPosition.x, hitboxCenter.position.y, desiredPosition.z);
-    }
-
-    #region Invokes
-    private void ActivateMovement()
-    {
-        canMove = true;
-    }
-
-    private void ActivateParry()
-    {
-        isParrying = true;
-        playerState = "Parry";
-    }
-
-    private void ResetParry()
-    {
-        isParrying = false;
-        wasParryInvoked = false;
-        wasParryPressed = false;
-        playerState = "";
-    }
-
-    private void DrawingAttackHitbox()
-    {
-        drawingAttackHitbox = false;
-    }
-
-    private void ActivateCombo()
-    {
-        canCombo = true;
-    }
-
-    private void ResetCombo()
-    {
-        canCombo = false;
-    }
-
-    private void ActivateCooldown()
-    {
-        isOnCooldown = true;
-    }
-
-    private void CooldownUpdate()
-    {
-        if (comboTime <= 0)
-        {
-            isOnCooldown = false;
-        }
-        else
-        {
-            comboTime -= Time.deltaTime;
-        }
-    }
-
-    private void ResetCooldown(float time)
-    {
-        comboTime = time;
-    }
-
-    private void ResetRoll()
-    {
-        isRolling = false;
-    }
-
-    private void ResetDamage()
-    {
-        canBeDamaged = true;
-    }
     #endregion
 
-    #region Overlap Hitbox
-    private void OverlapAttack()
+    #region Combat
+
+    #region Attack
+    public void OverlapAttack()
     {
         if (currentStamina < staminaUsageAttack)
             return;
@@ -483,8 +309,34 @@ public class PlayerController : Subject
             }
         }
     }
+    #endregion
 
-    private void NormalSlashVFXController()
+    #region Stamina
+    public void Stamina()
+    {
+        if (isRolling || isAttacking)
+        {
+            staminaTimer = 0;
+        }
+        else
+        {
+            if (staminaTimer < staminaCooldown)
+            {
+                staminaTimer += Time.deltaTime;
+            }
+            else
+            {
+                if (currentStamina < stamina)
+                {
+                    currentStamina += staminaRegenSpeed * Time.deltaTime;
+                }
+            }
+        }
+    }
+    #endregion
+
+    #region VFX
+    public void NormalSlashVFXController()
     {
         if (!isNormalVFXPlaying)
             return;
@@ -498,7 +350,7 @@ public class PlayerController : Subject
         }
     }
 
-    private void ComboSlashVFXController()
+    public void ComboSlashVFXController()
     {
         if (!isComboVFXPlaying)
             return;
@@ -511,8 +363,10 @@ public class PlayerController : Subject
             isComboVFXPlaying = false;
         }
     }
+    #endregion
 
-    private void ParryLogic()
+    #region Parry
+    public void ParryLogic()
     {
         if (!wasParryInvoked)
         {
@@ -523,8 +377,90 @@ public class PlayerController : Subject
     }
     #endregion
 
-    #region Animation
-    private void PlayerAnimations()
+    #region Rewards
+    public void GetHealth(float healthReward)
+    {
+        currentHealth += healthReward;
+
+        if (currentHealth > health)
+            currentHealth = health;
+    }
+
+    public void GetStamina(float staminaReward)
+    {
+        currentStamina += staminaReward;
+
+        if (currentStamina > stamina)
+            currentStamina = stamina;
+    }
+
+    public void GetParryReward(bool isBigEnemy, bool isBoss)
+    {
+        if (isBigEnemy)
+        {
+            GetStamina(staminaBigEnemyReward);
+            GetHealth(healthBigEnemyReward);
+        }
+        else if (isBoss)
+        {
+            GetStamina(staminaBossReward);
+            GetHealth(healthBossReward);
+            // damage multiplier
+        }
+        else
+        {
+            GetStamina(staminaNormalReward);
+        }
+    }
+    #endregion
+
+    #region Damage
+    public void TakeDamage(float damage, float knockbackForce, Vector3 damagePos)
+    {
+        if (isDead || !canBeDamaged)
+            return;
+
+        rb.AddForce(-damagePos.normalized * knockbackForce, ForceMode.Impulse);
+
+        if (canBeStaggered)
+        {
+            canMove = false;
+            Invoke("ActivateMovement", damagedCooldown);
+            PlayAnimation(animationIDs[0], false, true);
+        }
+
+        currentHealth -= damage;
+
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+        else
+        {
+            PlaySound(hitClips);
+            NotifyObservers(AllActions.LowHealth);
+        }
+    }
+
+    public void Die()
+    {
+        //Destroy(gameObject);
+        Debug.Log("Dead");
+        isDead = true;
+        playerState = "Dead";
+
+        direction = Vector3.zero;
+        lastDirection = Vector3.zero;
+        PlaySound(deathClips);
+        NotifyObservers(AllActions.Die);
+        FindObjectOfType<TextScreens>().OnDeath();
+    }
+    #endregion
+
+    #endregion
+
+    #region PlayerAnimations
+    public void PlayerAnimations()
     {
         if (direction == Vector3.zero)
         {
@@ -582,6 +518,9 @@ public class PlayerController : Subject
             isAttacking = false;
         }
     }
+    #endregion
+
+    #region Utility
 
     #region AnimationController
     public void PlayAnimation(string animName)
@@ -672,6 +611,7 @@ public class PlayerController : Subject
     }
     #endregion
 
+    #region Sounds
     public void PlaySound(AudioClip[] clip)
     {
         if (clip.Length > 0)
@@ -684,10 +624,91 @@ public class PlayerController : Subject
             AudioManager.instance.PlayCustomSFX(clip[0], audioSource);
         }
     }
-
     #endregion
 
-    #region Utility
+    #region RotateHitbox
+    public void RotateHitboxCentreToFaceTheDirection()
+    {
+        if (lastDirection == Vector3.zero)
+            return;
+
+        Vector3 direction = lastDirection.normalized;
+        Vector3 desiredPosition = transform.position + direction * offset;
+        Quaternion rotation = Quaternion.LookRotation(direction);
+        hitboxCenter.rotation = rotation;
+        hitboxCenter.position = new Vector3(desiredPosition.x, hitboxCenter.position.y, desiredPosition.z);
+    }
+    #endregion
+
+    #region Invokes
+    public void ActivateMovement()
+    {
+        canMove = true;
+    }
+
+    public void ActivateParry()
+    {
+        isParrying = true;
+        playerState = "Parry";
+    }
+
+    public void ResetParry()
+    {
+        isParrying = false;
+        wasParryInvoked = false;
+        wasParryPressed = false;
+        playerState = "";
+    }
+
+    public void DrawingAttackHitbox()
+    {
+        drawingAttackHitbox = false;
+    }
+
+    public void ActivateCombo()
+    {
+        canCombo = true;
+    }
+
+    public void ResetCombo()
+    {
+        canCombo = false;
+    }
+
+    public void ActivateCooldown()
+    {
+        isOnCooldown = true;
+    }
+
+    public void CooldownUpdate()
+    {
+        if (comboTime <= 0)
+        {
+            isOnCooldown = false;
+        }
+        else
+        {
+            comboTime -= Time.deltaTime;
+        }
+    }
+
+    public void ResetCooldown(float time)
+    {
+        comboTime = time;
+    }
+
+    public void ResetRoll()
+    {
+        isRolling = false;
+    }
+
+    public void ResetDamage()
+    {
+        canBeDamaged = true;
+    }
+    #endregion
+
+    #region GetCurrentStats
     public float GetCurrentHealth()
     {
         return currentHealth;
@@ -709,8 +730,10 @@ public class PlayerController : Subject
     }
     #endregion
 
+    #endregion
+
     #region Debug
-    private void DrawAttackHitbox()
+    public void DrawAttackHitbox()
     {
         if (lastDirection == Vector3.zero)
         {
@@ -722,7 +745,7 @@ public class PlayerController : Subject
         }
     }
 
-    private void OnDrawGizmos()
+    public void OnDrawGizmos()
     {
         if (drawHitbox)
         {

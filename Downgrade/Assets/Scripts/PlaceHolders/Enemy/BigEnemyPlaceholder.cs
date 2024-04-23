@@ -14,6 +14,9 @@ public class BigEnemyPlaceholder : EnemyBase
 
     public void FixedUpdate()
     {
+        if (GameManager.Instance.IsGamePaused())
+            return;
+
         OnCooldown();
         Movement();
         Attack();

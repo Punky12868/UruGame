@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class PlayerUI : MonoBehaviour
 {
-    PlayerController player;
+    PlayerComponent player;
 
     [SerializeField] private float updateSpeed;
     [SerializeField] private float timeBeforeUpdate;
@@ -19,7 +19,7 @@ public class PlayerUI : MonoBehaviour
 
     public void SetUI()
     {
-        player = GetComponent<PlayerController>();
+        player = GetComponent<PlayerComponent>();
 
         healthSlider.maxValue = player.GetCurrentHealth();
         healthSlider.value = player.GetCurrentHealth();
@@ -34,6 +34,9 @@ public class PlayerUI : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.Instance.IsGamePaused())
+            return;
+
         UpdateHealth();
         UpdateStamina();
 

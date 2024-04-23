@@ -2,50 +2,47 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Item : MonoBehaviour, IInteractable
+public class Item : MonoBehaviour, IPickup
 {
     public ItemType itemType;
 
-    [SerializeField] float value;
+    [SerializeField] private float value;
+    private float pickUpCooldown = 0.5f;
 
-    public void CanInteract()
+    private bool canBePickedUp = false;
+
+    private void Awake()
     {
-        //Debug.Log("Can Interact");
-        // show feedback
+        Invoke("PickUpCooldown", pickUpCooldown);
     }
 
-    public void Interact()
+    public float GetValue()
     {
-        //Debug.Log("Interacting with " + itemType);
-        // pickup item
-        // add item to inventory
-        // remove item from scene
-        // hide feedback
-        // play sound
+        return value;
+    }
+
+    public void CanPickup()
+    {
+        if (!canBePickedUp || GameManager.Instance.IsGamePaused())
+            return;
 
         switch (itemType)
         {
             case ItemType.Health:
-                FindObjectOfType<Inventory>().AddItem(FindObjectOfType<PorpsManager>().GetItem(itemType));
+                FindObjectOfType<PlayerInventory>().AddItem(FindObjectOfType<PropsManager>().GetItem(itemType));
                 // shows the item in the UI
                 Destroy(gameObject);
                 break;
             case ItemType.Stamina:
-                FindObjectOfType<Inventory>().AddItem(FindObjectOfType<PorpsManager>().GetItem(itemType));
+                FindObjectOfType<PlayerInventory>().AddItem(FindObjectOfType<PropsManager>().GetItem(itemType));
                 // shows the item in the UI
                 Destroy(gameObject);
                 break;
         }
     }
 
-    public void StopInteracting()
+    private void PickUpCooldown()
     {
-        //Debug.Log("Stop Interacting");
-        // hide feedback
-    }
-
-    public float GetValue()
-    {
-        return value;
+        canBePickedUp = true;
     }
 }

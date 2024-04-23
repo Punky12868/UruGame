@@ -6,6 +6,7 @@ public enum AllActions
     LowStamina,
     NotKilling,
     RandomNoise,
+    RandomPausedNoise,
     StartBoss,
     DieToFirstStageBoss,
     MidBoss,

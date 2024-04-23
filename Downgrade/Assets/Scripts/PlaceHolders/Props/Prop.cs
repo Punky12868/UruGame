@@ -16,7 +16,7 @@ public class Prop : MonoBehaviour
     private void Awake()
     {
         animator = GetComponent<Animator>();
-        holdedItem = FindObjectOfType<PorpsManager>().GetItem(itemType);
+        holdedItem = FindObjectOfType<PropsManager>().GetItem(itemType);
     }
 
     public void OnHit()

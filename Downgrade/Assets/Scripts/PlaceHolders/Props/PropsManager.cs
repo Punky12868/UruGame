@@ -9,7 +9,7 @@ public enum ItemType
     Stamina,
 }
 
-public class PorpsManager : MonoBehaviour
+public class PropsManager : MonoBehaviour
 {
     [SerializeField] GameObject[] itemPrefabs;
 

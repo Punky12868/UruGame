@@ -17,6 +17,9 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     public void LoadScene(int id)
@@ -51,6 +54,23 @@ public class GameManager : MonoBehaviour
 
     public void Victory()
     {
-        FindObjectOfType<DeathScreen>().OnVictory();
+        FindObjectOfType<TextScreens>().OnVictory();
+    }
+
+    public void PauseGame(bool pause)
+    {
+        if (pause)
+        {
+            Time.timeScale = 0;
+        }
+        else
+        {
+            Time.timeScale = 1;
+        }
+    }
+
+    public bool IsGamePaused()
+    {
+        return Time.timeScale == 0;
     }
 }

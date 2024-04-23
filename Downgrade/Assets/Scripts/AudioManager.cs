@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using static UnityEngine.Rendering.DebugUI;
 
 public class AudioManager : MonoBehaviour
 {
@@ -9,6 +10,11 @@ public class AudioManager : MonoBehaviour
 
     [SerializeField] private bool playOnAwake;
     [ShowIf("playOnAwake", true , true)][SerializeField] private int musicIndex;
+
+    [SerializeField] private float normalLowPassFreq = 22000.00f;
+    [SerializeField] private float pausedLowPassFreq = 500.00f;
+    [SerializeField] private float lowPassFreqLerpSpeed = 0.5f;
+    private float lowPassValue;
 
     [SerializeField] private AudioMixer mixer;
     [SerializeField] private AudioSource music;
@@ -42,20 +48,11 @@ public class AudioManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    /*private void Update()
+    private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            if (music.clip == musicClips[0])
-            {
-                PlayMusic(1);
-            }
-            else
-            {
-                PlayMusic(0);
-            }
-        }
-    }*/
+        lowPassValue = Mathf.Lerp(lowPassValue, GameManager.Instance.IsGamePaused() ? pausedLowPassFreq : normalLowPassFreq, lowPassFreqLerpSpeed * Time.unscaledDeltaTime);
+        mixer.SetFloat("MusicLowPassFreq", lowPassValue);
+    }
 
     public void PlayMusic(int musicIndex)
     {
@@ -118,7 +115,7 @@ public class AudioManager : MonoBehaviour
     {
         while (music.volume > 0)
         {
-            music.volume -= Time.deltaTime;
+            music.volume -= Time.unscaledDeltaTime;
             yield return null;
         }
 
@@ -127,7 +124,7 @@ public class AudioManager : MonoBehaviour
 
         while (music.volume < 1)
         {
-            music.volume += Time.deltaTime;
+            music.volume += Time.unscaledDeltaTime;
             yield return null;
         }
     }
@@ -136,7 +133,7 @@ public class AudioManager : MonoBehaviour
     {
         while (music.volume > 0)
         {
-            music.volume -= Time.deltaTime;
+            music.volume -= Time.unscaledDeltaTime;
             yield return null;
         }
 

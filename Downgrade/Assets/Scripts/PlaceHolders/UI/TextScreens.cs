@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DeathScreen : MonoBehaviour
+public class TextScreens : MonoBehaviour
 {
     CanvasGroup canvasGroup;
     public bool active = false;

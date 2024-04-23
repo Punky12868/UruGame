@@ -28,6 +28,9 @@ public class ProjectileLogic : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.Instance.IsGamePaused())
+            return;
+
         transform.Translate(direction.normalized * travelSpeed * Time.deltaTime);
     }
 
@@ -35,7 +38,7 @@ public class ProjectileLogic : MonoBehaviour
     {
         if (other.CompareTag("Player") && !isParried)
         {
-            if (canBeParried && other.GetComponent<PlayerController>().GetPlayerState() == "Parry")
+            if (canBeParried && other.GetComponent<PlayerComponent>().GetPlayerState() == "Parry")
             {
                 direction *= -1;
                 isParried = true;
@@ -43,7 +46,7 @@ public class ProjectileLogic : MonoBehaviour
             }
             else
             {
-                other.GetComponent<PlayerController>().TakeDamage(damage, knockbackForce, transform.position);
+                other.GetComponent<PlayerComponent>().TakeDamage(damage, knockbackForce, transform.position);
                 Destroy(gameObject);
             }
             

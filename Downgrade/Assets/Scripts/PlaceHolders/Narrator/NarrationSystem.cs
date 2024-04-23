@@ -41,7 +41,7 @@ public class NarrationSystem : MonoBehaviour, IObserver
                 Debug.Log("Game Ended");
                 break;
             case AllActions.LowHealth: //
-                if (FindObjectOfType<PlayerController>().GetCurrentHealth() < lowHealthThreshold && !lowStaminaTriggered)
+                if (FindObjectOfType<PlayerComponent>().GetCurrentHealth() < lowHealthThreshold && !lowStaminaTriggered)
                 {
                     lowStaminaTriggered = true;
                     AudioManager.instance.PlayVoice(narrationClips[0]);
@@ -51,7 +51,7 @@ public class NarrationSystem : MonoBehaviour, IObserver
                 }
                 break;
             case AllActions.LowStamina: //
-                if (FindObjectOfType<PlayerController>().GetCurrentStamina() < lowStaminaThreshold)
+                if (FindObjectOfType<PlayerComponent>().GetCurrentStamina() < lowStaminaThreshold)
                 {
                     AudioManager.instance.PlayVoice(narrationClips[1]);
                     Instantiate(subtitles, subtitlesParent).GetComponentInChildren<Subtitles>().DisplaySubtitles(subtitlesText[1], narrationClips[1].length);
@@ -64,6 +64,9 @@ public class NarrationSystem : MonoBehaviour, IObserver
                 break;
             case AllActions.RandomNoise:
                 Debug.Log("Random Noise");
+                break;
+            case AllActions.RandomPausedNoise:
+                Debug.Log("Random Paused Noise");
                 break;
             case AllActions.StartBoss:
                 Debug.Log("Boss Fight Started");
@@ -127,12 +130,19 @@ public class NarrationSystem : MonoBehaviour, IObserver
     {
         if (timeForRandomNoise >= timeAfterRandomNoise)
         {
-            OnNotify(AllActions.RandomNoise);
+            if (GameManager.Instance.IsGamePaused())
+            {
+                OnNotify(AllActions.RandomPausedNoise);
+            }
+            else
+            {
+                OnNotify(AllActions.RandomNoise);
+            }
             timeForRandomNoise = 0;
         }
         else
         {
-            timeForRandomNoise += Time.deltaTime;
+            timeForRandomNoise += Time.unscaledDeltaTime;
         }
     }
 
