@@ -4,9 +4,10 @@ using UnityEngine;
 
 public abstract class DowngradeCard : ScriptableObject
 {
+    public GameObject cardObject;
     public string cardName;
+    public string cardStat;
     public string cardDescription;
-    public Sprite cardSprite;
 
     public virtual void CardEffect()
     {

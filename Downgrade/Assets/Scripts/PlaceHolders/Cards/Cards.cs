@@ -6,37 +6,30 @@ using TMPro;
 
 public class Cards : MonoBehaviour
 {
-    GameObject cardHolder;
     [SerializeField] private DowngradeCard dgCard;
 
+    [SerializeField] private GameObject cardObject;
     [SerializeField] private TMP_Text cardName;
+    [SerializeField] private TMP_Text cardStat;
     [SerializeField] private TMP_Text cardDescription;
-    [SerializeField] private Image cardSprite;
 
-    private void Awake()
+    public void SetDgCard(DowngradeCard dg)
     {
-        cardHolder = GameObject.FindGameObjectWithTag("CardsHolder");
+        dgCard = dg;
+    }
 
+    public void SetCard()
+    {
+        cardObject = dgCard.cardObject;
         cardName.text = dgCard.cardName;
+        cardStat.text = dgCard.cardStat;
         cardDescription.text = dgCard.cardDescription;
-        cardSprite.sprite = dgCard.cardSprite;
     }
 
     public void UseCard()
     {
-        cardHolder.SetActive(false);
         //FindObjectOfType<PlayerController>().SetCanMove(true);
         dgCard.CardEffect();
-
-        int cardAmount = cardHolder.transform.childCount;
-
-        for (int i = 0; i < cardAmount; i++)
-        {
-            if (cardHolder.transform.GetChild(i).GetComponent<Cards>() != this)
-            {
-                Destroy(cardHolder.transform.GetChild(i).GetComponent<Cards>().gameObject);
-            }
-        }
         Destroy(gameObject);
         //PauseGame.Resume();
 
