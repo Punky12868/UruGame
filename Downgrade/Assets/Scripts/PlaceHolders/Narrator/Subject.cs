@@ -16,8 +16,13 @@ public abstract class Subject : MonoBehaviour
         observers.Remove(observer);
     }
 
-    public void NotifyObservers(AllActions action)
+    public void NotifyPlayerObservers(AllPlayerActions action)
     {
-        observers.ForEach(observer => observer.OnNotify(action));
+        observers.ForEach(observer => observer.OnPlayerNotify(action));
+    }
+
+    public void NotifyEnemyObservers(AllEnemyActions action)
+    {
+        observers.ForEach(observer => observer.OnEnemyNotify(action));
     }
 }

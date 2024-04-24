@@ -27,7 +27,7 @@ public class PlayerDamage : PlayerBase
         else
         {
             PlaySound(hitClips);
-            NotifyObservers(AllActions.LowHealth);
+            NotifyPlayerObservers(AllPlayerActions.LowHealth);
         }
     }
 
@@ -41,7 +41,7 @@ public class PlayerDamage : PlayerBase
         direction = Vector3.zero;
         lastDirection = Vector3.zero;
         PlaySound(deathClips);
-        NotifyObservers(AllActions.Die);
+        NotifyPlayerObservers(AllPlayerActions.Die);
         FindObjectOfType<TextScreens>().OnDeath();
     }
 }

@@ -6,6 +6,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
+    private bool isSelectingDowngrade = false;
 
     private void Awake()
     {
@@ -18,8 +19,10 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        DontDestroyOnLoad(gameObject);
+
+        /*Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;*/
     }
 
     public void LoadScene(int id)
@@ -69,8 +72,27 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void PauseGame(bool pause, bool downgrade)
+    {
+        isSelectingDowngrade = downgrade;
+
+        if (pause)
+        {
+            Time.timeScale = 0;
+        }
+        else
+        {
+            Time.timeScale = 1;
+        }
+    }
+
     public bool IsGamePaused()
     {
         return Time.timeScale == 0;
+    }
+
+    public bool IsSelectingDowngrade()
+    {
+        return isSelectingDowngrade;
     }
 }

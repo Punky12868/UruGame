@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerInventory : MonoBehaviour
 {
     [SerializeField] GameObject item;
+    [SerializeField] Sprite nullIcon;
     [SerializeField] float throwForce;
 
     public void AddItem(GameObject addedItem)
@@ -19,6 +20,7 @@ public class PlayerInventory : MonoBehaviour
 
         Instantiate(item, transform.position, Quaternion.identity);
         GetComponent<PlayerInteraction>().SetPickUp();
+        FindObjectOfType<PlayerUI>().SetItemIcon(nullIcon);
         item = null;
     }
 
@@ -32,11 +34,13 @@ public class PlayerInventory : MonoBehaviour
             case ItemType.Health:
                 // use health item
                 GetComponent<PlayerComponent>().GetHealth(item.GetComponent<Item>().GetValue());
+                FindObjectOfType<PlayerUI>().SetItemIcon(nullIcon);
                 item = null;
                 break;
             case ItemType.Stamina:
                 // use stamina item
                 GetComponent<PlayerComponent>().GetStamina(item.GetComponent<Item>().GetValue());
+                FindObjectOfType<PlayerUI>().SetItemIcon(nullIcon);
                 item = null;
                 break;
         }

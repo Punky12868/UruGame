@@ -15,11 +15,14 @@ public class PauseMenu : MonoBehaviour
 
     private void Update()
     {
-        if (player.GetButtonDown("Pause"))
+        if (player.GetButtonDown("Pause") && !GameManager.Instance.IsSelectingDowngrade())
         {
             GameManager.Instance.PauseGame(!GameManager.Instance.IsGamePaused());
         }
 
-        pauseMenu.SetActive(GameManager.Instance.IsGamePaused());
+        if (!GameManager.Instance.IsSelectingDowngrade())
+        {
+            pauseMenu.SetActive(GameManager.Instance.IsGamePaused());
+        }
     }
 }

@@ -1,4 +1,6 @@
 public interface IObserver
 {
-    public void OnNotify(AllActions actions);
+    public void OnPlayerNotify(AllPlayerActions actions);
+
+    public void OnEnemyNotify(AllEnemyActions actions);
 }

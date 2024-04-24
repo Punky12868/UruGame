@@ -1,9 +1,13 @@
-public enum AllActions
+public enum AllPlayerActions
 {
+    None,
     Start,
     End,
     LowHealth,
+    Heal,
     LowStamina,
+    HitEnemy,
+    KilledEnemy,
     NotKilling,
     RandomNoise,
     RandomPausedNoise,
@@ -17,9 +21,35 @@ public enum AllActions
     Attack,
     Parry,
     Dodge,
+    useItem,
+    useEmptyItem,
+    pickUpItem,
+    dropItem,
+    dropEmptyItem,
     Hit,
     Die,
     Victory,
     Defeat,
-    None
+}
+
+public enum AllEnemyActions
+{
+    None,
+    Spawned,
+    LightAttack,
+    HeavyAttack,
+    Avoiding,
+    Parried,
+    Hit,
+    Die,
+}
+
+public enum SelectedDowngrade
+{
+    None,
+    FatRoll,
+    Asthma,
+    BadLuck,
+    Weakness,
+    EnemyBoost,
 }

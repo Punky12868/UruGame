@@ -60,7 +60,7 @@ public class PlayerActions : PlayerBase
         }
 
         currentStamina -= staminaUsageRoll;
-        NotifyObservers(AllActions.LowStamina);
+        NotifyPlayerObservers(AllPlayerActions.LowStamina);
         isRolling = true;
         canBeDamaged = false;
         PlaySound(rollClips);

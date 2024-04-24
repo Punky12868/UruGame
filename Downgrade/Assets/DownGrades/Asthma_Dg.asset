@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 289416cf171919b4ca7d4a7fd71623da, type: 3}
+  m_Name: Asthma_Dg
+  m_EditorClassIdentifier: 
+  selectedDowngrade: 2
+  dgIcon: {fileID: 21300000, guid: f9161c6c9e06dc445ada3ee16d991f90, type: 3}
+  cardSprite: {fileID: 21300000, guid: 0e84906b7b1c7eb4c914c13ef8f86652, type: 3}
+  cardBackSprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  cardName: Asthma
+  cardStat: Health
+  cardDescription: Cada vez que se acaba tu Stamina, pierdes un 10% de vida.
+  staminaThresshold: 5
+  healthLossPercentage: 10

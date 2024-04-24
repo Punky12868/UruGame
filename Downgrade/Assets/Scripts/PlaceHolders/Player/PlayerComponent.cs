@@ -43,7 +43,7 @@ public class PlayerComponent : Subject
     [Header("Fighting")]
     public Transform hitboxCenter;
     public float offset = 0.3f;
-    public float attackDamage = 5;
+    public Vector2 attackDamage = new Vector2(3, 5);
     public float cooldownTime = 0.5f;
     public float comboCooldownTime = 0.5f;
     public bool canBeStaggered = false;
@@ -103,6 +103,18 @@ public class PlayerComponent : Subject
     [HideInInspector] public bool isAttacking = false;
     [HideInInspector] public bool isRolling = false;
 
+    [HideInInspector] public bool isNotHitting = false;
+    [HideInInspector] public bool isNotKilling = false;
+
+    [HideInInspector] public float notHittingTime;
+    [HideInInspector] public float notKillingTime;
+
+    [HideInInspector] public bool wasHitNotified;
+    [HideInInspector] public bool wasKilledNotified;
+
+    [HideInInspector] public float notHittingTimeThreshold;
+    [HideInInspector] public float notKillingTimeThreshold;
+
     [HideInInspector] public bool wasParryPressed = false;
     [HideInInspector] public bool wasParryInvoked = false;
 
@@ -126,11 +138,14 @@ public class PlayerComponent : Subject
         normalVfxTime = -1;
         comboVfxTime = -1;
 
+        DowngradeSystem.Instance.SetPlayer(this);
+
         //NotifyObservers();
     }
 
     public void Update()
     {
+        NotHittingKillingTimer();
         Stamina();
         NormalSlashVFXController();
         ComboSlashVFXController();
@@ -199,11 +214,29 @@ public class PlayerComponent : Subject
 
         if (input.GetButtonDown("UseItem"))
         {
+            if (inventory.HasItem())
+            {
+                NotifyPlayerObservers(AllPlayerActions.useItem);
+            }
+            else
+            {
+                NotifyPlayerObservers(AllPlayerActions.useEmptyItem);
+            }
+
             inventory.UseItem();
         }
 
         if (input.GetButtonDown("DropItem"))
         {
+            if (inventory.HasItem())
+            {
+                NotifyPlayerObservers(AllPlayerActions.dropItem);
+            }
+            else
+            {
+                NotifyPlayerObservers(AllPlayerActions.dropEmptyItem);
+            }
+
             inventory.DropItem();
         }
     }
@@ -222,14 +255,17 @@ public class PlayerComponent : Subject
             rb.AddForce(direction.normalized * rollForce, ForceMode.Impulse);
         }
 
-        currentStamina -= staminaUsageRoll;
-        NotifyObservers(AllActions.LowStamina);
+        UseStamina(staminaUsageRoll);
+        
+        NotifyPlayerObservers(AllPlayerActions.Dodge);
         isRolling = true;
         canBeDamaged = false;
         PlaySound(rollClips);
         Invoke("ResetDamage", rollInmunity);
         Invoke("ResetRoll", rollCooldown);
     }
+
+    
     #endregion
 
     #region Combat
@@ -289,9 +325,8 @@ public class PlayerComponent : Subject
             isNormalVFXPlaying = true;
         }
 
-        currentStamina -= staminaUsageAttack;
+        UseStamina(staminaUsageAttack);
         rb.AddForce(lastDirection.normalized * attackForce, ForceMode.Impulse);
-        NotifyObservers(AllActions.LowStamina);
         PlaySound(attackClips);
         Collider[] hitColliders = Physics.OverlapBox(hitboxCenter.position, hitboxSize, Quaternion.LookRotation(lastDirection));
 
@@ -300,13 +335,73 @@ public class PlayerComponent : Subject
             if (hit.CompareTag("Enemy"))
             {
                 Debug.Log("Hit");
-                hit.GetComponent<EnemyBase>().TakeDamage(attackDamage);
+
+                int damage = Random.Range((int)attackDamage.x, (int)attackDamage.y + 1);
+
+                if (hit.GetComponent<EnemyBase>().currentHealth - damage <= 0)
+                {
+                    ResetHittingKilling("Kill");
+                    NotifyPlayerObservers(AllPlayerActions.KilledEnemy);
+                }
+                else
+                {
+                    ResetHittingKilling("Hit");
+                    NotifyPlayerObservers(AllPlayerActions.HitEnemy);
+                }
+
+                hit.GetComponent<EnemyBase>().TakeDamage(damage);
             }
 
             if (hit.CompareTag("Destructible"))
             {
                 hit.GetComponent<Prop>().OnHit();
             }
+        }
+    }
+
+    private void NotHittingKillingTimer()
+    {
+        notHittingTime += Time.deltaTime;
+        notKillingTime += Time.deltaTime;
+
+        if (notHittingTime > notHittingTimeThreshold)
+        {
+            isNotHitting = true;
+        }
+
+        if (notKillingTime > notKillingTimeThreshold)
+        {
+            isNotKilling = true;
+        }
+
+        if (isNotHitting && !wasHitNotified)
+        {
+            wasHitNotified = true;
+            NotifyPlayerObservers(AllPlayerActions.NotKilling);
+        }
+
+        if (isNotKilling && !wasKilledNotified)
+        {
+            wasKilledNotified = true;
+            NotifyPlayerObservers(AllPlayerActions.NotKilling);
+        }
+    }
+
+    private void ResetHittingKilling(string action)
+    {
+        if (action == "Hit")
+        {
+            notHittingTime = 0;
+
+            isNotHitting = false;
+            wasHitNotified = false;
+        }
+        else if (action == "Kill")
+        {
+            notKillingTime = 0;
+
+            isNotKilling = false;
+            wasKilledNotified = false;
         }
     }
     #endregion
@@ -332,6 +427,16 @@ public class PlayerComponent : Subject
                 }
             }
         }
+    }
+
+    public void UseStamina(float value)
+    {
+        currentStamina -= value;
+
+        if (currentStamina < 0)
+            currentStamina = 0;
+
+        NotifyPlayerObservers(AllPlayerActions.LowStamina);
     }
     #endregion
 
@@ -384,6 +489,8 @@ public class PlayerComponent : Subject
 
         if (currentHealth > health)
             currentHealth = health;
+
+        NotifyPlayerObservers(AllPlayerActions.Heal);
     }
 
     public void GetStamina(float staminaReward)
@@ -415,6 +522,31 @@ public class PlayerComponent : Subject
     #endregion
 
     #region Damage
+    public void TakeDamage(float damage)
+    {
+        if (isDead || !canBeDamaged)
+            return;
+
+        if (canBeStaggered)
+        {
+            canMove = false;
+            Invoke("ActivateMovement", damagedCooldown);
+            PlayAnimation(animationIDs[0], false, true);
+        }
+
+        currentHealth -= damage;
+
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+        else
+        {
+            PlaySound(hitClips);
+            NotifyPlayerObservers(AllPlayerActions.LowHealth);
+        }
+    }
+
     public void TakeDamage(float damage, float knockbackForce, Vector3 damagePos)
     {
         if (isDead || !canBeDamaged)
@@ -438,9 +570,11 @@ public class PlayerComponent : Subject
         else
         {
             PlaySound(hitClips);
-            NotifyObservers(AllActions.LowHealth);
+            NotifyPlayerObservers(AllPlayerActions.LowHealth);
         }
     }
+
+    
 
     public void Die()
     {
@@ -452,7 +586,7 @@ public class PlayerComponent : Subject
         direction = Vector3.zero;
         lastDirection = Vector3.zero;
         PlaySound(deathClips);
-        NotifyObservers(AllActions.Die);
+        NotifyPlayerObservers(AllPlayerActions.Die);
         FindObjectOfType<TextScreens>().OnDeath();
     }
     #endregion
@@ -709,14 +843,24 @@ public class PlayerComponent : Subject
     #endregion
 
     #region GetCurrentStats
-    public float GetCurrentHealth()
+    public float GetHealth()
     {
         return currentHealth;
     }
 
-    public float GetCurrentStamina()
+    public float GetStamina()
     {
         return currentStamina;
+    }
+
+    public float GetSpeed()
+    {
+        return speed;
+    }
+
+    public Vector2 GetDamage()
+    {
+        return attackDamage;
     }
 
     public string GetPlayerState()
@@ -727,6 +871,28 @@ public class PlayerComponent : Subject
     public Vector3 GetLastDirection()
     {
         return lastDirection;
+    }
+
+    public bool IsNotHittingEnemy()
+    {
+        return isNotHitting;
+    }
+
+    public bool IsNotKillingEnemy()
+    {
+        return isNotKilling;
+    }
+    #endregion
+
+    #region SetStats
+    public void SetSpeed(float speed)
+    {
+        this.speed = speed;
+    }
+
+    public void SetDamage(Vector2 damage)
+    {
+        attackDamage = damage;
     }
     #endregion
 

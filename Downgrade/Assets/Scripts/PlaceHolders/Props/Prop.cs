@@ -9,7 +9,6 @@ public class Prop : MonoBehaviour
     [SerializeField] ItemType itemType;
     [SerializeField] string animName;
     [SerializeField] float spawnItemTime;
-    [SerializeField] float spawnForce;
 
     bool isDestroyed = false;
 
@@ -33,8 +32,7 @@ public class Prop : MonoBehaviour
     {
         if (holdedItem != null)
         {
-            GameObject spawnedItem = Instantiate(holdedItem, transform.position, Quaternion.identity);
-            spawnedItem.GetComponent<Rigidbody>().AddForce(transform.up * spawnForce, ForceMode.Impulse);
+            Instantiate(holdedItem, transform.position, Quaternion.identity);
         }
     }
 }

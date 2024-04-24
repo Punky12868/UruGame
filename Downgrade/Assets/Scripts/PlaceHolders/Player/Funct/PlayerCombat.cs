@@ -61,7 +61,7 @@ public class PlayerCombat : PlayerBase
 
         currentStamina -= staminaUsageAttack;
         rb.AddForce(lastDirection.normalized * attackForce, ForceMode.Impulse);
-        NotifyObservers(AllActions.LowStamina);
+        NotifyPlayerObservers(AllPlayerActions.LowStamina);
         PlaySound(attackClips);
         Collider[] hitColliders = Physics.OverlapBox(hitboxCenter.position, hitboxSize, Quaternion.LookRotation(lastDirection));
 

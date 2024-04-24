@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyBase : MonoBehaviour
+public class EnemyBase : Subject
 {
     // PlaceHolder for the EnemyBase
 
@@ -166,6 +166,9 @@ public class EnemyBase : MonoBehaviour
         isSpawning = true;
         PlaySound(spawnSounds);
         PlayAnimation(animationIDs[0], true);
+
+        DowngradeSystem.Instance.SetEnemy(this);
+        NotifyEnemyObservers(AllEnemyActions.Spawned);
     }
 
     /*public virtual void FixedUpdate()
@@ -695,6 +698,7 @@ public class EnemyBase : MonoBehaviour
     public void RemoveComponentsOnDeath()
     {
         isDead = true;
+        DowngradeSystem.Instance.RemoveEnemy(this);
         Destroy(rb);
         Destroy(GetComponent<Collider>());
         Destroy(audioSource);

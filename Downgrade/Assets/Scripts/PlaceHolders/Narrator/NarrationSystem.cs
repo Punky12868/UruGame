@@ -26,7 +26,7 @@ public class NarrationSystem : MonoBehaviour, IObserver
     [TextArea]
     [SerializeField] string[] subtitlesText;
 
-    public void OnNotify(AllActions actions)
+    public void OnPlayerNotify(AllPlayerActions actions)
     {
         if (isWaiting)
             return;
@@ -34,14 +34,14 @@ public class NarrationSystem : MonoBehaviour, IObserver
         
         switch (actions)
         {
-            case AllActions.Start:
+            case AllPlayerActions.Start:
                 Debug.Log("Game Started");
                 break;
-            case AllActions.End:
+            case AllPlayerActions.End:
                 Debug.Log("Game Ended");
                 break;
-            case AllActions.LowHealth: //
-                if (FindObjectOfType<PlayerComponent>().GetCurrentHealth() < lowHealthThreshold && !lowStaminaTriggered)
+            case AllPlayerActions.LowHealth: //
+                if (FindObjectOfType<PlayerComponent>().GetHealth() < lowHealthThreshold && !lowStaminaTriggered)
                 {
                     lowStaminaTriggered = true;
                     AudioManager.instance.PlayVoice(narrationClips[0]);
@@ -50,8 +50,8 @@ public class NarrationSystem : MonoBehaviour, IObserver
                     Debug.Log("Low Health");
                 }
                 break;
-            case AllActions.LowStamina: //
-                if (FindObjectOfType<PlayerComponent>().GetCurrentStamina() < lowStaminaThreshold)
+            case AllPlayerActions.LowStamina: //
+                if (FindObjectOfType<PlayerComponent>().GetStamina() < lowStaminaThreshold)
                 {
                     AudioManager.instance.PlayVoice(narrationClips[1]);
                     Instantiate(subtitles, subtitlesParent).GetComponentInChildren<Subtitles>().DisplaySubtitles(subtitlesText[1], narrationClips[1].length);
@@ -59,58 +59,58 @@ public class NarrationSystem : MonoBehaviour, IObserver
                     Debug.Log("Low Stamina");
                 }
                 break;
-            case AllActions.NotKilling:
+            case AllPlayerActions.NotKilling:
                 Debug.Log("Not Killing");
                 break;
-            case AllActions.RandomNoise:
+            case AllPlayerActions.RandomNoise:
                 Debug.Log("Random Noise");
                 break;
-            case AllActions.RandomPausedNoise:
+            case AllPlayerActions.RandomPausedNoise:
                 Debug.Log("Random Paused Noise");
                 break;
-            case AllActions.StartBoss:
+            case AllPlayerActions.StartBoss:
                 Debug.Log("Boss Fight Started");
                 break;
-            case AllActions.DieToFirstStageBoss:
+            case AllPlayerActions.DieToFirstStageBoss:
                 Debug.Log("Died to First Stage Boss");
                 break;
-            case AllActions.MidBoss:
+            case AllPlayerActions.MidBoss:
                 Debug.Log("Mid Boss Fight");
                 break;
-            case AllActions.DieToMidStageBoss:
+            case AllPlayerActions.DieToMidStageBoss:
                 Debug.Log("Died to Mid Stage Boss");
                 break;
-            case AllActions.ParryBoss:
+            case AllPlayerActions.ParryBoss:
                 Debug.Log("Parried Boss Attack");
                 break;
-            case AllActions.EndBoss:
+            case AllPlayerActions.EndBoss:
                 Debug.Log("Boss Fight Ended");
                 break;
-            case AllActions.Attack: //
+            case AllPlayerActions.Attack: //
                 Debug.Log("Attacked");
                 break;
-            case AllActions.Parry: //
+            case AllPlayerActions.Parry: //
                 Debug.Log("Parried");
                 break;
-            case AllActions.Dodge:
+            case AllPlayerActions.Dodge:
                 Debug.Log("Dodged");
                 break;
-            case AllActions.Hit:
+            case AllPlayerActions.Hit:
                 Debug.Log("Hit");
                 break;
-            case AllActions.Die:
+            case AllPlayerActions.Die:
                 AudioManager.instance.PlayVoice(narrationClips[2]);
                 Instantiate(subtitles, subtitlesParent).GetComponentInChildren<Subtitles>().DisplaySubtitles(subtitlesText[2], narrationClips[2].length);
                 SetWaiting(narrationClips[2].length);
                 Debug.Log("Died");
                 break;
-            case AllActions.Victory:
+            case AllPlayerActions.Victory:
                 Debug.Log("Victory");
                 break;
-            case AllActions.Defeat:
+            case AllPlayerActions.Defeat:
                 Debug.Log("Defeat");
                 break;
-            case AllActions.None:
+            case AllPlayerActions.None:
                 Debug.Log("None");
                 break;
         }
@@ -132,11 +132,11 @@ public class NarrationSystem : MonoBehaviour, IObserver
         {
             if (GameManager.Instance.IsGamePaused())
             {
-                OnNotify(AllActions.RandomPausedNoise);
+                OnPlayerNotify(AllPlayerActions.RandomPausedNoise);
             }
             else
             {
-                OnNotify(AllActions.RandomNoise);
+                OnPlayerNotify(AllPlayerActions.RandomNoise);
             }
             timeForRandomNoise = 0;
         }
@@ -155,5 +155,9 @@ public class NarrationSystem : MonoBehaviour, IObserver
     private void ResetWaiting()
     {
         isWaiting = false;
+    }
+
+    public void OnEnemyNotify(AllEnemyActions actions)
+    {
     }
 }

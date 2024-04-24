@@ -17,19 +17,29 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private Slider staminaSlider;
     [SerializeField] private Slider staminaUsedSlider;
 
+    [SerializeField] private Image itemIcon;
+    [SerializeField] private Image dgIcon;
+
     public void SetUI()
     {
         player = GetComponent<PlayerComponent>();
 
-        healthSlider.maxValue = player.GetCurrentHealth();
-        healthSlider.value = player.GetCurrentHealth();
-        healthHitSlider.maxValue = player.GetCurrentHealth();
-        healthHitSlider.value = player.GetCurrentHealth();
+        healthSlider.maxValue = player.GetHealth();
+        healthSlider.value = player.GetHealth();
+        healthHitSlider.maxValue = player.GetHealth();
+        healthHitSlider.value = player.GetHealth();
 
-        staminaSlider.maxValue = player.GetCurrentStamina();
-        staminaSlider.value = player.GetCurrentStamina();
-        staminaUsedSlider.maxValue = player.GetCurrentStamina();
-        staminaUsedSlider.value = player.GetCurrentStamina();
+        staminaSlider.maxValue = player.GetStamina();
+        staminaSlider.value = player.GetStamina();
+        staminaUsedSlider.maxValue = player.GetStamina();
+        staminaUsedSlider.value = player.GetStamina();
+
+        dgIcon.sprite = DowngradeSystem.Instance.GetIcon();
+    }
+
+    public void SetItemIcon(Sprite icon)
+    {
+        itemIcon.sprite = icon;
     }
 
     private void Update()
@@ -46,27 +56,27 @@ public class PlayerUI : MonoBehaviour
 
     private void UpdateHealth()
     {
-        if (healthSlider.value != player.GetCurrentHealth())
+        if (healthSlider.value != player.GetHealth())
         {
-            healthSlider.value = player.GetCurrentHealth();
+            healthSlider.value = player.GetHealth();
         }
     }
 
     private void UpdateStamina()
     {
-        if (staminaSlider.value != player.GetCurrentStamina())
+        if (staminaSlider.value != player.GetStamina())
         {
-            staminaSlider.value = player.GetCurrentStamina();
+            staminaSlider.value = player.GetStamina();
         }
     }
 
     private void Hit()
     {
-        healthHitSlider.value = Mathf.Lerp(healthHitSlider.value, player.GetCurrentHealth(), Time.deltaTime * updateSpeed);
+        healthHitSlider.value = Mathf.Lerp(healthHitSlider.value, player.GetHealth(), Time.deltaTime * updateSpeed);
     }
 
     private void UseStamina()
     {
-        staminaUsedSlider.value = Mathf.Lerp(staminaUsedSlider.value, player.GetCurrentStamina(), Time.deltaTime * updateSpeed);
+        staminaUsedSlider.value = Mathf.Lerp(staminaUsedSlider.value, player.GetStamina(), Time.deltaTime * updateSpeed);
     }
 }
