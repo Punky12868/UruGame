@@ -697,8 +697,8 @@ public class EnemyBase : Subject
     #region Utility
     public void RemoveComponentsOnDeath()
     {
-        isDead = true;
         DowngradeSystem.Instance.RemoveEnemy(this);
+        isDead = true;
         Destroy(rb);
         Destroy(GetComponent<Collider>());
         Destroy(audioSource);
