@@ -1,6 +1,8 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemyBase : Subject
 {
@@ -38,11 +40,18 @@ public class EnemyBase : Subject
 
     [Header("AI Stats")]
     public float health = 100;
+    public bool hasHealthBar;
+    [ShowIf("hasHealthBar", true, true)] public Slider healthBar;
+    [ShowIf("hasHealthBar", true, true)] public Slider healthBarBg;
+    [ShowIf("hasHealthBar", true, true)] public float healthBarBgSpeed;
+    [ShowIf("hasHealthBar", true, true)] public float onHitAppearSpeed;
+    [ShowIf("hasHealthBar", true, true)] public float onHitDisappearSpeed;
+    [ShowIf("hasHealthBar", true, true)] public float onHitBarCooldown;
     [HideInInspector] public float currentHealth;
-    public int normalAttackdamage = 5;
-    public int normalAttackKnockback = 5;
-    [ShowIf("isMelee", true, true)][ShowIf("hasChargeAttack", true, true)][ShowIf("isMelee", true, true)][ShowIf("hasChargeAttack", true, true)] public int chargeAttackDamage = 5;
-    [ShowIf("isMelee", true, true)][ShowIf("hasChargeAttack", true, true)][ShowIf("isMelee", true, true)][ShowIf("hasChargeAttack", true, true)] public int chargeAttackKnockback = 15;
+    public float normalAttackdamage = 5;
+    public float normalAttackKnockback = 5;
+    [ShowIf("isMelee", true, true)][ShowIf("hasChargeAttack", true, true)][ShowIf("isMelee", true, true)][ShowIf("hasChargeAttack", true, true)] public float chargeAttackDamage = 5;
+    [ShowIf("isMelee", true, true)][ShowIf("hasChargeAttack", true, true)][ShowIf("isMelee", true, true)][ShowIf("hasChargeAttack", true, true)] public float chargeAttackKnockback = 15;
     [HideInInspector] public float speed;
     public float walkingSpeed = 1;
     public bool canRun;
@@ -143,6 +152,17 @@ public class EnemyBase : Subject
         audioSource = GetComponent<AudioSource>();
         target = GameObject.FindGameObjectWithTag("Player").transform;
 
+        if (hasHealthBar)
+        {
+            healthBar.GetComponentInParent<CanvasGroup>().alpha = 0;
+
+            healthBar.maxValue = health;
+            healthBarBg.maxValue = health;
+
+            healthBar.value = health;
+            healthBarBg.value = health;
+        }
+
         if (isStatic)
         {
             speed = 0;
@@ -190,6 +210,41 @@ public class EnemyBase : Subject
         RotateHitboxCentreToFaceThePlayer();
         SetTargetDirection();
         QueueAnimation();
+        UpdateHealthUI();
+    }
+
+    private void UpdateHealthUI()
+    {
+        if (!hasHealthBar)
+            return;
+
+        // if the enemy flips the sprite, flip the health bar
+        if (isSpriteFlipped)
+        {
+            healthBar.GetComponentInParent<CanvasGroup>().gameObject.transform.localScale = new Vector3(-1, 1, 1);
+        }
+        else
+        {
+            healthBar.GetComponentInParent<CanvasGroup>().gameObject.transform.localScale = new Vector3(1, 1, 1);
+
+        }
+
+        if (healthBar.value != currentHealth)
+        {
+            healthBar.value = currentHealth;
+        }
+
+        Hit();
+    }
+
+    private void Hit()
+    {
+        healthBarBg.value = Mathf.Lerp(healthBarBg.value, currentHealth, Time.deltaTime * healthBarBgSpeed);
+    }
+
+    private void DissapearBar()
+    {
+        healthBar.GetComponentInParent<CanvasGroup>().DOFade(0, onHitDisappearSpeed).SetUpdate(UpdateType.Normal, true);
     }
 
     public void SetTargetDirection()
@@ -230,7 +285,6 @@ public class EnemyBase : Subject
 
     public virtual void Movement()
     {
-        
     }
 
     public virtual void TakeDamage(float damage)
@@ -699,6 +753,12 @@ public class EnemyBase : Subject
     {
         DowngradeSystem.Instance.RemoveEnemy(this);
         isDead = true;
+
+        if (hasHealthBar)
+        {
+            Destroy(healthBar.GetComponentInParent<CanvasGroup>().gameObject);
+        }
+
         Destroy(rb);
         Destroy(GetComponent<Collider>());
         Destroy(audioSource);

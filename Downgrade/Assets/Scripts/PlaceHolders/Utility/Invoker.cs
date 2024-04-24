@@ -96,41 +96,60 @@ public class Invoker : MonoBehaviour {
 	{
 		Instance.invokeListPendingAddition.Add(new InvokableItem(func, delaySeconds));
 	}
-	
-	// must be maanually called from a game controller or something similar every frame
-	public void Update()
-	{
-		fRealDeltaTime = Time.realtimeSinceStartup - fRealTimeLastFrame;
-		fRealTimeLastFrame = Time.realtimeSinceStartup;
-		
-		// Copy pending additions into the list (Pending addition list 
-		// is used because some invokes add a recurring invoke, and
-		// this would modify the collection in the next loop, 
-		// generating errors)
-		foreach(InvokableItem item in invokeListPendingAddition)
-		{
-			invokeList.Add(item);	
-		}
-		invokeListPendingAddition.Clear();
-		
-		
-		// Invoke all items whose time is up
-		foreach(InvokableItem item in invokeList)
-		{
-			if(item.executeAtTime <= Time.realtimeSinceStartup)	
-			{
-				if(item.func != null)
-					item.func();
 
-				invokeListExecuted.Add(item);
-			}
-		}
-		
-		// Remove invoked items from the list.
-		foreach(InvokableItem item in invokeListExecuted)
-		{
-			invokeList.Remove(item);
-		}
-		invokeListExecuted.Clear();
-	}
+    static List<InvokableItem> scratchInvokeList = new List<InvokableItem>();
+    public static void CancelInvoke(Invokable func)
+    {
+        scratchInvokeList.Clear();
+        scratchInvokeList.AddRange(Instance.invokeList);
+        foreach (var i in Instance.invokeList)
+        {
+            if (i.func == func)
+            {
+                //Debug.Log("Purging invoker item");
+                scratchInvokeList.Remove(i);
+            }
+        }
+        Instance.invokeList.Clear();
+        Instance.invokeList.AddRange(scratchInvokeList);
+    }
+
+    // must be maanually called from a game controller or something similar every frame
+    public void Update()
+    {
+        fRealDeltaTime = Time.realtimeSinceStartup - fRealTimeLastFrame;
+        fRealTimeLastFrame = Time.realtimeSinceStartup;
+
+        // Copy pending additions into the list (Pending addition list 
+        // is used because some invokes add a recurring invoke, and
+        // this would modify the collection in the next loop, 
+        // generating errors)
+        foreach (InvokableItem item in invokeListPendingAddition)
+        {
+            invokeList.Add(item);
+        }
+        invokeListPendingAddition.Clear();
+
+        // Create a copy of invokeList to iterate over
+        List<InvokableItem> itemsToExecute = new List<InvokableItem>(invokeList);
+
+        // Invoke all items whose time is up
+        foreach (InvokableItem item in itemsToExecute)
+        {
+            if (item.executeAtTime <= Time.realtimeSinceStartup)
+            {
+                if (item.func != null)
+                    item.func();
+
+                invokeListExecuted.Add(item);
+            }
+        }
+
+        // Remove invoked items from the list.
+        foreach (InvokableItem item in invokeListExecuted)
+        {
+            invokeList.Remove(item);
+        }
+        invokeListExecuted.Clear();
+    }
 }

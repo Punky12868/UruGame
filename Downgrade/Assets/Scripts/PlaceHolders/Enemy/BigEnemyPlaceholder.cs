@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -53,6 +54,12 @@ public class BigEnemyPlaceholder : EnemyBase
     {
         if (isDead)
             return;
+
+        if (hasHealthBar)
+        {
+            healthBar.GetComponentInParent<CanvasGroup>().DOFade(1, onHitAppearSpeed).SetUpdate(UpdateType.Normal, true);
+            Invoke("DissapearBar", onHitBarCooldown);
+        }
 
         if (hasKnockback)
         {
