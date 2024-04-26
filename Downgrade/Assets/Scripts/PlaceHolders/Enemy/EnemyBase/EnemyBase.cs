@@ -116,8 +116,9 @@ public class EnemyBase : Subject
     [ShowIf("isMelee", false, true)] [ShowIf("avoidTarget", true, true)] [ShowIf("isStatic", false, true)] public float avoidRange = 2;
 
     [Header("AI Animations")]
-    [HideInInspector] public string queueAnimation;
+    public bool flipSprite;
     public string[] animationIDs;
+    [HideInInspector] public string queueAnimation;
     AnimationClip[] clips;
 
     [Header ("AI Sounds")]
@@ -222,11 +223,12 @@ public class EnemyBase : Subject
         if (isSpriteFlipped)
         {
             healthBar.GetComponentInParent<CanvasGroup>().gameObject.transform.localScale = new Vector3(-1, 1, 1);
+            Debug.Log(healthBar.GetComponentInParent<CanvasGroup>().gameObject.name + " X - 1");
         }
         else
         {
             healthBar.GetComponentInParent<CanvasGroup>().gameObject.transform.localScale = new Vector3(1, 1, 1);
-
+            Debug.Log(healthBar.GetComponentInParent<CanvasGroup>().gameObject.name + " X  1");
         }
 
         if (healthBar.value != currentHealth)
@@ -255,19 +257,27 @@ public class EnemyBase : Subject
         GetNearestEnemy(dir);
     }
 
+    public Vector3 ShootDirection()
+    {
+        Vector3 targetPos = new Vector3(target.position.x, transform.position.y, target.position.z);
+        Vector3 enemyPos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+        Vector3 dir = (targetPos - enemyPos).normalized;
+        return dir;
+    }
+
     public void GetNearestEnemy(Vector3 dir)
     {
-        if (avoidTarget && !isMelee)
+        /*if (avoidTarget && !isMelee)
         {
             targetDir = dir;
             return;
-        }
+        }*/
 
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, enemyAvoidanceRange);
 
         foreach (Collider c in hitColliders)
         {
-            if (c.CompareTag("Enemy") && c != GetComponent<Collider>() || c.CompareTag("Wall") || c.CompareTag("Destructible"))
+            if (c.CompareTag("Enemy") && c != GetComponent<Collider>() || c.CompareTag("Wall") || c.CompareTag("Destructible") || c.CompareTag("Limits"))
             {
                 Vector3 enemyDirection = (c.transform.position - transform.position).normalized;
                 enemyDirection.y = 0f;
@@ -277,8 +287,17 @@ public class EnemyBase : Subject
             }
             else
             {
-                targetDir = dir;
-                targetDir = Vector3.Slerp(targetDir, dir, Time.deltaTime * wallAvoidanceSpeed);
+                if (avoidTarget && !isMelee)
+                {
+                    //targetDir = -dir;
+                    Vector3 midPoint = (dir + targetDir) / 2;
+                    targetDir = Vector3.Slerp(midPoint.normalized, dir.normalized, Time.deltaTime * wallAvoidanceSpeed);
+                }
+                else
+                {
+                    targetDir = dir;
+                    targetDir = Vector3.Slerp(targetDir, dir.normalized, Time.deltaTime * wallAvoidanceSpeed);
+                }
             }
         }
     }
@@ -345,7 +364,7 @@ public class EnemyBase : Subject
     public virtual void SummonProjectile()
     {
         GameObject prjctl = Instantiate(projectile, projectileSpawnPoint.position, projectileSpawnPoint.rotation);
-        prjctl.GetComponent<ProjectileLogic>().SetVariables(projectileSpeed, normalAttackdamage, projectileLifeTime, normalAttackKnockback, projectileCanBeParried, targetDir, parrySounds, gameObject);
+        prjctl.GetComponent<ProjectileLogic>().SetVariables(projectileSpeed, normalAttackdamage, projectileLifeTime, normalAttackKnockback, projectileCanBeParried, ShootDirection(), parrySounds, gameObject);
     }
 
     public virtual void MoveOnNormalAttack()
@@ -780,42 +799,44 @@ public class EnemyBase : Subject
             {
                 if (direction.x > 0)
                 {
-                    pivot.localScale = new Vector3(-1, 1, 1);
-
-                    if (isSpriteFlipped)
-                        isSpriteFlipped = true;
+                    Flip(true);
                 }
                 else
                 {
-                    pivot.localScale = new Vector3(1, 1, 1);
-
-                    if (!isSpriteFlipped)
-                        isSpriteFlipped = false;
+                    Flip(false);
                 }
             }
             else
             {
                 if (direction.x > 0)
                 {
-                    pivot.localScale = new Vector3(1, 1, 1);
-                    //GetComponentInChildren<SpriteRenderer>().flipX = false;
-
-                    if (isSpriteFlipped)
-                        isSpriteFlipped = false;
+                    Flip(true);
                 }
                 else
                 {
-                    pivot.localScale = new Vector3(-1, 1, 1);
-                    //GetComponentInChildren<SpriteRenderer>().flipX = true;
-
-                    if (!isSpriteFlipped)
-                        isSpriteFlipped = true;
+                    Flip(false);
                 }
             }
         }
         else
         {
             if (direction.x > 0)
+            {
+                Flip(true);
+            }
+            else
+            {
+                Flip(false);
+            }
+        }
+
+    }
+
+    public void Flip(bool value)
+    {
+        if (flipSprite)
+        {
+            if (!value)
             {
                 pivot.localScale = new Vector3(1, 1, 1);
                 //GetComponentInChildren<SpriteRenderer>().flipX = false;
@@ -832,7 +853,25 @@ public class EnemyBase : Subject
                     isSpriteFlipped = true;
             }
         }
-        
+        else
+        {
+            if (value)
+            {
+                pivot.localScale = new Vector3(1, 1, 1);
+                //GetComponentInChildren<SpriteRenderer>().flipX = false;
+
+                if (isSpriteFlipped)
+                    isSpriteFlipped = false;
+            }
+            else
+            {
+                pivot.localScale = new Vector3(-1, 1, 1);
+                //GetComponentInChildren<SpriteRenderer>().flipX = true;
+
+                if (!isSpriteFlipped)
+                    isSpriteFlipped = true;
+            }
+        }
     }
 
     public void CheckStatus()

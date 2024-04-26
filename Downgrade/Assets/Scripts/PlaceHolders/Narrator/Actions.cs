@@ -12,9 +12,9 @@ public enum AllPlayerActions
     RandomNoise,
     RandomPausedNoise,
     StartBoss,
-    DieToFirstStageBoss,
+    DieToFirstFaseBoss,
     MidBoss,
-    DieToMidStageBoss,
+    DieToMidFaceBoss,
     ParryBoss,
     EndBoss,
 

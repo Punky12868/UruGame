@@ -1,13 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 public class WaveSystem : MonoBehaviour
 {
     [SerializeField] private float timerEnemySpawn;
-    [SerializeField] private float timer;
-    [SerializeField] private List<Wave> waves = new List<Wave>();
 
+    // 0 = Small, 1 = SmallRanged, 2 = SmallStatic, 3 = Big
+    [SerializeField] private GameObject[] swampEnemies;
+    [SerializeField] private GameObject[] circusEnemies;
+    [SerializeField] private GameObject[] dungeonEnemies;
+    [SerializeField] private GameObject[] castleEnemies;
+
+
+    public List<Wave> waves = new List<Wave>();
+
+    private float timer;
     private int currentWave;
     private int currentWaveData;
     private bool isWaveFinished;
@@ -49,16 +59,21 @@ public class WaveSystem : MonoBehaviour
                         {
                             timerEnemySpawn = 0;
                             Vector3 pos = new Vector3(waves[currentWave].waves[currentWaveData].position.x, 0.002f, waves[currentWave].waves[currentWaveData].position.y);
-                            GameObject enemy = Instantiate(waves[currentWave].waves[currentWaveData].enemy, pos, Quaternion.identity);
-                            enemyBases.Add(enemy.GetComponent<EnemyBase>());
+                            //GameObject enemy = Instantiate(waves[currentWave].waves[currentWaveData].enemy, pos, Quaternion.identity);
+                            //enemyBases.Add(enemy.GetComponent<EnemyBase>());
+
+                            // Check the stage and enemy type to spawn the correct enemy
+                            SwitchStatement(pos);
                             currentWaveData++;
                         }
                     }
                     else
                     {
                         Vector3 pos = new Vector3(waves[currentWave].waves[currentWaveData].position.x, 0.002f, waves[currentWave].waves[currentWaveData].position.y);
-                        GameObject enemy = Instantiate(waves[currentWave].waves[currentWaveData].enemy, pos, Quaternion.identity);
-                        enemyBases.Add(enemy.GetComponent<EnemyBase>());
+
+                        //GameObject enemy = Instantiate(waves[currentWave].waves[currentWaveData].enemy, pos, Quaternion.identity);
+                        //enemyBases.Add(enemy.GetComponent<EnemyBase>());
+                        SwitchStatement(pos);
                         currentWaveData++;
                     }
                 }
@@ -69,6 +84,97 @@ public class WaveSystem : MonoBehaviour
                 AudioManager.instance.PlaySFX(1);
                 GameManager.Instance.Victory();
             }
+        }
+    }
+
+    public void SwitchStatement(Vector3 pos)
+    {
+        switch (waves[currentWave].waves[currentWaveData].stage)
+        {
+            case WaveData.Stage.Swamp:
+                switch (waves[currentWave].waves[currentWaveData].enemyType)
+                {
+                    case WaveData.EnemyType.Small:
+                        GameObject enemys = Instantiate(swampEnemies[0], pos, Quaternion.identity);
+                        enemyBases.Add(enemys.GetComponent<EnemyBase>());
+                        break;
+                    case WaveData.EnemyType.SmallRanged:
+                        GameObject enemysr = Instantiate(swampEnemies[1], pos, Quaternion.identity);
+                        enemyBases.Add(enemysr.GetComponent<EnemyBase>());
+                        break;
+                    case WaveData.EnemyType.SmallStatic:
+                        GameObject enemysrt = Instantiate(swampEnemies[2], pos, Quaternion.identity);
+                        enemyBases.Add(enemysrt.GetComponent<EnemyBase>());
+                        break;
+                    case WaveData.EnemyType.Big:
+                        GameObject enemyb = Instantiate(swampEnemies[3], pos, Quaternion.identity);
+                        enemyBases.Add(enemyb.GetComponent<EnemyBase>());
+                        break;
+                }
+                break;
+            case WaveData.Stage.Circus:
+                switch (waves[currentWave].waves[currentWaveData].enemyType)
+                {
+                    case WaveData.EnemyType.Small:
+                        GameObject enemys = Instantiate(circusEnemies[0], pos, Quaternion.identity);
+                        enemyBases.Add(enemys.GetComponent<EnemyBase>());
+                        break;
+                    case WaveData.EnemyType.SmallRanged:
+                        GameObject enemysr = Instantiate(circusEnemies[1], pos, Quaternion.identity);
+                        enemyBases.Add(enemysr.GetComponent<EnemyBase>());
+                        break;
+                    case WaveData.EnemyType.SmallStatic:
+                        GameObject enemysrt = Instantiate(circusEnemies[2], pos, Quaternion.identity);
+                        enemyBases.Add(enemysrt.GetComponent<EnemyBase>());
+                        break;
+                    case WaveData.EnemyType.Big:
+                        GameObject enemyb = Instantiate(circusEnemies[3], pos, Quaternion.identity);
+                        enemyBases.Add(enemyb.GetComponent<EnemyBase>());
+                        break;
+                }
+                break;
+            case WaveData.Stage.Dungeon:
+                switch (waves[currentWave].waves[currentWaveData].enemyType)
+                {
+                    case WaveData.EnemyType.Small:
+                        GameObject enemys = Instantiate(dungeonEnemies[0], pos, Quaternion.identity);
+                        enemyBases.Add(enemys.GetComponent<EnemyBase>());
+                        break;
+                    case WaveData.EnemyType.SmallRanged:
+                        GameObject enemysr = Instantiate(dungeonEnemies[1], pos, Quaternion.identity);
+                        enemyBases.Add(enemysr.GetComponent<EnemyBase>());
+                        break;
+                    case WaveData.EnemyType.SmallStatic:
+                        GameObject enemysrt = Instantiate(dungeonEnemies[2], pos, Quaternion.identity);
+                        enemyBases.Add(enemysrt.GetComponent<EnemyBase>());
+                        break;
+                    case WaveData.EnemyType.Big:
+                        GameObject enemyb = Instantiate(dungeonEnemies[3], pos, Quaternion.identity);
+                        enemyBases.Add(enemyb.GetComponent<EnemyBase>());
+                        break;
+                }
+                break;
+            case WaveData.Stage.Castle:
+                switch (waves[currentWave].waves[currentWaveData].enemyType)
+                {
+                    case WaveData.EnemyType.Small:
+                        GameObject enemys = Instantiate(castleEnemies[0], pos, Quaternion.identity);
+                        enemyBases.Add(enemys.GetComponent<EnemyBase>());
+                        break;
+                    case WaveData.EnemyType.SmallRanged:
+                        GameObject enemysr = Instantiate(castleEnemies[1], pos, Quaternion.identity);
+                        enemyBases.Add(enemysr.GetComponent<EnemyBase>());
+                        break;
+                    case WaveData.EnemyType.SmallStatic:
+                        GameObject enemysrt = Instantiate(castleEnemies[2], pos, Quaternion.identity);
+                        enemyBases.Add(enemysrt.GetComponent<EnemyBase>());
+                        break;
+                    case WaveData.EnemyType.Big:
+                        GameObject enemyb = Instantiate(castleEnemies[3], pos, Quaternion.identity);
+                        enemyBases.Add(enemyb.GetComponent<EnemyBase>());
+                        break;
+                }
+                break;
         }
     }
 
@@ -95,7 +201,24 @@ public class Wave
 [System.Serializable]
 public class WaveData
 {
-    public GameObject enemy;
+    public enum EnemyType
+    {
+        None,
+        Small,
+        SmallRanged,
+        SmallStatic,
+        Big
+    }
+    public enum Stage
+    {
+        None,
+        Swamp,
+        Circus,
+        Dungeon,
+        Castle
+    }
+    public EnemyType enemyType;
+    public Stage stage;
     public Vector2 position;
     public bool hasDelay;
     [ShowIf("hasDelay", true, true)] public float delayForNextEnemy;

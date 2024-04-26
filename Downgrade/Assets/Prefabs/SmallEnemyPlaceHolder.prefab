@@ -500,7 +500,7 @@ MonoBehaviour:
   wallAvoidanceSpeed: 7.5
   avoidTarget: 0
   avoidRange: 2
-  queueAnimation: 
+  flipSprite: 0
   animationIDs:
   - SmalEnemySpawn
   - SmallEnemyIdle
@@ -510,6 +510,7 @@ MonoBehaviour:
   - SmallEnemyParied
   - SmallEnemyHit
   - SmallEnemyDeath
+  queueAnimation: 
   audioSource: {fileID: 0}
   spawnSounds:
   - {fileID: 8300000, guid: a512488da0a216e4db65231866278c31, type: 3}

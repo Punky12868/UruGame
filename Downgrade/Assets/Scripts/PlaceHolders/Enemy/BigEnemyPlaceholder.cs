@@ -76,6 +76,7 @@ public class BigEnemyPlaceholder : EnemyBase
         else
         {
             //HIT ANIMATION
+            PlayAnimation(animationIDs[6], true, false, true);
             PlaySound(hitSounds);
         }
     }
@@ -88,7 +89,7 @@ public class BigEnemyPlaceholder : EnemyBase
         }
         PlaySound(parrySounds);
         isParried = true;
-        PlayAnimation(animationIDs[1], false, false, true);
+        PlayAnimation(animationIDs[5], true, false, true);
         Debug.Log("Parried");
         Invoke("ResetParried", time);
     }
@@ -96,7 +97,7 @@ public class BigEnemyPlaceholder : EnemyBase
     public override void Death()
     {
         PlaySound(deathSounds);
-        PlayAnimation(animationIDs[6], false, false, true);
+        PlayAnimation(animationIDs[7], false, false, true);
         RemoveComponentsOnDeath();
     }
 

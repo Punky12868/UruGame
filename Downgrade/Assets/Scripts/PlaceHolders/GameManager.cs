@@ -60,29 +60,22 @@ public class GameManager : MonoBehaviour
         FindObjectOfType<TextScreens>().OnVictory();
     }
 
-    public void PauseGame(bool pause)
-    {
-        if (pause)
-        {
-            Time.timeScale = 0;
-        }
-        else
-        {
-            Time.timeScale = 1;
-        }
-    }
+    public delegate void OnPauseGame();
+    public static event OnPauseGame onPauseGame;
 
-    public void PauseGame(bool pause, bool downgrade)
+    public void PauseGame(bool pause, bool downgrade = false)
     {
         isSelectingDowngrade = downgrade;
 
         if (pause)
         {
             Time.timeScale = 0;
+            onPauseGame?.Invoke();
         }
         else
         {
             Time.timeScale = 1;
+            onPauseGame?.Invoke();
         }
     }
 

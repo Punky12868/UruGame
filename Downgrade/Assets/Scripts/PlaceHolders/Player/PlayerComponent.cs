@@ -91,7 +91,7 @@ public class PlayerComponent : Subject
     [ShowIf("debugTools", true, true)][ShowIf("drawHitbox", true, true)] public Color parryHitboxColor = new Color(0, 1, 0, 1);
 
     //[Header("PlayerStatus")]
-    [HideInInspector] public bool isFacingRight;
+    [HideInInspector] public bool isFacingLeft;
 
     [HideInInspector] public bool isOnCooldown = false;
     [HideInInspector] public bool canCombo = false;
@@ -139,8 +139,13 @@ public class PlayerComponent : Subject
         comboVfxTime = -1;
 
         DowngradeSystem.Instance.SetPlayer(this);
-
+        Invoker.InvokeDelayed(DelayedAwake, 0.1f);
         //NotifyObservers();
+    }
+
+    private void DelayedAwake()
+    {
+        FindObjectOfType<CutOutObject>().AddTarget(transform);
     }
 
     public void Update()
@@ -164,6 +169,7 @@ public class PlayerComponent : Subject
 
         CooldownUpdate();
         ResetAnimClipUpdate();
+        RotateSprite();
     }
 
     public void FixedUpdate()
@@ -202,8 +208,11 @@ public class PlayerComponent : Subject
         {
             if (!wasParryPressed)
             {
+                Debug.Log("Parry Pressed");
+                PlayAnimation(animationIDs[5], true); // Parry
                 wasParryPressed = true;
                 Invoke("ActivateParry", parryWindowTime.x);
+
             }
         }
 
@@ -256,7 +265,7 @@ public class PlayerComponent : Subject
         }
 
         UseStamina(staminaUsageRoll);
-        
+        PlayAnimation(animationIDs[2], true, true); // Roll
         NotifyPlayerObservers(AllPlayerActions.Dodge);
         isRolling = true;
         canBeDamaged = false;
@@ -279,7 +288,7 @@ public class PlayerComponent : Subject
         bool isCombo = false;
         if (canCombo)
         {
-            PlayAnimation(animationIDs[8], true, true); // Attack
+            PlayAnimation(animationIDs[4], true, true); // Attack
             ActivateCooldown();
             ResetCooldown(comboCooldownTime);
             ResetCombo();
@@ -308,7 +317,7 @@ public class PlayerComponent : Subject
 
         if (!canCombo && !isCombo)
         {
-            PlayAnimation(animationIDs[7], true); // Attack
+            PlayAnimation(animationIDs[3], true); // Attack
             ActivateCooldown();
             ResetCooldown(cooldownTime);
             Invoke("ActivateCombo", comboWindowTime.x);
@@ -478,7 +487,7 @@ public class PlayerComponent : Subject
             wasParryInvoked = true;
             Invoke("ResetParry", parryWindowTime.y);
         }
-        PlayAnimation(animationIDs[9], true); // Parry
+        //PlayAnimation(animationIDs[5], true); // Parry
     }
     #endregion
 
@@ -542,6 +551,7 @@ public class PlayerComponent : Subject
         }
         else
         {
+            PlayAnimation(animationIDs[6]);
             PlaySound(hitClips);
             NotifyPlayerObservers(AllPlayerActions.LowHealth);
         }
@@ -604,46 +614,46 @@ public class PlayerComponent : Subject
         {
             if (direction.x < 0 && direction.z == 0)
             {
-                PlayAnimation(animationIDs[5]); // WalkLeft
-                isFacingRight = false;
+                PlayAnimation(animationIDs[1]); // WalkLeft
+                isFacingLeft = false;
             }
             else if (direction.x > 0 && direction.z == 0)
             {
-                PlayAnimation(animationIDs[4]); // WalkRight
-                isFacingRight = true;
+                PlayAnimation(animationIDs[1]); // WalkRight
+                isFacingLeft = true;
             }
             else if (direction.z > 0 && direction.x == 0)
             {
-                PlayAnimation(animationIDs[3]); // WalkUp
+                PlayAnimation(animationIDs[1]); // WalkUp
             }
             else if (direction.z < 0 && direction.x == 0)
             {
-                PlayAnimation(animationIDs[6]); // WalkDown
+                PlayAnimation(animationIDs[1]); // WalkDown
             }
             else if (direction.x < 0 && direction.z > 0)
             {
-                PlayAnimation(animationIDs[2]); // WalkLeftUp
-                isFacingRight = false;
+                PlayAnimation(animationIDs[1]); // WalkLeftUp
+                isFacingLeft = false;
             }
             else if (direction.x > 0 && direction.z > 0)
             {
                 PlayAnimation(animationIDs[1]); // WalkRightUp
-                isFacingRight = true;
+                isFacingLeft = true;
             }
             else if (direction.x < 0 && direction.z < 0)
             {
-                PlayAnimation(animationIDs[5]); // WalkLeftDown
-                isFacingRight = false;
+                PlayAnimation(animationIDs[1]); // WalkLeftDown
+                isFacingLeft = false;
             }
             else if (direction.x > 0 && direction.z < 0)
             {
-                PlayAnimation(animationIDs[4]); // WalkRightDown
-                isFacingRight = true;
+                PlayAnimation(animationIDs[1]); // WalkRightDown
+                isFacingLeft = true;
             }
         }
 
         // if the attack animation is playing, the player can't move, taking the current animation state
-        if (anim.GetCurrentAnimatorStateInfo(0).IsName(animationIDs[7]) || anim.GetCurrentAnimatorStateInfo(0).IsName(animationIDs[8]))
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName(animationIDs[3]) || anim.GetCurrentAnimatorStateInfo(0).IsName(animationIDs[4]))
         {
             isAttacking = true;
         }
@@ -657,50 +667,7 @@ public class PlayerComponent : Subject
     #region Utility
 
     #region AnimationController
-    public void PlayAnimation(string animName)
-    {
-        if (!isAnimationDone)
-            return;
-
-        for (int i = 0; i < animationIDs.Length; i++)
-        {
-            if (animName == animationIDs[i])
-            {
-                anim.Play(animName);
-                return;
-            }
-        }
-    }
-
-    public void PlayAnimation(string animName, bool hasExitTime)
-    {
-        if (!isAnimationDone)
-            return;
-
-        for (int i = 0; i < animationIDs.Length; i++)
-        {
-            if (animName == animationIDs[i])
-            {
-                anim.Play(animName);
-
-                if (hasExitTime)
-                {
-                    isAnimationDone = false;
-
-                    foreach (AnimationClip clip in clips)
-                    {
-                        if (clip.name == animName)
-                        {
-                            animClipLength = clip.length;
-                        }
-                    }
-                }
-                return;
-            }
-        }
-    }
-
-    public void PlayAnimation(string animName, bool hasExitTime, bool bypassExitTime)
+    public void PlayAnimation(string animName, bool hasExitTime = false, bool bypassExitTime = false)
     {
         if (bypassExitTime)
             isAnimationDone = true;
@@ -774,6 +741,22 @@ public class PlayerComponent : Subject
     }
     #endregion
 
+    #region Rotate Sprite
+    public void RotateSprite()
+    {
+        if (isFacingLeft)
+        {
+            //transform.rotation = Quaternion.Euler(0, 0, 0);
+            GetComponent<SpriteRenderer>().flipX = true;
+        }
+        else
+        {
+            //transform.rotation = Quaternion.Euler(0, 180, 0);
+            GetComponent<SpriteRenderer>().flipX = false;
+        }
+    }
+    #endregion
+
     #region Invokes
     public void ActivateMovement()
     {
@@ -782,12 +765,14 @@ public class PlayerComponent : Subject
 
     public void ActivateParry()
     {
+        Debug.Log("Parry Active");
         isParrying = true;
         playerState = "Parry";
     }
 
     public void ResetParry()
     {
+        Debug.Log("Parry Reset");
         isParrying = false;
         wasParryInvoked = false;
         wasParryPressed = false;

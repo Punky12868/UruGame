@@ -95,7 +95,9 @@ public class AudioManager : MonoBehaviour
     public void PlayVoice(AudioClip voiceClip)
     {
         if (voice.isPlaying)
-            return;
+        {
+            voice.Stop();
+        }
 
         voice.PlayOneShot(voiceClip);
     }

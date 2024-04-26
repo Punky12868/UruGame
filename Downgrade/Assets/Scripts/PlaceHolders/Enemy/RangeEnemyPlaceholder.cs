@@ -120,7 +120,7 @@ public class RangeEnemyPlaceholder : EnemyBase
         {
             //HIT ANIMATION
             PlaySound(hitSounds);
-            PlayAnimation(animationIDs[5], true/*, false, true*/);
+            PlayAnimation(animationIDs[6], true/*, false, true*/);
         }
     }
 

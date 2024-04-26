@@ -23,6 +23,8 @@ public class ProjectileLogic : MonoBehaviour
         parrySounds = prrySnd;
         originalEnemy = orgnlEnemy;
 
+        
+
         Destroy(gameObject, lftime);
     }
 
@@ -30,6 +32,11 @@ public class ProjectileLogic : MonoBehaviour
     {
         if (GameManager.Instance.IsGamePaused())
             return;
+
+        if (direction.x > 0 && !GetComponent<SpriteRenderer>().flipX)
+        {
+            GetComponent<SpriteRenderer>().flipX = true;
+        }
 
         transform.Translate(direction.normalized * travelSpeed * Time.deltaTime);
     }
@@ -56,6 +63,11 @@ public class ProjectileLogic : MonoBehaviour
         if (other.CompareTag("Enemy") && isParried)
         {
             other.GetComponent<EnemyBase>().TakeDamage(damage);
+            Destroy(gameObject);
+        }
+
+        if (other.CompareTag("Wall") || other.CompareTag("Limits"))
+        {
             Destroy(gameObject);
         }
     }

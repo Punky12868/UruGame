@@ -678,7 +678,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.13914365
+  m_Radius: 0.21637854
   m_Height: 0.6493261
   m_Direction: 1
   m_Center: {x: 0, y: 0.27466297, z: 0}
@@ -792,23 +792,36 @@ MonoBehaviour:
   wallAvoidanceSpeed: 7.5
   avoidTarget: 1
   avoidRange: 1.5
-  queueAnimation: 
+  flipSprite: 1
   animationIDs:
-  - SmalEnemySpawn
-  - SmallEnemyIdle
-  - SmallEnemyWalk
-  - SmallEnemyRun
-  - SmallEnemyAttack
-  - SmallEnemyParied
-  - SmallEnemyHit
-  - SmallEnemyDeath
+  - SlimeSpawn
+  - SlimeIdle
+  - SlimeWalk
+  - 
+  - LightAttack
+  - 
+  - SlimeHit
+  - SlimeDeath
+  queueAnimation: 
   audioSource: {fileID: 0}
-  spawnSounds: []
-  normalAttackSounds: []
-  chargedAttackSounds: []
-  hitSounds: []
-  deathSounds: []
-  parrySounds: []
+  spawnSounds:
+  - {fileID: 8300000, guid: bd5ce0b70f360584c9ac3401dc732556, type: 3}
+  - {fileID: 8300000, guid: bd5ce0b70f360584c9ac3401dc732556, type: 3}
+  normalAttackSounds:
+  - {fileID: 8300000, guid: bd5ce0b70f360584c9ac3401dc732556, type: 3}
+  - {fileID: 8300000, guid: bd5ce0b70f360584c9ac3401dc732556, type: 3}
+  chargedAttackSounds:
+  - {fileID: 8300000, guid: bd5ce0b70f360584c9ac3401dc732556, type: 3}
+  - {fileID: 8300000, guid: bd5ce0b70f360584c9ac3401dc732556, type: 3}
+  hitSounds:
+  - {fileID: 8300000, guid: bd5ce0b70f360584c9ac3401dc732556, type: 3}
+  - {fileID: 8300000, guid: bd5ce0b70f360584c9ac3401dc732556, type: 3}
+  deathSounds:
+  - {fileID: 8300000, guid: bd5ce0b70f360584c9ac3401dc732556, type: 3}
+  - {fileID: 8300000, guid: bd5ce0b70f360584c9ac3401dc732556, type: 3}
+  parrySounds:
+  - {fileID: 8300000, guid: bd5ce0b70f360584c9ac3401dc732556, type: 3}
+  - {fileID: 8300000, guid: bd5ce0b70f360584c9ac3401dc732556, type: 3}
   debugTools: 1
   drawHitboxes: 1
   drawHitboxesOnGameplay: 1
@@ -990,7 +1003,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -1425925327, guid: 42c8f35b02d04aa45bd9cc3748e66692, type: 3}
+  m_Sprite: {fileID: 387630918, guid: 265f2c272120ea44c958f09016f848a4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1011,7 +1024,7 @@ Animator:
   m_GameObject: {fileID: 7721122361977482157}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 8d315442d2159954680a70f8c78039e7, type: 2}
+  m_Controller: {fileID: 9100000, guid: 01fa4de32ebc74c44952cbe25aa2cf02, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

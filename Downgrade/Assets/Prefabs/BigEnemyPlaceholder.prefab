@@ -395,7 +395,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6413154521548149583}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.232, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -443,7 +443,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 1363186085, guid: dddc175fe6e2f08458fcaa49b61aa84d, type: 3}
+  m_Sprite: {fileID: 1372621220, guid: a7ee20be9f4940747874d48fa640b1ed, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -464,7 +464,7 @@ Animator:
   m_GameObject: {fileID: 6413154521548149583}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 682388f2fa10f1e438c3bff10cfb36e4, type: 2}
+  m_Controller: {fileID: 9100000, guid: f8c54ef36676596459b74adbe7ce49d8, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -655,12 +655,12 @@ MonoBehaviour:
   closeAttackRange: 0.8
   farAttackRange: 2
   moveOnNormalAttackForce: 10
-  normalMoveAttackActivationTime: 0.5
+  normalMoveAttackActivationTime: 0.6
   moveOnChargeAttackForce: 60
-  chargeMoveAttackActivationTime: 0.65
-  normalAttackHitboxAppearTime: {x: 0.5, y: 0.2}
+  chargeMoveAttackActivationTime: 0.7
+  normalAttackHitboxAppearTime: {x: 0.6, y: 0.2}
   normalAttackHitboxSize: {x: 0.25, y: 0.5, z: 0.25}
-  chargedAttackHitboxAppearTime: {x: 0.6, y: 0.25}
+  chargedAttackHitboxAppearTime: {x: 0.7, y: 0.5}
   chargedAttackHitboxSize: {x: 0.25, y: 0.5, z: 0.35}
   attackCooldown: 0.5
   chargeDecitionCooldown: 2.5
@@ -668,15 +668,17 @@ MonoBehaviour:
   wallAvoidanceSpeed: 7.5
   avoidTarget: 0
   avoidRange: 2
-  queueAnimation: 
+  flipSprite: 1
   animationIDs:
-  - EnemySpawn
-  - EnemyIdle
-  - EnemyWalk
-  - EnemyCloseAttack
-  - EnemyChargeAttack
-  - EnemyFullCombo
-  - EnemyDeath
+  - Spawn
+  - Idle
+  - Walk
+  - LightAttack
+  - ChargeAttack
+  - Parried
+  - Hit
+  - Death
+  queueAnimation: 
   audioSource: {fileID: 0}
   spawnSounds:
   - {fileID: 8300000, guid: a512488da0a216e4db65231866278c31, type: 3}
