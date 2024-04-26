@@ -15,7 +15,8 @@ public class PlayerComponent : Subject
     [HideInInspector] public PlayerInventory inventory;
     [HideInInspector] public Rigidbody rb;
     [HideInInspector] public Animator anim;
-
+    [HideInInspector] public ParticleSystem.EmissionModule _parryParticleEmission;
+    [HideInInspector] public ParticleSystem.EmissionModule _hitParticleEmission;
     [HideInInspector] public Vector3 direction;
     [HideInInspector] public Vector3 lastDirection;
 
@@ -35,6 +36,8 @@ public class PlayerComponent : Subject
     public float rollForce = 5f;
     public float rollInmunity = 1f;
     public float rollCooldown = 1f;
+    public ParticleSystem parryParticleEmission;
+    public ParticleSystem hitParticleEmission;
 
     [HideInInspector] public float currentHealth;
     [HideInInspector] public float currentStamina;
@@ -139,6 +142,10 @@ public class PlayerComponent : Subject
         comboVfxTime = -1;
 
         DowngradeSystem.Instance.SetPlayer(this);
+        _parryParticleEmission = parryParticleEmission.emission;
+        _parryParticleEmission.enabled = false;
+        _hitParticleEmission = hitParticleEmission.emission;
+        _hitParticleEmission.enabled = false;
         Invoker.InvokeDelayed(DelayedAwake, 0.1f);
         //NotifyObservers();
     }
@@ -209,6 +216,7 @@ public class PlayerComponent : Subject
             if (!wasParryPressed)
             {
                 Debug.Log("Parry Pressed");
+
                 PlayAnimation(animationIDs[5], true); // Parry
                 wasParryPressed = true;
                 Invoke("ActivateParry", parryWindowTime.x);
@@ -510,8 +518,11 @@ public class PlayerComponent : Subject
             currentStamina = stamina;
     }
 
-    public void GetParryReward(bool isBigEnemy, bool isBoss)
+    public void GetParryReward(bool isBigEnemy, bool isBoss, bool isProjectile = false)
     {
+        _parryParticleEmission.enabled = true;
+        Invoker.InvokeDelayed(DisableParryParticles, 0.1f);
+
         if (isBigEnemy)
         {
             GetStamina(staminaBigEnemyReward);
@@ -523,11 +534,13 @@ public class PlayerComponent : Subject
             GetHealth(healthBossReward);
             // damage multiplier
         }
-        else
+        else if (!isProjectile)
         {
             GetStamina(staminaNormalReward);
         }
     }
+
+    
     #endregion
 
     #region Damage
@@ -544,6 +557,9 @@ public class PlayerComponent : Subject
         }
 
         currentHealth -= damage;
+
+        _hitParticleEmission.enabled = true;
+        Invoker.InvokeDelayed(DisableHitParticles, 0.1f);
 
         if (currentHealth <= 0)
         {
@@ -572,6 +588,9 @@ public class PlayerComponent : Subject
         }
 
         currentHealth -= damage;
+
+        _hitParticleEmission.enabled = true;
+        Invoker.InvokeDelayed(DisableHitParticles, 0.1f);
 
         if (currentHealth <= 0)
         {
@@ -824,6 +843,16 @@ public class PlayerComponent : Subject
     public void ResetDamage()
     {
         canBeDamaged = true;
+    }
+
+    public void DisableParryParticles()
+    {
+        _parryParticleEmission.enabled = false;
+    }
+
+    public void DisableHitParticles()
+    {
+        _hitParticleEmission.enabled = false;
     }
     #endregion
 

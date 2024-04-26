@@ -111,6 +111,9 @@ public class RangeEnemyPlaceholder : EnemyBase
 
         currentHealth -= damage;
 
+        _particleEmission.enabled = true;
+        Invoker.InvokeDelayed(ResetParticle, 0.1f);
+
         if (currentHealth <= 0)
         {
             //RemoveComponentsOnDeath();

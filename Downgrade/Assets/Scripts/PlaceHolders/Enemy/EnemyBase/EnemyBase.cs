@@ -15,6 +15,7 @@ public class EnemyBase : Subject
     [HideInInspector] public Transform target;
     [HideInInspector] public Vector3 lastTargetDir;
     [HideInInspector] public Vector3 targetDir;
+    [HideInInspector] public ParticleSystem.EmissionModule _particleEmission;
 
     [HideInInspector] public float animClipLength;
     [HideInInspector] public bool isAnimationDone;
@@ -47,6 +48,7 @@ public class EnemyBase : Subject
     [ShowIf("hasHealthBar", true, true)] public float onHitAppearSpeed;
     [ShowIf("hasHealthBar", true, true)] public float onHitDisappearSpeed;
     [ShowIf("hasHealthBar", true, true)] public float onHitBarCooldown;
+    public ParticleSystem hitParticleEmission;
     [HideInInspector] public float currentHealth;
     public float normalAttackdamage = 5;
     public float normalAttackKnockback = 5;
@@ -188,6 +190,9 @@ public class EnemyBase : Subject
         PlaySound(spawnSounds);
         PlayAnimation(animationIDs[0], true);
 
+        _particleEmission = hitParticleEmission.emission;
+        _particleEmission.enabled = false;
+
         DowngradeSystem.Instance.SetEnemy(this);
         NotifyEnemyObservers(AllEnemyActions.Spawned);
     }
@@ -223,12 +228,10 @@ public class EnemyBase : Subject
         if (isSpriteFlipped)
         {
             healthBar.GetComponentInParent<CanvasGroup>().gameObject.transform.localScale = new Vector3(-1, 1, 1);
-            Debug.Log(healthBar.GetComponentInParent<CanvasGroup>().gameObject.name + " X - 1");
         }
         else
         {
             healthBar.GetComponentInParent<CanvasGroup>().gameObject.transform.localScale = new Vector3(1, 1, 1);
-            Debug.Log(healthBar.GetComponentInParent<CanvasGroup>().gameObject.name + " X  1");
         }
 
         if (healthBar.value != currentHealth)
@@ -308,10 +311,16 @@ public class EnemyBase : Subject
 
     public virtual void TakeDamage(float damage)
     {
+        
     }
 
     public virtual void Death()
     {
+    }
+
+    public void ResetParticle()
+    {
+        _particleEmission.enabled = false;
     }
 
     #region Attack Behaviour

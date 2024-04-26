@@ -50,6 +50,7 @@ public class ProjectileLogic : MonoBehaviour
                 direction *= -1;
                 isParried = true;
                 originalEnemy.GetComponent<EnemyBase>().PlaySound(parrySounds);
+                other.GetComponent<PlayerComponent>().GetParryReward(false, false, true);
             }
             else
             {
