@@ -4,7 +4,6 @@ using UnityEngine.UI;
 using UnityEngine;
 using TMPro;
 using DG.Tweening;
-using Unity.VisualScripting;
 
 public class Cards : MonoBehaviour
 {
@@ -13,9 +12,9 @@ public class Cards : MonoBehaviour
     [SerializeField] private GameObject cardObject;
 
     [SerializeField] private bool hasTextEffect;
-    [ShowIf("hasTextEffect", true, true)][SerializeField] private string cardNameTextEffect;
-    [ShowIf("hasTextEffect", true, true)][SerializeField] private string cardStatTextEffect;
-    [ShowIf("hasTextEffect", true, true)][SerializeField] private string cardDescriptionTextEffect;
+    [SerializeField] private string cardNameTextEffect;
+    [SerializeField] private string cardStatTextEffect;
+    [SerializeField] private string cardDescriptionTextEffect;
 
     [SerializeField] private CanvasGroup cardTextPanel;
     [SerializeField] private TMP_Text cardName;

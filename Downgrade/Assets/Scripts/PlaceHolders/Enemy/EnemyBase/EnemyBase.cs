@@ -42,80 +42,80 @@ public class EnemyBase : Subject
     [Header("AI Stats")]
     public float health = 100;
     public bool hasHealthBar;
-    [ShowIf("hasHealthBar", true, true)] public Slider healthBar;
-    [ShowIf("hasHealthBar", true, true)] public Slider healthBarBg;
-    [ShowIf("hasHealthBar", true, true)] public float healthBarBgSpeed;
-    [ShowIf("hasHealthBar", true, true)] public float onHitAppearSpeed;
-    [ShowIf("hasHealthBar", true, true)] public float onHitDisappearSpeed;
-    [ShowIf("hasHealthBar", true, true)] public float onHitBarCooldown;
+    public Slider healthBar;
+    public Slider healthBarBg;
+    public float healthBarBgSpeed;
+    public float onHitAppearSpeed;
+    public float onHitDisappearSpeed;
+    public float onHitBarCooldown;
     public ParticleSystem hitParticleEmission;
     [HideInInspector] public float currentHealth;
     public float normalAttackdamage = 5;
     public float normalAttackKnockback = 5;
-    [ShowIf("isMelee", true, true)][ShowIf("hasChargeAttack", true, true)][ShowIf("isMelee", true, true)][ShowIf("hasChargeAttack", true, true)] public float chargeAttackDamage = 5;
-    [ShowIf("isMelee", true, true)][ShowIf("hasChargeAttack", true, true)][ShowIf("isMelee", true, true)][ShowIf("hasChargeAttack", true, true)] public float chargeAttackKnockback = 15;
+    public float chargeAttackDamage = 5;
+    public float chargeAttackKnockback = 15;
     [HideInInspector] public float speed;
     public float walkingSpeed = 1;
     public bool canRun;
-    [ShowIf("canRun", true, true)] public bool reverseRunLogic;
-    [ShowIf("canRun", true, true)] public float runSpeed = 1.5f;
-    [ShowIf("canRun", true, true)] public float runRange = 1.5f;
+    public bool reverseRunLogic;
+    public float runSpeed = 1.5f;
+    public float runRange = 1.5f;
 
-    [ShowIf("isMelee", false, true)] public bool isStatic ;
-    [ShowIf("isMelee", false, true)] public float projectileSpawnTime;
-    [ShowIf("isMelee", false, true)] public float projectileLifeTime;
-    [ShowIf("isMelee", false, true)] public float projectileSpeed;
-    [ShowIf("isMelee", false, true)] public GameObject projectile;
-    [ShowIf("isMelee", false, true)] public Transform projectileSpawnPoint;
+    public bool isStatic ;
+    public float projectileSpawnTime;
+    public float projectileLifeTime;
+    public float projectileSpeed;
+    public GameObject projectile;
+    public Transform projectileSpawnPoint;
 
     public bool hasKnockback;
-    [ShowIf("hasKnockback", true, true)] public float knockbackForce = 5.5f;
+    public float knockbackForce = 5.5f;
     public bool canBeParried = true;
-    [ShowIf("canBeParried", true, true)] public bool projectileCanBeParried = false;
-    [ShowIf("isMelee", true, true)] [ShowIf("canBeParried", true, true)] [ShowIf("projectileCanBeParried", false, true)] public bool canBeParryStunned;
-    [ShowIf("isMelee", true, true)] [ShowIf("canBeParried", true, true)] [ShowIf("projectileCanBeParried", false, true)] public bool canParryChargeAttack;
-    [ShowIf("isMelee", true, true)] [ShowIf("canBeParried", true, true)] [ShowIf("projectileCanBeParried", false, true)] public float parryStunTime = 3;
+    public bool projectileCanBeParried = false;
+    public bool canBeParryStunned;
+    public bool canParryChargeAttack;
+    public float parryStunTime = 3;
 
     [Header("AI StunTime")]
-    [ShowIf("canBeParryStunned", true, true)]  public float stunTime = 2;
+    public float stunTime = 2;
 
     [Header("AI Stop range from player")]
     public float tooClose = 0.3f;
 
     [Header("AI Odds for charge attack")]
-    [ShowIf("isMelee", true, true)] [ShowIf("hasChargeAttack", true, true)] public int maxOdds = 1000;
-    [ShowIf("isMelee", true, true)] [ShowIf("hasChargeAttack", true, true)] public int oddsToChargeAttack = 250;
+    public int maxOdds = 1000;
+    public int oddsToChargeAttack = 250;
 
     [Header("AI Attack variables")]
-    [ShowIf("avoidTarget", false, true)] public bool isMelee;
-    [ShowIf("isMelee", true, true)] [SerializeField] Transform hitboxCenter;
-    [ShowIf("isMelee", true, true)] [SerializeField] float hitboxOffset;
-    [ShowIf("isMelee", true, true)] public bool hasChargeAttack;
-    [ShowIf("isMelee", true, true)] public float closeAttackRange = 0.8f;
-    [ShowIf("isMelee", true, true)] [ShowIf("hasChargeAttack", true, true)] public float farAttackRange = 2;
+    public bool isMelee;
+    [SerializeField] Transform hitboxCenter;
+    [SerializeField] float hitboxOffset;
+    public bool hasChargeAttack;
+    public float closeAttackRange = 0.8f;
+    public float farAttackRange = 2;
 
     [Header("AI Attack impulse")]
     public float moveOnNormalAttackForce = 10;
-    [ShowIf("isMelee", true, true)] public float normalMoveAttackActivationTime = 0;
+    public float normalMoveAttackActivationTime = 0;
 
-    [ShowIf("isMelee", true, true)] [ShowIf("hasChargeAttack", true, true)] public float moveOnChargeAttackForce = 60;
-    [ShowIf("isMelee", true, true)] [ShowIf("hasChargeAttack", true, true)] public float chargeMoveAttackActivationTime = 0;
+    public float moveOnChargeAttackForce = 60;
+    public float chargeMoveAttackActivationTime = 0;
 
-    [ShowIf("isMelee", true, true)] public Vector2 normalAttackHitboxAppearTime = new Vector2(0.2f, 0.5f);
-    [ShowIf("isMelee", true, true)] public Vector3 normalAttackHitboxSize = new Vector3(0.5f, 0.5f, 0.5f);
+    public Vector2 normalAttackHitboxAppearTime = new Vector2(0.2f, 0.5f);
+    public Vector3 normalAttackHitboxSize = new Vector3(0.5f, 0.5f, 0.5f);
 
-    [ShowIf("isMelee", true, true)] [ShowIf("hasChargeAttack", true, true)] public Vector2 chargedAttackHitboxAppearTime = new Vector2(0.2f, 0.5f);
-    [ShowIf("isMelee", true, true)] [ShowIf("hasChargeAttack", true, true)] public Vector3 chargedAttackHitboxSize = new Vector3(1, 1, 1);
+    public Vector2 chargedAttackHitboxAppearTime = new Vector2(0.2f, 0.5f);
+    public Vector3 chargedAttackHitboxSize = new Vector3(1, 1, 1);
 
     [Header("AI Cooldown")]
     public float attackCooldown = 0.5f;
-    [ShowIf("isMelee", true, true)][ShowIf("hasChargeAttack", true, true)] public float chargeDecitionCooldown = 2.5f;
+    public float chargeDecitionCooldown = 2.5f;
 
     [Header("AI Avoidance")]
-    [ShowIf("isStatic", false, true)] public float enemyAvoidanceRange = 0.5f;
-    [ShowIf("isStatic", false, true)] public float wallAvoidanceSpeed = 7.5f;
-    [ShowIf("isMelee", false, true)] [ShowIf("isStatic", false, true)] public bool avoidTarget;
-    [ShowIf("isMelee", false, true)] [ShowIf("avoidTarget", true, true)] [ShowIf("isStatic", false, true)] public float avoidRange = 2;
+    public float enemyAvoidanceRange = 0.5f;
+    public float wallAvoidanceSpeed = 7.5f;
+    public bool avoidTarget;
+    public float avoidRange = 2;
 
     [Header("AI Animations")]
     public bool flipSprite;
@@ -134,16 +134,16 @@ public class EnemyBase : Subject
 
     [Header("Debug")]
     [SerializeField] private bool debugTools = true;
-    [ShowIf("debugTools", true, true)] [SerializeField] private bool drawHitboxes = true;
-    [ShowIf("debugTools", true, true)] [ShowIf("drawHitboxes", true, true)] [SerializeField] private bool drawHitboxesOnGameplay = true;
-    [ShowIf("debugTools", true, true)] [SerializeField] private Transform debugDrawCenter;
-    [ShowIf("debugTools", true, true)] [SerializeField] private Color runRageColor = new Color(1, 0, 1,  1);
-    [ShowIf("debugTools", true, true)] [SerializeField] private Color tooCloseColor = new Color(0, 1, 0, 1);
-    [ShowIf("debugTools", true, true)] [SerializeField] private Color wallAvoidanceColor = new Color(1, 1, 0, 1);
-    [ShowIf("debugTools", true, true)] [SerializeField] private Color closeAttackColor = new Color(1, 0, 0, 1);
-    [ShowIf("debugTools", true, true)] [SerializeField] private Color farAttackColor = new Color(1, 0.5f, 0, 1);
-    [ShowIf("debugTools", true, true)] [SerializeField] private Color avoidRangeColor = new Color(1, 1, 0, 1);
-    [ShowIf("debugTools", true, true)] [SerializeField] private int segments = 8; // Number of line segments to approximate the circle
+    [SerializeField] private bool drawHitboxes = true;
+    [SerializeField] private bool drawHitboxesOnGameplay = true;
+    [SerializeField] private Transform debugDrawCenter;
+    [SerializeField] private Color runRageColor = new Color(1, 0, 1,  1);
+    [SerializeField] private Color tooCloseColor = new Color(0, 1, 0, 1);
+    [SerializeField] private Color wallAvoidanceColor = new Color(1, 1, 0, 1);
+    [SerializeField] private Color closeAttackColor = new Color(1, 0, 0, 1);
+    [SerializeField] private Color farAttackColor = new Color(1, 0.5f, 0, 1);
+    [SerializeField] private Color avoidRangeColor = new Color(1, 1, 0, 1);
+    [SerializeField] private int segments = 8; // Number of line segments to approximate the circle
     #endregion
 
     public virtual void Awake()

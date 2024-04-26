@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Sirenix.OdinInspector;
-using Sirenix.OdinInspector.Editor;
 using System;
 using UnityEditor;
 
@@ -221,108 +219,7 @@ public class WaveData
     }
     public EnemyType enemyType;
     public Stage stage;
-    [Vector2Grid]
     public Vector2 position;
     public bool hasDelay;
-    [ShowIf("hasDelay", true, true)] public float delayForNextEnemy;
-}
-
-public class Vector2GridAttribute : Attribute { }
-
-public class Vector2GridAttributeDrawer : OdinAttributeDrawer<Vector2GridAttribute, Vector2>
-{
-    private bool[,] grid;
-    private Vector2[] savedPositions; // Array para guardar las posiciones
-
-    public int gridSizeX = 12; // Tamaño del cuadrado de la cuadrícula en el inspector
-    public int gridSizeY = 9; // Tamaño del cuadrado de la cuadrícula en el inspector
-
-    private float worldMinX = -5;
-    private float worldMaxX = 5;
-
-    private float worldMinY = -4;
-    private float worldMaxY = 4;
-
-    protected override void Initialize()
-    {
-        grid = new bool[gridSizeX, gridSizeY];
-        LoadPositions(); // Cargar las posiciones guardadas al inicializar
-    }
-
-    protected override void DrawPropertyLayout(GUIContent label)
-    {
-        Vector2 value = this.ValueEntry.SmartValue;
-
-        GUILayout.BeginVertical();
-
-        for (int y = gridSizeY - 1; y >= 0; y--)
-        {
-            GUILayout.BeginHorizontal();
-
-            for (int x = 0; x < gridSizeX; x++)
-            {
-                Rect rect = EditorGUILayout.GetControlRect(GUILayout.Width(20), GUILayout.Height(20));
-
-                bool clicked = GUI.Button(rect, grid[x, y] ? "O" : "");
-                if (clicked)
-                {
-                    // Map inspector coordinates to world coordinates
-                    float worldX = Mathf.Lerp(worldMinX, worldMaxX, (float)x / (float)(gridSizeX - 1));
-                    float worldY = Mathf.Lerp(worldMinY, worldMaxY, (float)y / (float)(gridSizeY - 1));
-
-                    value = new Vector2(worldX, worldY);
-                    grid = new bool[gridSizeX, gridSizeY];
-                    grid[x, y] = true;
-
-                    // Guardar las posiciones después de hacer clic
-                    SavePositions();
-                }
-            }
-
-            GUILayout.EndHorizontal();
-        }
-
-        GUILayout.EndVertical();
-
-        this.ValueEntry.SmartValue = value;
-    }
-
-    // Método para guardar las posiciones en PlayerPrefs
-    private void SavePositions()
-    {
-        string positionsString = "";
-
-        for (int y = 0; y < gridSizeY; y++)
-        {
-            for (int x = 0; x < gridSizeX; x++)
-            {
-                if (grid[x, y])
-                {
-                    positionsString += x + "," + y + ";";
-                }
-            }
-        }
-
-        PlayerPrefs.SetString("SavedPositions", positionsString);
-        PlayerPrefs.Save();
-    }
-
-    // Método para cargar las posiciones desde PlayerPrefs
-    private void LoadPositions()
-    {
-        string positionsString = PlayerPrefs.GetString("SavedPositions", "");
-
-        if (!string.IsNullOrEmpty(positionsString))
-        {
-            string[] positions = positionsString.Split(';');
-
-            foreach (string position in positions)
-            {
-                string[] coordinates = position.Split(',');
-                int x = int.Parse(coordinates[0]);
-                int y = int.Parse(coordinates[1]);
-                grid[x, y] = true;
-            }
-        }
-    }
+    public float delayForNextEnemy;
 }

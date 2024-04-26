@@ -23,7 +23,7 @@ public class NarrationSystem : MonoBehaviour, IObserver
     bool isWaiting = false;
 
     [Header("Audio")]
-    [ShowIf("", true, true)] public bool placeHolderAudio;
+    public bool placeHolderAudio;
     [SerializeField] AudioClip[] startGame, endGame, playerLowHealth, playerHeal, playerLowStamina, playerHitEnemy, playerKilledEnemy, playerNotKilling;
     [SerializeField] AudioClip[] randomNoise, randomPausedNoise, startBoss, playerDieToFirstFaseBoss, midBoss, playerDieToMidFaceBoss, parryBoss, endBoss;
     [SerializeField] AudioClip[] playerAttack, playerParry, playerDodge, playerUseItem, playerUseEmptyItem, playerPickUpItem, playerDropItem, playerDropEmptyItem, playerGotHit, playerDies, victory, defeat;
@@ -33,7 +33,7 @@ public class NarrationSystem : MonoBehaviour, IObserver
     private string chainedDialog;
 
     [Header("Dialog")]
-    [ShowIf("", true, true)] public bool placeHolderDialog;
+    public bool placeHolderDialog;
     [TextArea] [SerializeField] string[] startGameDialog, endGameDialog, playerLowHealthDialog, playerHealDialog, playerLowStaminaDialog, playerHitEnemyDialog, playerKilledEnemyDialog, playerNotKillingDialog;
     [TextArea] [SerializeField] string[] randomNoiseDialog, randomPausedNoiseDialog, startBossDialog, playerDieToFirstFaseBossDialog, midBossDialog, playerDieToMidFaceBossDialog, parryBossDialog, endBossDialog;
     [TextArea] [SerializeField] string[] playerAttackDialog, playerParryDialog, playerDodgeDialog, playerUseItemDialog, playerUseEmptyItemDialog, playerPickUpItemDialog, playerDropItemDialog, playerDropEmptyItemDialog, playerGotHitDialog, playerDiesDialog, victoryDialog, defeatDialog;

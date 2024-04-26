@@ -87,11 +87,11 @@ public class PlayerComponent : Subject
 
     [Header("Debug")]
     public bool debugTools = true;
-    [ShowIf("debugTools", true, true)] public bool drawHitbox = true;
-    [ShowIf("debugTools", true, true)][ShowIf("drawHitbox", true, true)] public bool drawHitboxOnGameplay = true;
-    [ShowIf("debugTools", true, true)][ShowIf("drawHitbox", true, true)] public float attackHitboxTime = 0.2f;
-    [ShowIf("debugTools", true, true)][ShowIf("drawHitbox", true, true)] public Color attackHitboxColor = new Color(1, 0, 0, 1);
-    [ShowIf("debugTools", true, true)][ShowIf("drawHitbox", true, true)] public Color parryHitboxColor = new Color(0, 1, 0, 1);
+    public bool drawHitbox = true;
+    public bool drawHitboxOnGameplay = true;
+    public float attackHitboxTime = 0.2f;
+    public Color attackHitboxColor = new Color(1, 0, 0, 1);
+    public Color parryHitboxColor = new Color(0, 1, 0, 1);
 
     //[Header("PlayerStatus")]
     [HideInInspector] public bool isFacingLeft;

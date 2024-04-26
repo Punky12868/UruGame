@@ -2,14 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
-using static UnityEngine.Rendering.DebugUI;
 
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager instance;
 
     [SerializeField] private bool playOnAwake;
-    [ShowIf("playOnAwake", true , true)][SerializeField] private int musicIndex;
+    [SerializeField] private int musicIndex;
 
     [SerializeField] private float normalLowPassFreq = 22000.00f;
     [SerializeField] private float pausedLowPassFreq = 500.00f;

@@ -20,7 +20,7 @@ public abstract class DowngradeCard : ScriptableObject
     public string cardDescription;
 
     [Header("Custom Card Stats")]
-    [ShowIf("", true, true)] public bool placeholder;
+    public bool placeholder;
 
     public virtual void CardEffect()
     {
