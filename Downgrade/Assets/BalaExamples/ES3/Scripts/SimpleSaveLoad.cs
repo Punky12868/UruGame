@@ -58,6 +58,13 @@ public class SimpleSaveLoad : MonoBehaviour
         }
     }
 
+    // !PlayerPrefs.HasKey(playerPrefsKey_controllerAssignments)) return null
+    public bool CheckKey(string key)
+    {
+        if (ES3.KeyExists(key)) return true;
+        return false;
+    }
+
     private void GetType(FileType type)
     {
         switch (type)

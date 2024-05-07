@@ -1,13 +1,14 @@
-using UnityEngine;
-using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Collections;
+using UnityEngine.UI;
+using UnityEngine;
 using Rewired;
+using System;
+using Rewired.Data;
 
 [AddComponentMenu("")]
 public class SimpleRemap : MonoBehaviour
 {
-
     private const string category = "Default";
     private const string layout = "Default";
     private const string uiCategory = "UI";
@@ -15,6 +16,7 @@ public class SimpleRemap : MonoBehaviour
 
     private InputMapper inputMapper = new InputMapper();
 
+    
     public GameObject buttonPrefab;
     public GameObject textPrefab;
     public RectTransform fieldGroupTransform;
@@ -26,6 +28,8 @@ public class SimpleRemap : MonoBehaviour
     private List<Row> rows = new List<Row>();
     [SerializeField] private List<string> protectedActions = new List<string> { "Vertical", "Horizontal" };
     [SerializeField] private string CancelAction = "Pause";
+
+    public UserDataStore_PlayerPrefs save;
 
     private Player player { get { return ReInput.players.GetPlayer(0); } }
     private ControllerMap controllerMap
@@ -110,11 +114,11 @@ public class SimpleRemap : MonoBehaviour
 
         foreach (Transform t in actionGroupTransform)
         {
-            Object.Destroy(t.gameObject);
+            Destroy(t.gameObject);
         }
         foreach (Transform t in fieldGroupTransform)
         {
-            Object.Destroy(t.gameObject);
+            Destroy(t.gameObject);
         }
     }
 
@@ -171,11 +175,11 @@ public class SimpleRemap : MonoBehaviour
         // Delete placeholders
         foreach (Transform t in actionGroupTransform)
         {
-            Object.Destroy(t.gameObject);
+            Destroy(t.gameObject);
         }
         foreach (Transform t in fieldGroupTransform)
         {
-            Object.Destroy(t.gameObject);
+            Destroy(t.gameObject);
         }
 
         // Create Action fields and input field buttons
@@ -202,7 +206,7 @@ public class SimpleRemap : MonoBehaviour
     private void CreateUIRow(InputAction action, AxisRange actionRange, string label, string axisLabel = null)
     {
         // Create the Action label
-        GameObject labelGo = Object.Instantiate<GameObject>(textPrefab);
+        GameObject labelGo = Instantiate<GameObject>(textPrefab);
         labelGo.transform.SetParent(actionGroupTransform);
         labelGo.transform.SetAsLastSibling();
         labelGo.GetComponent<TMPro.TMP_Text>().text = label;
@@ -213,7 +217,7 @@ public class SimpleRemap : MonoBehaviour
         }
 
         // Create the input field button
-        GameObject buttonGo = Object.Instantiate<GameObject>(buttonPrefab);
+        GameObject buttonGo = Instantiate<GameObject>(buttonPrefab);
         buttonGo.transform.SetParent(fieldGroupTransform);
         buttonGo.transform.SetAsLastSibling();
 
@@ -275,8 +279,6 @@ public class SimpleRemap : MonoBehaviour
         if (index < 0 || index >= rows.Count) return; // index out of range
         if (controller == null) return; // there is no Controller selected
 
-        
-
         // Begin listening for input, but use a coroutine so it starts only after a short delay to prevent
         // the button bound to UI Submit from binding instantly when the input field is activated.
         StartCoroutine(StartListeningDelayed(index, actionElementMapToReplaceId));
@@ -284,6 +286,8 @@ public class SimpleRemap : MonoBehaviour
 
     private IEnumerator StartListeningDelayed(int index, int actionElementMapToReplaceId)
     {
+        // Disable the UI Controller Maps while listening to prevent UI control and submissions.
+        player.controllers.maps.SetMapsEnabled(false, uiCategory);
 
         // Don't allow a binding for a short period of time after input field is activated
         // to prevent button bound to UI Submit from binding instantly when input field is activated.
@@ -298,9 +302,6 @@ public class SimpleRemap : MonoBehaviour
         };
 
         inputMapper.Start(context);
-
-        // Disable the UI Controller Maps while listening to prevent UI control and submissions.
-        player.controllers.maps.SetMapsEnabled(false, uiCategory);
 
         // Update the UI text
         statusUI.SetActive(true);
@@ -334,9 +335,8 @@ public class SimpleRemap : MonoBehaviour
 
     private void OnInputMapped(InputMapper.InputMappedEventData data)
     {
+        save.Save();
         RedrawUI();
-
-
     }
 
     private void OnStopped(InputMapper.StoppedEventData data)
