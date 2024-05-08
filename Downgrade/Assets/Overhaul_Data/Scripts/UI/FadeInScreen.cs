@@ -5,13 +5,14 @@ using UnityEngine;
 public class FadeInScreen : MonoBehaviour
 {
     public float fadeSpeed = 0.5f;
-    public bool fadeIn = true;
+    public bool fadeOut = true;
+    private bool isFadeDone;
     private CanvasGroup canvasGroup;
 
     private void Start()
     {
         canvasGroup = GetComponent<CanvasGroup>();
-        if (fadeIn)
+        if (fadeOut)
         {
             canvasGroup.alpha = 1;
         }
@@ -23,12 +24,15 @@ public class FadeInScreen : MonoBehaviour
 
     private void Update()
     {
-        if (fadeIn)
+        if (isFadeDone) return;
+
+        if (fadeOut)
         {
             canvasGroup.alpha -= fadeSpeed * Time.deltaTime;
             if (canvasGroup.alpha <= 0)
             {
                 canvasGroup.alpha = 0;
+                isFadeDone = true;
                 //fadeIn = false;
             }
         }
@@ -38,8 +42,14 @@ public class FadeInScreen : MonoBehaviour
             if (canvasGroup.alpha >= 1)
             {
                 canvasGroup.alpha = 1;
+                isFadeDone = true;
                 //fadeIn = true;
             }
         }
+    }
+
+    public void SetFade(bool value)
+    {
+        isFadeDone = value;
     }
 }
