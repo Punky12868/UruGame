@@ -229,7 +229,7 @@ public class PlayerComponent : Subject
             Roll();
         }
 
-        if (input.GetButtonDown("UseItem"))
+        if (input.GetButtonDown("Use Item"))
         {
             if (inventory.HasItem())
             {
@@ -243,7 +243,7 @@ public class PlayerComponent : Subject
             inventory.UseItem();
         }
 
-        if (input.GetButtonDown("DropItem"))
+        if (input.GetButtonDown("Drop Item"))
         {
             if (inventory.HasItem())
             {
