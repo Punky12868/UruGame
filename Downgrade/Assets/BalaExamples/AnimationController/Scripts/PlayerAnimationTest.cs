@@ -2,54 +2,59 @@ using Rewired;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Windows;
 
-public class PlayerAnimationTest : MonoBehaviour
+public class PlayerAnimationTest : MonoBehaviour, IAnimController
 {
     private Player input;
-    private Animator animator;
-    private AnimationController anim;
+    private AnimationsHolder animHolder;
+    private List<string> animationIDs;
 
-    [Header("Animation")]
-    [SerializeField] private string[] animationIDs;
-    private AnimationClip[] clips;
     private void Awake()
     {
         input = ReInput.players.GetPlayer(0);
-        animator = GetComponent<Animator>();
-        clips = animator.runtimeAnimatorController.animationClips;
 
-        anim = new AnimationController();
-        anim.SetAnimationController(this, animator, clips, animationIDs);
+        SetAnimHolder();
     }
 
     private void Update()
     {
         if (input.GetButtonDown("Attack"))
         {
-            anim.PlayAnimation(animationIDs[1], null, true);
+            animHolder.GetAnimationController().PlayAnimation(animationIDs[1], null, true);
         }
 
         if (input.GetButtonDown("Parry"))
         {
-            anim.PlayAnimation(animationIDs[3], null, true);
+            animHolder.GetAnimationController().PlayAnimation(animationIDs[3], null, true);
         }
 
         if (input.GetButtonDown("Roll"))
         {
-            anim.PlayAnimation(animationIDs[4], null, true);
+            animHolder.GetAnimationController().PlayAnimation(animationIDs[4], null, true);
         }
 
         if (input.GetButtonDown("Use Item"))
         {
             // chained animation, creates the list and then plays the full sequence
             List<string> chainedAnimNames = new List<string> { animationIDs[1], animationIDs[2], animationIDs[3], animationIDs[4] };
-            anim.PlayAnimation(null, chainedAnimNames, true);
+            animHolder.GetAnimationController().PlayAnimation(null, chainedAnimNames, true);
         }
 
-        if (anim.isAnimationDone)
+        if (animHolder.GetAnimationController().isAnimationDone)
         {
-            anim.PlayAnimation(animationIDs[0]);
+            animHolder.GetAnimationController().PlayAnimation(animationIDs[0]);
         }
+    }
+
+    public void TestEvents(string message)
+    {
+        Debug.Log(message);
+    }
+
+    public void SetAnimHolder()
+    {
+        animHolder = GetComponent<AnimationsHolder>();
+        animHolder.Initialize();
+        animationIDs = animHolder.GetAnimationsIDs();
     }
 }

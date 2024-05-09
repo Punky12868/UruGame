@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AnimationController_Timer : MonoBehaviour
@@ -7,9 +5,14 @@ public class AnimationController_Timer : MonoBehaviour
     private AnimationController animLogic;
     private bool isUsingTimeDeltaTime;
 
-    public void SetAnimatorController(AnimationController controller, bool usingTimeDeltaTime = true)
+    public void SetAnimatorController(AnimationController controller)
     {
         animLogic = controller;
+    }
+
+    public void SetTimeSettings(bool value)
+    {
+        isUsingTimeDeltaTime = value;
     }
 
     void Update()
@@ -20,7 +23,7 @@ public class AnimationController_Timer : MonoBehaviour
         {
             animLogic.UpdateTimer(Time.deltaTime);
         }
-        else
+        else if (!isUsingTimeDeltaTime)
         {
             animLogic.UpdateTimer(Time.unscaledDeltaTime);
         }
