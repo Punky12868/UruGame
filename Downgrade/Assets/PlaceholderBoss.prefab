@@ -89,16 +89,17 @@ MonoBehaviour:
   tooCloseRange: 0.5
   closeAttackRange: 1.3
   farAttackRange: 5
-  wallAvoidanceRange: 0
+  wallAvoidanceRange: 1.4
+  wallAvoidanceSpeed: 5
   health: 450
-  attackdamage: 0
-  attackKnockback: 0
-  parryKnockback: 0
+  attackdamage: 20
+  attackKnockback: 35
+  parryKnockback: 100
   maxOdds: 1000
   farAttackOdds: 250
   hitboxCenter: {fileID: 4480574325755231756}
-  hitboxSize: {x: 0.3, y: 1, z: 0.3}
-  hitboxOffset: 0
+  hitboxSize: {x: 0.3, y: 1, z: 0.6}
+  hitboxOffset: 0.65
   playerTag: Player
   farAttackDecitionCooldown: 5
   audioSource: {fileID: 0}
@@ -120,6 +121,39 @@ MonoBehaviour:
   - Dialog #2 (Ending Dialog)
   hitParticleEmission: {fileID: 9104005641529623329}
   flipSprite: 1
+  onHit:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2249891949141174795}
+        m_TargetAssemblyTypeName: BossBase, Assembly-CSharp
+        m_MethodName: EnableHitParticle
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0.1
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onFaseChange:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2249891949141174795}
+        m_TargetAssemblyTypeName: BossBase, Assembly-CSharp
+        m_MethodName: SetNewFase
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0.1
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onDeath:
+    m_PersistentCalls:
+      m_Calls: []
   debugTools: 1
   drawDebug: 1
   drawDebugWhenHappening: 0
@@ -150,6 +184,62 @@ MonoBehaviour:
     invokableEvents: []
   - animClip: {fileID: 7400000, guid: 565327493e04e9d478e1538e9ca1b3c0, type: 2}
     invokableEvents:
+    - time: 0.5
+      events:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 2249891949141174795}
+            m_TargetAssemblyTypeName: BossBase, Assembly-CSharp
+            m_MethodName: MoveOnAttack
+            m_Mode: 4
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 20
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: 2249891949141174795}
+            m_TargetAssemblyTypeName: BossBase, Assembly-CSharp
+            m_MethodName: HitboxController
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 1
+            m_CallState: 2
+          - m_Target: {fileID: 2249891949141174795}
+            m_TargetAssemblyTypeName: BossBase, Assembly-CSharp
+            m_MethodName: SetFarAttackDecision
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 1
+            m_CallState: 2
+    - time: 0.7
+      events:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 2249891949141174795}
+            m_TargetAssemblyTypeName: BossBase, Assembly-CSharp
+            m_MethodName: HitboxController
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
     - time: 1.2
       events:
         m_PersistentCalls:

@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using UnityEngine.Events;
+using DG.Tweening;
 using UnityEngine;
 
 public class BossBase : Subject, IAnimController
@@ -16,6 +18,7 @@ public class BossBase : Subject, IAnimController
     protected Vector3 targetDir;
     protected ParticleSystem.EmissionModule _particleEmission;
 
+    protected bool isDead;
     protected bool isMoving;
     protected bool isAttacking;
     protected bool decidedFarAttack;
@@ -33,13 +36,14 @@ public class BossBase : Subject, IAnimController
     [Header("Boss General Stats")]
     [SerializeField] protected string bossName;
     [SerializeField] protected float moveSpeed;
-    [SerializeField] protected float ammountOfFases;
+    [SerializeField] protected int ammountOfFases;
 
     [Header("Ranges")]
     [SerializeField] protected float tooCloseRange;
     [SerializeField] protected float closeAttackRange;
     [SerializeField] protected float farAttackRange;
     [SerializeField] protected float wallAvoidanceRange;
+    [SerializeField] protected float wallAvoidanceSpeed;
 
     [Header("Health")]
     [SerializeField] protected float health;
@@ -51,6 +55,8 @@ public class BossBase : Subject, IAnimController
     [SerializeField] protected float parryKnockback;
     [SerializeField] protected int maxOdds;
     [SerializeField] protected int farAttackOdds;
+
+    [Header("Hitbox")]
     [SerializeField] protected Transform hitboxCenter;
     [SerializeField] protected Vector3 hitboxSize;
     [SerializeField] protected float hitboxOffset;
@@ -75,16 +81,21 @@ public class BossBase : Subject, IAnimController
     [SerializeField] protected ParticleSystem hitParticleEmission;
     [SerializeField] protected bool flipSprite;
 
+    [Header("Events")]
+    [SerializeField] protected UnityEvent onHit;
+    [SerializeField] protected UnityEvent onFaseChange;
+    [SerializeField] protected UnityEvent onDeath;
+
     [Header("Debug")]
-    [SerializeField] private bool debugTools = true;
-    [SerializeField] private bool drawDebug = true;
-    [SerializeField] private bool drawDebugWhenHappening = true;
-    [SerializeField] private Transform debugDrawCenter;
-    [SerializeField] private Color tooCloseColor = new Color(0, 1, 0, 1);
-    [SerializeField] private Color wallAvoidanceColor = new Color(1, 1, 0, 1);
-    [SerializeField] private Color closeAttackColor = new Color(1, 0, 0, 1);
-    [SerializeField] private Color farAttackColor = new Color(1, 0.5f, 0, 1);
-    [SerializeField] private int segments = 8;
+    [SerializeField] protected bool debugTools = true;
+    [SerializeField] protected bool drawDebug = true;
+    [SerializeField] protected bool drawDebugWhenHappening = true;
+    [SerializeField] protected Transform debugDrawCenter;
+    [SerializeField] protected Color tooCloseColor = new Color(0, 1, 0, 1);
+    [SerializeField] protected Color wallAvoidanceColor = new Color(1, 1, 0, 1);
+    [SerializeField] protected Color closeAttackColor = new Color(1, 0, 0, 1);
+    [SerializeField] protected Color farAttackColor = new Color(1, 0.5f, 0, 1);
+    [SerializeField] protected int segments = 8;
     #endregion
 
     #region Unity Methods
@@ -105,6 +116,7 @@ public class BossBase : Subject, IAnimController
         _particleEmission = hitParticleEmission.emission;
         _particleEmission.enabled = false;
 
+        if (FindObjectOfType<BossUI>()) FindObjectOfType<BossUI>().SetUI(this);
         if (debugDrawCenter == null) debugDrawCenter = this.transform;
 
         animHolder.GetAnimationController().PlayAnimation(animationIDs[0], null, false);
@@ -117,12 +129,14 @@ public class BossBase : Subject, IAnimController
 
     protected virtual void Update()
     {
-        if (GameManager.Instance.IsGamePaused())
+        if (GameManager.Instance.IsGamePaused() || isDead)
             return;
 
         AllUtilityCallback();
         Attack();
+        Hitbox();
         Movement();
+        
     }
 
     #endregion
@@ -173,7 +187,7 @@ public class BossBase : Subject, IAnimController
             // animation event for hitbox activation and deactivation
             // animation event to apply force to the rigidbody
         }
-        else if (TargetDistance() <= farAttackRange && !hasConsideredFarAttack)
+        else if (TargetDistance() <= farAttackRange && TargetDistance() > closeAttackRange &&  !hasConsideredFarAttack)
         {
             int random = Random.Range(0, maxOdds + 1);
 
@@ -197,7 +211,7 @@ public class BossBase : Subject, IAnimController
             if (isAttacking) isAttacking = false;
         }
 
-        SetLastTargetDirection();
+        SetTargetDirection(false);
     }
 
     
@@ -246,8 +260,29 @@ public class BossBase : Subject, IAnimController
 
     #region Take Damage
 
-    protected virtual void TakeDamage(float damage)
+    public virtual void TakeDamage(float damage)
     {
+        onHit?.Invoke();
+        currentHealth -= damage;
+
+        if (currentHealth <= 0)
+        {
+            Death();
+        }
+    }
+
+    protected virtual void Death()
+    {
+        if (currentFase < ammountOfFases && ammountOfFases > 1)
+        {
+            onFaseChange?.Invoke();
+            //animHolder.GetAnimationController().PlayAnimation(animationIDs[!], null, true); // 2nd fase anim
+        }
+        else
+        {
+            onDeath?.Invoke();
+            isDead = true;
+        }
     }
 
     #endregion
@@ -256,33 +291,55 @@ public class BossBase : Subject, IAnimController
 
     protected virtual void AllUtilityCallback()
     {
-        SetTargetDirection();
+        SetTargetDirection(true);
         FlipPivot();
         RotateHitboxCentreToFaceThePlayer();
     }
 
     #region Targeting
 
-    protected virtual void SetTargetDirection()
+    protected virtual void SetTargetDirection(bool value)
     {
         Vector3 targetPos = new Vector3(target.position.x, transform.position.y, target.position.z);
         Vector3 enemyPos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
         Vector3 dir = (targetPos - enemyPos).normalized;
-        targetDir = dir;
-    }
 
-    protected virtual void SetLastTargetDirection()
-    {
-        Vector3 targetPos = new Vector3(target.position.x, transform.position.y, target.position.z);
-        Vector3 enemyPos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
-        Vector3 dir = (targetPos - enemyPos).normalized;
-        lastTargetDir = dir;
+        if (value)
+            targetDir = dir;
+        else
+            lastTargetDir = dir;
     }
 
     protected virtual float TargetDistance()
     {
         return Vector3.Distance(target.position, transform.position);
     }
+
+    #endregion
+
+    #region Wall Avoidance
+
+    /*protected virtual void GetNearestWall(Vector3 dir)
+    {
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, wallAvoidanceRange);
+
+        foreach (Collider c in hitColliders)
+        {
+            if (c.CompareTag("Enemy") && c != GetComponent<Collider>() || c.CompareTag("Wall") || c.CompareTag("Destructible") || c.CompareTag("Limits"))
+            {
+                Vector3 wallDir = (c.transform.position - transform.position).normalized;
+                wallDir.y = 0f;
+
+                targetDir = Vector3.Slerp(targetDir, -wallDir, Time.deltaTime * wallAvoidanceSpeed);
+                //targetDir = -wallDir;
+            }
+            else
+            {
+                targetDir = dir;
+                targetDir = Vector3.Slerp(targetDir, dir.normalized, Time.deltaTime * wallAvoidanceSpeed);
+            }
+        }
+    }*/
 
     #endregion
 
@@ -370,14 +427,15 @@ public class BossBase : Subject, IAnimController
 
     #endregion
 
-    #region Invokes
-    protected virtual void ResetConsideredFarAttackDecitionStatus()
-    {
-        hasConsideredFarAttack = false;
-    }
-    #endregion
+    #region Set Variables / Events Callback
 
-    #region Set Variables
+    public virtual void SetNewFase()
+    {
+        if (isDead) isDead = false;
+        ChangeFaseUI();
+        health = 550;
+        currentHealth = health;
+    }
     public virtual void SetAttack(bool value)
     {
         isAttacking = value;
@@ -394,6 +452,46 @@ public class BossBase : Subject, IAnimController
     {
         isOnCooldown = value;
         Debug.Log("Is on cooldown: " + isOnCooldown);
+    }
+
+    public virtual void MoveOnAttack(float force)
+    {
+        rb.velocity = lastTargetDir * force;
+    }
+
+    public virtual void EnableHitParticle(float resetTime)
+    {
+        if (resetTime == 0) resetTime = 0.1f;
+
+        _particleEmission.enabled = true;
+        Invoker.InvokeDelayed(ResetHitParticle, resetTime);
+    }
+
+    public virtual void ChangeFaseUI()
+    {
+        FindObjectOfType<BossUI>().SetChangeFase();
+    }
+    #endregion
+
+    #region Get Variables
+
+    public string GetBossName() { return bossName; }
+    public float GetHealth() { return health; }
+    public float GetCurrentHealth() { return currentHealth; }
+    public int GetAllFases() { return ammountOfFases; }
+    public int GetCurrentFase() { return currentFase; }
+
+    #endregion
+
+    #region Invokes
+
+    protected virtual void ResetHitParticle()
+    {
+        _particleEmission.enabled = false;
+    }
+    protected virtual void ResetConsideredFarAttackDecitionStatus()
+    {
+        hasConsideredFarAttack = false;
     }
     #endregion
 

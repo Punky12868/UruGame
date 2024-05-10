@@ -16,6 +16,7 @@ public enum AllPlayerActions
     MidBoss,
     DieToMidFaceBoss,
     ParryBoss,
+    HitBoss,
     EndBoss,
 
     Attack,

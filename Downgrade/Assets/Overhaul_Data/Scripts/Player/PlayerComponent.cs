@@ -34,9 +34,9 @@ public class PlayerComponent : Subject
     public float staminaUsageRoll;
     public float staminaUsageAttack;
     public AnimationCurve rollSpeed;
+    public float moveDuration = 0;
     public float rollInmunity = 1f;
     public float rollCooldown = 1f;
-    public float rollAnimationCurve = 1f;
     public ParticleSystem parryParticleEmission;
     public ParticleSystem hitParticleEmission;
 
@@ -122,7 +122,7 @@ public class PlayerComponent : Subject
     [HideInInspector] public bool wasParryInvoked = false;
 
     [HideInInspector] public bool isDead = false;
-    [HideInInspector] public string playerState;
+    public string playerState;
     #endregion
 
     #region Unity Methods
@@ -184,10 +184,16 @@ public class PlayerComponent : Subject
         if (!canMove || isAttacking)
             return;
 
+        
         if (isRolling)
         {
-            rb.velocity = direction.normalized * rollSpeed.Evaluate(1);
+            moveDuration += Time.deltaTime;
+            rb.velocity = lastDirection.normalized * rollSpeed.Evaluate(moveDuration);
             return;
+        }
+        else
+        {
+            moveDuration = 0;
         }
 
         RotateHitboxCentreToFaceTheDirection();
@@ -355,18 +361,44 @@ public class PlayerComponent : Subject
 
                 int damage = Random.Range((int)attackDamage.x, (int)attackDamage.y + 1);
 
-                if (hit.GetComponent<EnemyBase>().currentHealth - damage <= 0)
+                if (hit.GetComponent<EnemyBase>())
                 {
-                    ResetHittingKilling("Kill");
-                    NotifyPlayerObservers(AllPlayerActions.KilledEnemy);
-                }
-                else
-                {
-                    ResetHittingKilling("Hit");
-                    NotifyPlayerObservers(AllPlayerActions.HitEnemy);
-                }
+                    if (hit.GetComponent<EnemyBase>().currentHealth - damage <= 0)
+                    {
+                        ResetHittingKilling("Kill");
+                        NotifyPlayerObservers(AllPlayerActions.KilledEnemy);
+                    }
+                    else
+                    {
+                        ResetHittingKilling("Hit");
+                        NotifyPlayerObservers(AllPlayerActions.HitEnemy);
+                    }
 
-                hit.GetComponent<EnemyBase>().TakeDamage(damage);
+                    hit.GetComponent<EnemyBase>().TakeDamage(damage);
+                }
+                else if (hit.GetComponent<BossBase>())
+                {
+                    if (hit.GetComponent<BossBase>().GetCurrentHealth() - damage <= 0)
+                    {
+                        if (hit.GetComponent<BossBase>().GetCurrentFase() < hit.GetComponent<BossBase>().GetAllFases())
+                        {
+                            ResetHittingKilling("Kill");
+                            NotifyPlayerObservers(AllPlayerActions.MidBoss);
+                        }
+                        else
+                        {
+                            ResetHittingKilling("Kill");
+                            NotifyPlayerObservers(AllPlayerActions.EndBoss);
+                        }
+                    }
+                    else
+                    {
+                        ResetHittingKilling("Hit");
+                        NotifyPlayerObservers(AllPlayerActions.HitBoss);
+                    }
+
+                    hit.GetComponent<BossBase>().TakeDamage(damage);
+                }
             }
 
             if (hit.CompareTag("Destructible"))
