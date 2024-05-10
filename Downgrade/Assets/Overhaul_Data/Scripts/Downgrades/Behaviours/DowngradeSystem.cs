@@ -204,6 +204,19 @@ public class DowngradeSystem : MonoBehaviour, IObserver
                 break;
         }
     }
+
+    public void OnBossesNotify(AllBossActions actions)
+    {
+        switch (dg)
+        {
+            /*case SelectedDowngrade.EnemyBoost:
+                if (actions == AllBossActions.Start && !enemySpawned)
+                {
+                    enemySpawned = true;
+                }
+                break;*/
+        }
+    }
     #endregion
 
     #region Set Downgrade Values

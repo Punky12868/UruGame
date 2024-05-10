@@ -3,18 +3,26 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 
-public class AnimationsHolder : MonoBehaviour
+public class AnimationHolder : MonoBehaviour
 {
     private Animator animator;
     private AnimationController anim;
     private List<AnimationClip> clips = new List<AnimationClip>();
-    private List<string> animationIDs = new List<string>();
+    private List<AnimationClip> animationIDs = new List<AnimationClip>();
 
     [SerializeField] private List<AnimationCustomEvents> animations = new List<AnimationCustomEvents>();
 
-    public void Initialize()
+    public void Initialize(Animator animator = null)
     {
-        animator = GetComponent<Animator>();
+        if (animator == null)
+        {
+            animator = GetComponent<Animator>();
+        }
+        else
+        {
+            this.animator = animator;
+        }
+
         anim = new AnimationController();
 
         foreach (var clip in animator.runtimeAnimatorController.animationClips)
@@ -24,7 +32,7 @@ public class AnimationsHolder : MonoBehaviour
 
         foreach (var animation in animations)
         {
-            animationIDs.Add(animation.animationId);
+            animationIDs.Add(animation.animClip);
         }
 
         anim.SetAnimationController(this, animator, clips, animationIDs);
@@ -40,7 +48,7 @@ public class AnimationsHolder : MonoBehaviour
         return anim;
     }
 
-    public List<string> GetAnimationsIDs()
+    public List<AnimationClip> GetAnimationsIDs()
     {
         return animationIDs;
     }
@@ -59,7 +67,7 @@ public class AnimationsHolder : MonoBehaviour
 [Serializable]
 public class AnimationCustomEvents
 {
-    public string animationId;
+    public AnimationClip animClip;
     public List<EventData> invokableEvents = new List<EventData>();
 }
 

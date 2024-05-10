@@ -44,6 +44,20 @@ public enum AllEnemyActions
     Die,
 }
 
+public enum AllBossActions
+{
+    None,
+    Spawned,
+    LightAttack,
+    HeavyAttack,
+    Avoiding,
+    Parried,
+    Hit,
+    Die,
+    Start,
+    End,
+}
+
 public enum SelectedDowngrade
 {
     None,

@@ -6,15 +6,15 @@ using System;
 public class AnimationController
 {
     private AnimationController_Timer timer;
-    private AnimationsHolder animHolder;
+    private AnimationHolder animHolder;
     private Animator anim;
     private List<AnimationClip> clips;
-    private List<string> animationIDs;
+    private List<AnimationClip> animationIDs;
     private float animClipLength;
     public bool isAnimationDone;
     public bool isPlayingChainAnim;
 
-    private List<string> chainedAnimNames;
+    private List<AnimationClip> chainedAnimNames;
     private int chainedAnimCount;
 
     private Action action;
@@ -22,13 +22,13 @@ public class AnimationController
     private float elapsedTime;
     private bool isRunning;
 
-    public void SetAnimationController(MonoBehaviour script, Animator _anim, List<AnimationClip> _clips, List<string> _animationIDs)
+    public void SetAnimationController(MonoBehaviour script, Animator _anim, List<AnimationClip> _clips, List<AnimationClip> _animationIDs)
     {
         script.gameObject.AddComponent<AnimationController_Timer>().SetAnimatorController(this);
         timer = script.GetComponent<AnimationController_Timer>();
         timer.SetTimeSettings(true);
 
-        animHolder = script.GetComponent<AnimationsHolder>();
+        animHolder = script.GetComponent<AnimationHolder>();
 
         anim = _anim;
         clips = _clips;
@@ -36,13 +36,12 @@ public class AnimationController
         isAnimationDone = true;
     }
 
-    public void PlayAnimation(string animName = null, List<string> chainedAnimNames = null, bool hasExitTime = false, bool bypassExitTime = false, bool canBeBypassed = false)
+    public void PlayAnimation(AnimationClip animClip = null, List<AnimationClip> chainedAnimNames = null, bool hasExitTime = false, bool bypassExitTime = false, bool canBeBypassed = false)
     {
         if (bypassExitTime && !canBeBypassed)
             isAnimationDone = true;
 
-        if (!isAnimationDone)
-            return;
+        if (!isAnimationDone) return;
 
         if (!NullOrCero.isListNullOrCero(chainedAnimNames))
         {
@@ -50,21 +49,21 @@ public class AnimationController
             chainedAnimCount = this.chainedAnimNames.Count;
             isPlayingChainAnim = true;
 
-            if (animName == null)
-                animName = this.chainedAnimNames[0];
+            if (animClip == null)
+                animClip = this.chainedAnimNames[0];
         }
         else if (!NullOrCero.isListNullOrCero(this.chainedAnimNames) && isPlayingChainAnim)
         {
-            animName = this.chainedAnimNames[0];
+            animClip = this.chainedAnimNames[0];
         }
 
         for (int i = 0; i < animationIDs.Count; i++)
         {
-            if (animName == animationIDs[i])
+            if (animClip == animationIDs[i])
             {
-                anim.Play(animName);
+                anim.Play(animClip.name);
 
-                InvokeEvents(animName);
+                InvokeEvents(animationIDs[i]);
 
                 if (hasExitTime || chainedAnimCount > 0)
                 {
@@ -72,7 +71,7 @@ public class AnimationController
 
                     foreach (AnimationClip clip in clips)
                     {
-                        if (clip.name == animName)
+                        if (clip == animClip)
                         {
                             animClipLength = clip.length;
 
@@ -104,16 +103,15 @@ public class AnimationController
         }
     }
 
-    private void InvokeEvents(string animName)
+    private void InvokeEvents(AnimationClip animName)
     {
         foreach (var animation in animHolder.GetAnimationCustomEvents())
         {
-            if (animation.animationId == animName)
+            if (animation.animClip == animName)
             {
                 foreach (var eventData in animation.invokableEvents)
                 {
                     Invoker.InvokeDelayed(eventData.events.Invoke, eventData.time);
-                    return;
                 }
             }
         }

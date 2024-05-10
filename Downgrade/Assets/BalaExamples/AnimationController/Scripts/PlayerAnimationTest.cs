@@ -6,8 +6,8 @@ using UnityEngine;
 public class PlayerAnimationTest : MonoBehaviour, IAnimController
 {
     private Player input;
-    private AnimationsHolder animHolder;
-    private List<string> animationIDs;
+    private AnimationHolder animHolder;
+    private List<AnimationClip> animationIDs;
 
     private void Awake()
     {
@@ -36,7 +36,7 @@ public class PlayerAnimationTest : MonoBehaviour, IAnimController
         if (input.GetButtonDown("Use Item"))
         {
             // chained animation, creates the list and then plays the full sequence
-            List<string> chainedAnimNames = new List<string> { animationIDs[1], animationIDs[2], animationIDs[3], animationIDs[4] };
+            List<AnimationClip> chainedAnimNames = new List<AnimationClip> { animationIDs[1], animationIDs[2], animationIDs[3], animationIDs[4] };
             animHolder.GetAnimationController().PlayAnimation(null, chainedAnimNames, true);
         }
 
@@ -53,7 +53,7 @@ public class PlayerAnimationTest : MonoBehaviour, IAnimController
 
     public void SetAnimHolder()
     {
-        animHolder = GetComponent<AnimationsHolder>();
+        animHolder = GetComponent<AnimationHolder>();
         animHolder.Initialize();
         animationIDs = animHolder.GetAnimationsIDs();
     }

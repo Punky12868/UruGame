@@ -33,9 +33,10 @@ public class PlayerComponent : Subject
     public float staminaBossReward = 50;
     public float staminaUsageRoll;
     public float staminaUsageAttack;
-    public float rollForce = 5f;
+    public AnimationCurve rollSpeed;
     public float rollInmunity = 1f;
     public float rollCooldown = 1f;
+    public float rollAnimationCurve = 1f;
     public ParticleSystem parryParticleEmission;
     public ParticleSystem hitParticleEmission;
 
@@ -60,7 +61,6 @@ public class PlayerComponent : Subject
     [HideInInspector] public float comboVfxTime;
     [HideInInspector] public bool isNormalVFXPlaying = false;
     [HideInInspector] public bool isComboVFXPlaying = false;
-    //[SerializeField] private float knockbackForce;
 
     [HideInInspector] public float comboTime;
 
@@ -181,8 +181,14 @@ public class PlayerComponent : Subject
 
     public void FixedUpdate()
     {
-        if (!canMove || isAttacking || isRolling)
+        if (!canMove || isAttacking)
             return;
+
+        if (isRolling)
+        {
+            rb.velocity = direction.normalized * rollSpeed.Evaluate(1);
+            return;
+        }
 
         RotateHitboxCentreToFaceTheDirection();
 
@@ -260,22 +266,16 @@ public class PlayerComponent : Subject
 
     public void Roll()
     {
-        if (isRolling || isAttacking || currentStamina < staminaUsageRoll)
+        if (isRolling || isAttacking || currentStamina < staminaUsageRoll || direction == Vector3.zero)
             return;
 
-        if (direction == Vector3.zero)
-        {
-            rb.AddForce(lastDirection.normalized * rollForce, ForceMode.Impulse);
-        }
-        else
-        {
-            rb.AddForce(direction.normalized * rollForce, ForceMode.Impulse);
-        }
+        //rb.AddForce(direction.normalized * rollForce, ForceMode.Impulse);
+        //rb.velocity = direction.normalized * rollSpeed.Evaluate(rollCooldown);
 
+        isRolling = true;
         UseStamina(staminaUsageRoll);
         PlayAnimation(animationIDs[2], true, true); // Roll
         NotifyPlayerObservers(AllPlayerActions.Dodge);
-        isRolling = true;
         canBeDamaged = false;
         PlaySound(rollClips);
         Invoke("ResetDamage", rollInmunity);
@@ -589,8 +589,16 @@ public class PlayerComponent : Subject
 
         currentHealth -= damage;
 
-        _hitParticleEmission.enabled = true;
-        Invoker.InvokeDelayed(DisableHitParticles, 0.1f);
+        if (damage != 0)
+        {
+            _hitParticleEmission.enabled = true;
+            Invoker.InvokeDelayed(DisableHitParticles, 0.1f);
+        }
+        else
+        {
+            _parryParticleEmission.enabled = true;
+            Invoker.InvokeDelayed(DisableParryParticles, 0.1f);
+        }
 
         if (currentHealth <= 0)
         {

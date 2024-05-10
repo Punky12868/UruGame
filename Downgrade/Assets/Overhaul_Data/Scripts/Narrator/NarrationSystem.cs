@@ -212,4 +212,8 @@ public class NarrationSystem : MonoBehaviour, IObserver
     public void OnEnemyNotify(AllEnemyActions actions)
     {
     }
+
+    public void OnBossesNotify(AllBossActions actions)
+    {
+    }
 }
