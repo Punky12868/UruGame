@@ -227,7 +227,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.7647059, g: 0.54509807, b: 0.5686275, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -263,7 +263,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 2
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -408,9 +408,19 @@ MonoBehaviour:
   moveDuration: 1.5
   rotationDuration: 0.5
   fadeDuration: 2
+  cardMusic: 0
   wiggleEffect: {x: -5, y: 5}
+  wiggleEffectMultiplier: 1.5
+  growAmmountWhenSelected: 1.1
+  growSpeed: 5
   wiggleResetTime: 0.3
   easeType: 6
+  rotEaseType: 30
+  rotateCardTimeout: 0.2
+  cardRotationAmmount: {x: -20, y: 20}
+  cardRotationMultiplier: 2
+  cardRotationSpeed: 5
+  cardRotationSpeedMultiplier: 2
 --- !u!225 &7229200483987478
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -618,8 +628,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4285689310
-  m_fontColor: {r: 0.8705883, g: 0.427451, b: 0.44705886, a: 1}
+    rgba: 4283491737
+  m_fontColor: {r: 0.6, g: 0.8980393, b: 0.3137255, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -809,7 +819,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 16
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535

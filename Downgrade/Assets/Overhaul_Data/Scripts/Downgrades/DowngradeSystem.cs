@@ -121,7 +121,7 @@ public class DowngradeSystem : MonoBehaviour, IObserver
             }
         }
 
-        if (dg == SelectedDowngrade.Weakness)
+        if (dg == SelectedDowngrade.Debil)
         {
             if (weaknessTime < weaknessCooldownTime)
             {
@@ -140,7 +140,7 @@ public class DowngradeSystem : MonoBehaviour, IObserver
     {
         switch (dg)
         {
-            case SelectedDowngrade.FatRoll:
+            case SelectedDowngrade.Slime:
                 if (actions == AllPlayerActions.Dodge)
                 {
                     FindObjectOfType<PlayerComponent>().SetSpeed(fatrollSpeedAmmount);
@@ -148,7 +148,7 @@ public class DowngradeSystem : MonoBehaviour, IObserver
                     Debug.Log("Fatroll");
                 }
                 break;
-            case SelectedDowngrade.Asthma:
+            case SelectedDowngrade.Rodilla:
                 if (actions == AllPlayerActions.LowStamina)
                 {
                     if (FindObjectOfType<PlayerComponent>().GetStamina() <= asthmaStaminaThresshold)
@@ -158,7 +158,7 @@ public class DowngradeSystem : MonoBehaviour, IObserver
                     }
                 }
                 break;
-            case SelectedDowngrade.BadLuck:
+            case SelectedDowngrade.Moneda:
                 if (actions == AllPlayerActions.useItem)
                 {
                     // 50% chance to take damage
@@ -169,7 +169,7 @@ public class DowngradeSystem : MonoBehaviour, IObserver
                     }
                 }
                 break;
-            case SelectedDowngrade.Weakness:
+            case SelectedDowngrade.Debil:
                 if (actions == AllPlayerActions.KilledEnemy)
                 {
                     FindObjectOfType<PlayerComponent>().SetDamage(weaknessDamageAmmount);
@@ -177,7 +177,7 @@ public class DowngradeSystem : MonoBehaviour, IObserver
                     Debug.Log("Weakness");
                 }
                 break;
-            case SelectedDowngrade.EnemyBoost:
+            case SelectedDowngrade.Esqueleto:
                 if (actions == AllPlayerActions.KilledEnemy)
                 {
                     isNotKilling = false;
@@ -196,7 +196,7 @@ public class DowngradeSystem : MonoBehaviour, IObserver
     {
         switch (dg)
         {
-            case SelectedDowngrade.EnemyBoost:
+            case SelectedDowngrade.Esqueleto:
                 if (actions == AllEnemyActions.Spawned && !enemySpawned)
                 {
                     enemySpawned = true;

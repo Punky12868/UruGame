@@ -10,15 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f598e6a9fdd9c8f4ea0971133e05b341, type: 3}
-  m_Name: FatRoll_Dg
+  m_Name: Slime
   m_EditorClassIdentifier: 
-  selectedDowngrade: 1
-  dgIcon: {fileID: 6645427384175290001, guid: 4dffe6eab57ca4e4ba2f967307bd1c29, type: 3}
-  cardSprite: {fileID: 21300000, guid: 0e84906b7b1c7eb4c914c13ef8f86652, type: 3}
+  selectedDowngrade: 7
+  dgIcon: {fileID: 21300000, guid: fb21d43469c422e4799d052c515883f3, type: 3}
+  cardSprite: {fileID: 21300000, guid: dbd0a2f745b3d7c47aebca7d1803bc84, type: 3}
+  cardSelectedSprite: {fileID: 21300000, guid: d5e6f46931a2db741b516c6e6d964274, type: 3}
   cardBackSprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
-  cardName: Carga pesada
-  cardStat: Velocidad
-  cardDescription: Rodar reduce la velocidad por 2 segundos.
+  cardName: Slime
+  cardStat: Movimiento
+  cardDescription: "Rodar hace al jugador m\xE1s lento por 2 segundos."
   placeholder: 0
   speedAmmount: 1.5
   time: 2

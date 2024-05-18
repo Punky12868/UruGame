@@ -62,9 +62,13 @@ public enum AllBossActions
 public enum SelectedDowngrade
 {
     None,
-    FatRoll,
-    Asthma,
-    BadLuck,
-    Weakness,
-    EnemyBoost,
+    Debil,
+    Stamina,
+    Esqueleto,
+    Daga,
+    Dados,
+    Paralisis,
+    Slime,
+    Rodilla,
+    Moneda,
 }

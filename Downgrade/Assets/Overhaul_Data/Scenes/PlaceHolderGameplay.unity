@@ -1440,6 +1440,74 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &410200501
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2323396712446184488, guid: c34a75b3aa05edf478dff5b16d7c9e76, type: 3}
+      propertyPath: m_Name
+      value: Rewired Input Manager
+      objectReference: {fileID: 0}
+    - target: {fileID: 2758251912441116255, guid: c34a75b3aa05edf478dff5b16d7c9e76, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2758251912441116255, guid: c34a75b3aa05edf478dff5b16d7c9e76, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2758251912441116255, guid: c34a75b3aa05edf478dff5b16d7c9e76, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2758251912441116255, guid: c34a75b3aa05edf478dff5b16d7c9e76, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2758251912441116255, guid: c34a75b3aa05edf478dff5b16d7c9e76, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2758251912441116255, guid: c34a75b3aa05edf478dff5b16d7c9e76, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2758251912441116255, guid: c34a75b3aa05edf478dff5b16d7c9e76, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2758251912441116255, guid: c34a75b3aa05edf478dff5b16d7c9e76, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2758251912441116255, guid: c34a75b3aa05edf478dff5b16d7c9e76, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2758251912441116255, guid: c34a75b3aa05edf478dff5b16d7c9e76, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2758251912441116255, guid: c34a75b3aa05edf478dff5b16d7c9e76, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c34a75b3aa05edf478dff5b16d7c9e76, type: 3}
+--- !u!114 &410200502 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8078535523230048358, guid: c34a75b3aa05edf478dff5b16d7c9e76, type: 3}
+  m_PrefabInstance: {fileID: 410200501}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 581b3e3c96df0ef42aef16b63b27b87f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &432065324
 GameObject:
   m_ObjectHideFlags: 0
@@ -3278,63 +3346,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &877610167
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2323396712446184488, guid: 05fe6cd174fa9824fa3132bde0477362, type: 3}
-      propertyPath: m_Name
-      value: Rewired Input Manager
-      objectReference: {fileID: 0}
-    - target: {fileID: 2758251912441116255, guid: 05fe6cd174fa9824fa3132bde0477362, type: 3}
-      propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2758251912441116255, guid: 05fe6cd174fa9824fa3132bde0477362, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2758251912441116255, guid: 05fe6cd174fa9824fa3132bde0477362, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2758251912441116255, guid: 05fe6cd174fa9824fa3132bde0477362, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2758251912441116255, guid: 05fe6cd174fa9824fa3132bde0477362, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2758251912441116255, guid: 05fe6cd174fa9824fa3132bde0477362, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2758251912441116255, guid: 05fe6cd174fa9824fa3132bde0477362, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2758251912441116255, guid: 05fe6cd174fa9824fa3132bde0477362, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2758251912441116255, guid: 05fe6cd174fa9824fa3132bde0477362, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2758251912441116255, guid: 05fe6cd174fa9824fa3132bde0477362, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2758251912441116255, guid: 05fe6cd174fa9824fa3132bde0477362, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 05fe6cd174fa9824fa3132bde0477362, type: 3}
 --- !u!1 &912580456
 GameObject:
   m_ObjectHideFlags: 0
@@ -3947,8 +3958,8 @@ MonoBehaviour:
   direction: {x: 0, y: 0, z: 0}
   lastDirection: {x: 0, y: 0, z: 0}
   health: 100
-  healthBigEnemyReward: 40
-  healthBossReward: 0
+  healthBigEnemyReward: 5
+  healthBossReward: 10
   speed: 2.5
   stamina: 100
   staminaCooldown: 0.3
@@ -3958,9 +3969,42 @@ MonoBehaviour:
   staminaBossReward: 100
   staminaUsageRoll: 10
   staminaUsageAttack: 3
-  rollForce: 35
+  rollSpeed:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 7
+      inSlope: 16.21595
+      outSlope: 16.21595
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.10670311
+    - serializedVersion: 3
+      time: 0.35
+      value: 1
+      inSlope: -32.185566
+      outSlope: -32.185566
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.45
+      value: 0.5
+      inSlope: -24.115496
+      outSlope: -24.115496
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  moveDuration: 0
   rollInmunity: 0.5
-  rollCooldown: 0.3
+  rollCooldown: 0.4
   parryParticleEmission: {fileID: 1579568510}
   hitParticleEmission: {fileID: 3054887266161603513}
   currentHealth: 0
@@ -4900,7 +4944,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1264370754}
-  - component: {fileID: 1264370755}
   m_Layer: 0
   m_Name: ----- Enemigos -----
   m_TagString: Untagged
@@ -4923,28 +4966,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1264370755
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1264370753}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b31eb21b5e5b64c4692281c95140bdc4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bossName: freakywitchraaahh
-  moveSpeed: 5
-  ammountOfFases: 2
-  health: 450
-  attacks:
-  - {fileID: 11400000, guid: 7ee833b83333f1049849197b79d32c77, type: 2}
-  dialogLines:
-  - Dialog #1 (Starting Dialog)
-  - Dialog #2 (Mid Fase Dialog)
-  - Dialog #2 (Ending Dialog)
 --- !u!1 &1305529403
 GameObject:
   m_ObjectHideFlags: 0
@@ -5456,7 +5477,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SendPointerHoverToParent: 1
-  rewiredInputManager: {fileID: 0}
+  rewiredInputManager: {fileID: 410200502}
   useAllRewiredGamePlayers: 1
   useRewiredSystemPlayer: 1
   rewiredPlayerIds: 00000000

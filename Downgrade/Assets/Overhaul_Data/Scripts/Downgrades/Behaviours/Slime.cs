@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "FatRoll_Dg", menuName = "Downgrade/FatRoll")]
-public class FatRoll : DowngradeCard
+[CreateAssetMenu(fileName = "Slime_Dg", menuName = "Downgrade/Slime")]
+public class Slime : DowngradeCard
 {
     public float speedAmmount = 1.5f;
     public float time = 1;

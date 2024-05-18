@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "EnemyBoost_Dg", menuName = "Downgrade/EnemyBoost")]
-public class EnemyBoost : DowngradeCard
+[CreateAssetMenu(fileName = "Esqueleto_Dg", menuName = "Downgrade/Esqueleto")]
+public class Esqueleto : DowngradeCard
 {
     public int damageAmmount = 1;
     public float timeThresshold = 1;
