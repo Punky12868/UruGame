@@ -21,7 +21,10 @@ public enum AllPlayerActions
 
     Attack,
     Parry,
+    SuccesfullParry,
     Dodge,
+    useAbility,
+    useAbilityOnCooldown,
     useItem,
     useEmptyItem,
     pickUpItem,

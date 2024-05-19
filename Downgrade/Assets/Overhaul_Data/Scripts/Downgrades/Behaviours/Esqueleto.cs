@@ -9,6 +9,6 @@ public class Esqueleto : DowngradeCard
     public float timeThresshold = 1;
     public override void CardEffect()
     {
-        DowngradeSystem.Instance.SetEnemyBoostDg(damageAmmount, timeThresshold, dgIcon);
+        DowngradeSystem.Instance.SetEsqueletoDg(damageAmmount, timeThresshold, dgIcon);
     }
 }

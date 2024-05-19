@@ -409,6 +409,7 @@ public class EnemyBase : Subject
                     {
                         ParriedEnemy(parryStunTime);
                         hitCollider.GetComponent<PlayerComponent>().GetParryReward(isBigEnemy, false);
+                        hitCollider.GetComponent<PlayerComponent>().AddEnemyToParryList(this.gameObject);
                         Debug.Log("Player parried hit");
                     }
                     else
@@ -455,6 +456,7 @@ public class EnemyBase : Subject
                     {
                         ParriedEnemy(parryStunTime);
                         hitCollider.GetComponent<PlayerComponent>().GetParryReward(isBigEnemy, true);
+                        hitCollider.GetComponent<PlayerComponent>().AddEnemyToParryList(this.gameObject);
                         Debug.Log("Player parried charged hit");
                     }
                     else

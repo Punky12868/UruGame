@@ -9,6 +9,6 @@ public class Rodillas : DowngradeCard
     public float healthLossPercentage = 10;
     public override void CardEffect()
     {
-        DowngradeSystem.Instance.SetAsthmaDg(staminaThresshold, healthLossPercentage, dgIcon);
+        DowngradeSystem.Instance.SetRodillasDg(staminaThresshold, healthLossPercentage, dgIcon);
     }
 }

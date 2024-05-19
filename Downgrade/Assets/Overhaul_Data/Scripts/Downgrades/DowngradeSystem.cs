@@ -11,30 +11,43 @@ public class DowngradeSystem : MonoBehaviour, IObserver
     Subject player;
     List<Subject> enemies = new List<Subject>();
 
-    //[Header("Fatroll")]
+    //[Header("Stamina")]
+    private float staminaLossAmmount;
+
+    //[Header("Slime")]
     private float fatrollSpeedAmmount;
     private float fatrollTime;
     private float stored_PlayerSpeed;
 
-    //[Header("Asthma")]
+    //[Header("Rodillas")]
     private float asthmaStaminaThresshold;
     private float asthmaHealthLossPercentage;
 
-    //[Header("BadLuck")]
+    //[Header("Paralisis")]
+    private float damageAmmount;
+    private float paralysisTime;
+
+    //[Header("Moneda")]
     private float badLuckHealthLossAmmount;
 
-    //[Header("Weakness")]
-    private Vector2 weaknessDamageAmmount;
-    private Vector2 stored_PlayerDamage;
-    private float weaknessCooldownTime;
-    private float weaknessTime;
-
-    //[Header("EnemyBoost")]
+    //[Header("Esqueleto")]
     private int enemyBoostDamageAmmount;
     private float enemyBoostTimeThresshold;
     private float enemyBoostTime;
     private bool isNotKilling = false;
     private bool enemySpawned = false;
+
+    //[Header("Debil")]
+    private Vector2 weaknessDamageAmmount;
+    private Vector2 stored_PlayerDamage;
+    private float weaknessCooldownTime;
+    private float weaknessTime;
+
+    //[Header("Daga")]
+    private bool onSwitch = true;
+
+    //[Header("Dados")]
+    private int diceRolls;
 
     #region Values
     public void SetPlayer(Subject player)
@@ -140,6 +153,13 @@ public class DowngradeSystem : MonoBehaviour, IObserver
     {
         switch (dg)
         {
+            case SelectedDowngrade.Stamina:
+                if (actions == AllPlayerActions.useAbility)
+                {
+                    FindObjectOfType<PlayerComponent>().UseStamina(staminaLossAmmount);
+                    Debug.Log("StaminaUsed");
+                }
+                break;
             case SelectedDowngrade.Slime:
                 if (actions == AllPlayerActions.Dodge)
                 {
@@ -158,23 +178,40 @@ public class DowngradeSystem : MonoBehaviour, IObserver
                     }
                 }
                 break;
+            case SelectedDowngrade.Paralisis:
+                if (actions == AllPlayerActions.SuccesfullParry)
+                {
+                    FindObjectOfType<PlayerComponent>().SetParalisisStatus(true, paralysisTime);
+
+                    EnemyBase[] enemyBases = FindObjectsOfType<EnemyBase>();
+                    foreach (EnemyBase enemy in enemyBases)
+                    {
+                        if (enemy.isParried) enemy.TakeDamage(damageAmmount);
+                    }
+
+                    Debug.Log("Paralysis");
+                }
+                break;
             case SelectedDowngrade.Moneda:
+                if (actions == AllPlayerActions.Start)
+                {
+                    FindObjectOfType<PlayerComponent>().SetMoneda(true);
+                    Debug.Log("Moneda Active");
+                }
+
                 if (actions == AllPlayerActions.useItem)
                 {
                     // 50% chance to take damage
                     if (Random.Range(0, 2) == 0)
                     {
                         FindObjectOfType<PlayerComponent>().TakeDamage(badLuckHealthLossAmmount);
+                        FindObjectOfType<PlayerComponent>().MonedaUseItem(false);
                         Debug.Log("BadLuck");
                     }
-                }
-                break;
-            case SelectedDowngrade.Debil:
-                if (actions == AllPlayerActions.KilledEnemy)
-                {
-                    FindObjectOfType<PlayerComponent>().SetDamage(weaknessDamageAmmount);
-                    weaknessTime = 0;
-                    Debug.Log("Weakness");
+                    else
+                    {
+                        FindObjectOfType<PlayerComponent>().MonedaUseItem(true);
+                    }
                 }
                 break;
             case SelectedDowngrade.Esqueleto:
@@ -189,6 +226,30 @@ public class DowngradeSystem : MonoBehaviour, IObserver
                     isNotKilling = true;
                 }
                 break;
+            case SelectedDowngrade.Debil:
+                if (actions == AllPlayerActions.KilledEnemy)
+                {
+                    FindObjectOfType<PlayerComponent>().SetDamage(weaknessDamageAmmount);
+                    weaknessTime = 0;
+                    Debug.Log("Weakness");
+                }
+                break;
+            case SelectedDowngrade.Daga:
+                if (actions == AllPlayerActions.Dodge)
+                {
+                    onSwitch = !onSwitch;
+                    FindObjectOfType<PlayerComponent>().SetCanAttack(onSwitch);
+                    Debug.Log("Attack is: " + onSwitch);
+                }
+                break;
+            case SelectedDowngrade.Dados:
+                if (actions == AllPlayerActions.Start)
+                {
+                    FindObjectOfType<PlayerComponent>().SetRollQuantity(true, diceRolls);
+                    Debug.Log("DiceRolls");
+                }
+                break;
+
         }
     }
 
@@ -220,7 +281,14 @@ public class DowngradeSystem : MonoBehaviour, IObserver
     #endregion
 
     #region Set Downgrade Values
-    public void SetFatRollDg(float speed, float cooldown, Sprite icon)
+
+    public void SetStaminaDg(float time, Sprite icon)
+    {
+        staminaLossAmmount = time;
+        dgIcon = icon;
+    }
+
+    public void SetSlimeDg(float speed, float cooldown, Sprite icon)
     {
         fatrollSpeedAmmount = speed;
         fatrollTime = cooldown;
@@ -232,30 +300,48 @@ public class DowngradeSystem : MonoBehaviour, IObserver
         stored_PlayerSpeed = storedSpeed;
     }
 
-    public void SetAsthmaDg(float stamina, float healthLoss, Sprite icon)
+    public void SetRodillasDg(float stamina, float healthLoss, Sprite icon)
     {
         asthmaStaminaThresshold = stamina;
         asthmaHealthLossPercentage = healthLoss;
         dgIcon = icon;
     }
 
-    public void SetBadLuckDg(float healthLoss, Sprite icon)
+    public void SetParalisisDg(float damage, float time, Sprite icon)
+    {
+        damageAmmount = damage;
+        paralysisTime = time;
+        dgIcon = icon;
+    }
+
+    public void SetMonedaDg(float healthLoss, Sprite icon)
     {
         badLuckHealthLossAmmount = healthLoss;
         dgIcon = icon;
     }
 
-    public void SetWeaknessDg(Vector2 damage, float cooldown, Sprite icon)
+    public void SetEsqueletoDg(int damage, float cooldown, Sprite icon)
+    {
+        enemyBoostDamageAmmount = damage;
+        enemyBoostTimeThresshold = cooldown;
+        dgIcon = icon;
+    }
+
+    public void SetDebilDg(Vector2 damage, float cooldown, Sprite icon)
     {
         weaknessDamageAmmount = damage;
         weaknessCooldownTime = cooldown;
         dgIcon = icon;
     }
 
-    public void SetEnemyBoostDg(int damage, float cooldown, Sprite icon)
+    public void SetDagaDg(Sprite icon)
     {
-        enemyBoostDamageAmmount = damage;
-        enemyBoostTimeThresshold = cooldown;
+        dgIcon = icon;
+    }
+
+    public void SetDadosDg(int rolls, Sprite icon)
+    {
+        diceRolls = rolls;
         dgIcon = icon;
     }
     #endregion

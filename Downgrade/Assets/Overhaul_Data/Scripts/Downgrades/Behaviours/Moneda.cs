@@ -8,6 +8,6 @@ public class Moneda : DowngradeCard
     public float healthLossPercentage = 10;
     public override void CardEffect()
     {
-        DowngradeSystem.Instance.SetBadLuckDg(healthLossPercentage, dgIcon);
+        DowngradeSystem.Instance.SetMonedaDg(healthLossPercentage, dgIcon);
     }
 }

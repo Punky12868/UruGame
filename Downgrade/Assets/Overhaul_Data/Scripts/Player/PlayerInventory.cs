@@ -33,17 +33,33 @@ public class PlayerInventory : MonoBehaviour
         {
             case ItemType.Health:
                 // use health item
-                GetComponent<PlayerComponent>().GetHealth(item.GetComponent<Item>().GetValue());
-                FindObjectOfType<PlayerUI>().SetItemIcon(nullIcon);
-                item = null;
+                UseHealthItem();
                 break;
             case ItemType.Stamina:
                 // use stamina item
-                GetComponent<PlayerComponent>().GetStamina(item.GetComponent<Item>().GetValue());
-                FindObjectOfType<PlayerUI>().SetItemIcon(nullIcon);
-                item = null;
+                UseStaminaItem();
                 break;
         }
+    }
+
+    private void UseHealthItem()
+    {
+        GetComponent<PlayerComponent>().GetHealth(item.GetComponent<Item>().GetValue());
+        FindObjectOfType<PlayerUI>().SetItemIcon(nullIcon);
+        item = null;
+    }
+
+    private void UseStaminaItem()
+    {
+        GetComponent<PlayerComponent>().GetStamina(item.GetComponent<Item>().GetValue());
+        FindObjectOfType<PlayerUI>().SetItemIcon(nullIcon);
+        item = null;
+    }
+
+    public void DeleteItem()
+    {
+        FindObjectOfType<PlayerUI>().SetItemIcon(nullIcon);
+        item = null;
     }
 
     public bool HasItem()

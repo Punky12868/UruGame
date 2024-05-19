@@ -9,6 +9,6 @@ public class Slime : DowngradeCard
     public float time = 1;
     public override void CardEffect()
     {
-        DowngradeSystem.Instance.SetFatRollDg(speedAmmount, time, dgIcon);
+        DowngradeSystem.Instance.SetSlimeDg(speedAmmount, time, dgIcon);
     }
 }

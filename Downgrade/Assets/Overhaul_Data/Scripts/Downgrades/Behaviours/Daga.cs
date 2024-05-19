@@ -7,5 +7,6 @@ public class Daga : DowngradeCard
 {
     public override void CardEffect()
     {
+        DowngradeSystem.Instance.SetDagaDg(dgIcon);
     }
 }

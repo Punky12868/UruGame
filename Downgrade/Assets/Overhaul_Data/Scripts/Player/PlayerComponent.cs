@@ -105,6 +105,10 @@ public class PlayerComponent : Subject
     [HideInInspector] public bool isParrying = false;
     [HideInInspector] public bool isAttacking = false;
     [HideInInspector] public bool isRolling = false;
+    public bool finiteRolling = false;
+    public int rollAmmount = 999;
+    [HideInInspector] public bool canAttack = true;
+    [HideInInspector] public bool monedaActive = false;
 
     [HideInInspector] public bool isNotHitting = false;
     [HideInInspector] public bool isNotKilling = false;
@@ -120,6 +124,9 @@ public class PlayerComponent : Subject
 
     [HideInInspector] public bool wasParryPressed = false;
     [HideInInspector] public bool wasParryInvoked = false;
+    [HideInInspector] public List<GameObject> parriedEnemies = new List<GameObject>();
+
+    [HideInInspector] public bool paralized = false;
 
     [HideInInspector] public bool isDead = false;
     public string playerState;
@@ -147,6 +154,7 @@ public class PlayerComponent : Subject
         _hitParticleEmission = hitParticleEmission.emission;
         _hitParticleEmission.enabled = false;
         Invoker.InvokeDelayed(DelayedAwake, 0.1f);
+        NotifyPlayerObservers(AllPlayerActions.Start);
         //NotifyObservers();
     }
 
@@ -165,7 +173,7 @@ public class PlayerComponent : Subject
         normalSlashVFX.GetComponent<Renderer>().material.SetFloat("_Status", normalVfxTime);
         comboSlashVFX.GetComponent<Renderer>().material.SetFloat("_Status", comboVfxTime);
 
-        if (!canMove || isDead)
+        if (!canMove || isDead || paralized)
             return;
 
         Inputs();
@@ -181,7 +189,7 @@ public class PlayerComponent : Subject
 
     public void FixedUpdate()
     {
-        if (!canMove || isAttacking)
+        if (!canMove || isAttacking || paralized)
             return;
 
         
@@ -252,7 +260,7 @@ public class PlayerComponent : Subject
                 NotifyPlayerObservers(AllPlayerActions.useEmptyItem);
             }
 
-            inventory.UseItem();
+            if (!monedaActive) inventory.UseItem();
         }
 
         if (input.GetButtonDown("Drop Item"))
@@ -272,12 +280,13 @@ public class PlayerComponent : Subject
 
     public void Roll()
     {
-        if (isRolling || isAttacking || currentStamina < staminaUsageRoll || direction == Vector3.zero)
+        if (isRolling || isAttacking || currentStamina < staminaUsageRoll || direction == Vector3.zero || finiteRolling && rollAmmount <= 0)
             return;
 
         //rb.AddForce(direction.normalized * rollForce, ForceMode.Impulse);
         //rb.velocity = direction.normalized * rollSpeed.Evaluate(rollCooldown);
 
+        if (finiteRolling) rollAmmount--;
         isRolling = true;
         UseStamina(staminaUsageRoll);
         PlayAnimation(animationIDs[2], true, true); // Roll
@@ -296,7 +305,7 @@ public class PlayerComponent : Subject
     #region Attack
     public void OverlapAttack()
     {
-        if (currentStamina < staminaUsageAttack)
+        if (currentStamina < staminaUsageAttack || !canAttack)
             return;
 
         bool isCombo = false;
@@ -552,6 +561,7 @@ public class PlayerComponent : Subject
 
     public void GetParryReward(bool isBigEnemy, bool isBoss, bool isProjectile = false)
     {
+        NotifyPlayerObservers(AllPlayerActions.SuccesfullParry);
         _parryParticleEmission.enabled = true;
         Invoker.InvokeDelayed(DisableParryParticles, 0.1f);
 
@@ -894,6 +904,16 @@ public class PlayerComponent : Subject
     {
         _hitParticleEmission.enabled = false;
     }
+
+    public void ResetParalisis()
+    {
+        paralized = false;
+    }
+
+    public void ResetParryList()
+    {
+        parriedEnemies.Clear();
+    }
     #endregion
 
     #region GetCurrentStats
@@ -936,6 +956,11 @@ public class PlayerComponent : Subject
     {
         return isNotKilling;
     }
+
+    public List<GameObject> GetParriedEnemies()
+    {
+        return parriedEnemies;
+    }
     #endregion
 
     #region SetStats
@@ -947,6 +972,50 @@ public class PlayerComponent : Subject
     public void SetDamage(Vector2 damage)
     {
         attackDamage = damage;
+    }
+
+    public void SetParalisisStatus(bool status, float reset)
+    {
+        paralized = status;
+        Invoke("ResetParalisis", reset);
+    }
+
+    public void AddEnemyToParryList(GameObject enemy)
+    {
+        parriedEnemies.Add(enemy);
+
+        Invoker.InvokeDelayed(ResetParryList, 0.3f);
+    }
+
+    public void SetCanAttack(bool status)
+    {
+        canAttack = status;
+    }
+
+    public void SetRollQuantity(bool status, int value)
+    {
+        finiteRolling = status;
+        rollAmmount = value;
+    }
+
+    public void SetMoneda(bool value)
+    {
+        monedaActive = value;
+    }
+
+    public void MonedaUseItem(bool value)
+    {
+        if (monedaActive)
+        {
+            if (value)
+            {
+                inventory.UseItem();
+            }
+            else
+            {
+                inventory.DeleteItem();
+            }
+        }
     }
     #endregion
 

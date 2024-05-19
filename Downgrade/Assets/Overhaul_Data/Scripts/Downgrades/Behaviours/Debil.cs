@@ -9,7 +9,7 @@ public class Debil : DowngradeCard
     public float time = 1f;
     public override void CardEffect()
     {
-        DowngradeSystem.Instance.SetWeaknessDg(damageAmmount, time, dgIcon);
+        DowngradeSystem.Instance.SetDebilDg(damageAmmount, time, dgIcon);
     }
 }
 

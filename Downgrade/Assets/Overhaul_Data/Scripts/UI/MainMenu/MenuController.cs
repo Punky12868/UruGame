@@ -1,11 +1,18 @@
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using System.Collections;
 using DG.Tweening;
+using Rewired;
 using System;
+using UnityEngine.EventSystems;
 
 public class MenuController : MonoBehaviour
 {
+    #region Variables
+
+    Player input;
+
     [SerializeField] private Transform target;
     [SerializeField] private Canvas currentCanvas;
     [SerializeField] private Button firstSelectedButton;
@@ -13,36 +20,60 @@ public class MenuController : MonoBehaviour
     [SerializeField] private float duration = 1;
     [SerializeField] private Ease easeType = Ease.InOutExpo;
 
+    private Button currentSelectedButton;
     private Button SelectedButton;
     private Vector3 targetPos;
     private Vector3 targetRot;
+    private bool onInputCooldown = false;
 
-    [SerializeField] private Stack<MenuHistory> menuHistory = new Stack<MenuHistory>();
+    private List<MenuHistory> menuHistory = new List<MenuHistory>();
+
+    [HideInInspector] public event Action OnSaveHistory;
+    [HideInInspector] public event Action OnLoadHistory;
+
+    #endregion
+
+    #region Unity Methods
 
     private void Awake()
     {
         if (target == null || currentCanvas == null || firstSelectedButton == null) this.enabled = false;
 
+        input = ReInput.players.GetPlayer(0);
         DeactivateAllButtons();
 
         SelectedButton = firstSelectedButton;
+        targetPos = target.position;
+        targetRot = target.rotation.eulerAngles;
+
         SaveHistory();
     }
 
+    private void Update() 
+    { 
+        if (input.GetButtonDown("Cancel") && !onInputCooldown) LoadHistory();
+
+        GameObject selectedGameObject = EventSystem.current.currentSelectedGameObject;
+        if (selectedGameObject != null && selectedGameObject.GetComponent<Button>() != null && selectedGameObject.GetComponent<Button>() != currentSelectedButton)
+        {
+            currentSelectedButton = selectedGameObject.GetComponent<Button>();
+        }
+    }
+
+    #endregion
+
+    #region Buttons Behaviours
+
     public void GetNewCanvas(Canvas newCanvas)
     {
+        if (newCanvas == null || currentCanvas == newCanvas) return;
+
         Button[] oldCanvasButtons = currentCanvas.GetComponentsInChildren<Button>();
         Button[] newCanvasButtons = newCanvas.GetComponentsInChildren<Button>();
 
-        foreach (Button button in oldCanvasButtons)
-        {
-            button.interactable = false;
-        }
+        foreach (Button button in oldCanvasButtons) button.interactable = false;
 
-        foreach (Button button in newCanvasButtons)
-        {
-            button.interactable = true;
-        }
+        foreach (Button button in newCanvasButtons) if (!button.transform.GetComponentInParent<Slider>()) button.interactable = true;
 
         currentCanvas = newCanvas;
     }
@@ -53,53 +84,52 @@ public class MenuController : MonoBehaviour
         Invoke("InvokeButtonSelection", duration);
     }
 
+    public void SelectButtonWithoutCooldown(Button button)
+    {
+        SelectedButton = button;
+        Invoke("InvokeButtonSelection", 0.1f);
+    }
+
     public void GetNewPos(Transform pos)
     {
+        if (pos == null || target.position == pos.position && target.rotation == pos.rotation) return;
+
         target.DOMove(pos.position, duration).SetEase(easeType);
         target.DORotate(pos.rotation.eulerAngles, duration).SetEase(easeType);
 
         targetPos = pos.position;
         targetRot = pos.rotation.eulerAngles;
+
+        onInputCooldown = true;
+        Invoke("InvokeInputCooldown", duration);
     }
 
-    public void GetNewPosFromHistory(Vector3 pos, Vector3 rot)
-    {
-        target.DOMove(pos, duration).SetEase(easeType);
-        target.DORotate(rot, duration).SetEase(easeType);
+    #endregion
 
-        targetPos = pos;
-        targetRot = rot;
-    }
-
-    private void InvokeButtonSelection()
-    {
-        SelectedButton.Select();
-    }
-
-    #region LIFO History
+    #region Lists History
 
     public void SaveHistory()
     {
-        MenuHistory history = new MenuHistory
-        {
-            canvas = currentCanvas,
-            button = SelectedButton,
-            pos = targetPos,
-            rot = targetRot
-        };
+        MenuHistory history = new MenuHistory();
+        history.canvas = currentCanvas;
+        history.button = currentSelectedButton;
+        history.pos = targetPos;
+        history.rot = targetRot;
 
-        menuHistory.Push(history);
+        menuHistory.Add(history);
+        OnSaveHistory?.Invoke();
     }
 
     public void LoadHistory()
     {
-        if (menuHistory.Count > 0)
+        if (menuHistory.Count > 1)
         {
-            MenuHistory history = menuHistory.Pop();
+            GetNewCanvas(menuHistory[menuHistory.Count - 2].canvas);
+            SelectButtonWithoutCooldown(menuHistory[menuHistory.Count - 1].button);
+            GetNewPosFromHistory(menuHistory[menuHistory.Count - 2].pos, menuHistory[menuHistory.Count - 2].rot);
 
-            GetNewCanvas(history.canvas);
-            SelectButton(history.button);
-            GetNewPosFromHistory(history.pos, history.rot);
+            menuHistory.RemoveAt(menuHistory.Count - 1);
+            OnLoadHistory?.Invoke();
         }
     }
 
@@ -107,19 +137,31 @@ public class MenuController : MonoBehaviour
 
     #region Utility
 
+    private void GetNewPosFromHistory(Vector3 pos, Vector3 rot)
+    {
+        target.DOMove(pos, duration).SetEase(easeType);
+        target.DORotate(rot, duration).SetEase(easeType);
+
+        targetPos = pos;
+        targetRot = rot;
+
+        onInputCooldown = true;
+        Invoke("InvokeInputCooldown", duration);
+    }
+
     private void DeactivateAllButtons()
     {
         Button[] buttons = FindObjectsOfType<Button>();
-        for (int i = 0; i < buttons.Length; i++)
-        {
-            if (buttons[i].transform.parent == currentCanvas.transform) continue;
-            buttons[i].interactable = false;
-        }
+        for (int i = 0; i < buttons.Length; i++) if (buttons[i].transform.GetComponentInParent<Canvas>() != currentCanvas) buttons[i].interactable = false;
     }
+
+    private void InvokeButtonSelection() {SelectedButton.Select();}
+    private void InvokeInputCooldown() {onInputCooldown = false;}
 
     #endregion
 }
 
+#region Serializable Classes
 [Serializable]
 public class MenuHistory
 {
@@ -128,3 +170,4 @@ public class MenuHistory
     public Vector3 pos;
     public Vector3 rot;
 }
+#endregion
