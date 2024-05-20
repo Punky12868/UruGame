@@ -8,15 +8,11 @@ public class PlayerInventory : MonoBehaviour
     [SerializeField] Sprite nullIcon;
     [SerializeField] float throwForce;
 
-    public void AddItem(GameObject addedItem)
-    {
-        item = addedItem;
-    }
+    public void AddItem(GameObject addedItem) {item = addedItem;}
 
     public void DropItem()
     {
-        if (item == null)
-            return;
+        if (item == null) return;
 
         Instantiate(item, transform.position, Quaternion.identity);
         GetComponent<PlayerInteraction>().SetPickUp();
@@ -26,8 +22,7 @@ public class PlayerInventory : MonoBehaviour
 
     public void UseItem()
     {
-        if (item == null)
-            return;
+        if (item == null) return;
 
         switch (item.GetComponent<Item>().itemType)
         {
@@ -44,14 +39,14 @@ public class PlayerInventory : MonoBehaviour
 
     private void UseHealthItem()
     {
-        GetComponent<PlayerComponent>().GetHealth(item.GetComponent<Item>().GetValue());
+        GetComponent<PlayerControllerOverhaul>().GainHealthProxy(item.GetComponent<Item>().GetValue());
         FindObjectOfType<PlayerUI>().SetItemIcon(nullIcon);
         item = null;
     }
 
     private void UseStaminaItem()
     {
-        GetComponent<PlayerComponent>().GetStamina(item.GetComponent<Item>().GetValue());
+        GetComponent<PlayerControllerOverhaul>().GainStaminaProxy(item.GetComponent<Item>().GetValue());
         FindObjectOfType<PlayerUI>().SetItemIcon(nullIcon);
         item = null;
     }
@@ -62,8 +57,5 @@ public class PlayerInventory : MonoBehaviour
         item = null;
     }
 
-    public bool HasItem()
-    {
-        return item != null;
-    }
+    public bool HasItem() {return item != null;}
 }

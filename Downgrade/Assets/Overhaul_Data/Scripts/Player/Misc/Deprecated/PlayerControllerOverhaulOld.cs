@@ -7,7 +7,7 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerInteraction))]
 [RequireComponent(typeof(PlayerUI))]
 
-public class PlayerComponent : Subject
+public class PlayerControllerOverhaulOld : Subject
 {
     #region Variables
     [HideInInspector] public Player input;
@@ -652,8 +652,6 @@ public class PlayerComponent : Subject
             NotifyPlayerObservers(AllPlayerActions.LowHealth);
         }
     }
-
-    
 
     public void Die()
     {

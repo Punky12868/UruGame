@@ -230,24 +230,24 @@ public class BossBase : Subject, IAnimController
         {
             if (hitCollider.CompareTag(playerTag))
             {
-                if (hitCollider.GetComponent<PlayerComponent>().GetPlayerState() == "Parry")
+                if (hitCollider.GetComponent<PlayerControllerOverhaul>().GetPlayerState() == "Parry")
                 {
-                    float dotProd = Vector3.Dot(hitCollider.GetComponent<PlayerComponent>().GetLastDirection(), targetDir);
+                    float dotProd = Vector3.Dot(hitCollider.GetComponent<PlayerControllerOverhaul>().GetLastDirection(), targetDir);
                     if (dotProd <= -0.45f && dotProd >= -1)
                     {
-                        hitCollider.GetComponent<PlayerComponent>().GetParryReward(false, true);
-                        hitCollider.GetComponent<PlayerComponent>().TakeDamage(0, parryKnockback, -targetDir);
+                        hitCollider.GetComponent<PlayerControllerOverhaul>().GetParryRewardProxy(false, true);
+                        hitCollider.GetComponent<PlayerControllerOverhaul>().TakeDamageProxy(0, parryKnockback, -targetDir);
                         Debug.Log("Player parried hit");
                     }
                     else
                     {
-                        hitCollider.GetComponent<PlayerComponent>().TakeDamage(attackdamage, attackKnockback, -targetDir);
+                        hitCollider.GetComponent<PlayerControllerOverhaul>().TakeDamageProxy(attackdamage, attackKnockback, -targetDir);
                         Debug.Log("Player normal hit - Failed Parry");
                     }
                 }
                 else
                 {
-                    hitCollider.GetComponent<PlayerComponent>().TakeDamage(attackdamage, attackKnockback, -targetDir);
+                    hitCollider.GetComponent<PlayerControllerOverhaul>().TakeDamageProxy(attackdamage, attackKnockback, -targetDir);
                     Debug.Log("Player normal hit");
                 }
 

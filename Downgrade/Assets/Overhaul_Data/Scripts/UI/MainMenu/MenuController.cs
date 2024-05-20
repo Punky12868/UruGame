@@ -100,8 +100,7 @@ public class MenuController : MonoBehaviour
         targetPos = pos.position;
         targetRot = pos.rotation.eulerAngles;
 
-        onInputCooldown = true;
-        Invoke("InvokeInputCooldown", duration);
+        InvokeMethods();
     }
 
     #endregion
@@ -129,6 +128,7 @@ public class MenuController : MonoBehaviour
             GetNewPosFromHistory(menuHistory[menuHistory.Count - 2].pos, menuHistory[menuHistory.Count - 2].rot);
 
             menuHistory.RemoveAt(menuHistory.Count - 1);
+            
             OnLoadHistory?.Invoke();
         }
     }
@@ -145,8 +145,7 @@ public class MenuController : MonoBehaviour
         targetPos = pos;
         targetRot = rot;
 
-        onInputCooldown = true;
-        Invoke("InvokeInputCooldown", duration);
+        InvokeMethods();
     }
 
     private void DeactivateAllButtons()
@@ -155,8 +154,16 @@ public class MenuController : MonoBehaviour
         for (int i = 0; i < buttons.Length; i++) if (buttons[i].transform.GetComponentInParent<Canvas>() != currentCanvas) buttons[i].interactable = false;
     }
 
+    private void InvokeMethods()
+    {
+        onInputCooldown = true;
+        Invoke("InvokeInputCooldown", duration);
+        Invoke("InvokeButtonDeactivation", 0.1f);
+    }
+
     private void InvokeButtonSelection() {SelectedButton.Select();}
     private void InvokeInputCooldown() {onInputCooldown = false;}
+    private void InvokeButtonDeactivation() {DeactivateAllButtons();}
 
     #endregion
 }

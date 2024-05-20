@@ -60,8 +60,8 @@ public class DowngradeSystem : MonoBehaviour, IObserver
 
     private void SetPLayerStoredStats()
     {
-        stored_PlayerSpeed = player.GetComponent<PlayerComponent>().GetSpeed();
-        stored_PlayerDamage = player.GetComponent<PlayerComponent>().GetDamage();
+        stored_PlayerSpeed = player.GetComponent<PlayerControllerOverhaul>().GetSpeed();
+        stored_PlayerDamage = player.GetComponent<PlayerControllerOverhaul>().GetDamage();
     }
 
     public void SetEnemy(Subject enemy)
@@ -142,7 +142,7 @@ public class DowngradeSystem : MonoBehaviour, IObserver
             }
             else
             {
-                FindObjectOfType<PlayerComponent>().SetDamage(stored_PlayerDamage);
+                FindObjectOfType<PlayerControllerOverhaul>().SetDamage(stored_PlayerDamage);
             }
         }
     }
@@ -156,14 +156,14 @@ public class DowngradeSystem : MonoBehaviour, IObserver
             case SelectedDowngrade.Stamina:
                 if (actions == AllPlayerActions.useAbility)
                 {
-                    FindObjectOfType<PlayerComponent>().UseStamina(staminaLossAmmount);
+                    FindObjectOfType<PlayerControllerOverhaul>().UseStamina(staminaLossAmmount);
                     Debug.Log("StaminaUsed");
                 }
                 break;
             case SelectedDowngrade.Slime:
                 if (actions == AllPlayerActions.Dodge)
                 {
-                    FindObjectOfType<PlayerComponent>().SetSpeed(fatrollSpeedAmmount);
+                    FindObjectOfType<PlayerControllerOverhaul>().SetSpeed(fatrollSpeedAmmount);
                     Invoke("ResetFatRoll", fatrollTime);
                     Debug.Log("Fatroll");
                 }
@@ -171,9 +171,9 @@ public class DowngradeSystem : MonoBehaviour, IObserver
             case SelectedDowngrade.Rodilla:
                 if (actions == AllPlayerActions.LowStamina)
                 {
-                    if (FindObjectOfType<PlayerComponent>().GetStamina() <= asthmaStaminaThresshold)
+                    if (FindObjectOfType<PlayerControllerOverhaul>().GetStamina() <= asthmaStaminaThresshold)
                     {
-                        FindObjectOfType<PlayerComponent>().TakeDamage(asthmaHealthLossPercentage);
+                        FindObjectOfType<PlayerControllerOverhaul>().TakeDamageProxy(asthmaHealthLossPercentage);
                         Debug.Log("Asthma");
                     }
                 }
@@ -181,7 +181,7 @@ public class DowngradeSystem : MonoBehaviour, IObserver
             case SelectedDowngrade.Paralisis:
                 if (actions == AllPlayerActions.SuccesfullParry)
                 {
-                    FindObjectOfType<PlayerComponent>().SetParalisisStatus(true, paralysisTime);
+                    FindObjectOfType<PlayerControllerOverhaul>().SetParalisisStatus(true, paralysisTime);
 
                     EnemyBase[] enemyBases = FindObjectsOfType<EnemyBase>();
                     foreach (EnemyBase enemy in enemyBases)
@@ -195,7 +195,7 @@ public class DowngradeSystem : MonoBehaviour, IObserver
             case SelectedDowngrade.Moneda:
                 if (actions == AllPlayerActions.Start)
                 {
-                    FindObjectOfType<PlayerComponent>().SetMoneda(true);
+                    FindObjectOfType<PlayerControllerOverhaul>().SetMoneda(true);
                     Debug.Log("Moneda Active");
                 }
 
@@ -204,13 +204,13 @@ public class DowngradeSystem : MonoBehaviour, IObserver
                     // 50% chance to take damage
                     if (Random.Range(0, 2) == 0)
                     {
-                        FindObjectOfType<PlayerComponent>().TakeDamage(badLuckHealthLossAmmount);
-                        FindObjectOfType<PlayerComponent>().MonedaUseItem(false);
+                        FindObjectOfType<PlayerControllerOverhaul>().TakeDamageProxy(badLuckHealthLossAmmount);
+                        FindObjectOfType<PlayerControllerOverhaul>().MonedaUseItem(false);
                         Debug.Log("BadLuck");
                     }
                     else
                     {
-                        FindObjectOfType<PlayerComponent>().MonedaUseItem(true);
+                        FindObjectOfType<PlayerControllerOverhaul>().MonedaUseItem(true);
                     }
                 }
                 break;
@@ -229,7 +229,7 @@ public class DowngradeSystem : MonoBehaviour, IObserver
             case SelectedDowngrade.Debil:
                 if (actions == AllPlayerActions.KilledEnemy)
                 {
-                    FindObjectOfType<PlayerComponent>().SetDamage(weaknessDamageAmmount);
+                    FindObjectOfType<PlayerControllerOverhaul>().SetDamage(weaknessDamageAmmount);
                     weaknessTime = 0;
                     Debug.Log("Weakness");
                 }
@@ -238,14 +238,14 @@ public class DowngradeSystem : MonoBehaviour, IObserver
                 if (actions == AllPlayerActions.Dodge)
                 {
                     onSwitch = !onSwitch;
-                    FindObjectOfType<PlayerComponent>().SetCanAttack(onSwitch);
+                    FindObjectOfType<PlayerControllerOverhaul>().SetCanAttack(onSwitch);
                     Debug.Log("Attack is: " + onSwitch);
                 }
                 break;
             case SelectedDowngrade.Dados:
                 if (actions == AllPlayerActions.Start)
                 {
-                    FindObjectOfType<PlayerComponent>().SetRollQuantity(true, diceRolls);
+                    FindObjectOfType<PlayerControllerOverhaul>().SetRollQuantity(true, diceRolls);
                     Debug.Log("DiceRolls");
                 }
                 break;
@@ -349,7 +349,7 @@ public class DowngradeSystem : MonoBehaviour, IObserver
     #region Cooldown Invoke Values
     public void ResetFatRoll()
     {
-        FindObjectOfType<PlayerComponent>().SetSpeed(stored_PlayerSpeed);
+        FindObjectOfType<PlayerControllerOverhaul>().SetSpeed(stored_PlayerSpeed);
     }
     #endregion
 }

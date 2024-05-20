@@ -45,17 +45,20 @@ public class ProjectileLogic : MonoBehaviour
     {
         if (other.CompareTag("Player") && !isParried)
         {
-            if (canBeParried && other.GetComponent<PlayerComponent>().GetPlayerState() == "Parry")
+            if (canBeParried && other.GetComponent<PlayerControllerOverhaul>().GetPlayerState() == "Parry")
             {
                 direction *= -1;
                 isParried = true;
                 originalEnemy.GetComponent<EnemyBase>().PlaySound(parrySounds);
-                other.GetComponent<PlayerComponent>().GetParryReward(false, false, true);
+                other.GetComponent<PlayerControllerOverhaul>().GetParryRewardProxy(false, false, true);
             }
             else
             {
-                other.GetComponent<PlayerComponent>().TakeDamage(damage, knockbackForce, transform.position);
-                Destroy(gameObject);
+                if (!other.GetComponent<PlayerControllerOverhaul>().GetImmunity())
+                {
+                    other.GetComponent<PlayerControllerOverhaul>().TakeDamageProxy(damage, knockbackForce, -direction);
+                    Destroy(gameObject);
+                }
             }
             
             

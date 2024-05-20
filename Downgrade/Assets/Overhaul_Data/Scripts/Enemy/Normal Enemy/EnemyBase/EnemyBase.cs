@@ -403,24 +403,24 @@ public class EnemyBase : Subject
         {
             if (hitCollider.CompareTag("Player"))
             {
-                if (hitCollider.GetComponent<PlayerComponent>().GetPlayerState() == "Parry" && canBeParried)
+                if (hitCollider.GetComponent<PlayerControllerOverhaul>().GetPlayerState() == "Parry" && canBeParried)
                 {
-                    if (Vector3.Dot(hitCollider.GetComponent<PlayerComponent>().GetLastDirection(), targetDir) <= -0.5f && Vector3.Dot(hitCollider.GetComponent<PlayerComponent>().GetLastDirection(), targetDir) >= -1)
+                    if (Vector3.Dot(hitCollider.GetComponent<PlayerControllerOverhaul>().GetLastDirection(), targetDir) <= -0.5f && Vector3.Dot(hitCollider.GetComponent<PlayerControllerOverhaul>().GetLastDirection(), targetDir) >= -1)
                     {
                         ParriedEnemy(parryStunTime);
-                        hitCollider.GetComponent<PlayerComponent>().GetParryReward(isBigEnemy, false);
-                        hitCollider.GetComponent<PlayerComponent>().AddEnemyToParryList(this.gameObject);
+                        hitCollider.GetComponent<PlayerControllerOverhaul>().GetParryRewardProxy(isBigEnemy, false);
+                        //hitCollider.GetComponent<PlayerControllerOverhaul>().AddEnemyToParryList(this.gameObject);
                         Debug.Log("Player parried hit");
                     }
                     else
                     {
-                        hitCollider.GetComponent<PlayerComponent>().TakeDamage(normalAttackdamage, normalAttackKnockback, -targetDir);
+                        hitCollider.GetComponent<PlayerControllerOverhaul>().TakeDamageProxy(normalAttackdamage, normalAttackKnockback, -targetDir);
                         Debug.Log("Player normal hit - Failed Parry");
                     }
                 }
                 else
                 {
-                    hitCollider.GetComponent<PlayerComponent>().TakeDamage(normalAttackdamage, normalAttackKnockback, -targetDir);
+                    hitCollider.GetComponent<PlayerControllerOverhaul>().TakeDamageProxy(normalAttackdamage, normalAttackKnockback, -targetDir);
                     Debug.Log("Player normal hit");
                 }
 
@@ -449,25 +449,25 @@ public class EnemyBase : Subject
         {
             if (hitCollider.CompareTag("Player"))
             {
-                if (hitCollider.GetComponent<PlayerComponent>().GetPlayerState() == "Parry" && canBeParried && canParryChargeAttack)
+                if (hitCollider.GetComponent<PlayerControllerOverhaul>().GetPlayerState() == "Parry" && canBeParried && canParryChargeAttack)
                 {
                     // dot product of the player direction and the enemy direction, if the player is facing the enemy, parry the charge attack
-                    if (Vector3.Dot(hitCollider.GetComponent<PlayerComponent>().GetLastDirection(), targetDir) > 0.5f)
+                    if (Vector3.Dot(hitCollider.GetComponent<PlayerControllerOverhaul>().GetLastDirection(), targetDir) > 0.5f)
                     {
                         ParriedEnemy(parryStunTime);
-                        hitCollider.GetComponent<PlayerComponent>().GetParryReward(isBigEnemy, true);
-                        hitCollider.GetComponent<PlayerComponent>().AddEnemyToParryList(this.gameObject);
+                        hitCollider.GetComponent<PlayerControllerOverhaul>().GetParryRewardProxy(isBigEnemy, true);
+                        //hitCollider.GetComponent<PlayerControllerOverhaul>().AddEnemyToParryList(this.gameObject);
                         Debug.Log("Player parried charged hit");
                     }
                     else
                     {
-                        hitCollider.GetComponent<PlayerComponent>().TakeDamage(chargeAttackDamage, chargeAttackKnockback, -targetDir);
+                        hitCollider.GetComponent<PlayerControllerOverhaul>().TakeDamageProxy(chargeAttackDamage, chargeAttackKnockback, -targetDir);
                         Debug.Log("Player normal charged hit - Failed Parry");
                     }
                 }
                 else
                 {
-                    hitCollider.GetComponent<PlayerComponent>().TakeDamage(chargeAttackDamage, chargeAttackKnockback, -targetDir);
+                    hitCollider.GetComponent<PlayerControllerOverhaul>().TakeDamageProxy(chargeAttackDamage, chargeAttackKnockback, -targetDir);
                     Debug.Log("Player normal charged hit");
                 }
 

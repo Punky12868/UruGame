@@ -5,6 +5,7 @@ public enum AllPlayerActions
     End,
     LowHealth,
     Heal,
+    StaminaChanged,
     LowStamina,
     HitEnemy,
     KilledEnemy,
