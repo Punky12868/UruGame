@@ -4103,7 +4103,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.2164359, y: 0.000000029095917, z: -0.000000006450293, w: 0.97629684}
+  m_LocalRotation: {x: 0.2164359, y: -0.000000029095913, z: 0.0000000064502923, w: 0.97629684}
   m_LocalPosition: {x: 0, y: 4.1967, z: -18.839}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -5344,7 +5344,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1332516484}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.2164359, y: 0.000000029095917, z: -0.000000006450293, w: 0.97629684}
+  m_LocalRotation: {x: 0.2164359, y: -0.000000029095913, z: 0.0000000064502923, w: 0.97629684}
   m_LocalPosition: {x: 0, y: 4.1967, z: -18.839}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -7303,7 +7303,7 @@ Transform:
   m_GameObject: {fileID: 1847309036}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.70697975, z: -0, w: 0.70723385}
-  m_LocalPosition: {x: 0, y: -0.36, z: 1.37}
+  m_LocalPosition: {x: 0, y: -0.39, z: 1.37}
   m_LocalScale: {x: 3.443226, y: 0.34432265, z: 3.443226}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7953,6 +7953,8 @@ MonoBehaviour:
   hitboxCenter: {fileID: 3981577376919409178}
   offset: 0.3
   canBeStaggered: 0
+  abilityCooldown: 3
+  abilityDamage: {x: 25, y: 35}
   healthBigEnemyReward: 5
   healthBossReward: 10
   staminaNormalReward: 25
@@ -7966,6 +7968,7 @@ MonoBehaviour:
   attackClips:
   - {fileID: 8300000, guid: 0b43f3a45f0340b41a94eee9b85514d2, type: 3}
   - {fileID: 8300000, guid: ee3290ee18f78424ea6ea29282823cbf, type: 3}
+  abilityClips: []
   rollClips:
   - {fileID: 8300000, guid: 7ff529287dbc3204c913884a2435dedb, type: 3}
   - {fileID: 8300000, guid: f6a78d1fe8b97a0419e26ef34997be3f, type: 3}
@@ -13538,6 +13541,8 @@ MonoBehaviour:
               m_BoolArgument: 0
             m_CallState: 2
   - animClip: {fileID: 7400000, guid: 78a107d9712b7eb4fa7a2c7b5be07de7, type: 2}
+    invokableEvents: []
+  - animClip: {fileID: 7400000, guid: e857112e277cc304cb78083607fb0e54, type: 2}
     invokableEvents: []
 --- !u!1 &3536429392049860948
 GameObject:

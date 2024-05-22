@@ -38,6 +38,10 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     [SerializeField] private float offset = 0.3f;
     [SerializeField] private bool canBeStaggered = false;
 
+    [Header("Ability")]
+    [SerializeField] private float abilityCooldown = 3f;
+    [SerializeField] private Vector2 abilityDamage = new Vector2(25f, 35f);
+
     [Header("Rewards")]
     [SerializeField] private float healthBigEnemyReward = 5f;
     [SerializeField] private float healthBossReward = 10f;
@@ -60,6 +64,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
 
     [Header("AudioClips")]
     [SerializeField] private AudioClip[] attackClips;
+    [SerializeField] private AudioClip[] abilityClips;
     [SerializeField] private AudioClip[] rollClips;
     [SerializeField] private AudioClip[] hitClips;
     [SerializeField] private AudioClip[] deathClips;
@@ -78,30 +83,31 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     [SerializeField] private Color attackHitboxColor = new Color(1, 0, 0, 1);
 
     #region States
+    private bool isDead = false;
     private bool isFacingLeft;
-    private bool isOnCooldown = false;
-    private bool canCombo = false;
-    private bool isComboAttack = false;
-    private bool drawingAttackHitbox = false;
-    private bool canMove = true;
-    private bool canBeDamaged = true;
     private bool isAttacking = false;
+    private bool isComboAttack = false;
     private bool isRolling = false;
-    private bool finiteRolling = false;
-    private int rollAmmount = 999;
+    private bool isOnCooldown = false;
+    private bool isAbilityOnCooldown = false;
+    private bool canMove = true;
     private bool canAttack = true;
-    private bool monedaActive = false;
-    private bool isNotHitting = false;
-    private bool isNotKilling = false;
-    private float notHittingTime;
-    private float notKillingTime;
+    private bool canCombo = false;
+    private bool canBeDamaged = true;
     private bool wasHitNotified;
     private bool wasKilledNotified;
+    private float notHittingTime;
     private float notHittingTimeThreshold;
+    private float notKillingTime;
     private float notKillingTimeThreshold;
+    private bool isNotHitting = false;
+    private bool isNotKilling = false;
+    private bool monedaActive = false;
     private bool wasParryPressed = false;
     private bool paralized = false;
-    private bool isDead = false;
+    private bool finiteRolling = false;
+    private int rollAmmount = 999;
+    private bool drawingAttackHitbox = false;
     private string playerState;
     #endregion
 
@@ -188,6 +194,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
         if (input.GetButtonDown("Roll")) Roll();
         if (input.GetButtonDown("Use Item")) UseItem();
         if (input.GetButtonDown("Drop Item")) DropItem();
+        if (input.GetButtonDown("Use Ability")) UseAbility();
     }
     #endregion
 
@@ -231,60 +238,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
         UseStamina(staminaUsageAttack);
         //rb.AddForce(lastDirection.normalized * attackForce, ForceMode.Impulse);
         PlaySound(attackClips);
-        Collider[] hitColliders = Physics.OverlapBox(hitboxCenter.position, hitboxSize, Quaternion.LookRotation(lastDirection));
-
-        #region Foreach Collider
-        foreach (Collider hit in hitColliders)
-        {
-            if (hit.CompareTag("Enemy"))
-            {
-                Debug.Log("Hit");
-
-                int damage = Random.Range((int)attackDamage.x, (int)attackDamage.y + 1);
-
-                if (hit.GetComponent<EnemyBase>())
-                {
-                    if (hit.GetComponent<EnemyBase>().currentHealth - damage <= 0)
-                    {
-                        ResetHittingKilling("Kill");
-                        NotifyPlayerObservers(AllPlayerActions.KilledEnemy);
-                    }
-                    else
-                    {
-                        ResetHittingKilling("Hit");
-                        NotifyPlayerObservers(AllPlayerActions.HitEnemy);
-                    }
-
-                    hit.GetComponent<EnemyBase>().TakeDamage(damage);
-                }
-                else if (hit.GetComponent<BossBase>())
-                {
-                    if (hit.GetComponent<BossBase>().GetCurrentHealth() - damage <= 0)
-                    {
-                        if (hit.GetComponent<BossBase>().GetCurrentFase() < hit.GetComponent<BossBase>().GetAllFases())
-                        {
-                            ResetHittingKilling("Kill");
-                            NotifyPlayerObservers(AllPlayerActions.MidBoss);
-                        }
-                        else
-                        {
-                            ResetHittingKilling("Kill");
-                            NotifyPlayerObservers(AllPlayerActions.EndBoss);
-                        }
-                    }
-                    else
-                    {
-                        ResetHittingKilling("Hit");
-                        NotifyPlayerObservers(AllPlayerActions.HitBoss);
-                    }
-
-                    hit.GetComponent<BossBase>().TakeDamage(damage);
-                }
-            }
-
-            if (hit.CompareTag("Destructible")) hit.GetComponent<Prop>().OnHit();
-        }
-        #endregion
+        HitboxCall(hitboxCenter.position, hitboxSize);
     }
 
     private void NotHittingKillingTimer()
@@ -348,6 +302,20 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     }
     #endregion
 
+    #region Ability
+    private void UseAbility()
+    {
+        if (isAbilityOnCooldown) { NotifyPlayerObservers(AllPlayerActions.useAbilityOnCooldown); return; }
+
+        PlayAnimation(7, true);
+        PlaySound(abilityClips);
+        isAbilityOnCooldown = true;
+        Invoker.InvokeDelayed(ResetAbilityCooldown, abilityCooldown);
+
+        NotifyPlayerObservers(AllPlayerActions.useAbility);
+    }
+    #endregion
+
     #region Item
     #region Use Item
     private void UseItem()
@@ -373,6 +341,70 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     #endregion
 
     #region System Logic
+
+    #region AttackHitbox
+
+    private void HitboxCall(Vector3 pos, Vector3 size)
+    {
+        Collider[] hitColliders = Physics.OverlapBox(pos, size, Quaternion.LookRotation(lastDirection));
+        foreach (Collider hit in hitColliders)
+        {
+            if (hit.CompareTag("Enemy"))
+            {
+                Debug.Log("Hit");
+
+                int damage = Random.Range((int)attackDamage.x, (int)attackDamage.y + 1);
+                if (hit.GetComponent<EnemyBase>()) HitEnemy(hit, damage);
+                else if (hit.GetComponent<BossBase>()) HitBoss(hit, damage);
+            }
+
+            if (hit.CompareTag("Destructible")) hit.GetComponent<Prop>().OnHit();
+        }
+    }
+
+    private void HitEnemy(Collider hit, int damage)
+    {
+        Debug.Log("Hit");
+
+        if (hit.GetComponent<EnemyBase>().currentHealth - damage <= 0)
+        {
+            ResetHittingKilling("Kill");
+            NotifyPlayerObservers(AllPlayerActions.KilledEnemy);
+        }
+        else
+        {
+            ResetHittingKilling("Hit");
+            NotifyPlayerObservers(AllPlayerActions.HitEnemy);
+        }
+
+        hit.GetComponent<EnemyBase>().TakeDamage(damage);
+    }
+
+    private void HitBoss(Collider hit, int damage)
+    {
+        if (hit.GetComponent<BossBase>().GetCurrentHealth() - damage <= 0)
+        {
+            if (hit.GetComponent<BossBase>().GetCurrentFase() < hit.GetComponent<BossBase>().GetAllFases())
+            {
+                ResetHittingKilling("Kill");
+                NotifyPlayerObservers(AllPlayerActions.MidBoss);
+            }
+            else
+            {
+                ResetHittingKilling("Kill");
+                NotifyPlayerObservers(AllPlayerActions.EndBoss);
+            }
+        }
+        else
+        {
+            ResetHittingKilling("Hit");
+            NotifyPlayerObservers(AllPlayerActions.HitBoss);
+        }
+
+        hit.GetComponent<BossBase>().TakeDamage(damage);
+    }
+
+    #endregion
 
     #region Reward
     private void GainHealth(float healthReward)
@@ -617,6 +649,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     public void ApplyForce(float value) { rb.AddForce(lastDirection.normalized * value, ForceMode.Impulse); }
     public void SetParryState(bool value) { if (value) playerState = "Parry"; else playerState = ""; }
     public void SetParryPressed(bool value) { wasParryPressed = value; }
+    public void SetAbilityCooldown(bool value) { isAbilityOnCooldown = value; }
 
 
     public void SetParalisisStatus(bool status, float reset)
@@ -653,6 +686,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     public void DisableHitParticles() { _hitParticleEmission.enabled = false;}
     public void DisableParryParticles() { _parryParticleEmission.enabled = false;}
     public void ResetImmunity() { canBeDamaged = true;}
+    public void ResetAbilityCooldown() { isAbilityOnCooldown = false;}
     #endregion
 
     #endregion
