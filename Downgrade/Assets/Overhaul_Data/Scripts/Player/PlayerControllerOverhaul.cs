@@ -19,6 +19,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     [Header("General")]
     [SerializeField] private float health = 100f;
     [SerializeField] private float speed = 2.5f;
+    [SerializeField] private float iFrames = 0.3f;
     [SerializeField] private Vector2 attackDamage = new Vector2(15f, 25f);
     [SerializeField] private AnimationCurve rollSpeed;
     private float currentHealth;
@@ -452,6 +453,8 @@ public class PlayerControllerOverhaul : Subject, IAnimController
             //PlayAnimation(animationIDs[6]);
             PlaySound(hitClips);
             NotifyPlayerObservers(AllPlayerActions.LowHealth);
+            canBeDamaged = false;
+            Invoker.InvokeDelayed(ResetImmunity, iFrames);
         }
     }
 
@@ -649,6 +652,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     public void ResetParalisis() {paralized = false;}
     public void DisableHitParticles() { _hitParticleEmission.enabled = false;}
     public void DisableParryParticles() { _parryParticleEmission.enabled = false;}
+    public void ResetImmunity() { canBeDamaged = true;}
     #endregion
 
     #endregion

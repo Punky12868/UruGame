@@ -8,6 +8,9 @@ public class UIOptionsController : MonoBehaviour
     [SerializeField] private Image toggleImage;
     [SerializeField] private Sprite[] toggleStatusSprites;
 
+    [TextArea]
+    [SerializeField] private string description;
+
     private bool isOn = true;
 
     public void Toggle()
@@ -20,5 +23,10 @@ public class UIOptionsController : MonoBehaviour
     {
         if (value > 0 && slider.value + value > slider.maxValue || value < 0 && slider.value + value < slider.minValue) return;
         slider.value += value;
+    }
+
+    public string GetDescription()
+    {
+        return description;
     }
 }

@@ -56,6 +56,13 @@ public class BossBase : Subject, IAnimController
     [SerializeField] protected int maxOdds;
     [SerializeField] protected int farAttackOdds;
 
+    [Header("Specials")]
+    [SerializeField] protected GameObject spawnable;
+    [SerializeField] protected float specialDamage;
+    [SerializeField] protected float specialKnockback;
+    [SerializeField] protected float lifeTime;
+    [SerializeField] protected float zOffset;
+
     [Header("Hitbox")]
     [SerializeField] protected Transform hitboxCenter;
     [SerializeField] protected Vector3 hitboxSize;
@@ -119,7 +126,8 @@ public class BossBase : Subject, IAnimController
         if (FindObjectOfType<BossUI>()) FindObjectOfType<BossUI>().SetUI(this);
         if (debugDrawCenter == null) debugDrawCenter = this.transform;
 
-        animHolder.GetAnimationController().PlayAnimation(animationIDs[0], null, false);
+        //animHolder.GetAnimationController().PlayAnimation(animationIDs[0], null, false);
+        PlayAnimation(0, false);
         PlaySound(spawnSounds);
 
         NotifyBossesObservers(AllBossActions.Spawned);
@@ -145,24 +153,27 @@ public class BossBase : Subject, IAnimController
 
     protected virtual void Movement()
     {
-        if (!animHolder.GetAnimationController().isAnimationDone || isAttacking || isSummoningObjects || hasQueuedAnimation) return;
+        if (!IsAnimationDone() || isAttacking || isSummoningObjects || hasQueuedAnimation) return;
 
         if (isOnCooldown)
         {
-            animHolder.GetAnimationController().PlayAnimation(animationIDs[1]);
+            //animHolder.GetAnimationController().PlayAnimation(animationIDs[1]);
+            PlayAnimation(1);
             return;
         }
 
         if (TargetDistance() < tooCloseRange)
         {
-            animHolder.GetAnimationController().PlayAnimation(animationIDs[1]);
+            //animHolder.GetAnimationController().PlayAnimation(animationIDs[1]);
+            PlayAnimation(1);
         }
         else if (Vector3.Distance(target.position, transform.position) > tooCloseRange)
         {
             transform.position += targetDir * moveSpeed * Time.deltaTime;
 
             isMoving = true;
-            animHolder.GetAnimationController().PlayAnimation(animationIDs[2]);
+            //animHolder.GetAnimationController().PlayAnimation(animationIDs[2]);
+            PlayAnimation(2);
         }
         else
         {
@@ -176,13 +187,14 @@ public class BossBase : Subject, IAnimController
 
     protected virtual void Attack()
     {
-        if (!animHolder.GetAnimationController().isAnimationDone || isOnCooldown || decidedFarAttack) return;
+        if (!IsAnimationDone() || isOnCooldown || decidedFarAttack) return;
 
         if (TargetDistance() <= closeAttackRange)
         {
             isAttacking = true;
             isOnCooldown = true;
-            animHolder.GetAnimationController().PlayAnimation(animationIDs[3], null, true);
+            //animHolder.GetAnimationController().PlayAnimation(animationIDs[3], null, true);
+            PlayAnimation(3, true);
 
             // animation event for hitbox activation and deactivation
             // animation event to apply force to the rigidbody
@@ -197,8 +209,10 @@ public class BossBase : Subject, IAnimController
                 {
                     isAttacking = true;
                     decidedFarAttack = true;
+                    isOnCooldown = true;
 
-                    animHolder.GetAnimationController().PlayAnimation(animationIDs[3], null, true); // animation for the far attack
+                    //animHolder.GetAnimationController().PlayAnimation(animationIDs[4], null, true); // animation for the far attack
+                    PlayAnimation(4, true);
                     // animation event to instantiate the spikes
                 }
             }
@@ -287,6 +301,17 @@ public class BossBase : Subject, IAnimController
 
     #endregion
 
+    #region Specials
+
+    public void SpawnObjectOnAttack()
+    {
+        GameObject spikes = Instantiate(spawnable, transform.position, Quaternion.identity);
+        //spikes.transform.position += spikes.transform.forward * zOffset;
+        spikes.GetComponent<Spikes>().SetVariables(specialDamage, specialKnockback, lifeTime, lastTargetDir);
+    }
+
+    #endregion
+
     #region Utility
 
     protected virtual void AllUtilityCallback()
@@ -367,7 +392,7 @@ public class BossBase : Subject, IAnimController
 
     protected virtual void FlipPivot()
     {
-        if (!animHolder.GetAnimationController().isAnimationDone || isAttacking || isSummoningObjects || hasQueuedAnimation) return;
+        if (!IsAnimationDone() || isAttacking || isSummoningObjects || hasQueuedAnimation) return;
 
         Vector3 direction = (target.position - transform.position).normalized;
 
@@ -400,6 +425,16 @@ public class BossBase : Subject, IAnimController
     #endregion
 
     #region Animation
+
+    private void PlayAnimation(int index, bool hasExitTime = false, bool bypassExitTime = false, bool canBeBypassed = false)
+    {
+        animHolder.GetAnimationController().PlayAnimation(animationIDs[index], null, hasExitTime, bypassExitTime, canBeBypassed);
+    }
+
+    private bool IsAnimationDone()
+    {
+        return animHolder.GetAnimationController().isAnimationDone;
+    }
 
     public void SetAnimHolder()
     {
@@ -501,7 +536,8 @@ public class BossBase : Subject, IAnimController
 
     public void DrawHitbox()
     {
-        VisualizeBox.DisplayBox(hitboxCenter.position, hitboxSize, Quaternion.LookRotation(lastTargetDir), closeAttackColor);
+        if (lastTargetDir == Vector3.zero) VisualizeBox.DisplayBox(hitboxCenter.position, hitboxSize, Quaternion.identity, closeAttackColor);
+        else VisualizeBox.DisplayBox(hitboxCenter.position, hitboxSize, Quaternion.LookRotation(lastTargetDir), closeAttackColor);
     }
 
     public void DrawWallAvoidance()
