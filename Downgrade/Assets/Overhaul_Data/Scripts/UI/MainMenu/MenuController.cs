@@ -13,6 +13,7 @@ public class MenuController : MonoBehaviour
 
     Player input;
 
+    [SerializeField] private GameObject eventSystem;
     [SerializeField] private Transform target;
     [SerializeField] private Canvas currentCanvas;
     [SerializeField] private Button firstSelectedButton;
@@ -52,7 +53,9 @@ public class MenuController : MonoBehaviour
     private void Update() 
     { 
         if (input.GetButtonDown("Cancel") && !onInputCooldown) LoadHistory();
+        //eventSystem.SetActive(!onInputCooldown);
 
+        if (EventSystem.current == null) return;
         GameObject selectedGameObject = EventSystem.current.currentSelectedGameObject;
         if (selectedGameObject != null && selectedGameObject.GetComponent<Button>() != null && selectedGameObject.GetComponent<Button>() != currentSelectedButton)
         {
@@ -124,9 +127,8 @@ public class MenuController : MonoBehaviour
         if (menuHistory.Count > 1)
         {
             GetNewCanvas(menuHistory[menuHistory.Count - 2].canvas);
-            SelectButtonWithoutCooldown(menuHistory[menuHistory.Count - 1].button);
             GetNewPosFromHistory(menuHistory[menuHistory.Count - 2].pos, menuHistory[menuHistory.Count - 2].rot);
-
+            SelectButtonWithoutCooldown(menuHistory[menuHistory.Count - 1].button);
             menuHistory.RemoveAt(menuHistory.Count - 1);
             
             OnLoadHistory?.Invoke();
@@ -154,15 +156,25 @@ public class MenuController : MonoBehaviour
         for (int i = 0; i < buttons.Length; i++) if (buttons[i].transform.GetComponentInParent<Canvas>() != currentCanvas) buttons[i].interactable = false;
     }
 
+    public Canvas GetCurrentCanvas() { return currentCanvas;}
+
     private void InvokeMethods()
     {
+        if (onInputCooldown)
+        {
+            Invoker.CancelInvoke(InvokeInputCooldown);
+            Invoker.CancelInvoke(InvokeButtonSelection);
+        }
+
         onInputCooldown = true;
-        Invoke("InvokeInputCooldown", duration);
-        Invoke("InvokeButtonDeactivation", 0.1f);
+        eventSystem.SetActive(false);
+        Invoker.InvokeDelayed(InvokeInputCooldown, duration);
+        Invoker.InvokeDelayed(InvokeButtonSelection, duration);
+        Invoker.InvokeDelayed(InvokeButtonDeactivation, 0.1f);
     }
 
     private void InvokeButtonSelection() {SelectedButton.Select();}
-    private void InvokeInputCooldown() {onInputCooldown = false;}
+    private void InvokeInputCooldown() {onInputCooldown = false; eventSystem.SetActive(true); }
     private void InvokeButtonDeactivation() {DeactivateAllButtons();}
 
     #endregion

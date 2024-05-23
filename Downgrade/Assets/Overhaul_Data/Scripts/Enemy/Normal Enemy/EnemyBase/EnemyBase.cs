@@ -309,9 +309,8 @@ public class EnemyBase : Subject
     {
     }
 
-    public virtual void TakeDamage(float damage)
+    public virtual void TakeDamage(float damage, float knockbackForce = 0, Vector3 dir = new Vector3())
     {
-        
     }
 
     public virtual void Death()

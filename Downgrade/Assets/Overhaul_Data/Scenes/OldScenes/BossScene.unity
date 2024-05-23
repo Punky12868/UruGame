@@ -2533,6 +2533,7 @@ GameObject:
   - component: {fileID: 677091407}
   - component: {fileID: 677091406}
   - component: {fileID: 677091405}
+  - component: {fileID: 677091408}
   m_Layer: 5
   m_Name: CanvasInGame_UI
   m_TagString: Untagged
@@ -2631,6 +2632,27 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &677091408
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 677091403}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43035e76479d3534fb73f33143fe4811, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  updateSpeed: 5
+  timeBeforeUpdate: 1
+  lerpMargen: 0.005
+  healthSlider: {fileID: 199340447}
+  healthHitSlider: {fileID: 199969798}
+  staminaSlider: {fileID: 635288427}
+  staminaUsedSlider: {fileID: 1347478274}
+  itemIcon: {fileID: 966044047}
+  dgIcon: {fileID: 728121687}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -7953,8 +7975,11 @@ MonoBehaviour:
   hitboxCenter: {fileID: 3981577376919409178}
   offset: 0.3
   canBeStaggered: 0
-  abilityCooldown: 3
-  abilityDamage: {x: 25, y: 35}
+  abilityPrefab: {fileID: 2858603775167999615, guid: da9b633d9925f464ba12e50e9b1f1f0e, type: 3}
+  abilityCooldown: 5
+  abilityDamage: {x: 5, y: 10}
+  abilityKnockback: 15
+  abilityLifeTime: 2
   healthBigEnemyReward: 5
   healthBossReward: 10
   staminaNormalReward: 25
@@ -7968,7 +7993,8 @@ MonoBehaviour:
   attackClips:
   - {fileID: 8300000, guid: 0b43f3a45f0340b41a94eee9b85514d2, type: 3}
   - {fileID: 8300000, guid: ee3290ee18f78424ea6ea29282823cbf, type: 3}
-  abilityClips: []
+  abilityClips:
+  - {fileID: 8300000, guid: bd5ce0b70f360584c9ac3401dc732556, type: 3}
   rollClips:
   - {fileID: 8300000, guid: 7ff529287dbc3204c913884a2435dedb, type: 3}
   - {fileID: 8300000, guid: f6a78d1fe8b97a0419e26ef34997be3f, type: 3}
@@ -13045,27 +13071,6 @@ MonoBehaviour:
   item: {fileID: 0}
   nullIcon: {fileID: 21300000, guid: 2e1e3f5cac4499b4984f484d15f06cf2, type: 3}
   throwForce: 3
---- !u!114 &2124105165656058976
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5568450289155002775}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43035e76479d3534fb73f33143fe4811, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  updateSpeed: 5
-  timeBeforeUpdate: 1
-  lerpMargen: 0.005
-  healthSlider: {fileID: 199340447}
-  healthHitSlider: {fileID: 199969798}
-  staminaSlider: {fileID: 635288427}
-  staminaUsedSlider: {fileID: 1347478274}
-  itemIcon: {fileID: 966044047}
-  dgIcon: {fileID: 728121687}
 --- !u!33 &2413212510012917446
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -13543,7 +13548,23 @@ MonoBehaviour:
   - animClip: {fileID: 7400000, guid: 78a107d9712b7eb4fa7a2c7b5be07de7, type: 2}
     invokableEvents: []
   - animClip: {fileID: 7400000, guid: e857112e277cc304cb78083607fb0e54, type: 2}
-    invokableEvents: []
+    invokableEvents:
+    - time: 0.2
+      events:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 43977702914329510}
+            m_TargetAssemblyTypeName: PlayerControllerOverhaul, Assembly-CSharp
+            m_MethodName: SpawnAbilityPrefab
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
 --- !u!1 &3536429392049860948
 GameObject:
   m_ObjectHideFlags: 0
@@ -13929,7 +13950,6 @@ GameObject:
   - component: {fileID: 6330397511574377712}
   - component: {fileID: 43977702914329510}
   - component: {fileID: 3444841143416124975}
-  - component: {fileID: 2124105165656058976}
   - component: {fileID: 8919464173713615494}
   - component: {fileID: 1916380874988889641}
   - component: {fileID: 7859071321029927282}

@@ -58,7 +58,7 @@ public class BossBase : Subject, IAnimController
 
     [Header("Specials")]
     [SerializeField] protected GameObject spawnable;
-    [SerializeField] protected float specialDamage;
+    [SerializeField] protected int specialDamage;
     [SerializeField] protected float specialKnockback;
     [SerializeField] protected float lifeTime;
     [SerializeField] protected float zOffset;
@@ -274,15 +274,13 @@ public class BossBase : Subject, IAnimController
 
     #region Take Damage
 
-    public virtual void TakeDamage(float damage)
+    public virtual void TakeDamage(float damage, float knockbackForce = 0, Vector3 dir = new Vector3())
     {
         onHit?.Invoke();
         currentHealth -= damage;
 
-        if (currentHealth <= 0)
-        {
-            Death();
-        }
+        if (currentHealth <= 0) Death();
+        else { if (knockbackForce != 0) rb.AddForce(dir * knockbackForce, ForceMode.Impulse); }
     }
 
     protected virtual void Death()
@@ -290,6 +288,7 @@ public class BossBase : Subject, IAnimController
         if (currentFase < ammountOfFases && ammountOfFases > 1)
         {
             onFaseChange?.Invoke();
+            currentFase++;
             //animHolder.GetAnimationController().PlayAnimation(animationIDs[!], null, true); // 2nd fase anim
         }
         else

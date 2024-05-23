@@ -20,6 +20,8 @@ public class UISelector : MonoBehaviour
 
     private void Update()
     {
+        if (EventSystem.current == null) return;
+
         GameObject selectedGameObject = EventSystem.current.currentSelectedGameObject;
 
         if (selectedGameObject != null && selectedGameObject.GetComponent<Button>() != null)

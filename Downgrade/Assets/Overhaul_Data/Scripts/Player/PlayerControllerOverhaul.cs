@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Rewired;
 
-[RequireComponent(typeof(PlayerInventory))] [RequireComponent(typeof(PlayerInteraction))] [RequireComponent(typeof(PlayerUI))]
+[RequireComponent(typeof(PlayerInventory))] [RequireComponent(typeof(PlayerInteraction))]
 [RequireComponent(typeof(AnimationHolder))] [RequireComponent(typeof(Rigidbody))]
 public class PlayerControllerOverhaul : Subject, IAnimController
 {
@@ -39,8 +39,11 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     [SerializeField] private bool canBeStaggered = false;
 
     [Header("Ability")]
+    [SerializeField] private GameObject abilityPrefab;
     [SerializeField] private float abilityCooldown = 3f;
     [SerializeField] private Vector2 abilityDamage = new Vector2(25f, 35f);
+    [SerializeField] private float abilityKnockback = 10f;
+    [SerializeField] private float abilityLifeTime = 3f;
 
     [Header("Rewards")]
     [SerializeField] private float healthBigEnemyReward = 5f;
@@ -124,7 +127,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
         audioSource = GetComponent<AudioSource>();
         currentHealth = health;
         currentStamina = stamina;
-        GetComponent<PlayerUI>().SetUI();
+        FindObjectOfType<PlayerUI>().SetUI();
         normalVfxTime = -1;
         comboVfxTime = -1;
 
@@ -137,7 +140,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
         NotifyPlayerObservers(AllPlayerActions.Start);
         //NotifyObservers();
     }
-    private void DelayedAwake() {FindObjectOfType<CutOutObject>().AddTarget(transform);}
+    private void DelayedAwake() { FindObjectOfType<CutOutObject>().AddTarget(transform);}
 
     public void Update()
     {
@@ -306,13 +309,20 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     private void UseAbility()
     {
         if (isAbilityOnCooldown) { NotifyPlayerObservers(AllPlayerActions.useAbilityOnCooldown); return; }
-
         PlayAnimation(7, true);
         PlaySound(abilityClips);
         isAbilityOnCooldown = true;
         Invoker.InvokeDelayed(ResetAbilityCooldown, abilityCooldown);
-
         NotifyPlayerObservers(AllPlayerActions.useAbility);
+    }
+
+    public void SpawnAbilityPrefab()
+    {
+        //if (isAbilityOnCooldown) return;
+        Vector3 spawnPos = new Vector3(transform.position.x, -0.05f, transform.position.z);
+        GameObject ability = Instantiate(abilityPrefab, spawnPos, Quaternion.LookRotation(lastDirection));
+        int randomDmg = Random.Range((int)abilityDamage.x, (int)abilityDamage.y + 1);
+        ability.GetComponent<AbilityCell>().SetVariables(randomDmg, abilityKnockback, abilityLifeTime, lastDirection, true, false, false);
     }
     #endregion
 

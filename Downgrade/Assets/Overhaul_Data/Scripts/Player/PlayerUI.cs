@@ -22,7 +22,7 @@ public class PlayerUI : MonoBehaviour
 
     public void SetUI()
     {
-        player = GetComponent<PlayerControllerOverhaul>();
+        player = FindObjectOfType<PlayerControllerOverhaul>();
 
         healthSlider.maxValue = player.GetHealth();
         healthSlider.value = player.GetHealth();

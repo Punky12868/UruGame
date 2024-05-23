@@ -93,7 +93,7 @@ public class RangeEnemyPlaceholder : EnemyBase
         }
     }
 
-    public override void TakeDamage(float damage)
+    public override void TakeDamage(float damage, float knockbackForce = 0, Vector3 dir = new Vector3())
     {
         if (isDead)
             return;
@@ -124,6 +124,7 @@ public class RangeEnemyPlaceholder : EnemyBase
             //HIT ANIMATION
             PlaySound(hitSounds);
             PlayAnimation(animationIDs[6], true/*, false, true*/);
+            if (knockbackForce != 0) rb.AddForce(dir * knockbackForce, ForceMode.Impulse);
         }
     }
 

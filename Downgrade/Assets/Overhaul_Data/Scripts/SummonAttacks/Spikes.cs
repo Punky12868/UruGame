@@ -20,7 +20,7 @@ public class Spikes : MonoBehaviour
 
     private Color hitboxColor;
     private Vector3 direction;
-    private float damage;
+    private int damage;
     private float knockback;
     private float lifeTime;
     private float timer;
@@ -29,7 +29,7 @@ public class Spikes : MonoBehaviour
     private bool lifeTimeReached = true;
     private void ResetLifeTimeReached() { lifeTimeReached = false; }
 
-    public void SetVariables(float damage, float knockback, float lifeTime, Vector3 direction) 
+    public void SetVariables(int damage, float knockback, float lifeTime, Vector3 direction) 
     { 
         this.damage = damage;
         this.knockback = knockback;
@@ -109,10 +109,8 @@ public class Spikes : MonoBehaviour
                 Vector3 crossProduct = Vector3.Cross(transform.forward, directionToPlayer);
                 Vector3 knockbackDirection;
 
-                if (crossProduct.y > 0)
-                    knockbackDirection = (transform.forward + transform.right).normalized;
-                else
-                    knockbackDirection = (transform.forward - transform.right).normalized;
+                if (crossProduct.y > 0) knockbackDirection = (transform.forward + transform.right).normalized;
+                else knockbackDirection = (transform.forward - transform.right).normalized;
 
                 hitCollider.GetComponent<PlayerControllerOverhaul>().TakeDamageProxy(damage, knockback, knockbackDirection);
             }
