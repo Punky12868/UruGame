@@ -7,7 +7,7 @@ public class ChangeCanvas : MonoBehaviour
     [SerializeField] private Transform target; //CVCAM
     [SerializeField] public Canvas currentCanvas;
 
-    private MenuController controller;
+    private MenuControllerJ controller;
     [SerializeField] private float duration = 1;
     [SerializeField] private Ease easeType = Ease.InOutExpo;
 
@@ -16,7 +16,7 @@ public class ChangeCanvas : MonoBehaviour
 
     private void Start()
     {
-        controller = gameObject.GetComponent<MenuController>();
+        controller = gameObject.GetComponent<MenuControllerJ>();
     }
     public void GetNewCanvas(Canvas newCanvas)
     {

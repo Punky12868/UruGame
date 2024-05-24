@@ -102,7 +102,7 @@ public class NarrationSystem : MonoBehaviour, IObserver
                 Debug.Log("Game Ended");
                 break;
             case AllPlayerActions.LowHealth: //
-                if (FindObjectOfType<PlayerComponent>().GetHealth() < lowHealthThreshold && !lowHealthTriggered)
+                if (FindObjectOfType<PlayerControllerOverhaul>().GetHealth() < lowHealthThreshold && !lowHealthTriggered)
                 {
                     lowHealthTriggered = true;
                     PlaySubs(playerLowHealth, playerLowHealthDialog);
@@ -110,7 +110,7 @@ public class NarrationSystem : MonoBehaviour, IObserver
                 }
                 break;
             case AllPlayerActions.LowStamina: //
-                if (FindObjectOfType<PlayerComponent>().GetStamina() < lowStaminaThreshold && !lowStaminaTriggered)
+                if (FindObjectOfType<PlayerControllerOverhaul>().GetStamina() < lowStaminaThreshold && !lowStaminaTriggered)
                 {
                     lowStaminaTriggered = true;
                     PlaySubs(playerLowStamina, playerLowStaminaDialog);
@@ -210,6 +210,10 @@ public class NarrationSystem : MonoBehaviour, IObserver
     }
 
     public void OnEnemyNotify(AllEnemyActions actions)
+    {
+    }
+
+    public void OnBossesNotify(AllBossActions actions)
     {
     }
 }

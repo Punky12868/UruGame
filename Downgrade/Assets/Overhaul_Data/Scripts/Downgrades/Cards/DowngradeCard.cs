@@ -10,6 +10,7 @@ public abstract class DowngradeCard : ScriptableObject
     [Header("Card Art")]
     public Sprite dgIcon;
     public Sprite cardSprite;
+    public Sprite cardSelectedSprite;
     public Sprite cardBackSprite;
 
     [Header("Card Info")]

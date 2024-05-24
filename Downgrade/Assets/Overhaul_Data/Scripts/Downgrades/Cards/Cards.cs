@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using UnityEngine;
 using TMPro;
 using DG.Tweening;
+using UnityEngine.EventSystems;
 
 public class Cards : MonoBehaviour
 {
@@ -32,36 +33,82 @@ public class Cards : MonoBehaviour
 
     [SerializeField] private int cardMusic;
     [SerializeField] private Vector2 wiggleEffect;
+    [SerializeField] private float wiggleEffectMultiplier;
+    [SerializeField] private float growAmmountWhenSelected;
+    [SerializeField] private float growSpeed;
     [SerializeField] private float wiggleResetTime;
     [SerializeField] private Ease easeType;
 
+    [SerializeField] private Ease rotEaseType;
+    [SerializeField] private float rotateCardTimeout;
+    [SerializeField] private Vector2 cardRotationAmmount;
+    [SerializeField] private float cardRotationMultiplier;
+    [SerializeField] private float cardRotationSpeed;
+    [SerializeField] private float cardRotationSpeedMultiplier;
+
     bool wiggle;
+    bool isSelected;
     float customTime;
+    float rotateCardTime;
 
     private void Awake()
     {
         if (cardTextPanel.alpha != 0)
             cardTextPanel.alpha = 0;
+
+        if (growAmmountWhenSelected < 1) growAmmountWhenSelected = 1;
     }
 
     private void Update()
     {
+        isSelected = EventSystem.current.currentSelectedGameObject == cardObject;
+
         if (wiggle)
         {
             customTime += Time.unscaledDeltaTime;
 
             if (customTime >= wiggleResetTime)
             {
-                Vector3 newPos = target + new Vector3(Random.Range(wiggleEffect.x, wiggleEffect.y), Random.Range(wiggleEffect.x, wiggleEffect.y), 0);
+                Vector3 newPos;
+
+                if (!isSelected)
+                {
+                    newPos = target + new Vector3(Random.Range(wiggleEffect.x, wiggleEffect.y), Random.Range(wiggleEffect.x, wiggleEffect.y), 0);
+                }
+                else
+                {
+                    newPos = target + new Vector3(Random.Range(wiggleEffect.x * wiggleEffectMultiplier, wiggleEffect.y * wiggleEffectMultiplier), Random.Range(wiggleEffect.x * wiggleEffectMultiplier, wiggleEffect.y * wiggleEffectMultiplier), 0);
+                }
+
                 cardObject.transform.DOMove(newPos, wiggleResetTime * 3).SetEase(easeType).SetUpdate(UpdateType.Normal, true);
                 customTime = 0;
             }
+        }
+
+        if (isSelected) cardObject.transform.localScale = Vector3.Lerp(cardObject.transform.localScale, new Vector3(growAmmountWhenSelected, growAmmountWhenSelected, growAmmountWhenSelected), Time.unscaledDeltaTime * growSpeed);  
+        else cardObject.transform.localScale = Vector3.Lerp(cardObject.transform.localScale, new Vector3(1, 1, 1), Time.unscaledDeltaTime * growSpeed);
+
+        if (rotateCardTime >= rotateCardTimeout)
+        {
+            SetCardRotation();
+            rotateCardTime = 0;
+        }
+        else
+        {
+            rotateCardTime += Time.unscaledDeltaTime;
         }
     }
 
     public void SetDgCard(DowngradeCard dg)
     {
         dgCard = dg;
+
+        SpriteState Ss = new SpriteState();
+        Ss.highlightedSprite = dgCard.cardSelectedSprite;
+        Ss.selectedSprite = dgCard.cardSelectedSprite;
+        Ss.pressedSprite = dgCard.cardSelectedSprite;
+        //Ss.disabledSprite = dgCard.cardSprite;
+        GetComponentInChildren<Button>().spriteState = Ss;
     }
 
     public void SetCard()
@@ -92,6 +139,19 @@ public class Cards : MonoBehaviour
     public void SetCardObjPos()
     {
         cardObject.transform.position += new Vector3(0, 500, 0);
+    }
+
+    private void SetCardRotation()
+    {
+        if (!isSelected)
+        {
+            cardObject.transform.DORotate(new Vector3(0, 0, Random.Range(cardRotationAmmount.x, cardRotationAmmount.y)), cardRotationSpeed).SetEase(rotEaseType).SetLoops(2, LoopType.Yoyo).SetUpdate(UpdateType.Normal, true);
+
+        }
+        else
+        {
+            cardObject.transform.DORotate(new Vector3(0, 0, Random.Range(cardRotationAmmount.x, cardRotationAmmount.y) * cardRotationMultiplier), cardRotationSpeed / cardRotationSpeedMultiplier).SetEase(rotEaseType).SetLoops(2, LoopType.Yoyo).SetUpdate(UpdateType.Normal, true);
+        }
     }
 
     public void UseCard()

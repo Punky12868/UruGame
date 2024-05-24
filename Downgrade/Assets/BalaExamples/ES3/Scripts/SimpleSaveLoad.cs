@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class SimpleSaveLoad : MonoBehaviour
 {
     public static SimpleSaveLoad Instance;
@@ -56,6 +55,13 @@ public class SimpleSaveLoad : MonoBehaviour
         {
             return default(T);
         }
+    }
+
+    // !PlayerPrefs.HasKey(playerPrefsKey_controllerAssignments)) return null
+    public bool CheckKey(string key)
+    {
+        if (ES3.KeyExists(key)) return true;
+        return false;
     }
 
     private void GetType(FileType type)

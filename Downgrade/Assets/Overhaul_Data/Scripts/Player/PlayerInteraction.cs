@@ -9,16 +9,8 @@ public class PlayerInteraction : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (GameManager.Instance.IsGamePaused())
-            return;
-
-        if (other.TryGetComponent(out IPickup pickup))
-        {
-            if (!GetComponent<PlayerInventory>().HasItem() && canPickup)
-            {
-                pickup.CanPickup();
-            }
-        }
+        if (GameManager.Instance.IsGamePaused()) return;
+        if (other.TryGetComponent(out IPickup pickup)) {if (!GetComponent<PlayerInventory>().HasItem() && canPickup) pickup.CanPickup();}
     }
 
     public void SetPickUp()
@@ -27,8 +19,5 @@ public class PlayerInteraction : MonoBehaviour
         Invoke("ResetPickUp", dropCooldown);
     }
 
-    private void ResetPickUp()
-    {
-        canPickup = true;
-    }
+    private void ResetPickUp() {canPickup = true;}
 }

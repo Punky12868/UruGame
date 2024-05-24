@@ -5,6 +5,7 @@ public enum AllPlayerActions
     End,
     LowHealth,
     Heal,
+    StaminaChanged,
     LowStamina,
     HitEnemy,
     KilledEnemy,
@@ -16,11 +17,15 @@ public enum AllPlayerActions
     MidBoss,
     DieToMidFaceBoss,
     ParryBoss,
+    HitBoss,
     EndBoss,
 
     Attack,
     Parry,
+    SuccesfullParry,
     Dodge,
+    useAbility,
+    useAbilityOnCooldown,
     useItem,
     useEmptyItem,
     pickUpItem,
@@ -44,12 +49,30 @@ public enum AllEnemyActions
     Die,
 }
 
+public enum AllBossActions
+{
+    None,
+    Spawned,
+    LightAttack,
+    HeavyAttack,
+    Avoiding,
+    Parried,
+    Hit,
+    Die,
+    Start,
+    End,
+}
+
 public enum SelectedDowngrade
 {
     None,
-    FatRoll,
-    Asthma,
-    BadLuck,
-    Weakness,
-    EnemyBoost,
+    Debil,
+    Stamina,
+    Esqueleto,
+    Daga,
+    Dados,
+    Paralisis,
+    Slime,
+    Rodilla,
+    Moneda,
 }

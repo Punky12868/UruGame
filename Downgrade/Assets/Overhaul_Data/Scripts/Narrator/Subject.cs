@@ -25,4 +25,9 @@ public abstract class Subject : MonoBehaviour
     {
         observers.ForEach(observer => observer.OnEnemyNotify(action));
     }
+
+    public void NotifyBossesObservers(AllBossActions action)
+    {
+        observers.ForEach(observer => observer.OnBossesNotify(action));
+    }
 }

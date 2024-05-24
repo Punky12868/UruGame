@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using UnityEngine;
 using Rewired;
 
-public class MenuController : MonoBehaviour
+public class MenuControllerJ : MonoBehaviour
 {
     Player player;
     ChangeCanvas changeCanvas;

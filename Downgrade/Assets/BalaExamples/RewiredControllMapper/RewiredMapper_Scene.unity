@@ -551,7 +551,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8078535523230048358, guid: c34a75b3aa05edf478dff5b16d7c9e76, type: 3}
   m_PrefabInstance: {fileID: 2111734571}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1685473514}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 581b3e3c96df0ef42aef16b63b27b87f, type: 3}
@@ -1243,6 +1243,7 @@ MonoBehaviour:
   - Vertical
   - Horizontal
   CancelAction: Pause
+  save: {fileID: 1685473516}
 --- !u!1 &1681769258
 GameObject:
   m_ObjectHideFlags: 0
@@ -1346,6 +1347,29 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1681769258}
   m_CullTransparentMesh: 1
+--- !u!1 &1685473514 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2323396712446184488, guid: c34a75b3aa05edf478dff5b16d7c9e76, type: 3}
+  m_PrefabInstance: {fileID: 2111734571}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1685473516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1685473514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 307e2fe016d34e8438488ad3bf56abd2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isEnabled: 1
+  loadDataOnStart: 1
+  loadJoystickAssignments: 1
+  loadKeyboardAssignments: 1
+  loadMouseAssignments: 1
+  playerPrefsKeyPrefix: RewiredSaveData
 --- !u!1001 &2111734571
 PrefabInstance:
   m_ObjectHideFlags: 0
