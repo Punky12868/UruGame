@@ -2783,6 +2783,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioVolume: {fileID: 339160112}
   mixer: {fileID: 24100000, guid: 588c9fbd69b92e647906a80cb9701d6c, type: 2}
+  simpleSave: {fileID: 0}
   sliders:
   - {fileID: 6981256460549938260}
   - {fileID: 1760036733}
@@ -6963,6 +6964,7 @@ MonoBehaviour:
   toggleStatusSprites:
   - {fileID: 21300000, guid: 871c465a9943a63499f701340ac40783, type: 3}
   - {fileID: 21300000, guid: 2e9189cb34c5c84478b16efe48988238, type: 3}
+  option: 
   description: Cambiar el volumen de los efectos de sonido.
 --- !u!114 &815855036
 MonoBehaviour:
@@ -10640,9 +10642,9 @@ MonoBehaviour:
     m_Mode: 3
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnDown: {fileID: 1348977586}
+    m_SelectOnLeft: {fileID: 1795559404}
+    m_SelectOnRight: {fileID: 1348977586}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -10759,8 +10761,8 @@ MonoBehaviour:
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnUp: {fileID: 1347703822}
+    m_SelectOnDown: {fileID: 1044897440}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
@@ -12660,6 +12662,7 @@ Transform:
   - {fileID: 1666236256}
   - {fileID: 145995202}
   - {fileID: 801499167}
+  - {fileID: 339160111}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1534971667
@@ -12956,6 +12959,7 @@ MonoBehaviour:
   toggleStatusSprites:
   - {fileID: 21300000, guid: 871c465a9943a63499f701340ac40783, type: 3}
   - {fileID: 21300000, guid: 2e9189cb34c5c84478b16efe48988238, type: 3}
+  option: 
   description: Activar y desactivar el modo pantalla completa.
 --- !u!114 &1550565739
 MonoBehaviour:
@@ -14679,9 +14683,9 @@ MonoBehaviour:
     m_Mode: 3
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnDown: {fileID: 593706847}
     m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnRight: {fileID: 1347703822}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
