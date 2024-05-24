@@ -8,15 +8,43 @@ public class UIOptionsController : MonoBehaviour
     [SerializeField] private Image toggleImage;
     [SerializeField] private Sprite[] toggleStatusSprites;
 
+    [SerializeField] private string option;
     [TextArea]
     [SerializeField] private string description;
 
     private bool isOn = true;
 
+    private void Start()
+    {
+        if (!slider)
+        {
+            if (PlayerPrefs.GetInt(option) == 0)
+            {
+                toggleImage.sprite = toggleStatusSprites[0];
+            }
+            else if (PlayerPrefs.GetInt(option) == 1)
+            {
+                toggleImage.sprite = toggleStatusSprites[1];
+            }
+        }
+        else if (slider)
+        {
+            slider.value = PlayerPrefs.GetFloat(option);
+        }
+    }
     public void Toggle()
     {
         isOn = !isOn;
-        toggleImage.sprite = isOn ? toggleStatusSprites[0] : toggleStatusSprites[1];
+        if (isOn)
+        {
+            toggleImage.sprite = toggleStatusSprites[0];
+            PlayerPrefs.SetInt(option, 0);
+        }
+        else
+        {
+            toggleImage.sprite = toggleStatusSprites[1];
+            PlayerPrefs.SetInt(option, 1);
+        }
     }
 
     public void IncreaseDecreaseSliderValue(int value)

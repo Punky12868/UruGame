@@ -1777,6 +1777,7 @@ MonoBehaviour:
   toggleStatusSprites:
   - {fileID: 21300000, guid: 871c465a9943a63499f701340ac40783, type: 3}
   - {fileID: 21300000, guid: 2e9189cb34c5c84478b16efe48988238, type: 3}
+  option: VoiceVol
   description: "Cambiar el volumen de los di\xE1logos."
 --- !u!114 &312213128
 MonoBehaviour:
@@ -2274,6 +2275,69 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 321778663}
   m_CullTransparentMesh: 1
+--- !u!1 &339160109
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 339160111}
+  - component: {fileID: 339160110}
+  - component: {fileID: 339160112}
+  m_Layer: 0
+  m_Name: DataOptions
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &339160110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 339160109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8923a4e5fafa4914382b0d8aea865dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioVolume: {fileID: 339160112}
+  mixer: {fileID: 24100000, guid: 588c9fbd69b92e647906a80cb9701d6c, type: 2}
+  sliders:
+  - {fileID: 6981256460549938260}
+  - {fileID: 1760036733}
+  - {fileID: 970585951}
+--- !u!4 &339160111
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 339160109}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1530767268}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &339160112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 339160109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3014b71164f2b045978dad43a66b446, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &341100568
 GameObject:
   m_ObjectHideFlags: 0
@@ -3012,6 +3076,7 @@ MonoBehaviour:
   toggleStatusSprites:
   - {fileID: 21300000, guid: 871c465a9943a63499f701340ac40783, type: 3}
   - {fileID: 21300000, guid: 2e9189cb34c5c84478b16efe48988238, type: 3}
+  option: LifeBar
   description: Activar y desactivar las barras de vida de los enemigos.
 --- !u!114 &432218192
 MonoBehaviour:
@@ -4284,7 +4349,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &701326404
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5298,6 +5363,7 @@ MonoBehaviour:
   toggleStatusSprites:
   - {fileID: 21300000, guid: 871c465a9943a63499f701340ac40783, type: 3}
   - {fileID: 21300000, guid: 2e9189cb34c5c84478b16efe48988238, type: 3}
+  option: SFXVol
   description: Cambiar el volumen de los efectos de sonido.
 --- !u!114 &815855036
 MonoBehaviour:
@@ -6014,7 +6080,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &912580457
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6429,7 +6495,19 @@ MonoBehaviour:
   m_Value: 5
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 339160110}
+        m_TargetAssemblyTypeName: MenuData, Assembly-CSharp
+        m_MethodName: SaveVoice
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &988584229
 GameObject:
   m_ObjectHideFlags: 0
@@ -8750,7 +8828,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 400, y: -284.01}
+  m_AnchoredPosition: {x: 400, y: -283.9474}
   m_SizeDelta: {x: 452.546, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1415967550
@@ -9386,7 +9464,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 400, y: -235.00002}
+  m_AnchoredPosition: {x: 400, y: -234.96243}
   m_SizeDelta: {x: 452.546, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1521800767
@@ -9768,6 +9846,7 @@ Transform:
   - {fileID: 1666236256}
   - {fileID: 145995202}
   - {fileID: 801499167}
+  - {fileID: 339160111}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1534971667
@@ -10064,6 +10143,7 @@ MonoBehaviour:
   toggleStatusSprites:
   - {fileID: 21300000, guid: 871c465a9943a63499f701340ac40783, type: 3}
   - {fileID: 21300000, guid: 2e9189cb34c5c84478b16efe48988238, type: 3}
+  option: FullScreen
   description: Activar y desactivar el modo pantalla completa.
 --- !u!114 &1550565739
 MonoBehaviour:
@@ -11077,7 +11157,19 @@ MonoBehaviour:
   m_Value: 5
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 339160110}
+        m_TargetAssemblyTypeName: MenuData, Assembly-CSharp
+        m_MethodName: SaveSFX
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1779032063
 GameObject:
   m_ObjectHideFlags: 0
@@ -11215,7 +11307,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 400, y: -175.99}
+  m_AnchoredPosition: {x: 400, y: -175.97748}
   m_SizeDelta: {x: 231.195, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1782688544
@@ -12659,6 +12751,7 @@ MonoBehaviour:
   toggleStatusSprites:
   - {fileID: 21300000, guid: 871c465a9943a63499f701340ac40783, type: 3}
   - {fileID: 21300000, guid: 2e9189cb34c5c84478b16efe48988238, type: 3}
+  option: Subtitles
   description: "Activar y desactivar los subt\xEDtulos en la pantalla."
 --- !u!114 &2108378027
 MonoBehaviour:
@@ -14911,7 +15004,19 @@ MonoBehaviour:
   m_Value: 5
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 339160110}
+        m_TargetAssemblyTypeName: MenuData, Assembly-CSharp
+        m_MethodName: SaveMusic
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &7042020400441753806
 GameObject:
   m_ObjectHideFlags: 0
@@ -15070,6 +15175,7 @@ MonoBehaviour:
   toggleStatusSprites:
   - {fileID: 21300000, guid: 871c465a9943a63499f701340ac40783, type: 3}
   - {fileID: 21300000, guid: 2e9189cb34c5c84478b16efe48988238, type: 3}
+  option: MusicVol
   description: "Cambiar el volumen de la m\xFAsica."
 --- !u!224 &7666190824860671529
 RectTransform:
