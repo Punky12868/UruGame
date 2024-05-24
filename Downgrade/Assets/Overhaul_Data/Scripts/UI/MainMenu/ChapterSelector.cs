@@ -13,6 +13,7 @@ public class ChapterSelector : MonoBehaviour
     [SerializeField] private float duration = 1;
     [SerializeField] private Ease easeType = Ease.InOutExpo;
     [SerializeField] private int maxChapters = 4;
+    [SerializeField] private GameObject mainMenu;
     [SerializeField] private Button[] chaptersFirstButton;
 
     [SerializeField] private Button[] chapterIButtons;
@@ -21,20 +22,42 @@ public class ChapterSelector : MonoBehaviour
     [SerializeField] private Button[] chapterIVButtons;
 
     int currentChapter = 0;
-    bool active = false;
     bool isOnTransition = false;
 
-    private void Awake() { Player = ReInput.players.GetPlayer(0); maxChapters--; }
+    bool _active = false;
+    public bool Active
+    {
+        get { return _active; }
+        set
+        {
+            if (_active != value)
+            {
+                _active = value;
+                OnActiveChanged?.Invoke(_active);
+            }
+        }
+    }
+
+    public delegate void ActiveChanged(bool newValue);
+    public event ActiveChanged OnActiveChanged;
+
+    private void Awake() 
+    {
+        Player = ReInput.players.GetPlayer(0); 
+        maxChapters--;
+        OnActiveChanged += ActivateChapter;
+        OnActiveChanged += ActivateMainMenuButtons;
+    }
     private void Update() 
     {
-        active = FindObjectOfType<MainMenuTransition>().GetListening();
+        Active = FindObjectOfType<MainMenuTransition>().GetListening();
         Inputs(); 
     }
 
     private void Inputs()
     {
-        if (!active && currentChapter != 0) ResetChapter();
-        if (!active || isOnTransition) return;
+        if (!Active && currentChapter != 0) ResetChapter();
+        if (!Active || isOnTransition) return;
         if (Player.GetButtonDown("RightTrigger")) MoveChapters(true);
         if (Player.GetButtonDown("LeftTrigger")) MoveChapters(false);
     }
@@ -44,7 +67,7 @@ public class ChapterSelector : MonoBehaviour
         if (value && currentChapter < maxChapters)
         {
             currentChapter++;
-            ActivateChapter(currentChapter);
+            ActivateChapter(true);
             isOnTransition = true;
             Invoker.InvokeDelayed(ResetOnTransition, duration);
             target.DOLocalMoveX(target.localPosition.x - 1920, duration).SetEase(easeType);
@@ -52,54 +75,62 @@ public class ChapterSelector : MonoBehaviour
         else if (!value && currentChapter > 0)
         {
             currentChapter--;
-            ActivateChapter(currentChapter);
+            ActivateChapter(true);
             isOnTransition = true;
             Invoker.InvokeDelayed(ResetOnTransition, duration);
             target.DOLocalMoveX(target.localPosition.x + 1920, duration).SetEase(easeType);
         }
     }
 
-    private void ActivateChapter(int chapterIndex)
+    private void ActivateChapter(bool isActive)
     {
-        DeactivateAllChaptersExcept(chapterIndex);
-        switch (chapterIndex)
+        if (!isActive) return;
+
+        DeactivateAllChaptersExcept(currentChapter);
+        switch (currentChapter)
         {
             case 0:
-                SetButtonsActive(chapterIButtons, true);
+                SetButtonsInteractable(chapterIButtons, true);
                 break;
             case 1:
-                SetButtonsActive(chapterIIButtons, true);
+                SetButtonsInteractable(chapterIIButtons, true);
                 break;
             case 2:
-                SetButtonsActive(chapterIIIButtons, true);
+                SetButtonsInteractable(chapterIIIButtons, true);
                 break;
             case 3:
-                SetButtonsActive(chapterIVButtons, true);
+                SetButtonsInteractable(chapterIVButtons, true);
                 break;
         }
     }
 
     private void DeactivateAllChaptersExcept(int activeChapterIndex)
     {
-        if (activeChapterIndex != 0) SetButtonsActive(chapterIButtons, false);
-        if (activeChapterIndex != 1) SetButtonsActive(chapterIIButtons, false);
-        if (activeChapterIndex != 2) SetButtonsActive(chapterIIIButtons, false);
-        if (activeChapterIndex != 3) SetButtonsActive(chapterIVButtons, false);
+        if (activeChapterIndex != 0) SetButtonsInteractable(chapterIButtons, false);
+        if (activeChapterIndex != 1) SetButtonsInteractable(chapterIIButtons, false);
+        if (activeChapterIndex != 2) SetButtonsInteractable(chapterIIIButtons, false);
+        if (activeChapterIndex != 3) SetButtonsInteractable(chapterIVButtons, false);
     }
 
-    private void SetButtonsActive(Button[] buttons, bool isActive)
+    private void SetButtonsInteractable(Button[] buttons, bool isActive)
     {
         foreach (Button button in buttons)
         {
-            button.gameObject.SetActive(isActive);
+            button.interactable = isActive;
         }
     }
 
     private void ResetChapter()
     {
         currentChapter = 0;
-        ActivateChapter(0);
+        ActivateChapter(true);
         target.DOLocalMoveX(0, duration);
+    }
+
+    public void ActivateMainMenuButtons(bool value)
+    {
+        if (value) return;
+        FindObjectOfType<MenuController>().ActivateButtonsWithGameObject(mainMenu);
     }
 
     public void ResetOnTransition() { isOnTransition = false; chaptersFirstButton[currentChapter].Select(); }
