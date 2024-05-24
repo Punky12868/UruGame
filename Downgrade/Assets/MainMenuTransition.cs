@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UIElements;
 
 public class MainMenuTransition : MonoBehaviour
 {
@@ -92,4 +89,6 @@ public class MainMenuTransition : MonoBehaviour
     {
         if (shoulBeListening) shoulBeListening = false;
     }
+
+    public bool GetListening() { return shoulBeListening; }
 }
