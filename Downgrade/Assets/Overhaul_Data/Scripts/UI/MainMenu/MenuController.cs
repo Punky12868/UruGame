@@ -150,6 +150,18 @@ public class MenuController : MonoBehaviour
         InvokeMethods();
     }
 
+    public void DeactivateButtonsWithGameObject(GameObject go)
+    {
+        Button[] buttons = go.GetComponentsInChildren<Button>();
+        for (int i = 0; i < buttons.Length; i++) buttons[i].interactable = false;
+    }
+
+    public void ActivateButtonsWithGameObject(GameObject go)
+    {
+        Button[] buttons = go.GetComponentsInChildren<Button>();
+        for (int i = 0; i < buttons.Length; i++) buttons[i].interactable = true;
+    }
+
     private void DeactivateAllButtons()
     {
         Button[] buttons = FindObjectsOfType<Button>();
