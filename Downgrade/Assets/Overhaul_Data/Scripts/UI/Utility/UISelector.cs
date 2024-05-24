@@ -8,14 +8,22 @@ public class UISelector : MonoBehaviour
 {
     [SerializeField] private float duration;
     [SerializeField] private Ease easeType = Ease.InOutExpo;
+    [SerializeField] private bool automaticSetPos;
+    [SerializeField] private bool addButtonsManually;
+    [SerializeField] private List<Button> manualButtons = new List<Button>();
 
     private Button currentButton;
     private List<Button> buttons = new List<Button>();
 
     private void Awake()
     {
-        Button[] currentCanvasButtons = GetComponentInParent<Canvas>().gameObject.GetComponentsInChildren<Button>();
-        foreach (Button button in currentCanvasButtons) if (!button.transform.GetComponentInParent<Slider>()) buttons.Add(button);
+        if (addButtonsManually) buttons = manualButtons;
+        else
+        {
+            Button[] currentCanvasButtons = GetComponentInParent<Canvas>().gameObject.GetComponentsInChildren<Button>();
+            foreach (Button button in currentCanvasButtons) if (!button.transform.GetComponentInParent<Slider>()) buttons.Add(button);
+        }
+        
     }
 
     private void Update()
@@ -36,7 +44,15 @@ public class UISelector : MonoBehaviour
 
     private void MoveSelector()
     {
-        Vector3 newPos = new Vector3(transform.position.x, currentButton.transform.position.y, transform.position.z);
-        transform.DOMove(newPos, duration).SetEase(easeType);
+        if (automaticSetPos)
+        {
+            transform.DOMove(currentButton.transform.position, duration).SetEase(easeType);
+        }
+        else
+        {
+            Vector3 newPos = new Vector3(transform.position.x, currentButton.transform.position.y, transform.position.z);
+            transform.DOMove(newPos, duration).SetEase(easeType);
+        }
+        
     }
 }
