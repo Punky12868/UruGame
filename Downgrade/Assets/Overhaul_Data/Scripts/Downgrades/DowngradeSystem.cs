@@ -76,9 +76,18 @@ public class DowngradeSystem : MonoBehaviour, IObserver
         enemy.RemoveObserver(this);
     }
 
+    private void LoadDg()
+    {
+        //Ola carga bien pero se puede cambiar
+        //dg = FindObjectOfType<SimpleSaveLoad>().LoadData<SelectedDowngrade>(FileType.Gameplay, "Downgrade");
+
+        dg = ES3.Load<SelectedDowngrade>("Downgrade", System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments) + "/" + "Overhaul" + "/" + "_Player.ovh");
+    }
+
     public void SetDowngrade(SelectedDowngrade dg)
     {
         this.dg = dg;
+        FindObjectOfType<SimpleSaveLoad>().SaveData(FileType.Gameplay, "Downgrade", dg);
     }
 
     public void RemoveDowngrade()
@@ -114,7 +123,8 @@ public class DowngradeSystem : MonoBehaviour, IObserver
 
         DontDestroyOnLoad(gameObject);
 
-        RemoveDowngrade();
+        LoadDg();
+        //RemoveDowngrade();
     }
 
     private void Update()
@@ -151,6 +161,12 @@ public class DowngradeSystem : MonoBehaviour, IObserver
     #region Notify
     public void OnPlayerNotify(AllPlayerActions actions)
     {
+        if (actions == AllPlayerActions.Start && dg == SelectedDowngrade.None)
+        {
+            LoadDg();
+            //Debug.Log("DiceRolls");
+        }
+
         switch (dg)
         {
             case SelectedDowngrade.Stamina:

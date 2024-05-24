@@ -57,6 +57,7 @@ public class Cards : MonoBehaviour
             cardTextPanel.alpha = 0;
 
         if (growAmmountWhenSelected < 1) growAmmountWhenSelected = 1;
+        Debug.Log(FindObjectOfType<SimpleSaveLoad>().LoadData<SelectedDowngrade>(FileType.Gameplay, "Downgrade"));
     }
 
     private void Update()
@@ -102,7 +103,8 @@ public class Cards : MonoBehaviour
     public void SetDgCard(DowngradeCard dg)
     {
         dgCard = dg;
-
+        
+        //FindObjectOfType<SimpleSaveLoad>().LoadData<DowngradeCard>(FileType.Gameplay, "Downgrade");
         SpriteState Ss = new SpriteState();
         Ss.highlightedSprite = dgCard.cardSelectedSprite;
         Ss.selectedSprite = dgCard.cardSelectedSprite;
@@ -157,10 +159,14 @@ public class Cards : MonoBehaviour
     public void UseCard()
     {
         dgCard.CardEffect();
+        
         GameManager.Instance.PauseGame(false, false);
         GameManager.Instance.LoadNextScene();
         AudioManager.instance.PlayMusic(cardMusic);
         DowngradeSystem.Instance.SetDowngrade(dgCard.selectedDowngrade);
+        //FindObjectOfType<SimpleSaveLoad>().SaveData<SelectedDowngrade>(FileType.Gameplay, "Downgrade", dgCard.selectedDowngrade);
+        //dgCard = FindObjectOfType<SimpleSaveLoad>().LoadData<DowngradeCard>(FileType.Gameplay, "Downgrade");
+
 
         /*Cards[] cards = FindObjectsOfType<Cards>();
         foreach (Cards card in cards)

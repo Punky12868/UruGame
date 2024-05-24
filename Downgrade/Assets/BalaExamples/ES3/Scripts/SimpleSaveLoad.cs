@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 public class SimpleSaveLoad : MonoBehaviour
 {
@@ -44,12 +45,13 @@ public class SimpleSaveLoad : MonoBehaviour
 
     public T LoadData<T>(FileType type, string key)
     {
-        if (System.IO.File.Exists(fullPath + saveDataName + "." + saveDataExtension))
+        if (File.Exists(fullPath + saveDataName + "." + saveDataExtension))
         {
             GetType(type);
 
             Debug.Log("Loaded " + key + " with value " + ES3.Load<T>(key, fullPath + saveDataName + "." + saveDataExtension) + " from " + fullPath + saveDataName + "." + saveDataExtension);
-            return ES3.Load<T>(key, fullPath + saveDataName + "." + saveDataExtension);
+            T value = ES3.Load<T>(key, fullPath + saveDataName + "." + saveDataExtension);
+            return value;
         }
         else
         {
