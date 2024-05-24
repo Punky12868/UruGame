@@ -45,7 +45,6 @@ public class ChapterSelector : MonoBehaviour
         {
             currentChapter++;
             ActivateChapter(currentChapter);
-            chaptersFirstButton[currentChapter].Select();
             isOnTransition = true;
             Invoker.InvokeDelayed(ResetOnTransition, duration);
             target.DOLocalMoveX(target.localPosition.x - 1920, duration).SetEase(easeType);
@@ -54,7 +53,6 @@ public class ChapterSelector : MonoBehaviour
         {
             currentChapter--;
             ActivateChapter(currentChapter);
-            chaptersFirstButton[currentChapter].Select();
             isOnTransition = true;
             Invoker.InvokeDelayed(ResetOnTransition, duration);
             target.DOLocalMoveX(target.localPosition.x + 1920, duration).SetEase(easeType);
@@ -100,8 +98,9 @@ public class ChapterSelector : MonoBehaviour
     private void ResetChapter()
     {
         currentChapter = 0;
+        ActivateChapter(0);
         target.DOLocalMoveX(0, duration);
     }
 
-    public void ResetOnTransition() { isOnTransition = false; }
+    public void ResetOnTransition() { isOnTransition = false; chaptersFirstButton[currentChapter].Select(); }
 }
