@@ -26,6 +26,7 @@ public class MenuController : MonoBehaviour
     private Vector3 targetPos;
     private Vector3 targetRot;
     private bool onInputCooldown = false;
+    private SliderListener sliderListener;
 
     private List<MenuHistory> menuHistory = new List<MenuHistory>();
 
@@ -168,6 +169,9 @@ public class MenuController : MonoBehaviour
         for (int i = 0; i < buttons.Length; i++) if (buttons[i].transform.GetComponentInParent<Canvas>() != currentCanvas) buttons[i].interactable = false;
     }
 
+    public void SetSliderListener(SliderListener slider) { sliderListener = slider; }
+    public SliderListener GetSliderListener() { return sliderListener; }
+
     public Canvas GetCurrentCanvas() { return currentCanvas;}
 
     private void InvokeMethods()
@@ -178,11 +182,24 @@ public class MenuController : MonoBehaviour
             Invoker.CancelInvoke(InvokeButtonSelection);
         }
 
-        onInputCooldown = true;
-        eventSystem.SetActive(false);
-        Invoker.InvokeDelayed(InvokeInputCooldown, duration);
-        Invoker.InvokeDelayed(InvokeButtonSelection, duration);
-        Invoker.InvokeDelayed(InvokeButtonDeactivation, 0.1f);
+        if (sliderListener != null)
+        {
+            onInputCooldown = true;
+            eventSystem.SetActive(false);
+            Invoker.InvokeDelayed(InvokeInputCooldown, 0.1f);
+            Invoker.InvokeDelayed(InvokeButtonSelection, 0.1f);
+            Invoker.InvokeDelayed(InvokeButtonDeactivation, 0.1f);
+            sliderListener = null;
+        }
+        else
+        {
+            onInputCooldown = true;
+            eventSystem.SetActive(false);
+            Invoker.InvokeDelayed(InvokeInputCooldown, duration);
+            Invoker.InvokeDelayed(InvokeButtonSelection, duration);
+            Invoker.InvokeDelayed(InvokeButtonDeactivation, 0.1f);
+        }
+        
     }
 
     private void InvokeButtonSelection() {SelectedButton.Select();}
