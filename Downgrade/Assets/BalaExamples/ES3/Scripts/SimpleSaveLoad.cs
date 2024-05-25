@@ -45,9 +45,10 @@ public class SimpleSaveLoad : MonoBehaviour
 
     public T LoadData<T>(FileType type, string key)
     {
+        GetType(type);
         if (File.Exists(fullPath + saveDataName + "." + saveDataExtension))
         {
-            GetType(type);
+            
 
             Debug.Log("Loaded " + key + " with value " + ES3.Load<T>(key, fullPath + saveDataName + "." + saveDataExtension) + " from " + fullPath + saveDataName + "." + saveDataExtension);
             T value = ES3.Load<T>(key, fullPath + saveDataName + "." + saveDataExtension);

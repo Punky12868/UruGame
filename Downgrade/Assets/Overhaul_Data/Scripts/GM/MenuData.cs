@@ -20,7 +20,6 @@ public class MenuData : MonoBehaviour
         Invoke("SetSavedOptions", 0.2f);
 
         dgSelected = FindObjectOfType<SimpleSaveLoad>().LoadData<SelectedDowngrade>(FileType.Gameplay, "Downgrade");
-        Debug.Log(ES3.Load<SelectedDowngrade>("Downgrade", System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments) + "/" + "Overhaul" + "/" + "_Player.ovh"));
     }
 
     void SetSavedOptions()
