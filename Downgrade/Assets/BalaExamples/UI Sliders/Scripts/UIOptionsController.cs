@@ -14,6 +14,9 @@ public class UIOptionsController : MonoBehaviour
 
     private bool isOn = true;
 
+    // Evitar usar PlayerPrefs, usemos el SimpleSaveLoad para guardar y cargar
+    // Toggle necesita llamarse en alguna parte para que se cargue correctamente el estado, no solo el sprite
+
     private void Start()
     {
         if (!slider)
