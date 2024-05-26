@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GameManagerProxy : MonoBehaviour
 {
@@ -35,6 +32,11 @@ public class GameManagerProxy : MonoBehaviour
     public void LoadPreviousScene()
     {
         GameManager.Instance.LoadPreviousScene();
+    }
+
+    public void UnlockLevel(int i)
+    {
+        GameManager.Instance.UnlockLevel(i);
     }
 
     public void Victory()

@@ -55,4 +55,9 @@ public class UISelector : MonoBehaviour
         }
         
     }
+
+    public Button[] GetManualButtons()
+    {
+        return manualButtons.ToArray();
+    }
 }

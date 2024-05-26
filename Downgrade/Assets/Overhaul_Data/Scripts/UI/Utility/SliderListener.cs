@@ -54,7 +54,8 @@ public class SliderListener : MonoBehaviour
     {
         if (EventSystem.current == null) return false;
         GameObject selectedGameObject = EventSystem.current.currentSelectedGameObject;
-        if (selectedGameObject != null && selectedGameObject.GetComponent<Button>() != null && selectedGameObject.GetComponent<Button>() != currentSelectedButton)
+        if (selectedGameObject == null) return false;
+        if (selectedGameObject.GetComponent<Button>() != currentSelectedButton)
         {
             return false;
         }
