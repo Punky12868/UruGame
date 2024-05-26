@@ -5,8 +5,12 @@ using UnityEngine;
 public enum ItemType
 {
     None,
-    Health,
-    Stamina,
+    Skull,
+    Flower,
+    MBox,
+    Mushroom,
+    Chest,
+    Statue,
 }
 
 public class PropsManager : MonoBehaviour
