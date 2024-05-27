@@ -78,13 +78,13 @@ public class DowngradeSystem : MonoBehaviour, IObserver
 
     private void LoadDg()
     {
-        dg = FindObjectOfType<SimpleSaveLoad>().LoadData<SelectedDowngrade>(FileType.Gameplay, "Downgrade");
+        //dg = SimpleSaveLoad.Instance.LoadData<SelectedDowngrade>(FileType.Gameplay, "Downgrade", SelectedDowngrade.None);
     }
 
     public void SetDowngrade(SelectedDowngrade dg)
     {
         this.dg = dg;
-        FindObjectOfType<SimpleSaveLoad>().SaveData(FileType.Gameplay, "Downgrade", dg);
+        SimpleSaveLoad.Instance.SaveData(FileType.Gameplay, "Downgrade", dg);
     }
 
     public void RemoveDowngrade()

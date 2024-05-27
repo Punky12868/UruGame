@@ -148,6 +148,7 @@ public class EnemyBase : Subject
 
     public virtual void Awake()
     {
+        hasHealthBar = SimpleSaveLoad.Instance.LoadData(FileType.Config, "hbar", true);
         anim = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody>();
         pivot = GetComponentInParent<Transform>();
@@ -164,6 +165,11 @@ public class EnemyBase : Subject
 
             healthBar.value = health;
             healthBarBg.value = health;
+        }
+        else
+        {
+            healthBar.GetComponentInParent<CanvasGroup>().alpha = 0;
+            healthBar.GetComponentInParent<Canvas>().gameObject.SetActive(false);
         }
 
         if (isStatic)

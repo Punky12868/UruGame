@@ -60,11 +60,11 @@ public class AudioVolume : MonoBehaviour
     private void SaveVolume(string key, int value)
     {
         if (!listening) return;
-        FindObjectOfType<SimpleSaveLoad>().SaveData(FileType.Config, key, value);
+        SimpleSaveLoad.Instance.SaveData(FileType.Config, key, value);
     }
 
     private float LoadVolume(string key)
     {
-        return FindObjectOfType<SimpleSaveLoad>().LoadData<int>(FileType.Config, key, 5);
+        return SimpleSaveLoad.Instance.LoadData<int>(FileType.Config, key, 5);
     }
 }

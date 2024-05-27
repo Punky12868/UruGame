@@ -13,6 +13,11 @@ public class MenuData : MonoBehaviour
     public Slider[] sliders;
     private void Awake()
     {
-        dgSelected = FindObjectOfType<SimpleSaveLoad>().LoadData<SelectedDowngrade>(FileType.Gameplay, "Downgrade");
+        Invoker.InvokeDelayed(DelayedAwake, 0.1f);
+    }
+
+    private void DelayedAwake()
+    {
+        dgSelected = SimpleSaveLoad.Instance.LoadData<SelectedDowngrade>(FileType.Gameplay, "Downgrade");
     }
 }

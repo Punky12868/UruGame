@@ -58,7 +58,7 @@ public class GameManager : MonoBehaviour
 
     public void UnlockLevel(int i)
     {
-        FindObjectOfType<SimpleSaveLoad>().SaveData<bool>(FileType.Gameplay, levelUnlockerKey + i, true);
+        SimpleSaveLoad.Instance.SaveData<bool>(FileType.Gameplay, levelUnlockerKey + i, true);
         // victory and then loads next scene
     }
 

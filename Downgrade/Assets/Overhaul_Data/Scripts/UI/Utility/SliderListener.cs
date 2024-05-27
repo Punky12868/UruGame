@@ -11,6 +11,8 @@ public class SliderListener : MonoBehaviour
     [SerializeField] private Button currentSelectedButton;
     private bool buttonDown;
 
+    [SerializeField] private bool onGameplay;
+
     private void Awake()
     {
         input = ReInput.players.GetPlayer(0);
@@ -44,6 +46,7 @@ public class SliderListener : MonoBehaviour
 
     private void SetListening()
     {
+        if (onGameplay) return;
         if (IsListening() && FindObjectOfType<MenuController>().GetSliderListener() != this)
         {
             FindObjectOfType<MenuController>().SetSliderListener(this);

@@ -8,6 +8,9 @@ public class NarrationSystem : MonoBehaviour, IObserver
     [SerializeField] Transform subtitlesParent;
     [SerializeField] GameObject subtitles;
 
+    [SerializeField] string subtitleKey = "subs";
+    [SerializeField] bool subtitlesActivated = true;
+
     [SerializeField] float aditionalTimeAfterNarration = 1f;
     [SerializeField] float lowHealthThreshold = 10f;
     bool lowHealthTriggered = false;
@@ -39,23 +42,32 @@ public class NarrationSystem : MonoBehaviour, IObserver
     [TextArea] [SerializeField] string[] playerAttackDialog, playerParryDialog, playerDodgeDialog, playerUseItemDialog, playerUseEmptyItemDialog, playerPickUpItemDialog, playerDropItemDialog, playerDropEmptyItemDialog, playerGotHitDialog, playerDiesDialog, victoryDialog, defeatDialog;
     [TextArea] [SerializeField] string[] inBetweenNarrationDialog;
 
+    private void Awake()
+    {
+        Invoker.InvokeDelayed(DelayedAwake, 0.1f);
+    }
+
+    private void DelayedAwake()
+    {
+        subtitlesActivated = SimpleSaveLoad.Instance.LoadData<bool>(FileType.Config, subtitleKey, true);
+    }
+
     public void PlaySubs(AudioClip[] clip, string[] dialog, bool hasPriority = false)
     {
         Subtitles subs = null;
         int randomDialog = Random.Range(0, clip.Length);
 
-        if (FindObjectOfType<Subtitles>())
-            subs = FindObjectOfType<Subtitles>();
+        if (subtitlesActivated) { if (FindObjectOfType<Subtitles>()) subs = FindObjectOfType<Subtitles>(); }
 
         if (isWaiting && hasPriority)
         {
             int randomInBetween = Random.Range(0, inBetweenNarrationClips.Length);
 
-            chainedDialog = dialog[randomDialog];
+            if (subtitlesActivated) chainedDialog = dialog[randomDialog];
             chainedClip = clip[randomDialog];
 
             AudioManager.instance.PlayVoice(inBetweenNarrationClips[randomInBetween]);
-            subs.DisplayOnPlayingSubtitles(inBetweenNarrationDialog[randomInBetween], inBetweenNarrationClips[randomInBetween].length);
+            if (subtitlesActivated) subs.DisplayOnPlayingSubtitles(inBetweenNarrationDialog[randomInBetween], inBetweenNarrationClips[randomInBetween].length);
             Invoker.InvokeDelayed(ChainedDialog, inBetweenNarrationClips[randomInBetween].length);
         }
         else
@@ -64,10 +76,13 @@ public class NarrationSystem : MonoBehaviour, IObserver
 
             AudioManager.instance.PlayVoice(clip[randomDialog]);
 
-            if (subs == null)
-                Instantiate(subtitles, subtitlesParent).GetComponentInChildren<Subtitles>().DisplaySubtitles(dialog[randomDialog], clip[randomDialog].length);
-            else
-                subs.DisplaySubtitles(dialog[randomDialog], clip[randomDialog].length);
+            if (subtitlesActivated)
+            {
+                if (subs == null)
+                    Instantiate(subtitles, subtitlesParent).GetComponentInChildren<Subtitles>().DisplaySubtitles(dialog[randomDialog], clip[randomDialog].length);
+                else
+                    subs.DisplaySubtitles(dialog[randomDialog], clip[randomDialog].length);
+            }
 
             isWaiting = true;
             Invoker.InvokeDelayed(ResetWait, clip[randomDialog].length);
@@ -77,7 +92,7 @@ public class NarrationSystem : MonoBehaviour, IObserver
     private void ChainedDialog()
     {
         AudioManager.instance.PlayVoice(chainedClip);
-        FindObjectOfType<Subtitles>().DisplayOnPlayingSubtitles(chainedDialog, chainedClip.length);
+        if (subtitlesActivated) FindObjectOfType<Subtitles>().DisplayOnPlayingSubtitles(chainedDialog, chainedClip.length);
         isWaiting = true;
         Invoker.InvokeDelayed(ResetWait, chainedClip.length);
     }
@@ -215,5 +230,15 @@ public class NarrationSystem : MonoBehaviour, IObserver
 
     public void OnBossesNotify(AllBossActions actions)
     {
+    }
+
+    public bool GetSubtitlesActivated()
+    {
+        return subtitlesActivated;
+    }
+
+    public void SetSubtitlesActivated(bool value)
+    {
+        subtitlesActivated = value;
     }
 }

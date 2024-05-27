@@ -11,6 +11,10 @@ public class LevelUnlocker : MonoBehaviour
 
     private void Awake()
     {
+        Invoker.InvokeDelayed(DelayedAwake, 0.1f);
+    }
+    private void DelayedAwake()
+    {
         levels = uiSelector.GetManualButtons();
 
         for (int i = 0; i < levels.Length; i++)
@@ -21,7 +25,7 @@ public class LevelUnlocker : MonoBehaviour
             if (!levelButton.CanBeUnlocked()) { levelLockStatus(levelButton, lockImage, true); continue; }
             if (i == 0) { levelLockStatus(levelButton, lockImage); continue; }
 
-            levelButton.SetLockState(FindObjectOfType<SimpleSaveLoad>().LoadData<bool>(FileType.Gameplay, key + i, false));
+            levelButton.SetLockState(SimpleSaveLoad.Instance.LoadData<bool>(FileType.Gameplay, key + i, false));
             levelLockStatus(levelButton, lockImage);
         }
     }
