@@ -2262,6 +2262,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee4d72f38c36b6542b22395c7f9c0f7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isHealing: 1
   itemType: 2
   animName: BarrelDestroy
   spawnItemTime: 0.3
@@ -2973,6 +2974,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee4d72f38c36b6542b22395c7f9c0f7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isHealing: 1
   itemType: 1
   animName: BarrelDestroy
   spawnItemTime: 0.3
@@ -3861,6 +3863,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee4d72f38c36b6542b22395c7f9c0f7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isHealing: 1
   itemType: 1
   animName: BarrelDestroy
   spawnItemTime: 0.3
@@ -3928,7 +3931,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: -1209537386, guid: ed0800227ef10c6448d9827b84a905ab, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 0.6333333, y: 0.7}
@@ -5668,7 +5671,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.2164359, y: 0.000000029095917, z: -0.000000006450293, w: 0.97629684}
+  m_LocalRotation: {x: 0.2164359, y: 0.000000029095913, z: -0.0000000064502923, w: 0.97629684}
   m_LocalPosition: {x: 0, y: 4.1967, z: -18.839}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -7571,7 +7574,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1332516484}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.2164359, y: 0.000000029095917, z: -0.000000006450293, w: 0.97629684}
+  m_LocalRotation: {x: 0.2164359, y: 0.000000029095913, z: -0.0000000064502923, w: 0.97629684}
   m_LocalPosition: {x: 0, y: 4.1967, z: -18.839}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -10094,6 +10097,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee4d72f38c36b6542b22395c7f9c0f7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isHealing: 1
   itemType: 2
   animName: BarrelDestroy
   spawnItemTime: 0.3

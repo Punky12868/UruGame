@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SlowTrap : MonoBehaviour
 {
-    // Start is called before the first frame update
+    private float despawnTime; //Maybe
     [SerializeField] private float radius;
     [SerializeField] private float multiplier = 0.7f;
     [SerializeField] private Dictionary<GameObject, float> originalSpeeds = new Dictionary<GameObject, float>(); 
@@ -16,6 +16,16 @@ public class SlowTrap : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (despawnTime < 6 && !GameManager.Instance.IsGamePaused()) 
+        {
+           despawnTime +=  Time.fixedDeltaTime ;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
+
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, radius);
         foreach (Collider hit in hitColliders)
         {
@@ -24,9 +34,6 @@ public class SlowTrap : MonoBehaviour
                 float speedToSave = 1;
                 if (!originalSpeeds.ContainsKey(hit.gameObject))
                 {
-
-                   
-                    
                     if (hit.CompareTag("Player"))
                     {
                         speedToSave = hit.GetComponent<PlayerControllerOverhaul>().GetSpeed();
@@ -46,7 +53,7 @@ public class SlowTrap : MonoBehaviour
             }
         }
 
-        // Restore speed for objects that have left the sphere
+        // Restore speed
         List<GameObject> toRemove = new List<GameObject>();
         foreach (var obj in originalSpeeds)
         {
@@ -65,9 +72,9 @@ public class SlowTrap : MonoBehaviour
                 {
                     obj.Key.GetComponent<PlayerControllerOverhaul>().SetSpeed(originalSpeeds[obj.Key]);
                 }
-                else if (obj.Key.CompareTag("Enemy"))
+                else if (obj.Key.CompareTag("Enemy") && obj.Key.GetComponent<EnemyBase>())
                 {
-                    obj.Key.GetComponent<EnemyBase>().speed = originalSpeeds[obj.Key];
+                    obj.Key.GetComponent<EnemyBase>().speed = originalSpeeds[obj.Key];  
                 }
                 toRemove.Add(obj.Key);
             }
