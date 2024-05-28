@@ -57,7 +57,7 @@ public class Cards : MonoBehaviour
             cardTextPanel.alpha = 0;
 
         if (growAmmountWhenSelected < 1) growAmmountWhenSelected = 1;
-        Debug.Log(FindObjectOfType<SimpleSaveLoad>().LoadData<SelectedDowngrade>(FileType.Gameplay, "Downgrade"));
+        Debug.Log(SimpleSaveLoad.Instance.LoadData<SelectedDowngrade>(FileType.Gameplay, "Downgrade"));
     }
 
     private void Update()

@@ -4,6 +4,7 @@ using UnityEngine;
 using Rewired;
 using DG.Tweening;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class ChapterSelector : MonoBehaviour
 {
@@ -133,5 +134,25 @@ public class ChapterSelector : MonoBehaviour
         FindObjectOfType<MenuController>().ActivateButtonsWithGameObject(mainMenu);
     }
 
-    public void ResetOnTransition() { isOnTransition = false; chaptersFirstButton[currentChapter].Select(); }
+    public void ResetOnTransition() 
+    {
+        isOnTransition = false;
+
+        if (!Active) return; //EventSystem.current.firstSelectedGameObject.GetComponent<Button>().Select();
+        else chaptersFirstButton[currentChapter].Select();
+    }
+    public bool GetTransition() { return isOnTransition; }
+    public int GetCurrentChapter() { return currentChapter; }
+    public Button[] GetFirstSelectedButtons() { return chaptersFirstButton; } 
+    public Button[] GetChaptersButtons(int index)
+    {
+        switch (index)
+        {
+            case 0: return chapterIButtons;
+            case 1: return chapterIIButtons;
+            case 2: return chapterIIIButtons;
+            case 3: return chapterIVButtons;
+            default: return null;
+        }
+    }
 }

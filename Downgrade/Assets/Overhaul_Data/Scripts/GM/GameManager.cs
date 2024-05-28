@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
     private bool isSelectingDowngrade = false;
+    [SerializeField] private string levelUnlockerKey = "level_";
 
     private void Awake()
     {
@@ -53,6 +54,12 @@ public class GameManager : MonoBehaviour
     {
         // Load the previous scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+    }
+
+    public void UnlockLevel(int i)
+    {
+        SimpleSaveLoad.Instance.SaveData<bool>(FileType.Gameplay, levelUnlockerKey + i, true);
+        // victory and then loads next scene
     }
 
     public void Victory()

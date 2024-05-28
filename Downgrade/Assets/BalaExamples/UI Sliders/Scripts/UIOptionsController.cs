@@ -6,44 +6,38 @@ public class UIOptionsController : MonoBehaviour
     [SerializeField] private Slider slider;
 
     [SerializeField] private Image toggleImage;
+    [SerializeField] private string toggleKey;
     [SerializeField] private Sprite[] toggleStatusSprites;
-
-    [SerializeField] private string option;
-    [TextArea]
-    [SerializeField] private string description;
+    [TextArea] [SerializeField] private string description;
 
     private bool isOn = true;
 
-    private void Start()
+    private void Awake()
     {
-        if (!slider)
-        {
-            if (PlayerPrefs.GetInt(option) == 0)
-            {
-                toggleImage.sprite = toggleStatusSprites[0];
-            }
-            else if (PlayerPrefs.GetInt(option) == 1)
-            {
-                toggleImage.sprite = toggleStatusSprites[1];
-            }
-        }
-        else if (slider)
-        {
-            slider.value = PlayerPrefs.GetFloat(option);
-        }
+        Invoker.InvokeDelayed(DelayedAwake, 0.1f);
     }
+
+    private void DelayedAwake()
+    {
+        if (toggleImage != null) LoadToggle();
+    }
+
     public void Toggle()
     {
         isOn = !isOn;
-        if (isOn)
+        if (isOn) toggleImage.sprite = toggleStatusSprites[0];
+        else toggleImage.sprite = toggleStatusSprites[1];
+
+        OnToggle(isOn);
+
+        if (GetComponent<ScreenMode>())
         {
-            toggleImage.sprite = toggleStatusSprites[0];
-            PlayerPrefs.SetInt(option, 0);
+            GetComponent<ScreenMode>().SetFullScreen(isOn);
         }
-        else
+
+        if (FindObjectOfType<NarrationSystem>())
         {
-            toggleImage.sprite = toggleStatusSprites[1];
-            PlayerPrefs.SetInt(option, 1);
+            FindObjectOfType<NarrationSystem>().SetSubtitlesActivated(isOn);
         }
     }
 
@@ -56,5 +50,18 @@ public class UIOptionsController : MonoBehaviour
     public string GetDescription()
     {
         return description;
+    }
+
+    private void LoadToggle()
+    {
+        isOn = SimpleSaveLoad.Instance.LoadData<bool>(FileType.Config, toggleKey, true);
+        if (isOn) toggleImage.sprite = toggleStatusSprites[0];
+        else toggleImage.sprite = toggleStatusSprites[1];
+    }
+
+    public void OnToggle(bool value)
+    {
+        SimpleSaveLoad.Instance.SaveData(FileType.Config, toggleKey, value);
+        Debug.Log("Toggle " + toggleKey + " is " + value);
     }
 }

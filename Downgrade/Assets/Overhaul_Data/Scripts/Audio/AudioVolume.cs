@@ -1,52 +1,70 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.UI;
 
 public class AudioVolume : MonoBehaviour
 {
-    AudioMixer mixer;
+    [SerializeField] private AudioMixer mixer;
 
-    float masterVol;
-    float musicVol;
-    float sfxVol;
-    float voiceVol;
+    [SerializeField] private Slider musicSlider;
+    [SerializeField] private Slider sfxSlider;
+    [SerializeField] private Slider voiceSlider;
 
-    public void SetMixer(AudioMixer mixer)
+    [SerializeField] private int lowestDeciblesBeforeMute = -20;
+    private bool listening;
+    private void Awake() { Invoker.InvokeDelayed(CustomAwake, 0.1f); }
+
+    private void CustomAwake()
     {
-        this.mixer = mixer;
+        musicSlider.value = LoadVolume("MusicVol");
+        sfxSlider.value = LoadVolume("SFXVol");
+        voiceSlider.value = LoadVolume("VoiceVol");
 
-        masterVol = PlayerPrefs.GetFloat("MasterVol", 1);
-        musicVol = PlayerPrefs.GetFloat("MusicVol", 1);
-        sfxVol = PlayerPrefs.GetFloat("SFXVol", 1);
-        voiceVol = PlayerPrefs.GetFloat("VoiceVol", 1);
+        mixer.SetFloat("MusicVol", SetVolume((int)musicSlider.value));
+        mixer.SetFloat("SFXVol", SetVolume((int)sfxSlider.value));
+        mixer.SetFloat("VoiceVol", SetVolume((int)voiceSlider.value));
+
+        musicSlider.onValueChanged.AddListener(delegate { SetMusicVolume(musicSlider); });
+        sfxSlider.onValueChanged.AddListener(delegate { SetSFXVolume(sfxSlider); });
+        voiceSlider.onValueChanged.AddListener(delegate { SetVoiceVolume(voiceSlider); });
+
+        listening = true;
     }
 
-    public void SetMasterVolume(float sliderValue)
+    public void SetMusicVolume(Slider sliderValue)
     {
-        mixer.SetFloat("MasterVol", Mathf.Log10(sliderValue) * 20);
-        masterVol = sliderValue;
-        PlayerPrefs.SetFloat("MasterVol", sliderValue);
+        mixer.SetFloat("MusicVol", SetVolume((int)sliderValue.value));
+        SaveVolume("MusicVol", (int)sliderValue.value);
     }
 
-    public void SetMusicVolume(float sliderValue)
+    public void SetSFXVolume(Slider sliderValue)
     {
-        mixer.SetFloat("MusicVol", Mathf.Log10(sliderValue) * 20);
-        musicVol = sliderValue;
-        PlayerPrefs.SetFloat("MusicVol", sliderValue);
+        mixer.SetFloat("SFXVol", SetVolume((int)sliderValue.value));
+        SaveVolume("SFXVol", (int)sliderValue.value);
     }
 
-    public void SetSFXVolume(float sliderValue)
+    public void SetVoiceVolume(Slider sliderValue)
     {
-        mixer.SetFloat("SFXVol", Mathf.Log10(sliderValue) * 20);
-        sfxVol = sliderValue;
-        PlayerPrefs.SetFloat("SFXVol", sliderValue);
+        mixer.SetFloat("VoiceVol", SetVolume((int)sliderValue.value));
+        SaveVolume("VoiceVol", (int)sliderValue.value);
     }
 
-    public void SetVoiceVolume(float sliderValue)
+    private float SetVolume(int sliderVolume)
     {
-        mixer.SetFloat("VoiceVol", Mathf.Log10(sliderValue) * 20);
-        voiceVol = sliderValue;
-        PlayerPrefs.SetFloat("VoiceVol", sliderValue);
+        int volume = sliderVolume * 10;
+        float adjustedVolume = lowestDeciblesBeforeMute + (-lowestDeciblesBeforeMute / 5 * volume / 20);
+        if (volume == 0) adjustedVolume = -100;
+        return adjustedVolume;
+    }
+
+    private void SaveVolume(string key, int value)
+    {
+        if (!listening) return;
+        SimpleSaveLoad.Instance.SaveData(FileType.Config, key, value);
+    }
+
+    private float LoadVolume(string key)
+    {
+        return SimpleSaveLoad.Instance.LoadData<int>(FileType.Config, key, 5);
     }
 }

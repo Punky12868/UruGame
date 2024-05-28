@@ -25,24 +25,14 @@ public class AudioManager : MonoBehaviour
 
     private void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        if (instance == null) instance = this;
+        else Destroy(gameObject);
 
         music.outputAudioMixerGroup = mixer.FindMatchingGroups("Music")[0];
         sfx.outputAudioMixerGroup = mixer.FindMatchingGroups("SFX")[0];
         voice.outputAudioMixerGroup = mixer.FindMatchingGroups("Voice")[0];
 
-        if (playOnAwake)
-        {
-            PlayMusic(musicIndex);
-        }
-
+        if (playOnAwake) PlayMusic(musicIndex);
         DontDestroyOnLoad(gameObject);
     }
 
@@ -69,47 +59,21 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public void StopMusic()
-    {
-        StartCoroutine(FadeOutStopMusic());
-    }
-
-    public void PlaySFX(int sfxIndex)
-    {
-        sfx.PlayOneShot(sfxClips[sfxIndex]);
-    }
-
-    public void PlayCustomSFX(AudioClip clip)
-    {
-        sfx.PlayOneShot(clip);
-    }
-
+    public void StopMusic() { StartCoroutine(FadeOutStopMusic()); }
+    public void PlaySFX(int sfxIndex) { sfx.PlayOneShot(sfxClips[sfxIndex]); }
+    public void PlayCustomSFX(AudioClip clip) { sfx.PlayOneShot(clip); }
     public void PlayCustomSFX(AudioClip clip, AudioSource source)
-    {
-        source.outputAudioMixerGroup = sfx.outputAudioMixerGroup;
-        source.PlayOneShot(clip);
-    }
+    { source.outputAudioMixerGroup = sfx.outputAudioMixerGroup; source.PlayOneShot(clip); }
 
     public void PlayVoice(AudioClip voiceClip)
     {
-        if (voice.isPlaying)
-        {
-            voice.Stop();
-        }
-
+        if (voice.isPlaying) voice.Stop();
         voice.PlayOneShot(voiceClip);
     }
 
-    public void StopSFX()
-    {
-        sfx.Stop();
-    }
+    public void StopSFX() { sfx.Stop(); }
 
-    public void StopAllAudio()
-    {
-        music.Stop();
-        sfx.Stop();
-    }
+    public void StopAllAudio() { music.Stop(); sfx.Stop(); }
 
     private IEnumerator FadeOutMusic(int musicIndex)
     {

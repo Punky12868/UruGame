@@ -45,4 +45,5 @@ public class SetPlayerMap : MonoBehaviour
     }
 
     public void SetLoadUiMap(bool value) { loadUiMap = value; }
+    public bool GetLoadUiMap() { return loadUiMap;}
 }
