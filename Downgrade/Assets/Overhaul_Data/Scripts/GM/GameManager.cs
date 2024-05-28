@@ -2,12 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
+using EasyTransition;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
     private bool isSelectingDowngrade = false;
     [SerializeField] private string levelUnlockerKey = "level_";
+    [SerializeField] private TransitionSettings transitionSettings;
+    [SerializeField] private float transitionDelay;
 
     private void Awake()
     {
@@ -65,6 +68,8 @@ public class GameManager : MonoBehaviour
     public void Victory()
     {
         FindObjectOfType<TextScreens>().OnVictory();
+        SimpleSaveLoad.Instance.SaveData<bool>(FileType.Gameplay, levelUnlockerKey + SceneManager.GetActiveScene().buildIndex, true);
+        TransitionManager.Instance().Transition(SceneManager.GetActiveScene().buildIndex + 1, transitionSettings, transitionDelay);
     }
 
     public delegate void OnPauseGame();

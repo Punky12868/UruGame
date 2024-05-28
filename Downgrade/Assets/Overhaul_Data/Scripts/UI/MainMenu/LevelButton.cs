@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using EasyTransition;
 
 public class LevelButton : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class LevelButton : MonoBehaviour
     [SerializeField] private string levelName;
     [SerializeField] private bool unlocked;
     [SerializeField] private bool canBeUnlocked;
+    [SerializeField] private TransitionSettings transitionSettings;
+    [SerializeField] private float startDelay;
 
     private void Awake()
     {
@@ -19,7 +22,8 @@ public class LevelButton : MonoBehaviour
     public void LoadLevel()
     {
         // quiza añadir transición antes de cargar el nivel¿¿
-        if (unlocked) GameManager.Instance.LoadScene(levelID);
+        //if (unlocked) GameManager.Instance.LoadScene(levelID);
+        if (unlocked) TransitionManager.Instance().Transition(levelID, transitionSettings, startDelay);
     }
 
     public int GetLevelID() { return levelID; }

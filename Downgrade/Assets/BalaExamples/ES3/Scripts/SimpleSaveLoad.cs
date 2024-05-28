@@ -3,6 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
+public enum FileType { Config, Gameplay }
+public class FileDefinition
+{
+    public readonly string gameplay_saveDataName = "_Player";
+    public readonly string gameplay_saveDataExtension = "ovh";
+
+    public readonly string config_saveDataName = "Config";
+    public readonly string config_saveDataExtension = "cfg";
+}
+
 public class SimpleSaveLoad : MonoBehaviour
 {
     public static SimpleSaveLoad Instance;
@@ -25,7 +35,7 @@ public class SimpleSaveLoad : MonoBehaviour
 
         ES3Settings.defaultSettings.location = ES3.Location.File;
         fullPath = myDocumentsPath + "/" + folderName + "/";
-        Debug.Log("Save data path: " + fullPath);
+        Log("Save data path: " + fullPath);
     }
 
     public void SaveData<T>(FileType type, string key, T value)
@@ -34,19 +44,7 @@ public class SimpleSaveLoad : MonoBehaviour
         CheckFolder();
 
         ES3.Save<T>(key, value, fullPath + saveDataName + "." + saveDataExtension);
-        if(consoleLog) Debug.Log("Saved " + key + " with value " + value + " to " + fullPath + saveDataName + "." + saveDataExtension);
-    }
-
-    public T LoadData<T>(FileType type, string key)
-    {
-        GetType(type);
-        if (ES3.FileExists(fullPath + saveDataName + "." + saveDataExtension) && CheckKey(key))
-        {
-            if (consoleLog) Debug.Log("Loaded " + key + " with value " + ES3.Load<T>(key, fullPath + saveDataName + "." + saveDataExtension) + " from " + fullPath + saveDataName + "." + saveDataExtension);
-            T value = ES3.Load<T>(key, fullPath + saveDataName + "." + saveDataExtension);
-            return value;
-        }
-        return default(T);
+        Log("Saved " + key + " with value " + value + " to " + fullPath + saveDataName + "." + saveDataExtension);
     }
 
     public T LoadData<T>(FileType type, string key, T defaultValue)
@@ -54,17 +52,19 @@ public class SimpleSaveLoad : MonoBehaviour
         GetType(type);
         if (ES3.FileExists(fullPath + saveDataName + "." + saveDataExtension) && CheckKey(key))
         {
-            if (consoleLog) 
-            { 
-                Debug.Log("Key " + key + " exists in " + fullPath + saveDataName + "." + saveDataExtension);
-                Debug.Log("Loaded " + key + " with value " + ES3.Load<T>(key, fullPath + saveDataName + "." + saveDataExtension) + " from " + fullPath + saveDataName + "." + saveDataExtension); 
-            }
+            Log("Key " + key + " exists in " + fullPath + saveDataName + "." + saveDataExtension);
+            Log("Loaded " + key + " with value " + ES3.Load<T>(key, fullPath + saveDataName + "." + saveDataExtension) + " from " + fullPath + saveDataName + "." + saveDataExtension); 
             
             T value = ES3.Load<T>(key, fullPath + saveDataName + "." + saveDataExtension);
             return value;
         }
-        if (consoleLog) Debug.Log("Key " + key + " does not exist in " + fullPath + saveDataName + "." + saveDataExtension);
+        Log("File or Key " + key + " does not exist in " + fullPath + saveDataName + "." + saveDataExtension);
         return defaultValue;
+    }
+
+    private void CheckFolder()
+    {
+        if (!Directory.Exists(myDocumentsPath + folderName)) Directory.CreateDirectory(myDocumentsPath + folderName);
     }
 
     public bool CheckKey(string key)
@@ -94,18 +94,8 @@ public class SimpleSaveLoad : MonoBehaviour
         }
     }
 
-    private void CheckFolder()
+    private void Log(string message)
     {
-        if (!Directory.Exists(myDocumentsPath + folderName)) Directory.CreateDirectory(myDocumentsPath + folderName);
+        if (consoleLog) Debug.Log(message);
     }
-}
-
-public enum FileType { Config, Gameplay }
-public class FileDefinition
-{
-    public readonly string gameplay_saveDataName = "_Player";
-    public readonly string gameplay_saveDataExtension = "ovh";
-
-    public readonly string config_saveDataName = "Config";
-    public readonly string config_saveDataExtension = "cfg";
 }

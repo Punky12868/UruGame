@@ -1198,6 +1198,8 @@ MonoBehaviour:
   levelName: Nivel 2
   unlocked: 0
   canBeUnlocked: 0
+  transitionSettings: {fileID: 0}
+  startDelay: 0
 --- !u!222 &177303778
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1686,6 +1688,8 @@ MonoBehaviour:
   levelName: Nivel 5
   unlocked: 0
   canBeUnlocked: 0
+  transitionSettings: {fileID: 0}
+  startDelay: 0
 --- !u!114 &285296739
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2741,6 +2745,8 @@ MonoBehaviour:
   levelName: Nivel 3
   unlocked: 0
   canBeUnlocked: 0
+  transitionSettings: {fileID: 0}
+  startDelay: 0
 --- !u!114 &358419819
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3481,6 +3487,8 @@ MonoBehaviour:
   levelName: Nivel 4
   unlocked: 0
   canBeUnlocked: 0
+  transitionSettings: {fileID: 0}
+  startDelay: 0
 --- !u!114 &404874745
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5060,6 +5068,8 @@ MonoBehaviour:
   levelName: Nivel 4
   unlocked: 0
   canBeUnlocked: 1
+  transitionSettings: {fileID: 11400000, guid: b0126e1e0c6c2a04895d564bd230dfb9, type: 2}
+  startDelay: 0
 --- !u!1 &650857844
 GameObject:
   m_ObjectHideFlags: 0
@@ -5442,6 +5452,8 @@ MonoBehaviour:
   levelName: Nivel 6
   unlocked: 0
   canBeUnlocked: 0
+  transitionSettings: {fileID: 0}
+  startDelay: 0
 --- !u!114 &685600444
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5991,6 +6003,8 @@ MonoBehaviour:
   levelName: Nivel 7
   unlocked: 0
   canBeUnlocked: 1
+  transitionSettings: {fileID: 11400000, guid: b0126e1e0c6c2a04895d564bd230dfb9, type: 2}
+  startDelay: 0
 --- !u!1 &747982325
 GameObject:
   m_ObjectHideFlags: 0
@@ -6931,6 +6945,8 @@ MonoBehaviour:
   levelName: Nivel 1
   unlocked: 0
   canBeUnlocked: 0
+  transitionSettings: {fileID: 0}
+  startDelay: 0
 --- !u!222 &853926206
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6959,6 +6975,63 @@ RectTransform:
   m_AnchoredPosition: {x: -751, y: 181.4}
   m_SizeDelta: {x: 89.86, y: 89.86}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1001 &855982406
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5302660681265042204, guid: 0be760750a3365e4386fef81e80f8da7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5302660681265042204, guid: 0be760750a3365e4386fef81e80f8da7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5302660681265042204, guid: 0be760750a3365e4386fef81e80f8da7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5302660681265042204, guid: 0be760750a3365e4386fef81e80f8da7, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5302660681265042204, guid: 0be760750a3365e4386fef81e80f8da7, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5302660681265042204, guid: 0be760750a3365e4386fef81e80f8da7, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5302660681265042204, guid: 0be760750a3365e4386fef81e80f8da7, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5302660681265042204, guid: 0be760750a3365e4386fef81e80f8da7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5302660681265042204, guid: 0be760750a3365e4386fef81e80f8da7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5302660681265042204, guid: 0be760750a3365e4386fef81e80f8da7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5551050723262144150, guid: 0be760750a3365e4386fef81e80f8da7, type: 3}
+      propertyPath: m_Name
+      value: TransitionManager
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0be760750a3365e4386fef81e80f8da7, type: 3}
 --- !u!1 &864563308
 GameObject:
   m_ObjectHideFlags: 0
@@ -7623,6 +7696,8 @@ MonoBehaviour:
   levelName: Nivel 3
   unlocked: 0
   canBeUnlocked: 0
+  transitionSettings: {fileID: 0}
+  startDelay: 0
 --- !u!114 &984968047
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7837,6 +7912,8 @@ MonoBehaviour:
   levelName: Nivel 7
   unlocked: 0
   canBeUnlocked: 0
+  transitionSettings: {fileID: 0}
+  startDelay: 0
 --- !u!114 &997621815
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8284,6 +8361,8 @@ MonoBehaviour:
   levelName: Nivel 6
   unlocked: 0
   canBeUnlocked: 1
+  transitionSettings: {fileID: 11400000, guid: b0126e1e0c6c2a04895d564bd230dfb9, type: 2}
+  startDelay: 0
 --- !u!1 &1075634676
 GameObject:
   m_ObjectHideFlags: 0
@@ -9392,6 +9471,8 @@ MonoBehaviour:
   levelName: Nivel 7
   unlocked: 0
   canBeUnlocked: 0
+  transitionSettings: {fileID: 0}
+  startDelay: 0
 --- !u!114 &1246059122
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9665,6 +9746,8 @@ MonoBehaviour:
   levelName: Nivel 5
   unlocked: 0
   canBeUnlocked: 0
+  transitionSettings: {fileID: 0}
+  startDelay: 0
 --- !u!114 &1261224801
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9933,6 +10016,8 @@ MonoBehaviour:
   levelName: Nivel 2
   unlocked: 0
   canBeUnlocked: 0
+  transitionSettings: {fileID: 0}
+  startDelay: 0
 --- !u!222 &1315559735
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -10551,6 +10636,8 @@ MonoBehaviour:
   levelName: Nivel 2
   unlocked: 0
   canBeUnlocked: 1
+  transitionSettings: {fileID: 11400000, guid: b0126e1e0c6c2a04895d564bd230dfb9, type: 2}
+  startDelay: 0
 --- !u!1 &1348977584
 GameObject:
   m_ObjectHideFlags: 0
@@ -10690,6 +10777,8 @@ MonoBehaviour:
   levelName: Nivel 3
   unlocked: 0
   canBeUnlocked: 1
+  transitionSettings: {fileID: 11400000, guid: b0126e1e0c6c2a04895d564bd230dfb9, type: 2}
+  startDelay: 0
 --- !u!1 &1352689693
 GameObject:
   m_ObjectHideFlags: 0
@@ -10967,6 +11056,8 @@ MonoBehaviour:
   levelName: Nivel 5
   unlocked: 0
   canBeUnlocked: 0
+  transitionSettings: {fileID: 0}
+  startDelay: 0
 --- !u!114 &1388630468
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11369,6 +11460,8 @@ MonoBehaviour:
   levelName: Nivel 3
   unlocked: 0
   canBeUnlocked: 0
+  transitionSettings: {fileID: 0}
+  startDelay: 0
 --- !u!114 &1437740411
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11562,6 +11655,8 @@ MonoBehaviour:
   levelName: Nivel 1
   unlocked: 0
   canBeUnlocked: 0
+  transitionSettings: {fileID: 0}
+  startDelay: 0
 --- !u!222 &1448506031
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -11723,6 +11818,8 @@ MonoBehaviour:
   levelName: Nivel 6
   unlocked: 0
   canBeUnlocked: 0
+  transitionSettings: {fileID: 0}
+  startDelay: 0
 --- !u!114 &1460471421
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12291,6 +12388,8 @@ MonoBehaviour:
   levelName: Nivel 1
   unlocked: 0
   canBeUnlocked: 0
+  transitionSettings: {fileID: 0}
+  startDelay: 0
 --- !u!222 &1508936114
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -14083,6 +14182,8 @@ MonoBehaviour:
   levelName: Nivel 4
   unlocked: 0
   canBeUnlocked: 0
+  transitionSettings: {fileID: 0}
+  startDelay: 0
 --- !u!114 &1683298118
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14818,6 +14919,8 @@ MonoBehaviour:
   levelName: Nivel 1
   unlocked: 1
   canBeUnlocked: 1
+  transitionSettings: {fileID: 11400000, guid: b0126e1e0c6c2a04895d564bd230dfb9, type: 2}
+  startDelay: 0
 --- !u!1 &1844516196
 GameObject:
   m_ObjectHideFlags: 0
@@ -15220,6 +15323,8 @@ MonoBehaviour:
   levelName: Nivel 4
   unlocked: 0
   canBeUnlocked: 0
+  transitionSettings: {fileID: 0}
+  startDelay: 0
 --- !u!114 &1871082415
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15581,6 +15686,8 @@ MonoBehaviour:
   levelName: Nivel 6
   unlocked: 0
   canBeUnlocked: 0
+  transitionSettings: {fileID: 0}
+  startDelay: 0
 --- !u!114 &1934997939
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16404,6 +16511,8 @@ MonoBehaviour:
   levelName: Nivel 5
   unlocked: 0
   canBeUnlocked: 1
+  transitionSettings: {fileID: 11400000, guid: b0126e1e0c6c2a04895d564bd230dfb9, type: 2}
+  startDelay: 0
 --- !u!1 &2026599301
 GameObject:
   m_ObjectHideFlags: 0
@@ -17039,6 +17148,8 @@ MonoBehaviour:
   levelName: Nivel 2
   unlocked: 0
   canBeUnlocked: 0
+  transitionSettings: {fileID: 0}
+  startDelay: 0
 --- !u!222 &2118522670
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -17199,6 +17310,8 @@ MonoBehaviour:
   levelName: Nivel 7
   unlocked: 0
   canBeUnlocked: 0
+  transitionSettings: {fileID: 0}
+  startDelay: 0
 --- !u!114 &2132721001
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18672,10 +18785,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: ----- Managers -----
       objectReference: {fileID: 0}
-    - target: {fileID: 4925695415570704438, guid: f2e6077a49322964b8c3648538e69c97, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4925695415570704439, guid: f2e6077a49322964b8c3648538e69c97, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -20145,3 +20254,4 @@ SceneRoots:
   - {fileID: 1339531323}
   - {fileID: 309547161}
   - {fileID: 1713033262}
+  - {fileID: 855982406}

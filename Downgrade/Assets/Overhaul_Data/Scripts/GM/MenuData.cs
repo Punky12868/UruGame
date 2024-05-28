@@ -18,6 +18,6 @@ public class MenuData : MonoBehaviour
 
     private void DelayedAwake()
     {
-        dgSelected = SimpleSaveLoad.Instance.LoadData<SelectedDowngrade>(FileType.Gameplay, "Downgrade");
+        dgSelected = SimpleSaveLoad.Instance.LoadData<SelectedDowngrade>(FileType.Gameplay, "Downgrade", SelectedDowngrade.None);
     }
 }
