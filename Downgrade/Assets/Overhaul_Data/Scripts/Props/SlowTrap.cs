@@ -25,7 +25,6 @@ public class SlowTrap : MonoBehaviour
             Destroy(gameObject);
         }
 
-
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, radius);
         foreach (Collider hit in hitColliders)
         {
@@ -47,9 +46,6 @@ public class SlowTrap : MonoBehaviour
                     }
                     originalSpeeds[hit.gameObject] = speedToSave;
                 }
-                
-
-                
             }
         }
 
