@@ -28,11 +28,11 @@ public class PlayerInventory : MonoBehaviour
 
         switch (item.GetComponent<Item>().itemType)
         {
-            case ItemType.Health:
+            case ItemType.Skull:
                 // use health item
                 UseHealthItem();
                 break;
-            case ItemType.Stamina:
+            case ItemType.Flower:
                 // use stamina item
                 UseStaminaItem();
                 break;

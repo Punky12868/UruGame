@@ -6,7 +6,13 @@ using UnityEngine;
 public class SmallEnemyPlaceholder : EnemyBase
 {
     // PlaceHolder for a Small Enemy
+    [SerializeField] private Dictionary<GameObject, Collider> posibleTargets = new Dictionary<GameObject, Collider>();
 
+    public override void Awake()
+    {
+        base.Awake();
+
+    }
     public void FixedUpdate()
     {
         if (GameManager.Instance.IsGamePaused())
@@ -14,8 +20,86 @@ public class SmallEnemyPlaceholder : EnemyBase
 
         OnCooldown();
         Movement();
-        Attack();
         FlipPivot();
+
+
+        if (posibleTargets.Count < 1)
+        {
+            target = GameObject.FindGameObjectWithTag("Player").transform;
+
+        }
+        else
+        {
+
+        }
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, closeAttackRange);
+
+        for (int i = 1; i < hitColliders.Length; i++)
+        {
+            if ((hitColliders[i].CompareTag("Player") || hitColliders[i].CompareTag("Enemy") && hitColliders[i] != GetComponent<Collider>()))
+            {
+                if (!posibleTargets.ContainsKey(hitColliders[i].gameObject))
+                {
+                    posibleTargets[hitColliders[i].gameObject] = hitColliders[i];
+                }
+            }
+        }
+
+        List<GameObject> toRemove = new List<GameObject>();
+        foreach (var obj in posibleTargets)
+        {
+            bool isStillInside = false;
+            foreach (var hit in hitColliders)
+            {
+                if (hit.gameObject == obj.Key)
+                {
+                    isStillInside = true;
+                    break;
+                }
+            }
+            if (!isStillInside)
+            {
+                toRemove.Add(obj.Key);
+            }
+        }
+
+        foreach (var obj in toRemove)
+        {
+            posibleTargets.Remove(obj);
+        }
+
+        SelectAttackObjective(hitColliders);
+    }
+    private void SelectAttackObjective(Collider[] colliders)
+    {
+        if (isStunned || isParried || !isAnimationDone || isOnCooldown || decidedChargeAttack)
+        {
+            return;
+        }
+
+        if (isMelee)
+        {
+            List<Collider> Punchables = new List<Collider>();
+            for (int i = 0; i < colliders.Length; i++)
+            {
+                if (colliders[i].CompareTag("Player") || colliders[i].CompareTag("Enemy"))
+                {
+                    Punchables.Add(colliders[i]);
+
+                }
+            }
+            if (Punchables.Count > 0)
+            {
+                int randomSelect = Random.Range(0, Punchables.Count);
+                Debug.Log("Se selecciono el numero: " + randomSelect + ". En una lista hasta: " + (Punchables.Count - 1) + ". Y el objeto seleccionado fue: " + Punchables[randomSelect].name);
+
+                Transform transform = Punchables[randomSelect].transform;
+                target = transform;
+                MeleeBehaviour();
+            }
+        }
+        
+
     }
 
     public override void Movement()
@@ -149,6 +233,10 @@ public class SmallEnemyPlaceholder : EnemyBase
             ActivateNormalAttackHitbox(normalAttackHitboxAppearTime.x);
             isAttacking = true;
             PlayAnimation(animationIDs[4], true, true);
+            if (target.CompareTag("Enemy") && target.gameObject != this.gameObject)
+            {
+                target.GetComponent<EnemyBase>().TakeDamage(normalAttackdamage, 0f, new Vector3(0, 0, 0));
+            }
         }
         else
         {

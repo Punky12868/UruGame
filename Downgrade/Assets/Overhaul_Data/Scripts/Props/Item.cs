@@ -31,12 +31,12 @@ public class Item : MonoBehaviour, IPickup
 
         switch (itemType)
         {
-            case ItemType.Health:
+            case ItemType.Skull:
                 FindObjectOfType<PlayerInventory>().AddItem(FindObjectOfType<PropsManager>().GetItem(itemType));
                 FindAnyObjectByType<PlayerUI>().SetItemIcon(itemIcon);
                 Destroy(gameObject);
                 break;
-            case ItemType.Stamina:
+            case ItemType.Flower:
                 FindObjectOfType<PlayerInventory>().AddItem(FindObjectOfType<PropsManager>().GetItem(itemType));
                 FindAnyObjectByType<PlayerUI>().SetItemIcon(itemIcon);
                 Destroy(gameObject);
