@@ -166,7 +166,7 @@ public class PlantTrap : EnemyBase
             ActivateNormalAttackHitbox(normalAttackHitboxAppearTime.x);
             isAttacking = true;
             PlayAnimation(animationIDs[1], true, true);
-            if (goToAttack.gameObject.CompareTag("Enemy"))
+            if (goToAttack.gameObject.CompareTag("Enemy") && goToAttack.gameObject != this.gameObject)
             {
                 goToAttack.GetComponent<EnemyBase>().TakeDamage(normalAttackdamage, 0f, new Vector3(0, 0, 0));
             }
