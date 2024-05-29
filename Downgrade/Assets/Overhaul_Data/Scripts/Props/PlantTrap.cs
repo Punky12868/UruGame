@@ -13,8 +13,7 @@ public class PlantTrap : EnemyBase
     [SerializeField] private Dictionary<GameObject, Transform> posibleTargets = new Dictionary<GameObject, Transform>();
 
     public override void Awake()
-    {
-        
+    {      
         isStatic = true;
         base.Awake();
     }
@@ -24,7 +23,7 @@ public class PlantTrap : EnemyBase
     {
         if (!isAttacking)
         {
-            PlayAnimation(animationIDs[1], false);
+            PlayAnimation(animationIDs[0], false);
         }
 
         FlipPivot();
@@ -40,19 +39,20 @@ public class PlantTrap : EnemyBase
 
 
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, radius);
-        foreach (Collider hit in hitColliders)
+
+        for (int i = 1; i < hitColliders.Length; i++)
         {
-            if ((hit.CompareTag("Player") || hit.CompareTag("Enemy")))
+            if ((hitColliders[i].CompareTag("Player") || hitColliders[i].CompareTag("Enemy")))
             {
 
-                if (!posibleTargets.ContainsKey(hit.gameObject))
+                if (!posibleTargets.ContainsKey(hitColliders[i].gameObject))
                 {
-                    if (hit.CompareTag("Player") && isReadyToAttack)
+                    if (hitColliders[i].CompareTag("Player") && isReadyToAttack)
                     {
                         SelectAttackObjective(hitColliders);
                     }
 
-                    if (hit.CompareTag("Enemy") && isReadyToAttack)
+                    if (hitColliders[i].CompareTag("Enemy") && isReadyToAttack)
                     {
                         SelectAttackObjective(hitColliders);
                     }
@@ -70,14 +70,12 @@ public class PlantTrap : EnemyBase
                 {
                     isStillInside = true;
                     break;
-                }
-                
+                }            
             }
             if (!isStillInside)
             {
                 toRemove.Add(obj.Key);
             }
-
         }
 
         foreach (var obj in toRemove)
@@ -126,8 +124,22 @@ public class PlantTrap : EnemyBase
 
     private void SelectAttackObjective(Collider[] colliders)
     {
-        int randomSelect = Random.Range(0, colliders.Length-1);
-        Transform transform = colliders[randomSelect].transform;
+        isReadyToAttack = false;
+        timeToAttack = 0;
+        List<Collider> Punchables = new List<Collider>();
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            if (colliders[i].CompareTag("Player") || colliders[i].CompareTag("Enemy"))
+            {
+                Punchables.Add(colliders[i]);
+                
+            }
+        }
+        
+        int randomSelect = Random.Range(0 , Punchables.Count);
+        Debug.Log("Se selecciono el numero: " + randomSelect + ". En una lista de: " + Punchables.Count+ ". Y el objeto seleccionado fue: " + Punchables[randomSelect].name);
+
+        Transform transform = Punchables[randomSelect].transform;
         goToAttack = transform;
         MeleeBehaviour();
     }
@@ -147,11 +159,19 @@ public class PlantTrap : EnemyBase
         if (Vector3.Distance(goToAttack.position, transform.position) <= closeAttackRange)
         {
             // Attack the player
-            isReadyToAttack = false;
-            timeToAttack = 0;
+           
             ActivateNormalAttackHitbox(normalAttackHitboxAppearTime.x);
             isAttacking = true;
             PlayAnimation(animationIDs[1], true, true);
+            if (goToAttack.gameObject.CompareTag("Enemy"))
+            {
+                goToAttack.GetComponent<EnemyBase>().TakeDamage(normalAttackdamage, 0f, new Vector3(0, 0, 0));
+            }
+            if (goToAttack.gameObject.CompareTag("Player"))
+            {
+                goToAttack.GetComponent<PlayerControllerOverhaul>().TakeDamageProxy(normalAttackdamage,0,transform.position);
+            }
+
 
             /*decidedChargeAttack = true;
             Invoke("ResetDecitionStatus", chargeDecitionCooldown / 2);*/
