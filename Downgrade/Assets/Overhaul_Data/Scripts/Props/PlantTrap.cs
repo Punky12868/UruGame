@@ -135,13 +135,16 @@ public class PlantTrap : EnemyBase
                 
             }
         }
-        
-        int randomSelect = Random.Range(0 , Punchables.Count);
-        Debug.Log("Se selecciono el numero: " + randomSelect + ". En una lista de: " + Punchables.Count+ ". Y el objeto seleccionado fue: " + Punchables[randomSelect].name);
+        if (Punchables.Count> 0)
+        {
+            int randomSelect = Random.Range(0, Punchables.Count);
+            Debug.Log("Se selecciono el numero: " + randomSelect + ". En una lista hasta: " + (Punchables.Count -1) + ". Y el objeto seleccionado fue: " + Punchables[randomSelect].name);
 
-        Transform transform = Punchables[randomSelect].transform;
-        goToAttack = transform;
-        MeleeBehaviour();
+            Transform transform = Punchables[randomSelect].transform;
+            goToAttack = transform;
+            MeleeBehaviour();
+        }
+        
     }
 
     public override void Death()
@@ -186,8 +189,8 @@ public class PlantTrap : EnemyBase
         }
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawWireSphere(transform.position, radius);
-    }
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.DrawWireSphere(transform.position, radius);
+    //}
 }
