@@ -7,6 +7,7 @@ public class Prop : MonoBehaviour
     Animator animator;
     GameObject holdedItem;
     [SerializeField] bool isHealing = true;
+    [SerializeField] bool isRotated90 = false;
     [SerializeField] ItemType itemType;
     [SerializeField] string animName;
     [SerializeField] float spawnItemTime;
@@ -48,6 +49,7 @@ public class Prop : MonoBehaviour
 
     private void SpawnTrap()
     {
-        Instantiate(trap, transform.position + new Vector3(0,0.1f,0), new Quaternion(0.707106829f, 0, 0, 0.707106829f));
+        if(isRotated90) { Instantiate(trap, transform.position + new Vector3(0, 0.1f, 0), new Quaternion(0.707106829f, 0, 0, 0.707106829f)); }
+        else { Instantiate(trap, transform.position + new Vector3(0, 0.1f, 0), Quaternion.identity); } 
     }
 }
