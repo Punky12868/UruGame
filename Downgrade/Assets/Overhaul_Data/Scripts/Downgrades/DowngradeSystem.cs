@@ -12,6 +12,13 @@ public class DowngradeSystem : MonoBehaviour, IObserver
     Subject player;
     List<Subject> enemies = new List<Subject>();
 
+    //[SerializeField] private Slime slimeDg;
+    //[SerializeField] private Paralisis paralisisDg;
+    //[SerializeField] private Rodillas rodillasDg;
+    //[SerializeField] private Moneda monedaDg;
+    //[SerializeField] private Esqueleto esqueletoDg;
+    //[SerializeField] private Debil debilDg;
+
     //[Header("Stamina")]
     private float staminaLossAmmount;
 
@@ -80,6 +87,32 @@ public class DowngradeSystem : MonoBehaviour, IObserver
     private void LoadDg()
     {
         dg = SimpleSaveLoad.Instance.LoadData<SelectedDowngrade>(FileType.Gameplay, "Downgrade", SelectedDowngrade.None);
+
+        switch (dg)
+        {
+            case SelectedDowngrade.None:
+                break;
+            case SelectedDowngrade.Debil:
+                break;
+            case SelectedDowngrade.Stamina:
+                break;
+            case SelectedDowngrade.Esqueleto:
+                break;
+            case SelectedDowngrade.Daga:
+                break;
+            case SelectedDowngrade.Dados:
+                break;
+            case SelectedDowngrade.Paralisis:
+                break;
+            case SelectedDowngrade.Slime:
+                break;
+            case SelectedDowngrade.Rodilla:
+                break;
+            case SelectedDowngrade.Moneda:
+                break;
+            default:
+                break;
+        }
     }
 
     public void SetDowngrade(SelectedDowngrade dg)

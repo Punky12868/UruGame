@@ -275,6 +275,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadUiMap: 1
+  consoleLog: 0
+  downgradeSelectionIndex: 0
 --- !u!1 &520728018
 GameObject:
   m_ObjectHideFlags: 0
@@ -513,6 +515,7 @@ MonoBehaviour:
   cardsMidPos: {fileID: 75305404}
   cardsStartPos: {fileID: 1961289241}
   fadeDuration: 1
+  spawnOnAwake: 0
   downgradePoll:
   - {fileID: 11400000, guid: 6307c8fd594e0914db29d655ca55eca3, type: 2}
   - {fileID: 11400000, guid: 9b1364e366180174bb311d07ee3b9293, type: 2}
@@ -2148,6 +2151,10 @@ PrefabInstance:
     - target: {fileID: 4925695415570704439, guid: f2e6077a49322964b8c3648538e69c97, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8512454978613515294, guid: f2e6077a49322964b8c3648538e69c97, type: 3}
+      propertyPath: consoleLog
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

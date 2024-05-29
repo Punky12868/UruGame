@@ -137,12 +137,13 @@ public class PlayerControllerOverhaul : Subject, IAnimController
         _hitParticleEmission = hitParticleEmission.emission;
         _hitParticleEmission.enabled = false;
         Invoker.InvokeDelayed(DelayedAwake, 0.1f);
-        NotifyPlayerObservers(AllPlayerActions.Start);
+        
         
         //NotifyObservers();
     }
     private void DelayedAwake() 
-    { 
+    {
+        NotifyPlayerObservers(AllPlayerActions.Start);
         FindObjectOfType<CutOutObject>().AddTarget(transform); 
         if (FindObjectOfType<SetPlayerMap>()) FindObjectOfType<SetPlayerMap>().SetLoadUiMap(true); 
     }
