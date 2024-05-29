@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DowngradeSystem : MonoBehaviour, IObserver
 {
@@ -78,7 +79,7 @@ public class DowngradeSystem : MonoBehaviour, IObserver
 
     private void LoadDg()
     {
-        //dg = SimpleSaveLoad.Instance.LoadData<SelectedDowngrade>(FileType.Gameplay, "Downgrade", SelectedDowngrade.None);
+        dg = SimpleSaveLoad.Instance.LoadData<SelectedDowngrade>(FileType.Gameplay, "Downgrade", SelectedDowngrade.None);
     }
 
     public void SetDowngrade(SelectedDowngrade dg)
@@ -120,12 +121,19 @@ public class DowngradeSystem : MonoBehaviour, IObserver
 
         DontDestroyOnLoad(gameObject);
 
+        Invoker.InvokeDelayed(DelayedAwake, 0.1f);
+    }
+
+    private void DelayedAwake()
+    {
         LoadDg();
         //RemoveDowngrade();
     }
 
     private void Update()
     {
+        if (SceneManager.GetActiveScene().buildIndex <= 2) return;
+
         if (isNotKilling && enemySpawned)
         {
             enemyBoostTime += Time.deltaTime;
@@ -158,6 +166,8 @@ public class DowngradeSystem : MonoBehaviour, IObserver
     #region Notify
     public void OnPlayerNotify(AllPlayerActions actions)
     {
+        if (SceneManager.GetActiveScene().buildIndex <= 2) return;
+
         if (actions == AllPlayerActions.Start && dg == SelectedDowngrade.None)
         {
             LoadDg();
@@ -268,6 +278,8 @@ public class DowngradeSystem : MonoBehaviour, IObserver
 
     public void OnEnemyNotify(AllEnemyActions actions)
     {
+        if (SceneManager.GetActiveScene().buildIndex <= 2) return;
+
         switch (dg)
         {
             case SelectedDowngrade.Esqueleto:

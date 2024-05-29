@@ -138,9 +138,14 @@ public class PlayerControllerOverhaul : Subject, IAnimController
         _hitParticleEmission.enabled = false;
         Invoker.InvokeDelayed(DelayedAwake, 0.1f);
         NotifyPlayerObservers(AllPlayerActions.Start);
+        
         //NotifyObservers();
     }
-    private void DelayedAwake() { FindObjectOfType<CutOutObject>().AddTarget(transform);}
+    private void DelayedAwake() 
+    { 
+        FindObjectOfType<CutOutObject>().AddTarget(transform); 
+        if (FindObjectOfType<SetPlayerMap>()) FindObjectOfType<SetPlayerMap>().SetLoadUiMap(true); 
+    }
 
     public void Update()
     {
@@ -163,7 +168,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
 
     public void FixedUpdate()
     {
-        if (!canMove || isAttacking || paralized) return;
+        if (!canMove || isAttacking || paralized || isOnCooldown) return;
 
         if (isRolling)
         {
@@ -189,7 +194,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     #region Actions
     public void Inputs()
     {
-        if (isAttacking || wasParryPressed) direction = Vector3.zero;
+        if (isAttacking || wasParryPressed || isOnCooldown) direction = Vector3.zero;
         else direction = new Vector3(input.GetAxisRaw("Horizontal"), 0, input.GetAxisRaw("Vertical"));
 
         if (input.GetButtonDown("Attack")) OverlapAttack();
@@ -576,6 +581,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     #region Flip Sprite Logic
     private void FlipSprite()
     {
+        if (isRolling) return;
         if (direction.x < 0) isFacingLeft = false;
         else if (direction.x > 0) isFacingLeft = true;
         RotateSprite();

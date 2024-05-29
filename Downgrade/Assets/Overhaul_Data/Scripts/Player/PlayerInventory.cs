@@ -14,7 +14,9 @@ public class PlayerInventory : MonoBehaviour
     {
         if (item == null) return;
 
-        Instantiate(item, transform.position, Quaternion.identity);
+        GameObject droppedItem = Instantiate(item, transform.position, Quaternion.identity);
+        Vector3 dir = transform.forward + transform.up;
+        droppedItem.GetComponent<Rigidbody>().AddForce(dir * throwForce, ForceMode.Impulse);
         GetComponent<PlayerInteraction>().SetPickUp();
         FindObjectOfType<PlayerUI>().SetItemIcon(nullIcon);
         item = null;

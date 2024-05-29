@@ -42,4 +42,20 @@ public class LevelUnlocker : MonoBehaviour
         if (levelButton.IsUnlocked()) lockImage.SetActive(false);
         else if (!levelButton.IsUnlocked()) lockImage.SetActive(true);
     }
+
+    public void LockAllLevels()
+    {
+        for (int i = 0; i < levels.Length; i++)
+        {
+            if (i == 0) continue;
+
+            LevelButton levelButton = levels[i].GetComponent<LevelButton>();
+            GameObject lockImage = levelButton.transform.GetChild(0).gameObject;
+
+            levelButton.SetLockState(true);
+            levelLockStatus(levelButton, lockImage);
+            
+            SimpleSaveLoad.Instance.SaveData(FileType.Gameplay, key + i, false);
+        }
+    }
 }

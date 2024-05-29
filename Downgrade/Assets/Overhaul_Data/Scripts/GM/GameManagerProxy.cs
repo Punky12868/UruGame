@@ -9,6 +9,11 @@ public class GameManagerProxy : MonoBehaviour
         //GameManager.Instance.PauseGame(false);
     }
 
+    public void LoadDowngradeSelectionScene()
+    {
+        GameManager.Instance.StartNewGame();
+    }
+
     public void LoadScene(int id)
     {
         GameManager.Instance.LoadScene(id);

@@ -1,5 +1,4 @@
 using DG.Tweening;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,15 +12,17 @@ public class SpawnDowngrades : MonoBehaviour
     [SerializeField] private Transform cardsMidPos;
     [SerializeField] private Transform cardsStartPos;
     [SerializeField] private float fadeDuration;
+    [SerializeField] private bool spawnOnAwake;
+    
 
     [SerializeField] private List<DowngradeCard> downgradePoll = new List<DowngradeCard>();
 
     List<DowngradeCard> Alldowngrades = new List<DowngradeCard>();
 
-    /*private void Awake()
+    private void Awake()
     {
-        Invoke("SpawnCards", 0.1f);
-    }*/
+        if (spawnOnAwake) Invoke("SpawnCards", 0.1f);
+    }
 
     public void SpawnCards()
     {
@@ -56,5 +57,7 @@ public class SpawnDowngrades : MonoBehaviour
     private void Update()
     {
         downgradesMenu.SetActive(GameManager.Instance.IsSelectingDowngrade());
+
+        //if (Time.timeScale == 0) Time.timeScale = 1;
     }
 }
