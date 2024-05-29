@@ -8,6 +8,7 @@ public class LevelButton : MonoBehaviour
     [SerializeField] private int levelID;
     [SerializeField] private int levelLockID;
     [SerializeField] private string levelName;
+    [SerializeField] private bool newGameButton;
     [SerializeField] private bool unlocked;
     [SerializeField] private bool canBeUnlocked;
     [SerializeField] private TransitionSettings transitionSettings;
@@ -23,6 +24,12 @@ public class LevelButton : MonoBehaviour
     {
         // quiza añadir transición antes de cargar el nivel¿¿
         //if (unlocked) GameManager.Instance.LoadScene(levelID);
+        if (newGameButton)
+        {
+            GameManager.Instance.StartNewGame();
+            return;
+        }
+
         if (unlocked) TransitionManager.Instance().Transition(levelID, transitionSettings, startDelay);
     }
 

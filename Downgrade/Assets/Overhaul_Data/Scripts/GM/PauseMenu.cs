@@ -30,6 +30,11 @@ public class PauseMenu : MonoBehaviour
             GameManager.Instance.PauseGame(!GameManager.Instance.IsGamePaused());
         }
 
+        if (player.GetButtonDown("Submit") && !GameManager.Instance.IsSelectingDowngrade() && onSlider && onConfig)
+        {
+            onSlider = false; sliderButtonSelected.Select(); subsButton.interactable = true; return;
+        }
+
         if (!GameManager.Instance.IsSelectingDowngrade())
         {
             if (onConfig) return;

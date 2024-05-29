@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
     private bool isSelectingDowngrade = false;
     [SerializeField] private string levelUnlockerKey = "level_";
+    [SerializeField] private int firstLevelIndex = 1;
+    [SerializeField] private int firstLevelDowngradeSelectionIndex = 2;
     [SerializeField] private TransitionSettings transitionSettings;
     [SerializeField] private float transitionDelay;
 
@@ -27,6 +29,26 @@ public class GameManager : MonoBehaviour
 
         /*Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;*/
+    }
+
+    public void StartNewGame()
+    {
+        if (!EraseProgressOnNewGame())
+        {
+            TransitionManager.Instance().Transition(firstLevelIndex, transitionSettings, transitionDelay);
+            Debug.Log("New Game Started");
+        }
+        else
+        {
+            if (FindObjectOfType<LevelUnlocker>()) FindObjectOfType<LevelUnlocker>().LockAllLevels();
+            TransitionManager.Instance().Transition(firstLevelIndex, transitionSettings, transitionDelay);
+            Debug.Log("Erased Game Started");
+        }
+    }
+
+    private bool EraseProgressOnNewGame()
+    {
+        return SimpleSaveLoad.Instance.LoadData<bool>(FileType.Gameplay, levelUnlockerKey + firstLevelIndex, false);
     }
 
     public void LoadScene(int id)
@@ -67,9 +89,18 @@ public class GameManager : MonoBehaviour
 
     public void Victory()
     {
+        int sceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
         FindObjectOfType<TextScreens>().OnVictory();
         SimpleSaveLoad.Instance.SaveData<bool>(FileType.Gameplay, levelUnlockerKey + SceneManager.GetActiveScene().buildIndex, true);
-        TransitionManager.Instance().Transition(SceneManager.GetActiveScene().buildIndex + 1, transitionSettings, transitionDelay);
+
+        if (sceneIndex == firstLevelDowngradeSelectionIndex)
+        {
+            StartNewGame();
+        }
+        else
+        {
+            TransitionManager.Instance().Transition(sceneIndex, transitionSettings, transitionDelay);
+        }
     }
 
     public delegate void OnPauseGame();

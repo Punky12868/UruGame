@@ -5,6 +5,8 @@ using UnityEngine;
 using TMPro;
 using DG.Tweening;
 using UnityEngine.EventSystems;
+using EasyTransition;
+using UnityEngine.SceneManagement;
 
 public class Cards : MonoBehaviour
 {
@@ -45,6 +47,11 @@ public class Cards : MonoBehaviour
     [SerializeField] private float cardRotationMultiplier;
     [SerializeField] private float cardRotationSpeed;
     [SerializeField] private float cardRotationSpeedMultiplier;
+
+    [SerializeField] private bool loadSpecificScene;
+    [SerializeField] private int loadSceneIndex;
+    [SerializeField] private TransitionSettings transitionSettings;
+    [SerializeField] private float transitionDelay;
 
     bool wiggle;
     bool isSelected;
@@ -161,9 +168,11 @@ public class Cards : MonoBehaviour
         dgCard.CardEffect();
         
         GameManager.Instance.PauseGame(false, false);
-        GameManager.Instance.LoadNextScene();
+        //GameManager.Instance.LoadNextScene();
         AudioManager.instance.PlayMusic(cardMusic);
         DowngradeSystem.Instance.SetDowngrade(dgCard.selectedDowngrade);
+        if (loadSpecificScene) TransitionManager.Instance().Transition(loadSceneIndex, transitionSettings, transitionDelay);
+        else TransitionManager.Instance().Transition(SceneManager.GetActiveScene().buildIndex + 1, transitionSettings, transitionDelay);
         //FindObjectOfType<SimpleSaveLoad>().SaveData<SelectedDowngrade>(FileType.Gameplay, "Downgrade", dgCard.selectedDowngrade);
         //dgCard = FindObjectOfType<SimpleSaveLoad>().LoadData<DowngradeCard>(FileType.Gameplay, "Downgrade");
 

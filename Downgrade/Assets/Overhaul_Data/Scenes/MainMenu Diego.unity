@@ -1196,6 +1196,7 @@ MonoBehaviour:
   levelID: 1
   levelLockID: 8
   levelName: Nivel 2
+  newGameButton: 0
   unlocked: 0
   canBeUnlocked: 0
   transitionSettings: {fileID: 0}
@@ -1686,6 +1687,7 @@ MonoBehaviour:
   levelID: 5
   levelLockID: 18
   levelName: Nivel 5
+  newGameButton: 0
   unlocked: 0
   canBeUnlocked: 0
   transitionSettings: {fileID: 0}
@@ -2743,6 +2745,7 @@ MonoBehaviour:
   levelID: 3
   levelLockID: 23
   levelName: Nivel 3
+  newGameButton: 0
   unlocked: 0
   canBeUnlocked: 0
   transitionSettings: {fileID: 0}
@@ -3485,6 +3488,7 @@ MonoBehaviour:
   levelID: 4
   levelLockID: 17
   levelName: Nivel 4
+  newGameButton: 0
   unlocked: 0
   canBeUnlocked: 0
   transitionSettings: {fileID: 0}
@@ -4059,6 +4063,112 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 453389936}
   m_CullTransparentMesh: 1
+--- !u!1 &456208073
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 456208076}
+  - component: {fileID: 456208075}
+  - component: {fileID: 456208074}
+  m_Layer: 0
+  m_Name: Humo-Sheet_0
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!95 &456208074
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 456208073}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b07df5697133adb4888858f26f488968, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!212 &456208075
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 456208073}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: -566010649, guid: b25e7b46c67623543b77b1c2231e27a0, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1.68, y: 4}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!4 &456208076
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 456208073}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: -0.38268343, z: 0, w: 0.92387956}
+  m_LocalPosition: {x: -15.975, y: 3.925, z: 4.403}
+  m_LocalScale: {x: 0.12798215, y: 0.12798215, z: 0.12798215}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -45, z: 0}
 --- !u!1 &469847013
 GameObject:
   m_ObjectHideFlags: 0
@@ -5066,6 +5176,7 @@ MonoBehaviour:
   levelID: 3
   levelLockID: 3
   levelName: Nivel 4
+  newGameButton: 0
   unlocked: 0
   canBeUnlocked: 1
   transitionSettings: {fileID: 11400000, guid: b0126e1e0c6c2a04895d564bd230dfb9, type: 2}
@@ -5450,6 +5561,7 @@ MonoBehaviour:
   levelID: 6
   levelLockID: 19
   levelName: Nivel 6
+  newGameButton: 0
   unlocked: 0
   canBeUnlocked: 0
   transitionSettings: {fileID: 0}
@@ -6001,6 +6113,7 @@ MonoBehaviour:
   levelID: 6
   levelLockID: 6
   levelName: Nivel 7
+  newGameButton: 0
   unlocked: 0
   canBeUnlocked: 1
   transitionSettings: {fileID: 11400000, guid: b0126e1e0c6c2a04895d564bd230dfb9, type: 2}
@@ -6943,6 +7056,7 @@ MonoBehaviour:
   levelID: 1
   levelLockID: 21
   levelName: Nivel 1
+  newGameButton: 0
   unlocked: 0
   canBeUnlocked: 0
   transitionSettings: {fileID: 0}
@@ -7694,6 +7808,7 @@ MonoBehaviour:
   levelID: 2
   levelLockID: 9
   levelName: Nivel 3
+  newGameButton: 0
   unlocked: 0
   canBeUnlocked: 0
   transitionSettings: {fileID: 0}
@@ -7910,6 +8025,7 @@ MonoBehaviour:
   levelID: 7
   levelLockID: 20
   levelName: Nivel 7
+  newGameButton: 0
   unlocked: 0
   canBeUnlocked: 0
   transitionSettings: {fileID: 0}
@@ -8359,6 +8475,7 @@ MonoBehaviour:
   levelID: 5
   levelLockID: 5
   levelName: Nivel 6
+  newGameButton: 0
   unlocked: 0
   canBeUnlocked: 1
   transitionSettings: {fileID: 11400000, guid: b0126e1e0c6c2a04895d564bd230dfb9, type: 2}
@@ -9469,6 +9586,7 @@ MonoBehaviour:
   levelID: 6
   levelLockID: 13
   levelName: Nivel 7
+  newGameButton: 0
   unlocked: 0
   canBeUnlocked: 0
   transitionSettings: {fileID: 0}
@@ -9744,6 +9862,7 @@ MonoBehaviour:
   levelID: 5
   levelLockID: 25
   levelName: Nivel 5
+  newGameButton: 0
   unlocked: 0
   canBeUnlocked: 0
   transitionSettings: {fileID: 0}
@@ -10014,6 +10133,7 @@ MonoBehaviour:
   levelID: 2
   levelLockID: 15
   levelName: Nivel 2
+  newGameButton: 0
   unlocked: 0
   canBeUnlocked: 0
   transitionSettings: {fileID: 0}
@@ -10634,6 +10754,7 @@ MonoBehaviour:
   levelID: 1
   levelLockID: 1
   levelName: Nivel 2
+  newGameButton: 0
   unlocked: 0
   canBeUnlocked: 1
   transitionSettings: {fileID: 11400000, guid: b0126e1e0c6c2a04895d564bd230dfb9, type: 2}
@@ -10775,6 +10896,7 @@ MonoBehaviour:
   levelID: 2
   levelLockID: 2
   levelName: Nivel 3
+  newGameButton: 0
   unlocked: 0
   canBeUnlocked: 1
   transitionSettings: {fileID: 11400000, guid: b0126e1e0c6c2a04895d564bd230dfb9, type: 2}
@@ -11054,6 +11176,7 @@ MonoBehaviour:
   levelID: 4
   levelLockID: 11
   levelName: Nivel 5
+  newGameButton: 0
   unlocked: 0
   canBeUnlocked: 0
   transitionSettings: {fileID: 0}
@@ -11458,6 +11581,7 @@ MonoBehaviour:
   levelID: 3
   levelLockID: 16
   levelName: Nivel 3
+  newGameButton: 0
   unlocked: 0
   canBeUnlocked: 0
   transitionSettings: {fileID: 0}
@@ -11653,6 +11777,7 @@ MonoBehaviour:
   levelID: 0
   levelLockID: 7
   levelName: Nivel 1
+  newGameButton: 0
   unlocked: 0
   canBeUnlocked: 0
   transitionSettings: {fileID: 0}
@@ -11816,6 +11941,7 @@ MonoBehaviour:
   levelID: 5
   levelLockID: 12
   levelName: Nivel 6
+  newGameButton: 0
   unlocked: 0
   canBeUnlocked: 0
   transitionSettings: {fileID: 0}
@@ -12386,6 +12512,7 @@ MonoBehaviour:
   levelID: 1
   levelLockID: 14
   levelName: Nivel 1
+  newGameButton: 0
   unlocked: 0
   canBeUnlocked: 0
   transitionSettings: {fileID: 0}
@@ -13437,6 +13564,7 @@ GameObject:
   - component: {fileID: 1619898756}
   - component: {fileID: 1619898755}
   - component: {fileID: 1619898754}
+  - component: {fileID: 1619898757}
   m_Layer: 0
   m_Name: NewGame
   m_TagString: Untagged
@@ -13507,79 +13635,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1619898755}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1339531324}
-        m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
-        m_MethodName: GetNewPos
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 1322914365}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Transform, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1339531324}
-        m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
-        m_MethodName: SaveHistory
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1339531324}
-        m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
-        m_MethodName: SelectButton
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 1795559404}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1021518445}
-        m_TargetAssemblyTypeName: MainMenuTransition, Assembly-CSharp
-        m_MethodName: SetTransition
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 1021518445}
-        m_TargetAssemblyTypeName: MainMenuTransition, Assembly-CSharp
-        m_MethodName: SetListening
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 1339531324}
-        m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
-        m_MethodName: DeactivateButtonsWithGameObject
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 1984270359}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1619898755
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13618,6 +13674,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1619898752}
   m_CullTransparentMesh: 1
+--- !u!114 &1619898757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1619898752}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 119e927f4c367c04688b830c9bc691b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelID: 0
+  levelLockID: 0
+  levelName: Nivel 1
+  newGameButton: 1
+  unlocked: 1
+  canBeUnlocked: 1
+  transitionSettings: {fileID: 11400000, guid: b0126e1e0c6c2a04895d564bd230dfb9, type: 2}
+  startDelay: 0
 --- !u!1 &1642206598
 GameObject:
   m_ObjectHideFlags: 0
@@ -14180,6 +14256,7 @@ MonoBehaviour:
   levelID: 4
   levelLockID: 24
   levelName: Nivel 4
+  newGameButton: 0
   unlocked: 0
   canBeUnlocked: 0
   transitionSettings: {fileID: 0}
@@ -14917,10 +14994,57 @@ MonoBehaviour:
   levelID: 0
   levelLockID: 0
   levelName: Nivel 1
+  newGameButton: 0
   unlocked: 1
   canBeUnlocked: 1
   transitionSettings: {fileID: 11400000, guid: b0126e1e0c6c2a04895d564bd230dfb9, type: 2}
   startDelay: 0
+--- !u!1 &1797998520
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1797998522}
+  - component: {fileID: 1797998521}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1797998521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1797998520}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1e0b71df56e1fb46af041c56db8230f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  transitionSettings: {fileID: 11400000, guid: b0126e1e0c6c2a04895d564bd230dfb9, type: 2}
+  delay: 0
+--- !u!4 &1797998522
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1797998520}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -17.89453, y: 4.4309506, z: 4.423497}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1844516196
 GameObject:
   m_ObjectHideFlags: 0
@@ -15321,6 +15445,7 @@ MonoBehaviour:
   levelID: 3
   levelLockID: 10
   levelName: Nivel 4
+  newGameButton: 0
   unlocked: 0
   canBeUnlocked: 0
   transitionSettings: {fileID: 0}
@@ -15684,6 +15809,7 @@ MonoBehaviour:
   levelID: 6
   levelLockID: 26
   levelName: Nivel 6
+  newGameButton: 0
   unlocked: 0
   canBeUnlocked: 0
   transitionSettings: {fileID: 0}
@@ -16509,6 +16635,7 @@ MonoBehaviour:
   levelID: 4
   levelLockID: 4
   levelName: Nivel 5
+  newGameButton: 0
   unlocked: 0
   canBeUnlocked: 1
   transitionSettings: {fileID: 11400000, guid: b0126e1e0c6c2a04895d564bd230dfb9, type: 2}
@@ -17146,6 +17273,7 @@ MonoBehaviour:
   levelID: 2
   levelLockID: 22
   levelName: Nivel 2
+  newGameButton: 0
   unlocked: 0
   canBeUnlocked: 0
   transitionSettings: {fileID: 0}
@@ -17308,6 +17436,7 @@ MonoBehaviour:
   levelID: 7
   levelLockID: 27
   levelName: Nivel 7
+  newGameButton: 0
   unlocked: 0
   canBeUnlocked: 0
   transitionSettings: {fileID: 0}
@@ -18781,6 +18910,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2806369054057046193, guid: f2e6077a49322964b8c3648538e69c97, type: 3}
+      propertyPath: downgradeSelectionIndex
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 4925695415570704438, guid: f2e6077a49322964b8c3648538e69c97, type: 3}
       propertyPath: m_Name
       value: ----- Managers -----
@@ -20255,3 +20388,5 @@ SceneRoots:
   - {fileID: 309547161}
   - {fileID: 1713033262}
   - {fileID: 855982406}
+  - {fileID: 456208076}
+  - {fileID: 1797998522}
