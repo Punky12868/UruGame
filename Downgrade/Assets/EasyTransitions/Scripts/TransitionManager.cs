@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 namespace EasyTransition
 {

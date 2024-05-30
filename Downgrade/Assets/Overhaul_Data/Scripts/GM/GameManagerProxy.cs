@@ -1,12 +1,19 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class GameManagerProxy : MonoBehaviour
 {
+    [SerializeField] private UnityEvent newGameEvent;
     private void Awake()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         //GameManager.Instance.PauseGame(false);
+    }
+
+    public void NewGame()
+    {
+        newGameEvent.Invoke();
     }
 
     public void LoadDowngradeSelectionScene()

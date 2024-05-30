@@ -40,10 +40,15 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            if (FindObjectOfType<LevelUnlocker>()) FindObjectOfType<LevelUnlocker>().LockAllLevels();
-            TransitionManager.Instance().Transition(firstLevelIndex, transitionSettings, transitionDelay);
-            Debug.Log("Erased Game Started");
+            FindObjectOfType<GameManagerProxy>().NewGame();
         }
+    }
+
+    public void NewGameErasedProgress()
+    {
+        if (FindObjectOfType<LevelUnlocker>()) FindObjectOfType<LevelUnlocker>().LockAllLevels();
+        TransitionManager.Instance().Transition(firstLevelIndex, transitionSettings, transitionDelay);
+        Debug.Log("Erased Game Started");
     }
 
     private bool EraseProgressOnNewGame()
