@@ -205,6 +205,7 @@ public class MenuController : MonoBehaviour
     private void InvokeButtonSelection() {SelectedButton.Select();}
     private void InvokeInputCooldown() {onInputCooldown = false; eventSystem.SetActive(true); }
     private void InvokeButtonDeactivation() {DeactivateAllButtons();}
+    public bool IsOnInputCooldown() { return onInputCooldown; }
 
     #endregion
 }
