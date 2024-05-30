@@ -34,7 +34,7 @@ public class PlayerInventory : MonoBehaviour
                 break;
             case ItemType.Flower:
                 // use stamina item
-                UseStaminaItem();
+                UseHealthItem();
                 break;
         }
     }
