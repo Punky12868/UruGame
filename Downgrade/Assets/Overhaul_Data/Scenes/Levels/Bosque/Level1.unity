@@ -1253,33 +1253,23 @@ MonoBehaviour:
   - waves:
     - enemyType: 2
       stage: 1
-      position: {x: -2.2727273, y: 3}
+      position: {x: -0.747, y: 3.334}
       hasDelay: 1
       delayForNextEnemy: 2.5
     - enemyType: 2
       stage: 1
-      position: {x: 2.2727275, y: 3}
+      position: {x: 3.28, y: 1.07}
       hasDelay: 1
       delayForNextEnemy: 1
   - waves:
     - enemyType: 2
       stage: 1
-      position: {x: -1.3636363, y: 3}
+      position: {x: -0.747, y: 3.334}
       hasDelay: 1
-      delayForNextEnemy: 1
-    - enemyType: 4
-      stage: 1
-      position: {x: 0.45454562, y: 2}
-      hasDelay: 1
-      delayForNextEnemy: 1
-    - enemyType: 4
-      stage: 1
-      position: {x: -0.45454532, y: 2}
-      hasDelay: 1
-      delayForNextEnemy: 1
+      delayForNextEnemy: 2.5
     - enemyType: 2
       stage: 1
-      position: {x: 1.3636363, y: 3}
+      position: {x: 3.28, y: 1.07}
       hasDelay: 1
       delayForNextEnemy: 1
 --- !u!1 &270419979
@@ -5558,9 +5548,17 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Scenario
       objectReference: {fileID: 0}
+    - target: {fileID: 538130878597010158, guid: 471b2c3b00e894d4bb965a25748b3fc4, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 471b2c3b00e894d4bb965a25748b3fc4, type: 3}
       propertyPath: m_Name
       value: N1-Bosque
+      objectReference: {fileID: 0}
+    - target: {fileID: 4109722019416026233, guid: 471b2c3b00e894d4bb965a25748b3fc4, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6156018408062052707, guid: 471b2c3b00e894d4bb965a25748b3fc4, type: 3}
       propertyPath: m_IsActive
@@ -7043,7 +7041,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.21643591, y: -8.421053e-17, z: 1.192436e-16, w: 0.97629684}
+  m_LocalRotation: {x: 0.21643591, y: 8.421053e-17, z: -1.192436e-16, w: 0.97629684}
   m_LocalPosition: {x: 0, y: 4.1967, z: -18.839}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -8946,7 +8944,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1332516484}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.21643591, y: -8.421053e-17, z: 1.192436e-16, w: 0.97629684}
+  m_LocalRotation: {x: 0.21643591, y: 8.421053e-17, z: -1.192436e-16, w: 0.97629684}
   m_LocalPosition: {x: 0, y: 4.1967, z: -18.839}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
