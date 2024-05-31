@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading.Tasks;
 
 public class NarrationSystem : MonoBehaviour, IObserver
 {
@@ -22,6 +23,7 @@ public class NarrationSystem : MonoBehaviour, IObserver
     [SerializeField] int hitThreshold = 10;
     [SerializeField] float timeAfterRandomNoise = 30;
     float timeForRandomNoise;
+    int dialogeContinueCount = 0;
 
     bool isWaiting = false;
 
@@ -42,6 +44,13 @@ public class NarrationSystem : MonoBehaviour, IObserver
     [TextArea] [SerializeField] string[] playerAttackDialog, playerParryDialog, playerDodgeDialog, playerUseItemDialog, playerUseEmptyItemDialog, playerPickUpItemDialog, playerDropItemDialog, playerDropEmptyItemDialog, playerGotHitDialog, playerDiesDialog, victoryDialog, defeatDialog;
     [TextArea] [SerializeField] string[] inBetweenNarrationDialog;
 
+    [Header("BoolNextDialog")]
+    public bool placeHolderBools;
+    [SerializeField] bool[] startGameBool, endGameBool, playerLowHealthBool, playerHealBool, playerLowStaminaBool, playerHitEnemyBool, playerKilledEnemyBool, playerNotKillingBool;
+    [SerializeField] bool[] randomNoiseBool, randomPausedNoiseBool, startBossBool, playerDieToFirstFaseBossBool, midBossBool, playerDieToMidFaceBossBool, parryBossBool, endBossBool;
+    [SerializeField] bool[] playerAttackBool, playerParryBool, playerDodgeBool, playerUseItemBool, playerUseEmptyItemBool, playerPickUpItemBool, playerDropItemBool, playerDropEmptyItemBool, playerGotHitBool, playerDiesBool, victoryBool, defeatBool;
+    [SerializeField] bool[] inBetweenNarrationBool;
+
     private void Awake()
     {
         Invoker.InvokeDelayed(DelayedAwake, 0.1f);
@@ -52,14 +61,27 @@ public class NarrationSystem : MonoBehaviour, IObserver
         subtitlesActivated = SimpleSaveLoad.Instance.LoadData<bool>(FileType.Config, subtitleKey, true);
     }
 
-    public void PlaySubs(AudioClip[] clip, string[] dialog, bool hasPriority = false)
+    public void PlaySubs(AudioClip[] clip, string[] dialog, bool[] largeDialoge, bool hasPriority = false, bool hasComeFromClip = false) //array de bools
     {
         Subtitles subs = null;
         int randomDialog = Random.Range(0, clip.Length);
+        bool continueDialog = false;
+
+        if (largeDialoge.Length > 0 || hasComeFromClip)
+        {
+            if (largeDialoge[0] == true)
+            {
+                continueDialog = true;
+            }
+
+            randomDialog = dialogeContinueCount;
+            dialogeContinueCount += 1;
+        }
+
 
         if (subtitlesActivated) { if (FindObjectOfType<Subtitles>()) subs = FindObjectOfType<Subtitles>(); }
 
-        if (isWaiting && hasPriority)
+        if (isWaiting && hasPriority && !continueDialog)
         {
             int randomInBetween = Random.Range(0, inBetweenNarrationClips.Length);
 
@@ -83,12 +105,31 @@ public class NarrationSystem : MonoBehaviour, IObserver
                 else
                     subs.DisplaySubtitles(dialog[randomDialog], clip[randomDialog].length);
             }
-
+            
             isWaiting = true;
-            Invoker.InvokeDelayed(ResetWait, clip[randomDialog].length);
+
+
+            if (continueDialog == true)
+            {
+                DelayND(clip[randomDialog].length, clip, dialog, largeDialoge, hasPriority, true);
+            }
+            else
+            {
+                Invoker.InvokeDelayed(ResetWait, clip[randomDialog].length);
+                dialogeContinueCount = 0;
+            }
+           
         }
     }
-
+    async void DelayND(float delay, AudioClip[] clip, string[] dialog, bool[] largeDialoge, bool hasPriority = false, bool hasComeFromClip = false)
+    {
+        await Task.Delay((int)(delay * 1000));
+        NextDialoge(clip, dialog, largeDialoge, hasPriority, hasComeFromClip);
+    }
+    private void NextDialoge(AudioClip[] clip, string[] dialog, bool[] largeDialoge, bool hasPriority = false, bool hasComeFromClip = false)
+    {
+        PlaySubs(clip, dialog, largeDialoge, hasPriority, hasComeFromClip);
+    }
     private void ChainedDialog()
     {
         AudioManager.instance.PlayVoice(chainedClip);
@@ -120,7 +161,7 @@ public class NarrationSystem : MonoBehaviour, IObserver
                 if (FindObjectOfType<PlayerControllerOverhaul>().GetHealth() < lowHealthThreshold && !lowHealthTriggered)
                 {
                     lowHealthTriggered = true;
-                    PlaySubs(playerLowHealth, playerLowHealthDialog);
+                    PlaySubs(playerLowHealth, playerLowHealthDialog,playerLowHealthBool);
                     Debug.Log("Low Health");
                 }
                 break;
@@ -128,7 +169,7 @@ public class NarrationSystem : MonoBehaviour, IObserver
                 if (FindObjectOfType<PlayerControllerOverhaul>().GetStamina() < lowStaminaThreshold && !lowStaminaTriggered)
                 {
                     lowStaminaTriggered = true;
-                    PlaySubs(playerLowStamina, playerLowStaminaDialog);
+                    PlaySubs(playerLowStamina, playerLowStaminaDialog,playerLowStaminaBool);
                     Debug.Log("Low Stamina");
                 }
                 break;
@@ -139,7 +180,7 @@ public class NarrationSystem : MonoBehaviour, IObserver
                 Debug.Log("Random Noise");
                 break;
             case AllPlayerActions.RandomPausedNoise:
-                PlaySubs(randomPausedNoise, randomPausedNoiseDialog);
+                PlaySubs(randomPausedNoise, randomPausedNoiseDialog, randomPausedNoiseBool);
                 Debug.Log("Random Paused Noise");
                 break;
             case AllPlayerActions.StartBoss:
@@ -173,7 +214,7 @@ public class NarrationSystem : MonoBehaviour, IObserver
                 Debug.Log("Hit");
                 break;
             case AllPlayerActions.Die:
-                PlaySubs(playerDies, playerDiesDialog, true);
+                PlaySubs(playerDies, playerDiesDialog,playerDiesBool, true);
                 Debug.Log("Died");
                 break;
             case AllPlayerActions.Victory:
@@ -221,7 +262,7 @@ public class NarrationSystem : MonoBehaviour, IObserver
 
     private void PlayStartAudio()
     {
-        PlaySubs(startGame, startGameDialog, true);
+        PlaySubs(startGame, startGameDialog,startGameBool, true);
         Debug.Log("Game Started");
     }
     private void OnPause()
