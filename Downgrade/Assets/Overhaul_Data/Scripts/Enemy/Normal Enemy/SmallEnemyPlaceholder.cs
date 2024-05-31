@@ -219,7 +219,7 @@ public class SmallEnemyPlaceholder : EnemyBase
         PlaySound(deathSounds);
         PlayAnimation(animationIDs[7], false, false, true);
         RemoveComponentsOnDeath();
-        Destroy(gameObject);
+        Destroy(gameObject, 0.5f);
     }
 
     public override void MeleeBehaviour()
