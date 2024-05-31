@@ -21,6 +21,11 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private Image itemIcon;
     [SerializeField] private Image dgIcon;
 
+    private void Awake()
+    {
+        GetComponent<Canvas>().worldCamera = FindObjectOfType<PauseMenu>().gameObject.GetComponent<Canvas>().worldCamera;
+    }
+
     public void SetUI()
     {
         player = FindObjectOfType<PlayerControllerOverhaul>();

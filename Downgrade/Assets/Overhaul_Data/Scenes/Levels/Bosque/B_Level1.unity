@@ -1008,7 +1008,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &208047253
 Transform:
   m_ObjectHideFlags: 0
@@ -1038,13 +1038,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timerEnemySpawn: 0
   swampEnemies:
+  - {fileID: 4680848831808023462, guid: ffe0056bf4e837641aed4498788d6850, type: 3}
+  - {fileID: 6541512594619184199, guid: e034d4732d47fed44b038fbdd4cefccd, type: 3}
   - {fileID: 0}
-  - {fileID: 7721122361339874846, guid: 83d0fad2ec7258943b3f1ca20b55f7c9, type: 3}
-  - {fileID: 0}
-  - {fileID: 6413154522963759641, guid: 2da47f84ab2776c42922076c50f82a9d, type: 3}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 4526869880663001187, guid: 53cb6b451fdfafe45830a71698eeba18, type: 3}
+  - {fileID: 734513466168590697, guid: db93257f94efc814791049d8bc4809da, type: 3}
+  - {fileID: 3098396404004596726, guid: 985519ecdc5fa424bae3e00fa785f572, type: 3}
+  - {fileID: 2610436548476913851, guid: 5b35eab16c7a80b4a9cc413a53ffe97e, type: 3}
   waves:
   - waves:
     - enemyType: 2
@@ -3363,15 +3363,15 @@ PrefabInstance:
     - target: {fileID: 957300845555870741, guid: f2e6077a49322964b8c3648538e69c97, type: 3}
       propertyPath: idRef._Values.Array.data[1659]
       value: 
-      objectReference: {fileID: 1830252047}
+      objectReference: {fileID: 0}
     - target: {fileID: 957300845555870741, guid: f2e6077a49322964b8c3648538e69c97, type: 3}
       propertyPath: idRef._Values.Array.data[1660]
       value: 
-      objectReference: {fileID: 1830252049}
+      objectReference: {fileID: 0}
     - target: {fileID: 957300845555870741, guid: f2e6077a49322964b8c3648538e69c97, type: 3}
       propertyPath: idRef._Values.Array.data[1661]
       value: 
-      objectReference: {fileID: 1830252048}
+      objectReference: {fileID: 0}
     - target: {fileID: 4925695415570704438, guid: f2e6077a49322964b8c3648538e69c97, type: 3}
       propertyPath: m_Name
       value: ----- Managers -----
@@ -4974,63 +4974,6 @@ Transform:
   - {fileID: 3610288983794922694}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &860014542
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 5302660681265042204, guid: 0be760750a3365e4386fef81e80f8da7, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5302660681265042204, guid: 0be760750a3365e4386fef81e80f8da7, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5302660681265042204, guid: 0be760750a3365e4386fef81e80f8da7, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5302660681265042204, guid: 0be760750a3365e4386fef81e80f8da7, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5302660681265042204, guid: 0be760750a3365e4386fef81e80f8da7, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5302660681265042204, guid: 0be760750a3365e4386fef81e80f8da7, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5302660681265042204, guid: 0be760750a3365e4386fef81e80f8da7, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5302660681265042204, guid: 0be760750a3365e4386fef81e80f8da7, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5302660681265042204, guid: 0be760750a3365e4386fef81e80f8da7, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5302660681265042204, guid: 0be760750a3365e4386fef81e80f8da7, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5551050723262144150, guid: 0be760750a3365e4386fef81e80f8da7, type: 3}
-      propertyPath: m_Name
-      value: TransitionManager
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 0be760750a3365e4386fef81e80f8da7, type: 3}
 --- !u!1 &912580456
 GameObject:
   m_ObjectHideFlags: 0
@@ -5517,7 +5460,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.21643591, y: -3.300082e-15, z: 9.745368e-16, w: 0.97629684}
+  m_LocalRotation: {x: 0.2164359, y: -0.000000029095917, z: 0.000000006450293, w: 0.97629684}
   m_LocalPosition: {x: 0, y: 4.1967, z: -18.839}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -6593,7 +6536,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1332516484}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.21643591, y: -3.300082e-15, z: 9.745368e-16, w: 0.97629684}
+  m_LocalRotation: {x: 0.2164359, y: -0.000000029095917, z: 0.000000006450293, w: 0.97629684}
   m_LocalPosition: {x: 0, y: 4.1967, z: -18.839}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -8308,56 +8251,64 @@ MonoBehaviour:
   inBetweenNarrationClips:
   - {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
   placeHolderDialog: 0
-  startGameDialog: []
-  endGameDialog: []
-  playerLowHealthDialog: []
-  playerHealDialog: []
-  playerLowStaminaDialog: []
-  playerHitEnemyDialog: []
-  playerKilledEnemyDialog: []
-  playerNotKillingDialog: []
-  randomNoiseDialog: []
-  randomPausedNoiseDialog: []
-  startBossDialog: []
-  playerDieToFirstFaseBossDialog: []
-  midBossDialog: []
-  playerDieToMidFaceBossDialog: []
-  parryBossDialog: []
-  endBossDialog: []
-  playerAttackDialog: []
-  playerParryDialog: []
-  playerDodgeDialog: []
-  playerUseItemDialog: []
-  playerUseEmptyItemDialog: []
-  playerPickUpItemDialog: []
-  playerDropItemDialog: []
-  playerDropEmptyItemDialog: []
-  playerGotHitDialog: []
-  playerDiesDialog: []
-  victoryDialog: []
-  defeatDialog: []
-  inBetweenNarrationDialog: []
---- !u!1 &1830252047 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5551050723262144150, guid: 0be760750a3365e4386fef81e80f8da7, type: 3}
-  m_PrefabInstance: {fileID: 860014542}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1830252048 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8677318588304811389, guid: 0be760750a3365e4386fef81e80f8da7, type: 3}
-  m_PrefabInstance: {fileID: 860014542}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1830252047}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61430b0086307cc4da3ccc8d39ae88da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &1830252049 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5302660681265042204, guid: 0be760750a3365e4386fef81e80f8da7, type: 3}
-  m_PrefabInstance: {fileID: 860014542}
-  m_PrefabAsset: {fileID: 0}
+  startGameDialog:
+  - 
+  endGameDialog:
+  - 
+  playerLowHealthDialog:
+  - 
+  playerHealDialog:
+  - 
+  playerLowStaminaDialog:
+  - 
+  playerHitEnemyDialog:
+  - 
+  playerKilledEnemyDialog:
+  - 
+  playerNotKillingDialog:
+  - 
+  randomNoiseDialog:
+  - 
+  randomPausedNoiseDialog:
+  - 
+  startBossDialog:
+  - 
+  playerDieToFirstFaseBossDialog:
+  - 
+  midBossDialog:
+  - 
+  playerDieToMidFaceBossDialog:
+  - 
+  parryBossDialog:
+  - 
+  endBossDialog:
+  - 
+  playerAttackDialog:
+  - 
+  playerParryDialog:
+  - 
+  playerDodgeDialog:
+  - 
+  playerUseItemDialog:
+  - 
+  playerUseEmptyItemDialog:
+  - 
+  playerPickUpItemDialog:
+  - 
+  playerDropItemDialog:
+  - 
+  playerDropEmptyItemDialog:
+  - 
+  playerGotHitDialog:
+  - 
+  playerDiesDialog:
+  - 
+  victoryDialog:
+  - 
+  defeatDialog:
+  - 
+  inBetweenNarrationDialog:
+  - 
 --- !u!1 &1899929882
 GameObject:
   m_ObjectHideFlags: 0
@@ -10259,4 +10210,3 @@ SceneRoots:
   - {fileID: 858613144}
   - {fileID: 404027813}
   - {fileID: 1264370754}
-  - {fileID: 860014542}
