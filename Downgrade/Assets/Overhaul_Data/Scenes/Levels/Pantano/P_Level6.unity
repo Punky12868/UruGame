@@ -1071,7 +1071,7 @@ MonoBehaviour:
   - waves:
     - enemyType: 5
       stage: 1
-      position: {x: -7.035133, y: 0.1685697}
+      position: {x: 3, y: 3}
       hasDelay: 1
       delayForNextEnemy: 1
     - enemyType: 4
@@ -1086,7 +1086,7 @@ MonoBehaviour:
       delayForNextEnemy: 1
     - enemyType: 5
       stage: 1
-      position: {x: 4.175725, y: -1.799411}
+      position: {x: 0, y: 0}
       hasDelay: 1
       delayForNextEnemy: 2
 --- !u!1001 &223679887
@@ -5202,6 +5202,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 427967801032459779, guid: 90e42301ebb12cd48b82f6c803e9a140, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.00010108948
+      objectReference: {fileID: 0}
     - target: {fileID: 2382232843265450493, guid: 90e42301ebb12cd48b82f6c803e9a140, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -6227,7 +6231,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.21643591, y: -8.421053e-17, z: 1.192436e-16, w: 0.97629684}
+  m_LocalRotation: {x: 0.2164359, y: 0.000000029095913, z: -0.0000000064502923, w: 0.97629684}
   m_LocalPosition: {x: 0, y: 4.1967, z: -18.839}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -7417,7 +7421,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1332516484}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.21643591, y: -8.421053e-17, z: 1.192436e-16, w: 0.97629684}
+  m_LocalRotation: {x: 0.2164359, y: 0.000000029095913, z: -0.0000000064502923, w: 0.97629684}
   m_LocalPosition: {x: 0, y: 4.1967, z: -18.839}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
