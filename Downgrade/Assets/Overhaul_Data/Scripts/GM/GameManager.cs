@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     private bool isSelectingDowngrade = false;
     [SerializeField] private string levelUnlockerKey = "level_";
     [SerializeField] private int firstLevelIndex = 1;
+    [SerializeField] private int downgradeSceneIndex = 11;
     [SerializeField] private int firstLevelDowngradeSelectionIndex = 2;
     [SerializeField] private TransitionSettings transitionSettings;
     [SerializeField] private float transitionDelay;
@@ -41,6 +42,15 @@ public class GameManager : MonoBehaviour
         else
         {
             FindObjectOfType<GameManagerProxy>().NewGame();
+        }
+    }
+
+    public void GoToDowngrade()
+    {
+        if (firstLevelDowngradeSelectionIndex == SceneManager.GetActiveScene().buildIndex + 1)
+        {
+            TransitionManager.Instance().Transition(downgradeSceneIndex, transitionSettings, transitionDelay);
+            Debug.Log("Downgrade Started");
         }
     }
 
@@ -100,7 +110,7 @@ public class GameManager : MonoBehaviour
 
         if (sceneIndex == firstLevelDowngradeSelectionIndex)
         {
-            StartNewGame();
+            GoToDowngrade();
         }
         else
         {

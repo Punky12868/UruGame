@@ -1,3 +1,4 @@
+using Rewired;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -39,6 +40,7 @@ public class PlayerUI : MonoBehaviour
 
     private void Update()
     {
+        if (player == null) { player = FindObjectOfType<PlayerControllerOverhaul>(); }
         if (GameManager.Instance.IsGamePaused()) return;
 
         UpdateHealth();
