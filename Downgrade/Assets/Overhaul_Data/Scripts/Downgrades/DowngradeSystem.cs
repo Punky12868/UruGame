@@ -9,6 +9,7 @@ public class DowngradeSystem : MonoBehaviour, IObserver
 
     SelectedDowngrade dg;
     Sprite dgIcon;
+    [SerializeField] private Sprite dgNoIcon;
     Subject player;
     List<Subject> enemies = new List<Subject>();
 
@@ -199,7 +200,15 @@ public class DowngradeSystem : MonoBehaviour, IObserver
     #region Notify
     public void OnPlayerNotify(AllPlayerActions actions)
     {
-        if (SceneManager.GetActiveScene().buildIndex <= 2) return;
+        if (SceneManager.GetActiveScene().buildIndex <= 2)
+        {
+            if (actions == AllPlayerActions.Start && dg == SelectedDowngrade.None)
+            {
+                dgIcon = dgNoIcon;
+                FindObjectOfType<PlayerUI>().SetUI();
+            }
+            return;
+        }
 
         if (actions == AllPlayerActions.Start && dg == SelectedDowngrade.None)
         {
