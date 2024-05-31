@@ -1142,6 +1142,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: N8-Pantano
       objectReference: {fileID: 0}
+    - target: {fileID: 6007021628598974375, guid: 84d77ea95868ab840b7dac4a8a25e8f5, type: 3}
+      propertyPath: m_TagString
+      value: Limits
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -4031,7 +4035,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 314, y: -204.00002}
+  m_AnchoredPosition: {x: 314, y: -204}
   m_SizeDelta: {x: -786.125, y: -436.21997}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &553431270
@@ -6041,7 +6045,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.2164359, y: -0.000000029095913, z: 0.0000000064502923, w: 0.97629684}
+  m_LocalRotation: {x: 0.21643591, y: 8.421053e-17, z: -1.192436e-16, w: 0.97629684}
   m_LocalPosition: {x: 0, y: 4.1967, z: -18.839}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -7117,7 +7121,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1332516484}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.2164359, y: -0.000000029095913, z: 0.0000000064502923, w: 0.97629684}
+  m_LocalRotation: {x: 0.21643591, y: 8.421053e-17, z: -1.192436e-16, w: 0.97629684}
   m_LocalPosition: {x: 0, y: 4.1967, z: -18.839}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -7921,7 +7925,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 314, y: -204.00002}
+  m_AnchoredPosition: {x: 314, y: -204}
   m_SizeDelta: {x: -786.125, y: -436.21997}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1477643645
@@ -8909,6 +8913,7 @@ MonoBehaviour:
   subtitles: {fileID: 2094765100692338899, guid: 62e688175a49f304e82c048cdb16dcfa, type: 3}
   subtitleKey: subs
   subtitlesActivated: 1
+  startDialogChainLength: 0
   aditionalTimeAfterNarration: 2
   lowHealthThreshold: 30
   lowStaminaThreshold: 30
