@@ -111,7 +111,7 @@ public class NarrationSystem : MonoBehaviour, IObserver
         switch (actions)
         {
             case AllPlayerActions.Start:
-                Debug.Log("Game Started");
+                Invoke("PlayStartAudio", 0.1f);
                 break;
             case AllPlayerActions.End:
                 Debug.Log("Game Ended");
@@ -219,6 +219,11 @@ public class NarrationSystem : MonoBehaviour, IObserver
         }
     }
 
+    private void PlayStartAudio()
+    {
+        PlaySubs(startGame, startGameDialog, true);
+        Debug.Log("Game Started");
+    }
     private void OnPause()
     {
         timeForRandomNoise = 0;
