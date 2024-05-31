@@ -113,8 +113,11 @@ public class NarrationSystem : MonoBehaviour, IObserver
 
     private void DelayedDialog()
     {
-        PlaySubs(startGame, startGameDialog, false, true);
-        startDialogChainIndex++;
+        if (startGame.Length > 0 || startGameDialog.Length > 0)
+        {
+            PlaySubs(startGame, startGameDialog, false, true);
+            startDialogChainIndex++;
+        }
     }
 
     public void OnPlayerNotify(AllPlayerActions actions)

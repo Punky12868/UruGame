@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine.Events;
 using DG.Tweening;
 using UnityEngine;
+using EasyTransition;
 
 public class BossBase : Subject, IAnimController
 {
@@ -295,6 +296,7 @@ public class BossBase : Subject, IAnimController
         {
             onDeath?.Invoke();
             isDead = true;
+            GameManager.Instance.BossDefeated();
         }
     }
 

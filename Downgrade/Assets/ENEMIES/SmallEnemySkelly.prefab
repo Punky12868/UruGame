@@ -4981,7 +4981,7 @@ GameObject:
   - component: {fileID: 7925415439636036557}
   m_Layer: 6
   m_Name: SmallEnemySkelly
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5070,7 +5070,7 @@ MonoBehaviour:
   anim: {fileID: 0}
   rb: {fileID: 0}
   pivot: {fileID: 0}
-  target: {fileID: 9019133123288924092}
+  target: {fileID: 0}
   lastTargetDir: {x: 0, y: 0, z: 0}
   targetDir: {x: 0, y: 0, z: 0}
   animClipLength: 0
@@ -5124,7 +5124,7 @@ MonoBehaviour:
   canBeParried: 1
   projectileCanBeParried: 0
   canBeParryStunned: 1
-  canParryChargeAttack: 0
+  canParryChargeAttack: 1
   parryStunTime: 3
   stunTime: 2
   tooClose: 0.3
@@ -5140,7 +5140,7 @@ MonoBehaviour:
   normalMoveAttackActivationTime: 0
   moveOnChargeAttackForce: 0
   chargeMoveAttackActivationTime: 0
-  normalAttackHitboxAppearTime: {x: 0.55, y: 0.5}
+  normalAttackHitboxAppearTime: {x: 0.35, y: 0.45}
   normalAttackHitboxSize: {x: 0.4, y: 0.32, z: 0.2}
   chargedAttackHitboxAppearTime: {x: 0.2, y: 0.5}
   chargedAttackHitboxSize: {x: 1, y: 1, z: 1}
