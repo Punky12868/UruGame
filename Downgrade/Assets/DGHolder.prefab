@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5177436989192257852
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8886547579094210142}
+  - component: {fileID: 4271987845469621307}
+  m_Layer: 0
+  m_Name: DGHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8886547579094210142
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5177436989192257852}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4271987845469621307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5177436989192257852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed16e8147031c03439484a904318a72f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dgCard:
+  - {fileID: 11400000, guid: 53ba6d77dc3f58048b88174f1bfccb47, type: 2}
+  - {fileID: 11400000, guid: 28a783038ec49b84ea59276dfa027406, type: 2}
+  - {fileID: 11400000, guid: 4291a84e6b5e1e247bb6e902e8413db8, type: 2}
+  - {fileID: 11400000, guid: 9b1364e366180174bb311d07ee3b9293, type: 2}
+  - {fileID: 11400000, guid: 6307c8fd594e0914db29d655ca55eca3, type: 2}
+  - {fileID: 11400000, guid: c65d79ebac8730740b37cd4bc1768951, type: 2}
+  - {fileID: 11400000, guid: 240bd435d5ed47e40851069ea32eff9b, type: 2}
+  - {fileID: 11400000, guid: f175fd7536f234a4582df986cd71d2d3, type: 2}
+  - {fileID: 11400000, guid: f2ef59c7bf22b92428f072f62da02707, type: 2}

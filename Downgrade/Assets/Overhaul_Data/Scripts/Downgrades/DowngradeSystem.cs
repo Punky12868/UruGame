@@ -216,6 +216,8 @@ public class DowngradeSystem : MonoBehaviour, IObserver
             //Debug.Log("DiceRolls");
         }
 
+        FindObjectOfType<PlayerUI>().SetUI();
+
         switch (dg)
         {
             case SelectedDowngrade.Stamina:
@@ -419,4 +421,9 @@ public class DowngradeSystem : MonoBehaviour, IObserver
         FindObjectOfType<PlayerControllerOverhaul>().SetSpeed(stored_PlayerSpeed);
     }
     #endregion
+
+    public SelectedDowngrade GetSelectedDowngrade()
+    {
+        return dg;
+    }
 }
