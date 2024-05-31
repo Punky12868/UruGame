@@ -45,19 +45,13 @@ public class UpgradeNarrationSystem : MonoBehaviour, IObserver
         Subtitles subs = null;
         bool isFixed = false;
 
-        if (fixedDialogue != 0)
-        {
-            isFixed = true;
-        }
+        if (fixedDialogue != 0) isFixed = true;
         
         int dialogueSelected = Random.Range(0, dialogueType.allDialogues.Length);
         
         if (subtitlesActivated) { if (FindObjectOfType<Subtitles>()) subs = FindObjectOfType<Subtitles>(); }
         
-        if (isFixed)
-        {
-            dialogueSelected = fixedDialogue -1 ;
-        }
+        if (isFixed) dialogueSelected = fixedDialogue - 1;
 
         if (isWaiting && hasPriority)
         {
@@ -98,7 +92,7 @@ public class UpgradeNarrationSystem : MonoBehaviour, IObserver
 
     async void DelayND(float delay, ChainedDialogues[] chainedDialogues)
     {
-        await Task.Delay((int)((delay+ aditionalTimeAfterNarration )* 1000));
+        await Task.Delay((int)((delay + aditionalTimeAfterNarration )* 1000));
         NextDialoge(chainedDialogues);
     }
     private void NextDialoge(ChainedDialogues[] chainedDialogues)
