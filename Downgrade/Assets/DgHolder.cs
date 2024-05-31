@@ -33,4 +33,8 @@ public class DgHolder : MonoBehaviour
     {
         dgCard[i].CardEffect();
     }
+
+    private void Update()
+    {
+    }
 }
