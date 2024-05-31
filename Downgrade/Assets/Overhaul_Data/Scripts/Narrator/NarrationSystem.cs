@@ -69,12 +69,18 @@ public class NarrationSystem : MonoBehaviour, IObserver
 
         if (largeDialoge.Length > 0 || hasComeFromClip)
         {
-            if (largeDialoge[0] == true)
+
+            randomDialog = dialogeContinueCount;
+            if (largeDialoge[dialogeContinueCount] == true)
             {
                 continueDialog = true;
             }
+            else
+            {
+                Debug.Log("No Encotré true en " + largeDialoge[dialogeContinueCount]);
+            }
 
-            randomDialog = dialogeContinueCount;
+            
             dialogeContinueCount += 1;
         }
 
@@ -87,13 +93,17 @@ public class NarrationSystem : MonoBehaviour, IObserver
 
             if (subtitlesActivated) chainedDialog = dialog[randomDialog];
             chainedClip = clip[randomDialog];
-
+            Debug.Log("Me fui por el isWaiting antes");
             AudioManager.instance.PlayVoice(inBetweenNarrationClips[randomInBetween]);
             if (subtitlesActivated) subs.DisplayOnPlayingSubtitles(inBetweenNarrationDialog[randomInBetween], inBetweenNarrationClips[randomInBetween].length);
             Invoker.InvokeDelayed(ChainedDialog, inBetweenNarrationClips[randomInBetween].length);
+
+
+            Debug.Log("Me fui por el isWaiting");
         }
         else
         {
+            Debug.Log("Me fui por el normal");
             int random = Random.Range(0, inBetweenNarrationClips.Length);
 
             AudioManager.instance.PlayVoice(clip[randomDialog]);
@@ -109,14 +119,16 @@ public class NarrationSystem : MonoBehaviour, IObserver
             isWaiting = true;
 
 
-            if (continueDialog == true)
+            if (continueDialog)
             {
                 DelayND(clip[randomDialog].length, clip, dialog, largeDialoge, hasPriority, true);
+                Debug.Log("Hay siguiente dialogo");
             }
             else
             {
                 Invoker.InvokeDelayed(ResetWait, clip[randomDialog].length);
                 dialogeContinueCount = 0;
+                Debug.Log("Solo un dialogo");
             }
            
         }
