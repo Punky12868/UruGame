@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Threading.Tasks;
 
 public class NarrationSystem : MonoBehaviour, IObserver
 {
@@ -11,6 +10,8 @@ public class NarrationSystem : MonoBehaviour, IObserver
 
     [SerializeField] string subtitleKey = "subs";
     [SerializeField] bool subtitlesActivated = true;
+    [SerializeField] int startDialogChainLength;
+    int startDialogChainIndex;
 
     [SerializeField] float aditionalTimeAfterNarration = 1f;
     [SerializeField] float lowHealthThreshold = 10f;
@@ -23,7 +24,6 @@ public class NarrationSystem : MonoBehaviour, IObserver
     [SerializeField] int hitThreshold = 10;
     [SerializeField] float timeAfterRandomNoise = 30;
     float timeForRandomNoise;
-    int dialogeContinueCount = 0;
 
     bool isWaiting = false;
 
@@ -39,17 +39,10 @@ public class NarrationSystem : MonoBehaviour, IObserver
 
     [Header("Dialog")]
     public bool placeHolderDialog;
-    [TextArea] [SerializeField] string[] startGameDialog, endGameDialog, playerLowHealthDialog, playerHealDialog, playerLowStaminaDialog, playerHitEnemyDialog, playerKilledEnemyDialog, playerNotKillingDialog;
-    [TextArea] [SerializeField] string[] randomNoiseDialog, randomPausedNoiseDialog, startBossDialog, playerDieToFirstFaseBossDialog, midBossDialog, playerDieToMidFaceBossDialog, parryBossDialog, endBossDialog;
-    [TextArea] [SerializeField] string[] playerAttackDialog, playerParryDialog, playerDodgeDialog, playerUseItemDialog, playerUseEmptyItemDialog, playerPickUpItemDialog, playerDropItemDialog, playerDropEmptyItemDialog, playerGotHitDialog, playerDiesDialog, victoryDialog, defeatDialog;
-    [TextArea] [SerializeField] string[] inBetweenNarrationDialog;
-
-    [Header("BoolNextDialog")]
-    public bool placeHolderBools;
-    [SerializeField] bool[] startGameBool, endGameBool, playerLowHealthBool, playerHealBool, playerLowStaminaBool, playerHitEnemyBool, playerKilledEnemyBool, playerNotKillingBool;
-    [SerializeField] bool[] randomNoiseBool, randomPausedNoiseBool, startBossBool, playerDieToFirstFaseBossBool, midBossBool, playerDieToMidFaceBossBool, parryBossBool, endBossBool;
-    [SerializeField] bool[] playerAttackBool, playerParryBool, playerDodgeBool, playerUseItemBool, playerUseEmptyItemBool, playerPickUpItemBool, playerDropItemBool, playerDropEmptyItemBool, playerGotHitBool, playerDiesBool, victoryBool, defeatBool;
-    [SerializeField] bool[] inBetweenNarrationBool;
+    [TextArea][SerializeField] string[] startGameDialog, endGameDialog, playerLowHealthDialog, playerHealDialog, playerLowStaminaDialog, playerHitEnemyDialog, playerKilledEnemyDialog, playerNotKillingDialog;
+    [TextArea][SerializeField] string[] randomNoiseDialog, randomPausedNoiseDialog, startBossDialog, playerDieToFirstFaseBossDialog, midBossDialog, playerDieToMidFaceBossDialog, parryBossDialog, endBossDialog;
+    [TextArea][SerializeField] string[] playerAttackDialog, playerParryDialog, playerDodgeDialog, playerUseItemDialog, playerUseEmptyItemDialog, playerPickUpItemDialog, playerDropItemDialog, playerDropEmptyItemDialog, playerGotHitDialog, playerDiesDialog, victoryDialog, defeatDialog;
+    [TextArea][SerializeField] string[] inBetweenNarrationDialog;
 
     private void Awake()
     {
@@ -61,50 +54,30 @@ public class NarrationSystem : MonoBehaviour, IObserver
         subtitlesActivated = SimpleSaveLoad.Instance.LoadData<bool>(FileType.Config, subtitleKey, true);
     }
 
-    public void PlaySubs(AudioClip[] clip, string[] dialog, bool[] largeDialoge, bool hasPriority = false, bool hasComeFromClip = false) //array de bools
+    public void PlaySubs(AudioClip[] clip, string[] dialog, bool hasPriority = false, bool isChainedOnStart = false)
     {
         Subtitles subs = null;
         int randomDialog = Random.Range(0, clip.Length);
-        bool continueDialog = false;
-
-        if (largeDialoge.Length > 0 || hasComeFromClip)
-        {
-
-            randomDialog = dialogeContinueCount;
-            if (largeDialoge[dialogeContinueCount] == true)
-            {
-                continueDialog = true;
-            }
-            else
-            {
-                Debug.Log("No Encotré true en " + largeDialoge[dialogeContinueCount]);
-            }
-
-            
-            dialogeContinueCount += 1;
-        }
-
+        if (isChainedOnStart) { randomDialog = startDialogChainIndex; }
 
         if (subtitlesActivated) { if (FindObjectOfType<Subtitles>()) subs = FindObjectOfType<Subtitles>(); }
 
-        if (isWaiting && hasPriority && !continueDialog)
+        if (isWaiting && hasPriority)
         {
             int randomInBetween = Random.Range(0, inBetweenNarrationClips.Length);
+            if (isChainedOnStart) { randomInBetween = startDialogChainIndex;}
 
             if (subtitlesActivated) chainedDialog = dialog[randomDialog];
             chainedClip = clip[randomDialog];
-            Debug.Log("Me fui por el isWaiting antes");
+
             AudioManager.instance.PlayVoice(inBetweenNarrationClips[randomInBetween]);
             if (subtitlesActivated) subs.DisplayOnPlayingSubtitles(inBetweenNarrationDialog[randomInBetween], inBetweenNarrationClips[randomInBetween].length);
             Invoker.InvokeDelayed(ChainedDialog, inBetweenNarrationClips[randomInBetween].length);
-
-
-            Debug.Log("Me fui por el isWaiting");
         }
         else
         {
-            Debug.Log("Me fui por el normal");
             int random = Random.Range(0, inBetweenNarrationClips.Length);
+            if (isChainedOnStart) { random = startDialogChainIndex; }
 
             AudioManager.instance.PlayVoice(clip[randomDialog]);
 
@@ -115,33 +88,12 @@ public class NarrationSystem : MonoBehaviour, IObserver
                 else
                     subs.DisplaySubtitles(dialog[randomDialog], clip[randomDialog].length);
             }
-            
+
             isWaiting = true;
-
-
-            if (continueDialog)
-            {
-                DelayND(clip[randomDialog].length, clip, dialog, largeDialoge, hasPriority, true);
-                Debug.Log("Hay siguiente dialogo");
-            }
-            else
-            {
-                Invoker.InvokeDelayed(ResetWait, clip[randomDialog].length);
-                dialogeContinueCount = 0;
-                Debug.Log("Solo un dialogo");
-            }
-           
+            Invoker.InvokeDelayed(ResetWait, clip[randomDialog].length);
         }
     }
-    async void DelayND(float delay, AudioClip[] clip, string[] dialog, bool[] largeDialoge, bool hasPriority = false, bool hasComeFromClip = false)
-    {
-        await Task.Delay((int)(delay * 1000));
-        NextDialoge(clip, dialog, largeDialoge, hasPriority, hasComeFromClip);
-    }
-    private void NextDialoge(AudioClip[] clip, string[] dialog, bool[] largeDialoge, bool hasPriority = false, bool hasComeFromClip = false)
-    {
-        PlaySubs(clip, dialog, largeDialoge, hasPriority, hasComeFromClip);
-    }
+
     private void ChainedDialog()
     {
         AudioManager.instance.PlayVoice(chainedClip);
@@ -153,6 +105,16 @@ public class NarrationSystem : MonoBehaviour, IObserver
     private void ResetWait()
     {
         isWaiting = false;
+        if (startDialogChainLength > startDialogChainIndex) 
+        { 
+            Invoke("DelayedDialog", 1f);
+        }
+    }
+
+    private void DelayedDialog()
+    {
+        PlaySubs(startGame, startGameDialog, false, true);
+        startDialogChainIndex++;
     }
 
     public void OnPlayerNotify(AllPlayerActions actions)
@@ -160,11 +122,12 @@ public class NarrationSystem : MonoBehaviour, IObserver
         /*if (isWaiting)
             return;*/
 
-        
+
         switch (actions)
         {
             case AllPlayerActions.Start:
-                Invoke("PlayStartAudio", 0.1f);
+                Debug.Log("Game Started");
+                Invoke("DelayedDialog", 1f);
                 break;
             case AllPlayerActions.End:
                 Debug.Log("Game Ended");
@@ -173,7 +136,7 @@ public class NarrationSystem : MonoBehaviour, IObserver
                 if (FindObjectOfType<PlayerControllerOverhaul>().GetHealth() < lowHealthThreshold && !lowHealthTriggered)
                 {
                     lowHealthTriggered = true;
-                    PlaySubs(playerLowHealth, playerLowHealthDialog,playerLowHealthBool);
+                    PlaySubs(playerLowHealth, playerLowHealthDialog);
                     Debug.Log("Low Health");
                 }
                 break;
@@ -181,7 +144,7 @@ public class NarrationSystem : MonoBehaviour, IObserver
                 if (FindObjectOfType<PlayerControllerOverhaul>().GetStamina() < lowStaminaThreshold && !lowStaminaTriggered)
                 {
                     lowStaminaTriggered = true;
-                    PlaySubs(playerLowStamina, playerLowStaminaDialog,playerLowStaminaBool);
+                    PlaySubs(playerLowStamina, playerLowStaminaDialog);
                     Debug.Log("Low Stamina");
                 }
                 break;
@@ -192,7 +155,7 @@ public class NarrationSystem : MonoBehaviour, IObserver
                 Debug.Log("Random Noise");
                 break;
             case AllPlayerActions.RandomPausedNoise:
-                PlaySubs(randomPausedNoise, randomPausedNoiseDialog, randomPausedNoiseBool);
+                PlaySubs(randomPausedNoise, randomPausedNoiseDialog);
                 Debug.Log("Random Paused Noise");
                 break;
             case AllPlayerActions.StartBoss:
@@ -226,7 +189,7 @@ public class NarrationSystem : MonoBehaviour, IObserver
                 Debug.Log("Hit");
                 break;
             case AllPlayerActions.Die:
-                PlaySubs(playerDies, playerDiesDialog,playerDiesBool, true);
+                PlaySubs(playerDies, playerDiesDialog, true);
                 Debug.Log("Died");
                 break;
             case AllPlayerActions.Victory:
@@ -272,11 +235,6 @@ public class NarrationSystem : MonoBehaviour, IObserver
         }
     }
 
-    private void PlayStartAudio()
-    {
-        PlaySubs(startGame, startGameDialog,startGameBool, true);
-        Debug.Log("Game Started");
-    }
     private void OnPause()
     {
         timeForRandomNoise = 0;
