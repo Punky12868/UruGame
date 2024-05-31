@@ -21,6 +21,8 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private Image itemIcon;
     [SerializeField] private Image dgIcon;
 
+    bool alreadySet;
+
     private void Awake()
     {
         GetComponent<Canvas>().worldCamera = FindObjectOfType<PauseMenu>().gameObject.GetComponent<Canvas>().worldCamera;
@@ -28,6 +30,7 @@ public class PlayerUI : MonoBehaviour
 
     public void SetUI()
     {
+        if (alreadySet) return;
         player = FindObjectOfType<PlayerControllerOverhaul>();
 
         healthSlider.maxValue = player.GetHealth();
@@ -41,6 +44,7 @@ public class PlayerUI : MonoBehaviour
         staminaUsedSlider.value = player.GetStamina();
 
         dgIcon.sprite = DowngradeSystem.Instance.GetIcon();
+        alreadySet = true;
     }
 
     private void Update()

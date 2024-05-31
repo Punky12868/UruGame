@@ -145,7 +145,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     {
         NotifyPlayerObservers(AllPlayerActions.Start);
         FindObjectOfType<CutOutObject>().AddTarget(transform); 
-        if (FindObjectOfType<SetPlayerMap>()) FindObjectOfType<SetPlayerMap>().SetLoadUiMap(true); 
+        if (FindObjectOfType<SetPlayerMap>()) FindObjectOfType<SetPlayerMap>().PlayerStarts(); 
     }
 
     public void Update()

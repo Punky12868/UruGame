@@ -66,6 +66,12 @@ public class GameManager : MonoBehaviour
         return SimpleSaveLoad.Instance.LoadData<bool>(FileType.Gameplay, levelUnlockerKey + firstLevelIndex, false);
     }
 
+    public void BossDefeated()
+    {
+        FindObjectOfType<TextScreens>().OnVictory();
+        TransitionManager.Instance().Transition(0, transitionSettings, transitionDelay + 0.5f);
+    }
+
     public void LoadScene(int id)
     {
         // Restart the game
