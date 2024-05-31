@@ -82,10 +82,21 @@ public class SmallEnemyPlaceholder : EnemyBase
             List<Collider> Punchables = new List<Collider>();
             for (int i = 0; i < colliders.Length; i++)
             {
-                if (colliders[i].CompareTag("Player") || colliders[i].CompareTag("Enemy"))
+                if (isStatic)
                 {
-                    Punchables.Add(colliders[i]);
+                    if (colliders[i].CompareTag("Player") || colliders[i].CompareTag("Enemy"))
+                    {
+                        Punchables.Add(colliders[i]);
 
+                    }
+                }
+                else
+                {
+                    if (colliders[i].CompareTag("Player"))
+                    {
+                        Punchables.Add(colliders[i]);
+
+                    }
                 }
             }
             if (Punchables.Count > 0)

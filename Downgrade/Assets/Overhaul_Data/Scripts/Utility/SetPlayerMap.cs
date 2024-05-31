@@ -32,6 +32,11 @@ public class SetPlayerMap : MonoBehaviour
         }
     }
 
+    public void PlayerStarts()
+    {
+        currentSceneIndex--;
+    }
+
     private void LoadMaps()
     {
         LoadAllMaps();
