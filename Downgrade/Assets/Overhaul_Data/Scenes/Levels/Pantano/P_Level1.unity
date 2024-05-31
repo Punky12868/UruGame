@@ -858,16 +858,16 @@ MonoBehaviour:
       stage: 1
       position: {x: 0.8010969, y: 3.727486}
       hasDelay: 1
-      delayForNextEnemy: 1
+      delayForNextEnemy: 14
     - enemyType: 4
       stage: 1
       position: {x: 3.030388, y: -3.395372}
-      hasDelay: 0
+      hasDelay: 1
       delayForNextEnemy: 1.5
     - enemyType: 4
       stage: 1
       position: {x: -5.669286, y: -4.129407}
-      hasDelay: 0
+      hasDelay: 1
       delayForNextEnemy: 2
 --- !u!1001 &283152163
 PrefabInstance:
@@ -3733,7 +3733,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 314, y: -204.00002}
+  m_AnchoredPosition: {x: 314, y: -204}
   m_SizeDelta: {x: -786.125, y: -436.21997}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &553431270
@@ -7523,7 +7523,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 314, y: -204.00002}
+  m_AnchoredPosition: {x: 314, y: -204}
   m_SizeDelta: {x: -786.125, y: -436.21997}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1477643645
@@ -8602,9 +8602,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 819bc7547970bb64ea35a0b7a5862993, type: 3}
   placeHolderDialog: 0
   startGameDialog:
-  - Prueba 1
-  - Prueba 2
-  - Prueba 3
+  - "\xA1Oye! \xA1\xBFT\xFA qui\xE9n eres?!"
+  - "No perteneces aqu\xED \xBFNo?"
+  - "Ser\xE1 mejor que te prepares"
   endGameDialog: []
   playerLowHealthDialog:
   - Mi loco le queda poca vida.
