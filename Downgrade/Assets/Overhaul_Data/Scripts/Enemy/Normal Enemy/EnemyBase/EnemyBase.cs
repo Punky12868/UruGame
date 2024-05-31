@@ -601,7 +601,7 @@ public class EnemyBase : Subject
 
     public void PlayAnimation(string animName, bool hasExitTime)
     {
-        if (!isAnimationDone)
+        if (!isAnimationDone || animName == "")
             return;
 
         for (int i = 0; i < animationIDs.Length; i++)

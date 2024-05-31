@@ -18,7 +18,7 @@ public class GameManagerProxy : MonoBehaviour
 
     public void LoadDowngradeSelectionScene()
     {
-        GameManager.Instance.StartNewGame();
+        GameManager.Instance.GoToDowngrade();
     }
 
     public void LoadScene(int id)

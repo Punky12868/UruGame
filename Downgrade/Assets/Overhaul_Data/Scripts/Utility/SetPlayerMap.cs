@@ -9,6 +9,7 @@ public class SetPlayerMap : MonoBehaviour
     [SerializeField] private int downgradeSelectionIndex;
     ControllerType lastControllerType;
     string lastCategoryLoaded;
+    int currentSceneIndex;
 
     private void Awake() { LoadMaps(); }
 
@@ -23,6 +24,12 @@ public class SetPlayerMap : MonoBehaviour
 
         if (lastCategoryLoaded != "UI" && loadUiMap) LoadMaps();
         if (lastCategoryLoaded != "Default" && !loadUiMap) LoadMaps();
+
+        if (currentSceneIndex != SceneManager.GetActiveScene().buildIndex)
+        {
+            currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+            LoadMaps();
+        }
     }
 
     private void LoadMaps()

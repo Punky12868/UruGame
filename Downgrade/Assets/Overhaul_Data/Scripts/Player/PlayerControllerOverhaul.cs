@@ -127,7 +127,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
         audioSource = GetComponent<AudioSource>();
         currentHealth = health;
         currentStamina = stamina;
-        FindObjectOfType<PlayerUI>().SetUI();
+        //FindObjectOfType<PlayerUI>().SetUI();
         normalVfxTime = -1;
         comboVfxTime = -1;
 

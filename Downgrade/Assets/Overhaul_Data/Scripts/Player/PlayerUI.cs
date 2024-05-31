@@ -1,3 +1,4 @@
+using Rewired;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,6 +21,11 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private Image itemIcon;
     [SerializeField] private Image dgIcon;
 
+    private void Awake()
+    {
+        GetComponent<Canvas>().worldCamera = FindObjectOfType<PauseMenu>().gameObject.GetComponent<Canvas>().worldCamera;
+    }
+
     public void SetUI()
     {
         player = FindObjectOfType<PlayerControllerOverhaul>();
@@ -39,6 +45,7 @@ public class PlayerUI : MonoBehaviour
 
     private void Update()
     {
+        if (player == null) { player = FindObjectOfType<PlayerControllerOverhaul>(); }
         if (GameManager.Instance.IsGamePaused()) return;
 
         UpdateHealth();

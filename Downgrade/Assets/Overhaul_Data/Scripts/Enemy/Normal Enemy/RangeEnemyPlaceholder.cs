@@ -147,6 +147,7 @@ public class RangeEnemyPlaceholder : EnemyBase
         PlaySound(deathSounds);
         PlayAnimation(animationIDs[7], false, false, true);
         RemoveComponentsOnDeath();
+        Destroy(gameObject);
     }
 
     public override void AvoidBehaviour()
