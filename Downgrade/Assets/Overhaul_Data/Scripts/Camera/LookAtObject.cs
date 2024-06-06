@@ -8,6 +8,7 @@ public class LookAtObject : MonoBehaviour
 
     Transform player;
     Transform scenario;
+    [SerializeField] float dividedBy = 2;
     //Transform[] enemies;
 
     private void Awake()
@@ -19,13 +20,10 @@ public class LookAtObject : MonoBehaviour
     private void Update()
     {
         // scenario and player only
-        Vector3 pos = (player.position + scenario.position) / 2;
+        Vector3 pos = (player.position + scenario.position) / dividedBy;
         pos.y = transform.position.y;
 
-        if (transform.position != pos)
-        {
-            transform.position = pos;
-        }
+        if (transform.position != pos) { transform.position = pos; }
     }
 
     private void OnDrawGizmos()

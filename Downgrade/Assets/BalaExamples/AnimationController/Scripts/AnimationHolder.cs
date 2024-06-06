@@ -14,54 +14,22 @@ public class AnimationHolder : MonoBehaviour
 
     public void Initialize(Animator animator = null)
     {
-        if (animator == null)
-        {
-            animator = GetComponent<Animator>();
-        }
-        else
-        {
-            this.animator = animator;
-        }
+        if (animator == null) animator = GetComponent<Animator>();
+        else this.animator = animator;
 
         anim = new AnimationController();
 
-        foreach (var clip in animator.runtimeAnimatorController.animationClips)
-        {
-            clips.Add(clip);
-        }
-
-        foreach (var animation in animations)
-        {
-            animationIDs.Add(animation.animClip);
-        }
+        foreach (var clip in animator.runtimeAnimatorController.animationClips) clips.Add(clip);
+        foreach (var animation in animations) animationIDs.Add(animation.animClip);
 
         anim.SetAnimationController(this, animator, clips, animationIDs);
     }
 
-    public Animator GetAnimator()
-    {
-        return animator;
-    }
-
-    public AnimationController GetAnimationController()
-    {
-        return anim;
-    }
-
-    public List<AnimationClip> GetAnimationsIDs()
-    {
-        return animationIDs;
-    }
-
-    public List<AnimationClip> GetAnimationClips()
-    {
-        return clips;
-    }
-
-    public List<AnimationCustomEvents> GetAnimationCustomEvents()
-    {
-        return animations;
-    }
+    public Animator GetAnimator() { return animator; }
+    public AnimationController GetAnimationController() { return anim; }
+    public List<AnimationClip> GetAnimationsIDs() { return animationIDs; }
+    public List<AnimationClip> GetAnimationClips() { return clips; }
+    public List<AnimationCustomEvents> GetAnimationCustomEvents() { return animations; }
 }
 
 [Serializable]
