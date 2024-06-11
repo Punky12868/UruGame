@@ -76,3 +76,19 @@ public enum SelectedDowngrade
     Rodilla,
     Moneda,
 }
+
+public enum EnemyType
+{
+    None,
+    Small,
+    Big,
+    Boss,
+}
+
+public enum EnemyBehaviour
+{
+    None,
+    Melee,
+    Ranged,
+    Trap,
+}
