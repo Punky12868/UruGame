@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class NewRangedEnemy : NewEnemyBase
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [Header("RE Type")]
+    [SerializeField] protected bool isStatic;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [Header("RE Projectile")]
+    [SerializeField] protected GameObject projectile;
+    [SerializeField] protected Transform projectileSpawnPoint;
+
+    [Header("RE Combat")]
+    [SerializeField] protected bool projectileCanBeParried = false;
+    [SerializeField] protected float projectileLifeTime;
+    [SerializeField] protected float projectileSpeed;
 }
