@@ -30,6 +30,8 @@ public class AnimationHolder : MonoBehaviour
     public List<AnimationClip> GetAnimationsIDs() { return animationIDs; }
     public List<AnimationClip> GetAnimationClips() { return clips; }
     public List<AnimationCustomEvents> GetAnimationCustomEvents() { return animations; }
+    public void AddClip(AnimationClip clip) { clips.Add(clip); } 
+    public void DeleteAllClips() { clips.Clear(); }
 }
 
 [Serializable]

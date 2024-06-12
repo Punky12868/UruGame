@@ -25,31 +25,33 @@ public class NewEnemyBase : Subject, IAnimController
     [SerializeField] protected float health = 100;
     [SerializeField] protected float speed = 1;
     [SerializeField] protected float attackDamage = 5;
-    [SerializeField] protected bool invertSprite;
-    [SerializeField] protected bool destroyOnDeath;
+    [SerializeField] protected bool invertSprite = false;
+    [SerializeField] protected bool destroyOnDeath = false;
     protected float currentHealth;
 
     [Header("Combat")]
-    [SerializeField] protected float attackCooldown = 0.5f;
-    [SerializeField] protected float attackKnockback = 5;
+    [SerializeField] protected float attackCooldown = 3;
+    [SerializeField] protected float attackKnockback = 10;
     [SerializeField] protected float parryStunTime = 3;
     //[SerializeField] protected float knockbackForce = 1;
     [SerializeField] protected bool canBeParried = true;
+    protected float cooldown;
 
     [Header("Ranges")]
     [SerializeField] protected float tooClose = 0.3f;
-    [SerializeField] protected float avoidRange = 2;
+    //[SerializeField] protected float avoidanceRange = 2;
 
     [Header("Avoidance")]
-    [SerializeField] protected float avoidanceRange = 0.5f;
+    [SerializeField] protected float avoidanceRange = 0.65f;
     [SerializeField] protected float avoidanceSpeed = 7.5f;
 
     [Header("UI")]
     [SerializeField] protected Slider healthBar;
     [SerializeField] protected Slider healthBarBg;
-    [SerializeField] protected float healthBarBgSpeed;
-    [SerializeField] protected float onHitAppearSpeed, onHitDisappearSpeed;
-    [SerializeField] protected float onHitBarCooldown;
+    [SerializeField] protected float healthBarBgSpeed = 5;
+    [SerializeField] protected float onHitAppearSpeed = 1;
+    [SerializeField] protected float onHitDisappearSpeed = 5;
+    [SerializeField] protected float onHitBarCooldown = 5;
 
     [Header("Particles")]
     [SerializeField] protected ParticleSystem hitParticleEmission;
@@ -67,7 +69,6 @@ public class NewEnemyBase : Subject, IAnimController
 
     protected bool isSpawning;
     protected bool isMoving;
-    protected bool isRunning;
     protected bool isAttacking;
     protected bool attackHitboxOn;
     protected bool isNormalAttack;
@@ -90,23 +91,86 @@ public class NewEnemyBase : Subject, IAnimController
     protected virtual void Update()
     {
         if (GameManager.Instance.IsGamePaused()) return;
-        if (!isAttacking) lastDirection = SetTargetDir();
-        direction = SetTargetDir() + SetAvoidanceDir();
+        if (!isAttacking && !attackHitboxOn) lastDirection = SetTargetDir();
+        if (isSpawning || IsAnimationDone()) isSpawning = false;
+        if (SetAvoidanceDir() == Vector3.zero) direction = SetTargetDir() + SetAvoidanceDir();
+        else direction = SetTargetDir();
+        OnCooldownTimer();
+        FlipFacingLastDir();
         UpdateHealthUI();
+        Movement();
         Attack();
+
     }
     #endregion
 
     #region Base Logic
-    protected virtual void Movement() { }
+    protected virtual void Movement() 
+    {
+        if (isStunned || isParried || !IsAnimationDone()) return;
+        if (isOnCooldown) { PlayAnimation(1, false); if (isMoving) { isMoving = false; } return; }
+
+        if (!isAttacking && DistanceFromTarget() < tooClose) PlayAnimation(1, false);
+        else if (!isAttacking && DistanceFromTarget() > tooClose)
+        {
+            transform.position += direction * speed * Time.deltaTime;
+            isMoving = true; PlayAnimation(2, false);
+        }
+        else isMoving = false;
+    }
+
+    protected virtual void GetParried() 
+    {
+        isStunned = true; isParried = true;
+        PlaySound(parriedSounds); PlayAnimation(5, true, true);
+    }
+
+    protected virtual void Death() 
+    {
+        isDead = true;
+        PlaySound(deathSounds); PlayAnimation(6, false, false, true);
+        if (destroyOnDeath) Destroy(gameObject, 0.5f);
+    }
+
+    protected virtual void TakeDamage(float damage, float knockbackForce = 0) 
+    {
+        if (isDead) return;
+        currentHealth -= damage;
+        rb.AddForce((transform.position - target.position).normalized * knockbackForce, ForceMode.Impulse);
+
+        _particleEmission.enabled = true;
+        Invoker.InvokeDelayed(ResetParticle, 0.1f);
+
+        if (hasHealthBar)
+        {
+            healthBar.GetComponentInParent<CanvasGroup>().DOFade(1, onHitAppearSpeed).SetUpdate(UpdateType.Normal, true);
+            Invoke("DissapearBar", onHitBarCooldown);
+        }
+
+        if (currentHealth <= 0) { Death(); PlaySound(deathSounds); }
+        else { PlayAnimation(4, true, true); PlaySound(hitSounds); ResetStatusOnHit(); }
+    }
+
     protected virtual void Attack() { }
-    protected virtual void TakeDamage(float damage, float knockbackForce = 0) { }
-    protected virtual void GetParried() { }
     protected virtual void GetStun() { }
-    protected virtual void Death() { }
     #endregion
 
     #region Utility
+
+    protected void ResetStatusOnHit()
+    {
+        isStunned = true;
+        isAttacking = false;
+        attackHitboxOn = false;
+    }
+
+    protected void OnCooldownTimer()
+    {
+        if (!isOnCooldown) return;
+
+        if (cooldown > 0) cooldown -= Time.deltaTime;
+        else { isOnCooldown = false; cooldown = attackCooldown; }
+    }
 
     #region Direction
     protected Vector3 SetTargetDir()
@@ -133,8 +197,8 @@ public class NewEnemyBase : Subject, IAnimController
                 }
             }
         }
-
-        return -nearestAvoidable.transform.position.normalized;
+        if (nearestAvoidable != null) return -nearestAvoidable.transform.position.normalized;
+        return Vector3.zero;
     }
     protected float DistanceFromTarget() { return Vector3.Distance(target.position, transform.position); }
 
@@ -150,25 +214,20 @@ public class NewEnemyBase : Subject, IAnimController
         healthBarBg.value = Mathf.Lerp(healthBarBg.value, currentHealth, Time.deltaTime * healthBarBgSpeed);
     }
 
-    protected void DissapearBar()
-    {
-        healthBar.GetComponentInParent<CanvasGroup>().DOFade(0, onHitDisappearSpeed).SetUpdate(UpdateType.Normal, true);
-    }
+    protected void DissapearBar() { healthBar.GetComponentInParent<CanvasGroup>().DOFade(0, onHitDisappearSpeed).SetUpdate(UpdateType.Normal, true); }
     #endregion
 
     #region Flip
+    protected void FlipFacingLastDir() 
+    {
+        if (isStunned || isParried || !IsAnimationDone() || isOnCooldown) return;
+        Flip(Vector3.Dot(lastDirection, Vector3.right) >= 0); 
+    }
+
     protected void Flip(bool value)
     {
-        if (invertSprite)
-        {
-            transform.localScale = value ? new Vector3(1, 1, 1) : new Vector3(-1, 1, 1);
-            isSpriteFlipped = value;
-        }
-        else
-        {
-            transform.localScale = value ? new Vector3(-1, 1, 1) : new Vector3(1, 1, 1);
-            isSpriteFlipped = !value;
-        }
+        if (invertSprite) { transform.localScale = value ? new Vector3(1, 1, 1) : new Vector3(-1, 1, 1); isSpriteFlipped = value; }
+        else { transform.localScale = value ? new Vector3(-1, 1, 1) : new Vector3(1, 1, 1); isSpriteFlipped = !value; }
     }
     #endregion
 
@@ -215,6 +274,7 @@ public class NewEnemyBase : Subject, IAnimController
         currentHealth = health;
         _particleEmission = hitParticleEmission.emission;
         _particleEmission.enabled = false;
+        cooldown = attackCooldown;
 
         SpawningSequence();
     }
@@ -241,5 +301,109 @@ public class NewEnemyBase : Subject, IAnimController
         NotifyEnemyObservers(AllEnemyActions.Spawned);
     }
     #endregion
+
+    #region Get - Set - Invokes
+
+    #region Get
+    public EnemyType GetEnemyType() { return enemyType; }
+    public EnemyBehaviour GetBehaviourType() { return behaviourType; }
+    public bool GetIsDead() { return isDead; }
+    public bool GetIsStunned() { return isStunned; }
+    public bool GetIsParried() { return isParried; }
+    public bool GetIsMoving() { return isMoving; }
+    public bool GetIsAttacking() { return isAttacking; }
+    public bool GetIsSpriteFlipped() { return isSpriteFlipped; }
+    public bool GetIsOnCooldown() { return isOnCooldown; }
+    public bool GetIsNormalAttack() { return isNormalAttack; }
+    public bool GetIsChargedAttack() { return isChargedAttack; }
+    public bool GetChargeAttackedConsidered() { return chargeAttackedConsidered; }
+    public bool GetDecidedChargeAttack() { return decidedChargeAttack; }
+    public bool GetAvoidingTarget() { return avoidingTarget; }
+    public bool GetCanBeParried() { return canBeParried; }
+    public bool GetHasHealthBar() { return hasHealthBar; }
+    public float GetHealth() { return currentHealth; }
+    public float GetAttackDamage() { return attackDamage; }
+    public float GetAttackKnockback() { return attackKnockback; }
+    public float GetParryStunTime() { return parryStunTime; }
+    public float GetAvoidanceSpeed() { return avoidanceSpeed; }
+    public float GetAvoidanceRange() { return avoidanceRange; }
+    public float GetTooClose() { return tooClose; }
+    public float GetSpeed() { return speed; }
+    public float GetAttackCooldown() { return attackCooldown; }
+    public bool GetAttackHitboxOn() { return attackHitboxOn; }
+    public Vector3 GetDirection() { return direction; }
+    public Vector3 GetLastDirection() { return lastDirection; }
+    public Transform GetTarget() { return target; }
+
+    #endregion
+
+    #region Set
+    public void SetIsDead(bool value) { isDead = value; }
+    public void SetIsStunned(bool value) { isStunned = value; }
+    public void SetIsParried(bool value) { isParried = value; }
+    public void SetIsMoving(bool value) { isMoving = value; }
+    public void SetIsAttacking(bool value) { isAttacking = value; }
+    public void SetIsSpriteFlipped(bool value) { isSpriteFlipped = value; }
+    public void SetIsOnCooldown(bool value) { isOnCooldown = value; }
+    public void SetIsNormalAttack(bool value) { isNormalAttack = value; }
+    public void SetIsChargedAttack(bool value) { isChargedAttack = value; }
+    public void SetChargeAttackedConsidered(bool value) { chargeAttackedConsidered = value; }
+    public void SetDecidedChargeAttack(bool value) { decidedChargeAttack = value; }
+    public void SetAvoidingTarget(bool value) { avoidingTarget = value; }
+    public void SetCanBeParried(bool value) { canBeParried = value; }
+    public void SetHealth(float value) { currentHealth = value; }
+    public void SetAttackDamage(float value) { attackDamage = value; }
+    public void SetAttackKnockback(float value) { attackKnockback = value; }
+    public void SetParryStunTime(float value) { parryStunTime = value; }
+    public void SetAvoidanceSpeed(float value) { avoidanceSpeed = value; }
+    public void SetAvoidanceRange(float value) { avoidanceRange = value; }
+    public void SetTooClose(float value) { tooClose = value; }
+    public void SetSpeed(float value) { speed = value; }
+    public void SetAttackCooldown(float value) { attackCooldown = value; }
+    public void SetAttackHitboxOn(bool value) { attackHitboxOn = value; }
+    public void SetVectorDirection(Vector3 value) { direction = value; }
+    public void SetLastVectorDirection(Vector3 value) { lastDirection = value; }
+    public void SetTransformDirection(Transform value) { direction = value.position.normalized; }
+    public void SetLastTransformDirection(Transform value) { lastDirection = value.position.normalized; }
+    public void SetTarget(Transform value) { target = value; }
+    #endregion
+
+    #region Invokes
+    protected void ResetParticle() { _particleEmission.enabled = false; }
+    #endregion
+
+    #endregion
+    #endregion
+
+    #region Debug
+
+    [Header("Debug Tools")]
+    [SerializeField] protected bool debugTools = true;
+    [SerializeField] protected Transform debugDrawCenter;
+    [SerializeField] protected int segments = 8;
+
+    protected void DrawAttackHitbox(Vector3 pos, Vector3 size, Color color)
+    {
+        VisualizeBox.DisplayBox(pos, size, Quaternion.LookRotation(lastDirection), color);
+    }
+
+    protected void DrawRange(float range, Color color)
+    {
+        Vector3 center = debugDrawCenter.position;
+        float angleIncrement = 360.0f / segments;
+
+        Vector3 prevPoint = center + new Vector3(range, 0, 0);
+
+        for (int i = 1; i <= segments; i++)
+        {
+            float angle = i * angleIncrement;
+            Vector3 nextPoint = center + new Vector3(range * Mathf.Cos(angle * Mathf.Deg2Rad), 0, range * Mathf.Sin(angle * Mathf.Deg2Rad));
+
+            Debug.DrawLine(prevPoint, nextPoint, color);
+            prevPoint = nextPoint;
+        }
+
+        Debug.DrawLine(prevPoint, center + new Vector3(range, 0, 0), color);
+    }
     #endregion
 }

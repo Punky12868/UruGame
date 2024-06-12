@@ -5,6 +5,12 @@ using UnityEngine;
 
 public class NewBigEnemy : NewEnemyBase
 {
+    [Header("Debug Colors")]
+    [SerializeField] protected Color tooCloseColor = new Color(0, 1, 0, 1);
+    [SerializeField] protected Color avoidRangeColor = new Color(1, 1, 0, 1);
+    [SerializeField] protected Color closeAttackColor = new Color(1, 0, 0, 1);
+    [SerializeField] protected Color farAttackColor = new Color(1, 0.5f, 0, 1);
+
     [Header("BE Combat")]
     [SerializeField] protected float chargeAttackDamage = 5;
     [SerializeField] protected float chargeAttackKnockback = 15;
@@ -38,28 +44,14 @@ public class NewBigEnemy : NewEnemyBase
     #endregion
 
     #region Logic
-    protected override void Movement()
-    {
-        if (isStunned || isParried || !IsAnimationDone() || isOnCooldown) return;
-
-        if (!isAttacking && Vector3.Distance(target.position, transform.position) < tooClose) PlayAnimation(1, false);
-        else if (!isAttacking && Vector3.Distance(target.position, transform.position) > tooClose)
-        {
-            transform.position += direction * speed * Time.deltaTime;
-            isMoving = true;
-            PlayAnimation(2, false);
-        }
-        else isMoving = false;
-    }
-
     protected override void Attack()
     {
-        if (Vector3.Distance(target.position, transform.position) <= closeAttackRange)
+        if (DistanceFromTarget() <= closeAttackRange)
         {
-            isAttacking = true; normalAttack = true; attackHitboxOn = true;
+            isAttacking = true; normalAttack = true; //attackHitboxOn = true;
             PlayAnimation(3, true, true);
         }
-        else if (Vector3.Distance(target.position, transform.position) <= farAttackRange && !chargeAttackedConsidered)
+        else if (DistanceFromTarget() <= farAttackRange && !chargeAttackedConsidered)
         {
             int random = Random.Range(0, maxOdds + 1);
 
@@ -68,7 +60,7 @@ public class NewBigEnemy : NewEnemyBase
                 if (random < oddsToChargeAttack)
                 {
                     PlayAnimation(4, true, true);
-                    isAttacking = true; normalAttack = false; attackHitboxOn = true;
+                    isAttacking = true; normalAttack = false; //attackHitboxOn = true;
 
                     decidedChargeAttack = true;
                     Invoke("ResetDecitionStatus", chargeDecitionCooldown);
@@ -81,7 +73,7 @@ public class NewBigEnemy : NewEnemyBase
         else { if (isAttacking == true) isAttacking = false; }
     }
 
-    public void AttackOverlapCollider()
+    protected void AttackOverlapCollider()
     {
         if (!attackHitboxOn) return;
 
@@ -102,11 +94,10 @@ public class NewBigEnemy : NewEnemyBase
                     {
                         GetParried();
                         //player.GetParryRewardProxy(isBigEnemy, false);
+                        attackHitboxOn = false; return;
                     }
-                    else { player.TakeDamageProxy(damage, knockback, -direction); }
                 }
-                else { player.TakeDamageProxy(damage, knockback, -direction); }
-
+                player.TakeDamageProxy(damage, knockback, -direction);
                 attackHitboxOn = false;
             }
         }
@@ -158,20 +149,24 @@ public class NewBigEnemy : NewEnemyBase
         hitboxCenter.position = new Vector3(desiredPosition.x, hitboxCenter.position.y, desiredPosition.z);
     }
 
-    protected void ResetStatusOnHit()
-    {
-        isStunned = true;
-        isAttacking = false;
-        attackHitboxOn = false;
-    }
-
     #region Invokes
 
-    protected void ResetParticle() { _particleEmission.enabled = false; }
     protected void ResetDecitionStatus() { decidedChargeAttack = false; }
     protected void ResetConsideredDecitionStatus() { chargeAttackedConsidered = false; }
 
     #endregion
 
+    #endregion
+
+    #region Debug
+    private void OnDrawGizmos()
+    {
+        if (!debugTools || debugDrawCenter == null) return;
+
+        DrawRange(tooClose, tooCloseColor);
+        DrawRange(avoidanceRange, avoidRangeColor);
+        DrawRange(closeAttackRange, closeAttackColor);
+        DrawRange(farAttackRange, farAttackColor);
+    }
     #endregion
 }
