@@ -279,7 +279,7 @@ Transform:
   m_GameObject: {fileID: 2179977445337152833}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.224, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -326,7 +326,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -1425925327, guid: 42c8f35b02d04aa45bd9cc3748e66692, type: 3}
+  m_Sprite: {fileID: 1363186085, guid: dddc175fe6e2f08458fcaa49b61aa84d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -347,7 +347,7 @@ Animator:
   m_GameObject: {fileID: 2179977445337152833}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 8d315442d2159954680a70f8c78039e7, type: 2}
+  m_Controller: {fileID: 9100000, guid: 682388f2fa10f1e438c3bff10cfb36e4, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -459,10 +459,10 @@ GameObject:
   - component: {fileID: 7836285335736058979}
   - component: {fileID: 654935973886037638}
   - component: {fileID: 3902854891899135714}
-  - component: {fileID: 3334045482419797443}
+  - component: {fileID: -7952684505447414370}
   - component: {fileID: 6862421462297913029}
   m_Layer: 6
-  m_Name: SmallEnemyPlaceHolder
+  m_Name: BigEnemyPlaceHolde
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -633,7 +633,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &3334045482419797443
+--- !u!114 &-7952684505447414370
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -642,16 +642,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 3664113595333325702}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd31edcc16b463f45a2fcca827ebfe20, type: 3}
+  m_Script: {fileID: 11500000, guid: cf33ebbaccf9db745a7fc35d6cf9ac5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyType: 1
+  enemyType: 2
   behaviourType: 1
-  health: 80
+  health: 100
   speed: 1
-  attackDamage: 12.5
-  hasHitAnimation: 1
-  canBeParryStunned: 1
+  attackDamage: 5
+  hasHitAnimation: 0
+  canBeParryStunned: 0
   invertSprite: 1
   destroyOnDeath: 0
   attackCooldown: 1.5
@@ -685,10 +685,20 @@ MonoBehaviour:
   tooCloseColor: {r: 0, g: 1, b: 0, a: 1}
   avoidRangeColor: {r: 1, g: 1, b: 0, a: 1}
   closeAttackColor: {r: 1, g: 0, b: 0, a: 1}
+  farAttackColor: {r: 1, g: 0.5, b: 0, a: 1}
+  chargeAttackDamage: 5
+  chargeAttackKnockback: 15
+  chargeDecitionCooldown: 2.5
+  canParryChargeAttack: 1
+  hasChargeAttack: 1
+  maxOdds: 1000
+  oddsToChargeAttack: 250
   hitboxCenter: {fileID: 898055889184827637}
-  attackHitboxSize: {x: 0.35, y: 0.35, z: 0.5}
+  attackHitboxSize: {x: 0.5, y: 0.5, z: 0.5}
+  chargedAttackHitboxSize: {x: 1, y: 1, z: 1}
   hitboxOffset: 0.5
-  closeAttackRange: 0.8
+  closeAttackRange: 1
+  farAttackRange: 4
 --- !u!114 &6862421462297913029
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -702,20 +712,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animations:
-  - animClip: {fileID: 7400000, guid: 8c33994dd7275094299483defdae84e7, type: 2}
+  - animClip: {fileID: 7400000, guid: b6c14b9be48c55b49bdca9f29837556e, type: 2}
     invokableEvents: []
-  - animClip: {fileID: 7400000, guid: 7bbc563b8db73324180dfc6b3e2aadbd, type: 2}
+  - animClip: {fileID: 7400000, guid: 42987928e028bab428a77dd966152cb6, type: 2}
     invokableEvents: []
-  - animClip: {fileID: 7400000, guid: daf1049a84809604783527b59fb52faa, type: 2}
+  - animClip: {fileID: 7400000, guid: 0be341fb3f83893459d21ff9fae45d7a, type: 2}
     invokableEvents: []
-  - animClip: {fileID: 7400000, guid: 9ed5a1633204fe94a8d903ce0766a3af, type: 2}
+  - animClip: {fileID: 7400000, guid: 26e99ff8b372db0479bd215a69faa79c, type: 2}
     invokableEvents:
     - time: 0.65
       events:
         m_PersistentCalls:
           m_Calls:
-          - m_Target: {fileID: 3334045482419797443}
-            m_TargetAssemblyTypeName: NewEnemyBase, Assembly-CSharp
+          - m_Target: {fileID: -7952684505447414370}
+            m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
             m_MethodName: SetAttackHitboxOn
             m_Mode: 6
             m_Arguments:
@@ -726,8 +736,8 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 1
             m_CallState: 2
-          - m_Target: {fileID: 3334045482419797443}
-            m_TargetAssemblyTypeName: NewEnemyBase, Assembly-CSharp
+          - m_Target: {fileID: -7952684505447414370}
+            m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
             m_MethodName: SetIsAttacking
             m_Mode: 6
             m_Arguments:
@@ -742,8 +752,8 @@ MonoBehaviour:
       events:
         m_PersistentCalls:
           m_Calls:
-          - m_Target: {fileID: 3334045482419797443}
-            m_TargetAssemblyTypeName: NewEnemyBase, Assembly-CSharp
+          - m_Target: {fileID: -7952684505447414370}
+            m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
             m_MethodName: SetIsOnCooldown
             m_Mode: 6
             m_Arguments:
@@ -754,8 +764,8 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 1
             m_CallState: 2
-          - m_Target: {fileID: 3334045482419797443}
-            m_TargetAssemblyTypeName: NewEnemyBase, Assembly-CSharp
+          - m_Target: {fileID: -7952684505447414370}
+            m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
             m_MethodName: SetAttackHitboxOn
             m_Mode: 6
             m_Arguments:
@@ -766,8 +776,8 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 0
             m_CallState: 2
-          - m_Target: {fileID: 3334045482419797443}
-            m_TargetAssemblyTypeName: NewEnemyBase, Assembly-CSharp
+          - m_Target: {fileID: -7952684505447414370}
+            m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
             m_MethodName: SetIsAttacking
             m_Mode: 6
             m_Arguments:
@@ -784,7 +794,7 @@ MonoBehaviour:
       events:
         m_PersistentCalls:
           m_Calls:
-          - m_Target: {fileID: 3334045482419797443}
+          - m_Target: {fileID: 0}
             m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
             m_MethodName: SetIsOnCooldown
             m_Mode: 6
@@ -800,7 +810,7 @@ MonoBehaviour:
       events:
         m_PersistentCalls:
           m_Calls:
-          - m_Target: {fileID: 3334045482419797443}
+          - m_Target: {fileID: 0}
             m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
             m_MethodName: SetIsStunned
             m_Mode: 6
@@ -818,7 +828,7 @@ MonoBehaviour:
       events:
         m_PersistentCalls:
           m_Calls:
-          - m_Target: {fileID: 3334045482419797443}
+          - m_Target: {fileID: 0}
             m_TargetAssemblyTypeName: NewEnemyBase, Assembly-CSharp
             m_MethodName: SetIsParried
             m_Mode: 6
@@ -830,7 +840,7 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 0
             m_CallState: 2
-          - m_Target: {fileID: 3334045482419797443}
+          - m_Target: {fileID: 0}
             m_TargetAssemblyTypeName: NewEnemyBase, Assembly-CSharp
             m_MethodName: SetIsStunned
             m_Mode: 6
@@ -842,8 +852,78 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 0
             m_CallState: 2
-  - animClip: {fileID: 7400000, guid: 5c8cce818e9ab924e8f4e3c57b049d21, type: 2}
+  - animClip: {fileID: 7400000, guid: 9420e5c58df9d69458ec827ce403aa85, type: 2}
     invokableEvents: []
+  - animClip: {fileID: 7400000, guid: 7c516fea0054e9b46ae8e60339548de2, type: 2}
+    invokableEvents:
+    - time: 0.65
+      events:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: -7952684505447414370}
+            m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
+            m_MethodName: SetAttackHitboxOn
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 1
+            m_CallState: 2
+          - m_Target: {fileID: -7952684505447414370}
+            m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
+            m_MethodName: SetIsAttacking
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 1
+            m_CallState: 2
+    - time: 0.9
+      events:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: -7952684505447414370}
+            m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
+            m_MethodName: SetIsOnCooldown
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 1
+            m_CallState: 2
+          - m_Target: {fileID: -7952684505447414370}
+            m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
+            m_MethodName: SetAttackHitboxOn
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: -7952684505447414370}
+            m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
+            m_MethodName: SetIsAttacking
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
 --- !u!1 &3740739450190283397
 GameObject:
   m_ObjectHideFlags: 0
@@ -938,7 +1018,7 @@ Transform:
   m_GameObject: {fileID: 6844356960698966627}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.366, z: 0}
+  m_LocalPosition: {x: 0, y: 0.55, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5886,7 +5966,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0.72198486}
+  m_AnchoredPosition: {x: 0, y: 1.061}
   m_SizeDelta: {x: 183.1093, y: 32.4579}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &8563834012991166168

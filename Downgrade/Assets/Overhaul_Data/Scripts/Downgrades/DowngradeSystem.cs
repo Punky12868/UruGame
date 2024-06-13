@@ -176,7 +176,9 @@ public class DowngradeSystem : MonoBehaviour, IObserver
             {
                 foreach (Subject enemy in enemies)
                 {
-                    enemy.GetComponent<EnemyBase>().normalAttackdamage += enemyBoostDamageAmmount;
+                    //enemy.GetComponent<OldEnemyBase>().normalAttackdamage += enemyBoostDamageAmmount;
+                    float newDamage = enemy.GetComponent<EnemyBase>().GetAttackDamage();
+                    enemy.GetComponent<EnemyBase>().SetAttackDamage(newDamage + enemyBoostDamageAmmount);
                 }
                 enemyBoostTime = 0;
                 Debug.Log("EnemyBoost");
@@ -253,7 +255,7 @@ public class DowngradeSystem : MonoBehaviour, IObserver
                     EnemyBase[] enemyBases = FindObjectsOfType<EnemyBase>();
                     foreach (EnemyBase enemy in enemyBases)
                     {
-                        if (enemy.isParried) enemy.TakeDamage(damageAmmount);
+                        if (enemy.GetIsParried()) enemy.TakeDamageProxy(damageAmmount);
                     }
 
                     Debug.Log("Paralysis");

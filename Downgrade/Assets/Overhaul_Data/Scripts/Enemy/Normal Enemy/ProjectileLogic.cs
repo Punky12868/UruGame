@@ -49,7 +49,7 @@ public class ProjectileLogic : MonoBehaviour
             {
                 direction *= -1;
                 isParried = true;
-                originalEnemy.GetComponent<EnemyBase>().PlaySound(parrySounds);
+                originalEnemy.GetComponent<EnemyBase>().PlaySoundProxy(parrySounds);
                 other.GetComponent<PlayerControllerOverhaul>().GetParryRewardProxy(false, false, true);
             }
             else
@@ -66,7 +66,7 @@ public class ProjectileLogic : MonoBehaviour
 
         if (other.CompareTag("Enemy") && isParried)
         {
-            other.GetComponent<EnemyBase>().TakeDamage(damage);
+            other.GetComponent<EnemyBase>().TakeDamageProxy(damage);
             Destroy(gameObject);
         }
 

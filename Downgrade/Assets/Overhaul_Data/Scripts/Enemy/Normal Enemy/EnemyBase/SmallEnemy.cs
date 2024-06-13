@@ -1,9 +1,6 @@
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class NewSmallEnemy : NewEnemyBase
+public class SmallEnemy : EnemyBase
 {
     [Header("Debug Colors")]
     [SerializeField] protected bool drawAttackHitboxesDuringAttack = true;
@@ -31,7 +28,7 @@ public class NewSmallEnemy : NewEnemyBase
     #region Logic
     protected override void Attack()
     {
-        if (isOnCooldown || attackHitboxOn || isStunned || isParried) return;
+        if (isOnCooldown || attackHitboxOn || isStunned || isParried || isAttacking) return;
 
         if (DistanceFromTarget() <= closeAttackRange)
         {
@@ -43,9 +40,7 @@ public class NewSmallEnemy : NewEnemyBase
 
     protected void AttackOverlapCollider()
     {
-        if (!attackHitboxOn) return;
-
-        Debug.Log("attackHitboxOn Value: " + attackHitboxOn);
+        if (!attackHitboxOn || isStunned || isOnCooldown) return;
 
         Vector3 colliderSize = attackHitboxSize;
         float damage = attackDamage;
@@ -64,13 +59,11 @@ public class NewSmallEnemy : NewEnemyBase
                     {
                         GetParried();
                         //player.GetParryRewardProxy(isBigEnemy, false);
-                        attackHitboxOn = false; 
-                        return;
+                        attackHitboxOn = false; return;
                     }
                 }
                 attackHitboxOn = false;
                 player.TakeDamageProxy(damage, knockback, -direction);
-                Debug.Log(attackHitboxOn);
             }
         }
     }
@@ -98,7 +91,10 @@ public class NewSmallEnemy : NewEnemyBase
         DrawRange(avoidanceRange, avoidRangeColor);
         DrawRange(closeAttackRange, closeAttackColor);
 
-        if (drawAttackHitboxesDuringAttack && !attackHitboxOn) return;
+        Gizmos.color = avoidRangeColor;
+        Gizmos.DrawLine(transform.position, transform.position + direction * avoidanceRange);
+
+        if (drawAttackHitboxesDuringAttack && !attackHitboxOn || isOnCooldown) return;
         DrawAttackHitbox(hitboxCenter.position, attackHitboxSize, Color.red);
     }
     #endregion

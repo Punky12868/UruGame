@@ -1,11 +1,9 @@
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class NewBigEnemy : NewEnemyBase
+public class BigEnemy : EnemyBase
 {
     [Header("Debug Colors")]
+    [SerializeField] protected bool drawAttackHitboxesDuringAttack = true;
     [SerializeField] protected Color tooCloseColor = new Color(0, 1, 0, 1);
     [SerializeField] protected Color avoidRangeColor = new Color(1, 1, 0, 1);
     [SerializeField] protected Color closeAttackColor = new Color(1, 0, 0, 1);
@@ -15,7 +13,8 @@ public class NewBigEnemy : NewEnemyBase
     [SerializeField] protected float chargeAttackDamage = 5;
     [SerializeField] protected float chargeAttackKnockback = 15;
     [SerializeField] protected float chargeDecitionCooldown = 2.5f;
-    [SerializeField] protected bool canParryChargeAttack;
+    [SerializeField] protected bool canParryChargeAttack = true;
+    [SerializeField] protected bool hasChargeAttack = true;
 
     [Header("BE C_Attack Odds")]
     [SerializeField] protected int maxOdds = 1000;
@@ -38,20 +37,21 @@ public class NewBigEnemy : NewEnemyBase
     {
         base.Update();
         HitboxFaceToTarget();
-        Movement();
-        Attack();
+        AttackOverlapCollider();
     }
     #endregion
 
     #region Logic
     protected override void Attack()
     {
+        if (isOnCooldown || attackHitboxOn || isStunned || isParried || isAttacking) return;
+
         if (DistanceFromTarget() <= closeAttackRange)
         {
             isAttacking = true; normalAttack = true; //attackHitboxOn = true;
             PlayAnimation(3, true, true);
         }
-        else if (DistanceFromTarget() <= farAttackRange && !chargeAttackedConsidered)
+        else if (DistanceFromTarget() <= farAttackRange && !chargeAttackedConsidered && hasChargeAttack)
         {
             int random = Random.Range(0, maxOdds + 1);
 
@@ -59,8 +59,8 @@ public class NewBigEnemy : NewEnemyBase
             {
                 if (random < oddsToChargeAttack)
                 {
-                    PlayAnimation(4, true, true);
                     isAttacking = true; normalAttack = false; //attackHitboxOn = true;
+                    PlayAnimation(7, true, true);
 
                     decidedChargeAttack = true;
                     Invoke("ResetDecitionStatus", chargeDecitionCooldown);
@@ -75,7 +75,7 @@ public class NewBigEnemy : NewEnemyBase
 
     protected void AttackOverlapCollider()
     {
-        if (!attackHitboxOn) return;
+        if (!attackHitboxOn || isStunned || isOnCooldown) return;
 
         Vector3 colliderSize = normalAttack ? attackHitboxSize : chargedAttackHitboxSize;
         float damage = normalAttack ? attackDamage : chargeAttackDamage;
@@ -97,42 +97,10 @@ public class NewBigEnemy : NewEnemyBase
                         attackHitboxOn = false; return;
                     }
                 }
-                player.TakeDamageProxy(damage, knockback, -direction);
                 attackHitboxOn = false;
+                player.TakeDamageProxy(damage, knockback, -direction);
             }
         }
-    }
-
-    protected override void TakeDamage(float damage, float knockbackForce = 0)
-    {
-        if (isDead) return;
-        currentHealth -= damage;
-        rb.AddForce((transform.position - target.position).normalized * knockbackForce, ForceMode.Impulse);
-
-        _particleEmission.enabled = true;
-        Invoker.InvokeDelayed(ResetParticle, 0.1f);
-
-        if (hasHealthBar)
-        {
-            healthBar.GetComponentInParent<CanvasGroup>().DOFade(1, onHitAppearSpeed).SetUpdate(UpdateType.Normal, true);
-            Invoke("DissapearBar", onHitBarCooldown);
-        }
-
-        if (currentHealth <= 0) { Death(); PlaySound(deathSounds); }
-        else { PlayAnimation(6, true, true); PlaySound(hitSounds); ResetStatusOnHit(); }
-    }
-
-    protected override void GetParried()
-    {
-        isStunned = true; isParried = true;
-        PlaySound(parriedSounds); PlayAnimation(5, true, true);
-    }
-
-    protected override void Death()
-    {
-        isDead = true;
-        PlaySound(deathSounds); PlayAnimation(7, false, false, true);
-        if (destroyOnDeath) Destroy(gameObject, 0.5f);
     }
 
     #endregion
@@ -167,6 +135,13 @@ public class NewBigEnemy : NewEnemyBase
         DrawRange(avoidanceRange, avoidRangeColor);
         DrawRange(closeAttackRange, closeAttackColor);
         DrawRange(farAttackRange, farAttackColor);
+
+        Gizmos.color = avoidRangeColor;
+        Gizmos.DrawLine(transform.position, transform.position + direction * avoidanceRange);
+
+        if (drawAttackHitboxesDuringAttack && !attackHitboxOn || isOnCooldown) return;
+        Vector3 colliderSize = normalAttack ? attackHitboxSize : chargedAttackHitboxSize;
+        DrawAttackHitbox(hitboxCenter.position, colliderSize, Color.red);
     }
     #endregion
 }
