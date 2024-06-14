@@ -1183,7 +1183,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &208047253
 Transform:
   m_ObjectHideFlags: 0
@@ -1213,13 +1213,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timerEnemySpawn: 0
   swampEnemies:
-  - {fileID: 4680848831808023462, guid: ffe0056bf4e837641aed4498788d6850, type: 3}
-  - {fileID: 6541512594619184199, guid: e034d4732d47fed44b038fbdd4cefccd, type: 3}
+  - {fileID: 3664113595333325702, guid: 1a775462e06bf9544816a3b59cc5c4f4, type: 3}
+  - {fileID: 3664113595333325702, guid: 1a775462e06bf9544816a3b59cc5c4f4, type: 3}
   - {fileID: 0}
-  - {fileID: 4526869880663001187, guid: 53cb6b451fdfafe45830a71698eeba18, type: 3}
-  - {fileID: 734513466168590697, guid: db93257f94efc814791049d8bc4809da, type: 3}
-  - {fileID: 3098396404004596726, guid: 985519ecdc5fa424bae3e00fa785f572, type: 3}
-  - {fileID: 2610436548476913851, guid: 5b35eab16c7a80b4a9cc413a53ffe97e, type: 3}
+  - {fileID: 3664113595333325702, guid: 20038ca91767e0e41a58c80e2d5f244b, type: 3}
+  - {fileID: 3664113595333325702, guid: 1a775462e06bf9544816a3b59cc5c4f4, type: 3}
+  - {fileID: 3664113595333325702, guid: 20038ca91767e0e41a58c80e2d5f244b, type: 3}
+  - {fileID: 3664113595333325702, guid: 1a775462e06bf9544816a3b59cc5c4f4, type: 3}
   waves:
   - waves:
     - enemyType: 2
@@ -5146,6 +5146,10 @@ PrefabInstance:
       value: N1-Bosque
       objectReference: {fileID: 0}
     - target: {fileID: 1848564565036445735, guid: 471b2c3b00e894d4bb965a25748b3fc4, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1848564565036445735, guid: 471b2c3b00e894d4bb965a25748b3fc4, type: 3}
       propertyPath: m_TagString
       value: Limits
       objectReference: {fileID: 0}
@@ -6553,7 +6557,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.2164359, y: -0.000000029095913, z: 0.0000000064502923, w: 0.97629684}
+  m_LocalRotation: {x: 0.21643591, y: -8.421053e-17, z: 1.192436e-16, w: 0.97629684}
   m_LocalPosition: {x: 0, y: 4.1967, z: -18.839}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -8173,7 +8177,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1332516484}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.2164359, y: -0.000000029095913, z: 0.0000000064502923, w: 0.97629684}
+  m_LocalRotation: {x: 0.21643591, y: -8.421053e-17, z: 1.192436e-16, w: 0.97629684}
   m_LocalPosition: {x: 0, y: 4.1967, z: -18.839}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
