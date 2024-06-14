@@ -370,9 +370,9 @@ public class PlayerControllerOverhaulOld : Subject
 
                 int damage = Random.Range((int)attackDamage.x, (int)attackDamage.y + 1);
 
-                if (hit.GetComponent<EnemyBase>())
+                if (hit.GetComponent<OldEnemyBase>())
                 {
-                    if (hit.GetComponent<EnemyBase>().currentHealth - damage <= 0)
+                    if (hit.GetComponent<OldEnemyBase>().currentHealth - damage <= 0)
                     {
                         ResetHittingKilling("Kill");
                         NotifyPlayerObservers(AllPlayerActions.KilledEnemy);
@@ -383,7 +383,7 @@ public class PlayerControllerOverhaulOld : Subject
                         NotifyPlayerObservers(AllPlayerActions.HitEnemy);
                     }
 
-                    hit.GetComponent<EnemyBase>().TakeDamage(damage);
+                    hit.GetComponent<OldEnemyBase>().TakeDamage(damage);
                 }
                 else if (hit.GetComponent<BossBase>())
                 {

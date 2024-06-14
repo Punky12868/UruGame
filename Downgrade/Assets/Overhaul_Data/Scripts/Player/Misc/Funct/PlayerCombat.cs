@@ -70,7 +70,7 @@ public class PlayerCombat : PlayerBase
             if (hit.CompareTag("Enemy"))
             {
                 Debug.Log("Hit");
-                hit.GetComponent<EnemyBase>().TakeDamage(attackDamage);
+                hit.GetComponent<OldEnemyBase>().TakeDamage(attackDamage);
             }
 
             if (hit.CompareTag("Destructible"))

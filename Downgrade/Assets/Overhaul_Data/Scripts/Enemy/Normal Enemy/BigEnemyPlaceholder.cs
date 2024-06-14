@@ -1,7 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
 
-public class BigEnemyPlaceholder : EnemyBase
+public class BigEnemyPlaceholder : OldEnemyBase
 {
     // PlaceHolder for a Big Enemy
 

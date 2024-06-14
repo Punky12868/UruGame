@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SmallEnemyPlaceholder : EnemyBase
+public class SmallEnemyPlaceholder : OldEnemyBase
 {
     // PlaceHolder for a Small Enemy
     [SerializeField] private Dictionary<GameObject, Collider> posibleTargets = new Dictionary<GameObject, Collider>();
@@ -247,7 +247,7 @@ public class SmallEnemyPlaceholder : EnemyBase
             PlayAnimation(animationIDs[4], true, true);
             if (target.CompareTag("Enemy") && target.gameObject != this.gameObject)
             {
-                target.GetComponent<EnemyBase>().TakeDamage(normalAttackdamage, 0f, new Vector3(0, 0, 0));
+                target.GetComponent<OldEnemyBase>().TakeDamage(normalAttackdamage, 0f, new Vector3(0, 0, 0));
             }
         }
         else

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RangeEnemyPlaceholder : EnemyBase
+public class RangeEnemyPlaceholder : OldEnemyBase
 {
     // PlaceHolder for a Big Enemy
 

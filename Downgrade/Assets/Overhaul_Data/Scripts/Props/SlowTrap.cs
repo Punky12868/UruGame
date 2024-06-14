@@ -41,8 +41,8 @@ public class SlowTrap : MonoBehaviour
 
                     if (hit.CompareTag("Enemy"))
                     {
-                        speedToSave = hit.GetComponent<EnemyBase>().speed;
-                        hit.GetComponent<EnemyBase>().speed = speedToSave * multiplier;
+                        speedToSave = hit.GetComponent<EnemyBase>().GetSpeed();
+                        hit.GetComponent<EnemyBase>().SetSpeed(speedToSave * multiplier);
                     }
                     originalSpeeds[hit.gameObject] = speedToSave;
                 }
@@ -70,7 +70,7 @@ public class SlowTrap : MonoBehaviour
                 }
                 else if (obj.Key.CompareTag("Enemy") && obj.Key.GetComponent<EnemyBase>())
                 {
-                    obj.Key.GetComponent<EnemyBase>().speed = originalSpeeds[obj.Key];  
+                    obj.Key.GetComponent<EnemyBase>().SetSpeed(originalSpeeds[obj.Key]);  
                 }
                 toRemove.Add(obj.Key);
             }

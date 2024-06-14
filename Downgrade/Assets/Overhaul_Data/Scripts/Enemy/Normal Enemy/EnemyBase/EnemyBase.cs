@@ -1,1102 +1,432 @@
-using DG.Tweening;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine;
+using DG.Tweening;
 
-public class EnemyBase : Subject
+[RequireComponent(typeof(AnimationHolder))]
+[RequireComponent(typeof(Rigidbody))]
+public class EnemyBase : Subject, IAnimController
 {
-    // PlaceHolder for the EnemyBase
-
     #region Variables
-    [HideInInspector] public Animator anim;
-    [HideInInspector] public Rigidbody rb;
-    [HideInInspector] public Transform pivot;
-    [HideInInspector] public Transform target;
-    [HideInInspector] public Vector3 lastTargetDir;
-    [HideInInspector] public Vector3 targetDir;
-    [HideInInspector] public ParticleSystem.EmissionModule _particleEmission;
+    protected AnimationHolder animHolder;
 
-    [HideInInspector] public float animClipLength;
-    [HideInInspector] public bool isAnimationDone;
+    protected Rigidbody rb;
+    protected List<AnimationClip> animationIDs;
 
-    [HideInInspector] public bool isBigEnemy;
-    [HideInInspector] public bool isSpawning;
-    [HideInInspector] public bool isMoving;
-    [HideInInspector] public bool isRunning;
-    [HideInInspector] public bool isAttacking;
-    [HideInInspector] public bool isNormalOverlapAttack;
-    [HideInInspector] public bool isChargedOverlapAttack;
-    [HideInInspector] public bool isInvokedNormalOverlapAttack;
-    [HideInInspector] public bool isInvokedChargedOverlapAttack;
-    [HideInInspector] public bool isStunned;
-    [HideInInspector] public bool isParried;
-    [HideInInspector] public bool isDead;
-    [HideInInspector] public bool isSpriteFlipped;
-    [HideInInspector] public bool isOnCooldown;
-    [HideInInspector] public bool decidedChargeAttack;
-    [HideInInspector] public bool chargeAttackedConsidered;
-    [HideInInspector] public bool avoidingTarget;
-    [HideInInspector] public bool hasQueuedAnimation;
+    protected Transform target;
+    protected Vector3 direction, lastDirection;
 
-    [Header("AI Stats")]
-    public float health = 100;
-    public bool hasHealthBar;
-    public Slider healthBar;
-    public Slider healthBarBg;
-    public float healthBarBgSpeed;
-    public float onHitAppearSpeed;
-    public float onHitDisappearSpeed;
-    public float onHitBarCooldown;
-    public ParticleSystem hitParticleEmission;
-    [HideInInspector] public float currentHealth;
-    public float normalAttackdamage = 5;
-    public float normalAttackKnockback = 5;
-    public float chargeAttackDamage = 5;
-    public float chargeAttackKnockback = 15;
-    [HideInInspector] public float speed;
-    public float walkingSpeed = 1;
-    public bool canRun;
-    public bool reverseRunLogic;
-    public float runSpeed = 1.5f;
-    public float runRange = 1.5f;
+    [Header("Type")]
+    [SerializeField] protected EnemyType enemyType;
+    [SerializeField] protected EnemyBehaviour behaviourType;
 
-    public bool isStatic ;
-    public float projectileSpawnTime;
-    public float projectileLifeTime;
-    public float projectileSpeed;
-    public GameObject projectile;
-    public Transform projectileSpawnPoint;
+    [Header("General")]
+    [SerializeField] protected float health = 100;
+    [SerializeField] protected float speed = 1;
+    [SerializeField] protected float attackDamage = 5;
+    [SerializeField] protected bool hasHitAnimation = true;
+    [SerializeField] protected bool canBeParryStunned = true;
+    [SerializeField] protected bool invertSprite = false;
+    [SerializeField] protected bool destroyOnDeath = false;
+    protected float currentHealth;
 
-    public bool hasKnockback;
-    public float knockbackForce = 5.5f;
-    public bool canBeParried = true;
-    public bool projectileCanBeParried = false;
-    public bool canBeParryStunned;
-    public bool canParryChargeAttack;
-    public float parryStunTime = 3;
+    [Header("Combat")]
+    [SerializeField] protected float attackCooldown = 1.5f;
+    [SerializeField] protected float attackKnockback = 10;
+    [SerializeField] protected float parryStunTime = 3;
+    //[SerializeField] protected float knockbackForce = 1;
+    [SerializeField] protected bool canBeParried = true;
+    protected float cooldown;
 
-    [Header("AI StunTime")]
-    public float stunTime = 2;
+    [Header("Ranges")]
+    [SerializeField] protected float tooClose = 0.3f;
+    //[SerializeField] protected float avoidanceRange = 2;
 
-    [Header("AI Stop range from player")]
-    public float tooClose = 0.3f;
+    [Header("Avoidance")]
+    [SerializeField] protected float avoidanceRange = 0.65f;
+    [SerializeField] protected float avoidanceSpeed = 7.5f;
 
-    [Header("AI Odds for charge attack")]
-    public int maxOdds = 1000;
-    public int oddsToChargeAttack = 250;
+    [Header("UI")]
+    [SerializeField] protected Slider healthBar;
+    [SerializeField] protected Slider healthBarBg;
+    [SerializeField] protected float healthBarBgSpeed = 5;
+    [SerializeField] protected float onHitAppearSpeed = 1;
+    [SerializeField] protected float onHitDisappearSpeed = 5;
+    [SerializeField] protected float onHitBarCooldown = 5;
 
-    [Header("AI Attack variables")]
-    public bool isMelee;
-    [SerializeField] Transform hitboxCenter;
-    [SerializeField] float hitboxOffset;
-    public bool hasChargeAttack;
-    public float closeAttackRange = 0.8f;
-    public float farAttackRange = 2;
+    [Header("Particles")]
+    [SerializeField] protected ParticleSystem hitParticleEmission;
+    protected ParticleSystem.EmissionModule _particleEmission;
 
-    [Header("AI Attack impulse")]
-    public float moveOnNormalAttackForce = 10;
-    public float normalMoveAttackActivationTime = 0;
+    [Header("AudioClips")]
+    [SerializeField] protected AudioClip[] spawnSounds;
+    [SerializeField] protected AudioClip[] attackSounds;
+    [SerializeField] protected AudioClip[] hitSounds;
+    [SerializeField] protected AudioClip[] deathSounds;
+    [SerializeField] protected AudioClip[] parriedSounds;
+    protected AudioSource audioSource;
 
-    public float moveOnChargeAttackForce = 60;
-    public float chargeMoveAttackActivationTime = 0;
+    #region States
 
-    public Vector2 normalAttackHitboxAppearTime = new Vector2(0.2f, 0.5f);
-    public Vector3 normalAttackHitboxSize = new Vector3(0.5f, 0.5f, 0.5f);
+    protected bool isSpawning;
+    protected bool isMoving;
+    protected bool isAttacking;
+    protected bool attackHitboxOn;
+    protected bool isNormalAttack;
+    protected bool isChargedAttack;
+    protected bool isStunned;
+    protected bool isParried;
+    protected bool isDead = false;
+    protected bool isSpriteFlipped;
+    protected bool isOnCooldown;
+    protected bool decidedChargeAttack;
+    protected bool chargeAttackedConsidered;
+    protected bool avoidingTarget;
+    protected bool hasHealthBar = true;
 
-    public Vector2 chargedAttackHitboxAppearTime = new Vector2(0.2f, 0.5f);
-    public Vector3 chargedAttackHitboxSize = new Vector3(1, 1, 1);
-
-    [Header("AI Cooldown")]
-    public float attackCooldown = 0.5f;
-    public float chargeDecitionCooldown = 2.5f;
-
-    [Header("AI Avoidance")]
-    public float enemyAvoidanceRange = 0.5f;
-    public float wallAvoidanceSpeed = 7.5f;
-    public bool avoidTarget;
-    public float avoidRange = 2;
-
-    [Header("AI Animations")]
-    public bool flipSprite;
-    public string[] animationIDs;
-    [HideInInspector] public string queueAnimation;
-    AnimationClip[] clips;
-
-    [Header ("AI Sounds")]
-    [HideInInspector] public AudioSource audioSource;
-    public AudioClip[] spawnSounds;
-    public AudioClip[] normalAttackSounds;
-    public AudioClip[] chargedAttackSounds;
-    public AudioClip[] hitSounds;
-    public AudioClip[] deathSounds;
-    public AudioClip[] parrySounds;
-
-    [Header("Debug")]
-    [SerializeField] private bool debugTools = true;
-    [SerializeField] private bool drawHitboxes = true;
-    [SerializeField] private bool drawHitboxesOnGameplay = true;
-    [SerializeField] private Transform debugDrawCenter;
-    [SerializeField] private Color runRageColor = new Color(1, 0, 1,  1);
-    [SerializeField] private Color tooCloseColor = new Color(0, 1, 0, 1);
-    [SerializeField] private Color wallAvoidanceColor = new Color(1, 1, 0, 1);
-    [SerializeField] private Color closeAttackColor = new Color(1, 0, 0, 1);
-    [SerializeField] private Color farAttackColor = new Color(1, 0.5f, 0, 1);
-    [SerializeField] private Color avoidRangeColor = new Color(1, 1, 0, 1);
-    [SerializeField] private int segments = 8; // Number of line segments to approximate the circle
+    #endregion
     #endregion
 
-    public virtual void Awake()
+    #region Unity Methods
+    protected virtual void Awake() { SetAwake(); }
+    protected virtual void Update()
     {
-        hasHealthBar = SimpleSaveLoad.Instance.LoadData(FileType.Config, "hbar", true);
-        anim = GetComponentInChildren<Animator>();
-        rb = GetComponent<Rigidbody>();
-        pivot = GetComponentInParent<Transform>();
-        clips = anim.runtimeAnimatorController.animationClips;
-        audioSource = GetComponent<AudioSource>();
-        target = GameObject.FindGameObjectWithTag("Player").transform;
+        if (GameManager.Instance.IsGamePaused() || isDead) return;
+        if (!isAttacking && !attackHitboxOn) lastDirection = SetTargetDir();
+        if (isSpawning || IsAnimationDone()) isSpawning = false;
+        if (SetAvoidanceDir() != Vector3.zero) { direction = Vector3.Slerp(direction, SetAvoidanceDir().normalized, Time.deltaTime * avoidanceSpeed); }
+        else direction = SetTargetDir();
+        OnCooldownTimer();
+        FlipFacingLastDir();
+        UpdateHealthUI();
+        Movement();
+        Attack();
+    }
+    #endregion
+
+    #region Base Logic
+    protected virtual void Movement() 
+    {
+        if (isStunned || isParried || !IsAnimationDone()) return;
+        if (isOnCooldown) { PlayAnimation(1, false); if (isMoving) { isMoving = false; } return; }
+
+        if (!isAttacking && DistanceFromTarget() < tooClose)
+        {
+            transform.position += -direction * speed * Time.deltaTime;
+            isMoving = true; PlayAnimation(2, false);
+        } 
+        else if (!isAttacking && DistanceFromTarget() > tooClose)
+        {
+            transform.position += direction * speed * Time.deltaTime;
+            isMoving = true; PlayAnimation(2, false);
+        }
+        else isMoving = false;
+    }
+
+    protected virtual void GetParried() 
+    {
+        if (canBeParryStunned) { isStunned = true; isParried = true; PlayAnimation(5, true, true); }
+        PlaySound(parriedSounds); 
+    }
+
+    protected virtual void Death()
+    {
+        isDead = true;
+        PlaySound(deathSounds); PlayAnimation(6, false, true);
+
+        if (destroyOnDeath) { Destroy(gameObject, 0.5f); return; }
+        if (FindObjectOfType<WaveSystem>()) FindObjectOfType<WaveSystem>().UpdateDeadEnemies();
+
+        healthBar.GetComponentInParent<CanvasGroup>().DOFade(0, 0.5f);
+        Destroy(healthBar.GetComponentInParent<CanvasGroup>().gameObject, 0.499f);
+        Destroy(GetComponent<Collider>());
+        Destroy(audioSource);
+        Destroy(this);
+    }
+
+    protected virtual void TakeDamage(float damage, float knockbackForce = 0, Vector3 direction = new Vector3()) 
+    {
+        if (isDead) return;
+        currentHealth -= damage;
+        if (direction != Vector3.zero) rb.AddForce((transform.position + direction).normalized * knockbackForce, ForceMode.Impulse);
+        else rb.AddForce((transform.position - target.position).normalized * knockbackForce, ForceMode.Impulse);
+
+        _particleEmission.enabled = true;
+        Invoker.InvokeDelayed(ResetParticle, 0.1f);
 
         if (hasHealthBar)
         {
-            healthBar.GetComponentInParent<CanvasGroup>().alpha = 0;
-
-            healthBar.maxValue = health;
-            healthBarBg.maxValue = health;
-
-            healthBar.value = health;
-            healthBarBg.value = health;
-        }
-        else
-        {
-            healthBar.GetComponentInParent<CanvasGroup>().alpha = 0;
-            healthBar.GetComponentInParent<Canvas>().gameObject.SetActive(false);
+            healthBar.GetComponentInParent<CanvasGroup>().DOFade(1, onHitAppearSpeed).SetUpdate(UpdateType.Normal, true);
+            Invoke("DissapearBar", onHitBarCooldown);
         }
 
-        if (isStatic)
-        {
-            speed = 0;
+        if (currentHealth <= 0) { Death(); }
+        else 
+        { 
+            if (hasHitAnimation) { PlayAnimation(4, true, true); } PlaySound(hitSounds); ResetStatusOnHit();
+            if (GetComponentInChildren<SpriteRenderer>().material) { GetComponentInChildren<SpriteRenderer>().material.SetFloat("_HitFloat", 1); Invoke("HitMaterialReset", 0.2f); }
         }
-        else
-        {
-            speed = walkingSpeed;
-        }
-
-        currentHealth = health;
-
-        if (debugDrawCenter == null)
-            debugDrawCenter = this.transform;
-
-        isAnimationDone = true;
-
-        
-
-        CheckStatus();
-
-        isSpawning = true;
-        PlaySound(spawnSounds);
-        PlayAnimation(animationIDs[0], true);
-
-        _particleEmission = hitParticleEmission.emission;
-        _particleEmission.enabled = false;
-
-        DowngradeSystem.Instance.SetEnemy(this);
-        NotifyEnemyObservers(AllEnemyActions.Spawned);
     }
 
-    /*public virtual void FixedUpdate()
-    {
-        OnCooldown();
-        Movement();
-        Attack();
-        FlipPivot();
-    }*/
+    protected virtual void Attack() { }
+    protected virtual void GetStun() { }
+    #endregion
 
-    public virtual void Update()
-    {
-        if (GameManager.Instance.IsGamePaused())
-            return;
+    #region Utility
 
-        DoNormalAttackOverlapCollider(normalAttackHitboxAppearTime.y);
-        DoChargeAttackOverlapCollider(chargedAttackHitboxAppearTime.y);
-        ResetAnimClipUpdate();
-        RotateHitboxCentreToFaceThePlayer();
-        SetTargetDirection();
-        QueueAnimation();
-        UpdateHealthUI();
+    protected void ResetStatusOnHit()
+    {
+        isStunned = true;
+        isAttacking = false;
+        attackHitboxOn = false;
     }
 
-    private void UpdateHealthUI()
+    protected void OnCooldownTimer()
     {
-        if (!hasHealthBar)
-            return;
+        if (!isOnCooldown) return;
 
-        // if the enemy flips the sprite, flip the health bar
-        if (isSpriteFlipped)
-        {
-            healthBar.GetComponentInParent<CanvasGroup>().gameObject.transform.localScale = new Vector3(-1, 1, 1);
-        }
-        else
-        {
-            healthBar.GetComponentInParent<CanvasGroup>().gameObject.transform.localScale = new Vector3(1, 1, 1);
-        }
-
-        if (healthBar.value != currentHealth)
-        {
-            healthBar.value = currentHealth;
-        }
-
-        Hit();
+        if (cooldown > 0) cooldown -= Time.deltaTime;
+        else { isOnCooldown = false; cooldown = attackCooldown; }
     }
 
-    private void Hit()
-    {
-        healthBarBg.value = Mathf.Lerp(healthBarBg.value, currentHealth, Time.deltaTime * healthBarBgSpeed);
-    }
-
-    private void DissapearBar()
-    {
-        healthBar.GetComponentInParent<CanvasGroup>().DOFade(0, onHitDisappearSpeed).SetUpdate(UpdateType.Normal, true);
-    }
-
-    public void SetTargetDirection()
+    #region Direction
+    protected Vector3 SetTargetDir()
     {
         Vector3 targetPos = new Vector3(target.position.x, transform.position.y, target.position.z);
-        Vector3 enemyPos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
-        Vector3 dir = (targetPos - enemyPos).normalized;
-        GetNearestEnemy(dir);
+        Vector3 currentPos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+        Vector3 dir = (targetPos - currentPos).normalized; return dir;
     }
-
-    public Vector3 ShootDirection()
+    protected Vector3 SetAvoidanceDir()
     {
-        Vector3 targetPos = new Vector3(target.position.x, transform.position.y, target.position.z);
-        Vector3 enemyPos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
-        Vector3 dir = (targetPos - enemyPos).normalized;
-        return dir;
-    }
-
-    public void GetNearestEnemy(Vector3 dir)
-    {
-        /*if (avoidTarget && !isMelee)
-        {
-            targetDir = dir;
-            return;
-        }*/
-
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, enemyAvoidanceRange);
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, avoidanceRange);
+        Collider nearestAvoidable = null;
+        float minDistance = float.MaxValue;
 
         foreach (Collider c in hitColliders)
         {
             if (c.CompareTag("Enemy") && c != GetComponent<Collider>() || c.CompareTag("Wall") || c.CompareTag("Destructible") || c.CompareTag("Limits"))
             {
-                Vector3 enemyDirection = (c.transform.position - transform.position).normalized;
-                enemyDirection.y = 0f;
-
-                //targetDir = Vector3.Slerp(targetDir, -enemyDirection, Time.deltaTime * wallAvoidanceSpeed);
-                targetDir = -enemyDirection;
-            }
-            else
-            {
-                if (avoidTarget && !isMelee)
+                float distance = Vector3.Distance(transform.position, c.transform.position);
+                if (distance < minDistance)
                 {
-                    //targetDir = -dir;
-                    Vector3 midPoint = (dir + targetDir) / 2;
-                    targetDir = Vector3.Slerp(midPoint.normalized, dir.normalized, Time.deltaTime * wallAvoidanceSpeed);
-                }
-                else
-                {
-                    targetDir = dir;
-                    targetDir = Vector3.Slerp(targetDir, dir.normalized, Time.deltaTime * wallAvoidanceSpeed);
+                    minDistance = distance;
+                    nearestAvoidable = c;
                 }
             }
         }
+        if (nearestAvoidable == null) return Vector3.zero; 
+        return (transform.position - nearestAvoidable.transform.position).normalized;
+    }
+    protected float DistanceFromTarget() { return Vector3.Distance(target.position, transform.position); }
+
+    public void MoveOnAttack(float value) { rb.velocity = lastDirection * value; }
+    #endregion
+
+    #region Health UI
+    protected void UpdateHealthUI()
+    {
+        if (!hasHealthBar) return;
+        healthBar.GetComponentInParent<CanvasGroup>().gameObject.transform.localScale = isSpriteFlipped ? new Vector3(1, 1, 1) : new Vector3(-1, 1, 1);
+        if (healthBar.value != currentHealth) healthBar.value = currentHealth;
+        healthBarBg.value = Mathf.Lerp(healthBarBg.value, currentHealth, Time.deltaTime * healthBarBgSpeed);
     }
 
-    public virtual void Movement()
+    protected void DissapearBar() { healthBar.GetComponentInParent<CanvasGroup>().DOFade(0, onHitDisappearSpeed).SetUpdate(UpdateType.Normal, true); }
+    #endregion
+
+    #region Flip
+    protected void FlipFacingLastDir() 
     {
+        if (isStunned || isParried || !IsAnimationDone() || isOnCooldown) return;
+        Flip(Vector3.Dot(lastDirection, Vector3.right) >= 0); 
     }
 
-    public virtual void TakeDamage(float damage, float knockbackForce = 0, Vector3 dir = new Vector3())
+    protected void Flip(bool value)
     {
+        if (invertSprite) { transform.localScale = value ? new Vector3(1, 1, 1) : new Vector3(-1, 1, 1); isSpriteFlipped = value; }
+        else { transform.localScale = value ? new Vector3(-1, 1, 1) : new Vector3(1, 1, 1); isSpriteFlipped = !value; }
+    }
+    #endregion
+
+    #region AnimationController
+    public void SetAnimHolder()
+    {
+        animHolder = GetComponent<AnimationHolder>();
+        animHolder.Initialize(GetComponentInChildren<Animator>());
+        animationIDs = animHolder.GetAnimationsIDs();
     }
 
-    public virtual void Death()
+    protected void PlayAnimation(int index, bool hasExitTime = false, bool bypassExitTime = false, bool canBeBypassed = false)
     {
+        animHolder.GetAnimationController().PlayAnimation(animationIDs[index], null, hasExitTime, bypassExitTime, canBeBypassed);
     }
 
-    public void ResetParticle()
+    protected bool IsAnimationDone()
     {
+        return animHolder.GetAnimationController().isAnimationDone;
+    }
+    #endregion
+
+    #region Sounds
+    protected void PlaySound(AudioClip[] clip)
+    {
+        if (clip == null || clip.Length == 0) { Debug.LogError("No AudioClips set on " + gameObject.name); return; }
+
+        if (clip.Length == 1) { AudioManager.instance.PlayCustomSFX(clip[0], audioSource); return; }
+
+        int random = Random.Range(0, clip.Length);
+        AudioManager.instance.PlayCustomSFX(clip[random], audioSource);
+    }
+    #endregion
+
+    #region Awake Variables
+    protected void SetAwake()
+    {
+        hasHealthBar = SimpleSaveLoad.Instance.LoadData(FileType.Config, "hbar", true);
+        SetUI();
+        SetAnimHolder();
+        rb = GetComponent<Rigidbody>();
+        audioSource = GetComponent<AudioSource>();
+        target = GameObject.FindGameObjectWithTag("Player").transform;
+        currentHealth = health;
+        _particleEmission = hitParticleEmission.emission;
         _particleEmission.enabled = false;
-    }
+        cooldown = attackCooldown;
 
-    #region Attack Behaviour
-    public void Attack()
+        SpawningSequence();
+    }
+    protected void SetUI()
     {
-        if (isStunned || isParried || !isAnimationDone || isOnCooldown || decidedChargeAttack)
+        if (!hasHealthBar)
         {
-            return;
+            healthBar.GetComponentInParent<CanvasGroup>().alpha = 0;
+            healthBar.GetComponentInParent<Canvas>().gameObject.SetActive(false); return;
         }
 
-        if (isMelee)
-        {
-            MeleeBehaviour();
-        }
-        else if (avoidTarget || isStatic)
-        {
-            AvoidBehaviour();
-        }
-        else
-        {
-            // Attack the player (Range combat)
-            isAttacking = true;
-        }
+        healthBar.GetComponentInParent<CanvasGroup>().alpha = 0;
 
-        Vector3 targetPos = new Vector3(target.position.x, transform.position.y, target.position.z);
-        Vector3 enemyPos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
-        Vector3 dir = (targetPos - enemyPos).normalized;
-        lastTargetDir = dir;
+        healthBar.maxValue = health; healthBarBg.maxValue = health;
+        healthBar.value = health; healthBarBg.value = health;
     }
-
-    public virtual void MeleeBehaviour()
+    protected void SpawningSequence()
     {
-        // Check if the player is in range, if its  in the close attack range, attack.
-        // if its in the far attack range, decide if attack or move to the player. if its out of range, move to the player
-    }
+        isSpawning = true;
+        PlaySound(spawnSounds);
+        PlayAnimation(0, true);
 
-    public void ResetDecitionStatus()
-    {
-        decidedChargeAttack = false;
-    }
-    public void ResetConsideredDecitionStatus()
-    {
-        chargeAttackedConsidered = false;
-    }
-
-    public virtual void AvoidBehaviour()
-    {
-    }
-
-    public virtual void SummonProjectile()
-    {
-        GameObject prjctl = Instantiate(projectile, projectileSpawnPoint.position, projectileSpawnPoint.rotation);
-        prjctl.GetComponent<ProjectileLogic>().SetVariables(projectileSpeed, normalAttackdamage, projectileLifeTime, normalAttackKnockback, projectileCanBeParried, ShootDirection(), parrySounds, gameObject);
-    }
-
-    public virtual void MoveOnNormalAttack()
-    {
-    }
-
-    public virtual void MoveOnChargeAttack()
-    {
-    }
-
-    public void DoNormalAttackOverlapCollider(float removeTime)
-    {
-        if (!isNormalOverlapAttack)
-            return;
-
-        if (!isInvokedNormalOverlapAttack)
-        {
-            isInvokedNormalOverlapAttack = true;
-            Invoke("RemoveAttackHitboxes", removeTime);
-        }
-
-        //Collider[] hitColliders = Physics.OverlapBox(hitboxCenter.position, chargedAttackHitboxSize, Quaternion.identity);
-        Collider[] hitColliders = Physics.OverlapBox(hitboxCenter.position, normalAttackHitboxSize, Quaternion.LookRotation(lastTargetDir));
-        //VisualizeBox.DisplayBox(hitboxCenter.position, normalAttackHitboxSize, Quaternion.LookRotation(direction), closeAttackColor);
-
-        foreach (Collider hitCollider in hitColliders)
-        {
-            if (hitCollider.CompareTag("Player"))
-            {
-                if (hitCollider.GetComponent<PlayerControllerOverhaul>().GetPlayerState() == "Parry" && canBeParried)
-                {
-                    if (Vector3.Dot(hitCollider.GetComponent<PlayerControllerOverhaul>().GetLastDirection(), targetDir) <= -0.5f && Vector3.Dot(hitCollider.GetComponent<PlayerControllerOverhaul>().GetLastDirection(), targetDir) >= -1)
-                    {
-                        ParriedEnemy(parryStunTime);
-                        hitCollider.GetComponent<PlayerControllerOverhaul>().GetParryRewardProxy(isBigEnemy, false);
-                        //hitCollider.GetComponent<PlayerControllerOverhaul>().AddEnemyToParryList(this.gameObject);
-                        Debug.Log("Player parried hit");
-                    }
-                    else
-                    {
-                        hitCollider.GetComponent<PlayerControllerOverhaul>().TakeDamageProxy(normalAttackdamage, normalAttackKnockback, -targetDir);
-                        Debug.Log("Player normal hit - Failed Parry");
-                    }
-                }
-                else
-                {
-                    hitCollider.GetComponent<PlayerControllerOverhaul>().TakeDamageProxy(normalAttackdamage, normalAttackKnockback, -targetDir);
-                    Debug.Log("Player normal hit");
-                }
-
-                RemoveAttackHitboxes();
-            }
-        }
-    }
-
-    public void DoChargeAttackOverlapCollider(float removeTime)
-    {
-        if (!isChargedOverlapAttack)
-            return;
-
-        if (!isInvokedChargedOverlapAttack)
-        {
-            isInvokedChargedOverlapAttack = true;
-            Invoke("RemoveAttackHitboxes", removeTime);
-        }
-
-        //Collider[] hitColliders = Physics.OverlapBox(hitboxCenter.position, chargedAttackHitboxSize, Quaternion.identity);
-        // rotate the hitbox to the direction of the player
-        Collider[] hitColliders = Physics.OverlapBox(hitboxCenter.position, chargedAttackHitboxSize, Quaternion.LookRotation(lastTargetDir));
-        //VisualizeBox.DisplayBox(hitboxCenter.position, chargedAttackHitboxSize, Quaternion.LookRotation(direction), farAttackColor);
-
-        foreach (Collider hitCollider in hitColliders)
-        {
-            if (hitCollider.CompareTag("Player"))
-            {
-                if (hitCollider.GetComponent<PlayerControllerOverhaul>().GetPlayerState() == "Parry" && canBeParried && canParryChargeAttack)
-                {
-                    // dot product of the player direction and the enemy direction, if the player is facing the enemy, parry the charge attack
-                    if (Vector3.Dot(hitCollider.GetComponent<PlayerControllerOverhaul>().GetLastDirection(), targetDir) > 0.5f)
-                    {
-                        ParriedEnemy(parryStunTime);
-                        hitCollider.GetComponent<PlayerControllerOverhaul>().GetParryRewardProxy(isBigEnemy, true);
-                        //hitCollider.GetComponent<PlayerControllerOverhaul>().AddEnemyToParryList(this.gameObject);
-                        Debug.Log("Player parried charged hit");
-                    }
-                    else
-                    {
-                        hitCollider.GetComponent<PlayerControllerOverhaul>().TakeDamageProxy(chargeAttackDamage, chargeAttackKnockback, -targetDir);
-                        Debug.Log("Player normal charged hit - Failed Parry");
-                    }
-                }
-                else
-                {
-                    hitCollider.GetComponent<PlayerControllerOverhaul>().TakeDamageProxy(chargeAttackDamage, chargeAttackKnockback, -targetDir);
-                    Debug.Log("Player normal charged hit");
-                }
-
-                RemoveAttackHitboxes();
-            }
-        }
-
-        /*Gizmos.color = Color.red;
-
-        Vector3 direction = (target.position - transform.position).normalized;
-        Quaternion rotation = Quaternion.LookRotation(direction);
-        Gizmos.matrix = Matrix4x4.TRS(hitboxCenter.position, rotation, Vector3.one);
-
-        Gizmos.DrawWireCube(Vector3.zero, normalAttackHitboxSize);
-
-        Gizmos.matrix = Matrix4x4.identity;*/
-    }
-
-    public void ActivateNormalAttackHitbox(float time)
-    {
-        Invoke("NormalHitboxInvoke", time);
-    }
-
-    public void ActivateChargedAttackHitbox(float time)
-    {
-        Invoke("ChargedHitboxInvoke", time);
-    }
-
-    private void NormalHitboxInvoke()
-    {
-        isNormalOverlapAttack = true;
-
-    }
-
-    private void ChargedHitboxInvoke()
-    {
-        isChargedOverlapAttack = true;
-
-    }
-
-    public void RemoveAttackHitboxes()
-    {
-        isNormalOverlapAttack = false;
-        isChargedOverlapAttack = false;
-
-        isInvokedNormalOverlapAttack = false;
-        isInvokedChargedOverlapAttack = false;
-    }
-
-    #endregion
-
-    #region Stun
-    public virtual void StunEnemy(float time)
-    {
-        isStunned = true;
-        PlayAnimation(animationIDs[1], false, false, true);
-        Debug.Log("Stunned");
-        Invoke("ResetStun", time);
-    }
-
-    public virtual void ParriedEnemy(float time)
-    {
-    }
-
-    public void ResetStun()
-    {
-        isStunned = false;
-    }
-
-    public void ResetParried()
-    {
-        isStunned = false;
-        isParried = false;
+        DowngradeSystem.Instance.SetEnemy(this);
+        NotifyEnemyObservers(AllEnemyActions.Spawned);
     }
     #endregion
 
-    #region Cooldown
-    public void StartCooldown()
-    {
-        if (isStunned || isParried)
-        {
-            return;
-        }
+    #region Get - Set - Proxys - Invokes
 
-        isOnCooldown = true;
-        Invoke("ResetCooldown", attackCooldown);
+    #region Get
+    public EnemyType GetEnemyType() { return enemyType; }
+    public EnemyBehaviour GetBehaviourType() { return behaviourType; }
+    public bool GetIsDead() { return isDead; }
+    public bool GetIsStunned() { return isStunned; }
+    public bool GetIsParried() { return isParried; }
+    public bool GetIsMoving() { return isMoving; }
+    public bool GetIsAttacking() { return isAttacking; }
+    public bool GetIsSpriteFlipped() { return isSpriteFlipped; }
+    public bool GetIsOnCooldown() { return isOnCooldown; }
+    public bool GetIsNormalAttack() { return isNormalAttack; }
+    public bool GetIsChargedAttack() { return isChargedAttack; }
+    public bool GetChargeAttackedConsidered() { return chargeAttackedConsidered; }
+    public bool GetDecidedChargeAttack() { return decidedChargeAttack; }
+    public bool GetAvoidingTarget() { return avoidingTarget; }
+    public bool GetCanBeParried() { return canBeParried; }
+    public bool GetHasHealthBar() { return hasHealthBar; }
+    public float GetCurrentHealth() { return currentHealth; }
+    public float GetAttackDamage() { return attackDamage; }
+    public float GetAttackKnockback() { return attackKnockback; }
+    public float GetParryStunTime() { return parryStunTime; }
+    public float GetAvoidanceSpeed() { return avoidanceSpeed; }
+    public float GetAvoidanceRange() { return avoidanceRange; }
+    public float GetTooClose() { return tooClose; }
+    public float GetSpeed() { return speed; }
+    public float GetAttackCooldown() { return attackCooldown; }
+    public bool GetAttackHitboxOn() { return attackHitboxOn; }
+    public Vector3 GetDirection() { return direction; }
+    public Vector3 GetLastDirection() { return lastDirection; }
+    public Transform GetTarget() { return target; }
 
-        int random = Random.Range(0, 2);
-
-        if (random == 0)
-        {
-            avoidingTarget = true;
-        }
-        else
-        {
-            avoidingTarget = false;
-        }
-    }
-
-    public virtual void OnCooldown()
-    {
-    }
-
-    public void ResetCooldown()
-    {
-        isOnCooldown = false;
-        isAttacking = false;
-    }
     #endregion
 
-    #region Animation
-    public void PlayAnimation(string animName)
-    {
-        if (!isAnimationDone)
-            return;
-
-        for (int i = 0; i < animationIDs.Length; i++)
-        {
-            if (animName == animationIDs[i])
-            {
-                anim.Play(animName);
-                return;
-            }
-        }
-    }
-
-    public void PlayAnimation(string animName, bool hasExitTime)
-    {
-        if (!isAnimationDone || animName == "")
-            return;
-
-        for (int i = 0; i < animationIDs.Length; i++)
-        {
-            if (animName == animationIDs[i])
-            {
-                anim.Play(animName);
-
-                if (hasExitTime)
-                {
-                    isAnimationDone = false;
-
-                    foreach (AnimationClip clip in clips)
-                    {
-                        if (clip.name == animName)
-                        {
-                            animClipLength = clip.length;
-                        }
-                    }
-                }
-                return;
-            }
-        }
-    }
-
-    public void PlayAnimation(string animName, bool hasExitTime, bool activateCooldown)
-    {
-        if (!isAnimationDone)
-            return;
-
-        for (int i = 0; i < animationIDs.Length; i++)
-        {
-            if (animName == animationIDs[i])
-            {
-                anim.Play(animName);
-
-                if (hasExitTime)
-                {
-                    isAnimationDone = false;
-
-                    foreach (AnimationClip clip in clips)
-                    {
-                        if (clip.name == animName)
-                        {
-                            animClipLength = clip.length;
-                        }
-                    }
-                }
-
-                if (activateCooldown)
-                {
-                    Invoke("StartCooldown", animClipLength);
-                }
-
-                return;
-            }
-        }
-    }
-
-    public void PlayAnimation(string animName, bool hasExitTime, bool activateCooldown, bool bypassExitTime)
-    {
-        if (bypassExitTime)
-            isAnimationDone = true;
-
-        if (!isAnimationDone)
-            return;
-
-        for (int i = 0; i < animationIDs.Length; i++)
-        {
-            if (animName == animationIDs[i])
-            {
-                anim.Play(animName);
-
-                if (hasExitTime)
-                {
-                    isAnimationDone = false;
-
-                    foreach (AnimationClip clip in clips)
-                    {
-                        if (clip.name == animName)
-                        {
-                            animClipLength = clip.length;
-                        }
-                    }
-                }
-
-                if (activateCooldown)
-                {
-                    Invoke("StartCooldown", animClipLength);
-                }
-
-                return;
-            }
-        }
-    }
-
-    public void PlayAnimation(string animName, bool hasExitTime, bool activateCooldown, bool bypassExitTime, bool queuedAnimation)
-    {
-        if (bypassExitTime)
-            isAnimationDone = true;
-
-        if (queuedAnimation)
-        {
-            hasQueuedAnimation = true;
-            queueAnimation = animName;
-            return;
-        }
-
-        if (!isAnimationDone)
-            return;
-
-        for (int i = 0; i < animationIDs.Length; i++)
-        {
-            if (animName == animationIDs[i])
-            {
-                anim.Play(animName);
-
-                if (hasExitTime)
-                {
-                    isAnimationDone = false;
-
-                    foreach (AnimationClip clip in clips)
-                    {
-                        if (clip.name == animName)
-                        {
-                            animClipLength = clip.length;
-                        }
-                    }
-                }
-
-                if (activateCooldown)
-                {
-                    Invoke("StartCooldown", animClipLength);
-                }
-
-                return;
-            }
-        }
-    }
-
-    public void QueueAnimation()
-    {
-        if (hasQueuedAnimation && isAnimationDone)
-        {
-            PlayAnimation(queueAnimation, true, false);
-            hasQueuedAnimation = false;
-        }
-    }
-
-    public void ResetAnimClipUpdate()
-    {
-        if (animClipLength <= 0)
-        {
-            isAnimationDone = true;
-
-            if (isSpawning)
-                isSpawning = false;
-        }
-        else
-        {
-            animClipLength -= Time.deltaTime;
-            isAnimationDone = false;
-        }
-    }
+    #region Set
+    public void SetIsDead(bool value) { isDead = value; }
+    public void SetIsStunned(bool value) { isStunned = value; }
+    public void SetIsParried(bool value) { isParried = value; }
+    public void SetIsMoving(bool value) { isMoving = value; }
+    public void SetIsAttacking(bool value) { isAttacking = value; }
+    public void SetIsSpriteFlipped(bool value) { isSpriteFlipped = value; }
+    public void SetIsOnCooldown(bool value) { isOnCooldown = value; }
+    public void SetIsNormalAttack(bool value) { isNormalAttack = value; }
+    public void SetIsChargedAttack(bool value) { isChargedAttack = value; }
+    public void SetChargeAttackedConsidered(bool value) { chargeAttackedConsidered = value; }
+    public void SetDecidedChargeAttack(bool value) { decidedChargeAttack = value; }
+    public void SetAvoidingTarget(bool value) { avoidingTarget = value; }
+    public void SetCanBeParried(bool value) { canBeParried = value; }
+    public void SetCurrentHealth(float value) { currentHealth = value; }
+    public void SetAttackDamage(float value) { attackDamage = value; }
+    public void SetAttackKnockback(float value) { attackKnockback = value; }
+    public void SetParryStunTime(float value) { parryStunTime = value; }
+    public void SetAvoidanceSpeed(float value) { avoidanceSpeed = value; }
+    public void SetAvoidanceRange(float value) { avoidanceRange = value; }
+    public void SetTooClose(float value) { tooClose = value; }
+    public void SetSpeed(float value) { speed = value; }
+    public void SetAttackCooldown(float value) { attackCooldown = value; }
+    public void SetAttackHitboxOn(bool value) { attackHitboxOn = value; }
+    public void SetVectorDirection(Vector3 value) { direction = value; }
+    public void SetLastVectorDirection(Vector3 value) { lastDirection = value; }
+    public void SetTransformDirection(Transform value) { direction = value.position.normalized; }
+    public void SetLastTransformDirection(Transform value) { lastDirection = value.position.normalized; }
+    public void SetTarget(Transform value) { target = value; }
     #endregion
 
-    #region Audio
-    public void PlaySound(AudioClip[] clip)
-    {
-        if (clip.Length > 0)
-        {
-            int random = Random.Range(0, clip.Length);
-            AudioManager.instance.PlayCustomSFX(clip[random], audioSource);
-        }
-        else
-        {
-            AudioManager.instance.PlayCustomSFX(clip[0], audioSource);
-        }
-    }
+    #endregion Proxys
+    public void TakeDamageProxy(float damage, float knockbackForce = 0, Vector3 dir = new Vector3()) { TakeDamage(damage, knockbackForce, dir); }
+    public void PlaySoundProxy(AudioClip[] clip) { PlaySound(clip); }
+    #region
+
+    #region Invokes
+    protected void ResetParticle() { _particleEmission.enabled = false; }
+    protected void HitMaterialReset() { GetComponentInChildren<SpriteRenderer>().material.SetFloat("_HitFloat", 0); }
     #endregion
 
-    #region Utility
-    public void RemoveComponentsOnDeath()
+    #endregion
+    #endregion
+
+    #region Debug
+
+    [Header("Debug Tools")]
+    [SerializeField] protected bool debugTools = true;
+    [SerializeField] protected Transform debugDrawCenter;
+    [SerializeField] protected int segments = 8;
+
+    protected void DrawAttackHitbox(Vector3 pos, Vector3 size, Color color)
     {
-        DowngradeSystem.Instance.RemoveEnemy(this);
-        isDead = true;
-
-        if (hasHealthBar)
-        {
-            Destroy(healthBar.GetComponentInParent<CanvasGroup>().gameObject);
-        }
-
-        Destroy(rb);
-        Destroy(GetComponent<Collider>());
-        Destroy(audioSource);
-        FindObjectOfType<WaveSystem>().UpdateDeadEnemies();
-        Destroy(this);
-        //this.enabled = false;
+        VisualizeBox.DisplayBox(pos, size, Quaternion.LookRotation(lastDirection), color);
     }
 
-    public void FlipPivot()
-    {
-        if (isStunned || isParried || !isAnimationDone || isAttacking)
-            return;
-
-        Vector3 direction = (target.position - transform.position).normalized;
-
-        if (avoidTarget)
-        {
-            if (avoidingTarget)
-            {
-                if (direction.x > 0)
-                {
-                    Flip(true);
-                }
-                else
-                {
-                    Flip(false);
-                }
-            }
-            else
-            {
-                if (direction.x > 0)
-                {
-                    Flip(true);
-                }
-                else
-                {
-                    Flip(false);
-                }
-            }
-        }
-        else
-        {
-            if (direction.x > 0)
-            {
-                Flip(true);
-            }
-            else
-            {
-                Flip(false);
-            }
-        }
-
-    }
-
-    public void Flip(bool value)
-    {
-        if (flipSprite)
-        {
-            if (!value)
-            {
-                pivot.localScale = new Vector3(1, 1, 1);
-                //GetComponentInChildren<SpriteRenderer>().flipX = false;
-
-                if (isSpriteFlipped)
-                    isSpriteFlipped = false;
-            }
-            else
-            {
-                pivot.localScale = new Vector3(-1, 1, 1);
-                //GetComponentInChildren<SpriteRenderer>().flipX = true;
-
-                if (!isSpriteFlipped)
-                    isSpriteFlipped = true;
-            }
-        }
-        else
-        {
-            if (value)
-            {
-                pivot.localScale = new Vector3(1, 1, 1);
-                //GetComponentInChildren<SpriteRenderer>().flipX = false;
-
-                if (isSpriteFlipped)
-                    isSpriteFlipped = false;
-            }
-            else
-            {
-                pivot.localScale = new Vector3(-1, 1, 1);
-                //GetComponentInChildren<SpriteRenderer>().flipX = true;
-
-                if (!isSpriteFlipped)
-                    isSpriteFlipped = true;
-            }
-        }
-    }
-
-    public void CheckStatus()
-    {
-        if (!debugTools)
-            return;
-
-        if (!GetComponent<Collider>())
-            Debug.LogError("Collider is missing!. Add a Collider component to the enemy");
-
-        if (rb == null)
-            Debug.LogError("Rigidbody is missing!. Add a Rigidbody component to the enemy");
-
-        if (anim == null)
-            Debug.LogError("Animator is missing!. Add an Animator component to the enemy");
-
-        if (target == null)
-            Debug.LogError("Target is missing!. Set the Player tag to the target");
-
-        if (animationIDs.Length <= 0)
-            Debug.LogError("AnimationIDs are missing!");
-
-        if (health <= 0)
-            Debug.LogError("Health is missing!");
-
-        if (normalAttackdamage <= 0)
-            Debug.LogError("Damage is missing!");
-
-        if (speed <= 0 && !isStatic)
-            Debug.LogError("Speed is missing!");
-    }
-
-    public void RotateHitboxCentreToFaceThePlayer()
-    {
-        if (!isMelee || isAttacking)
-            return;
-
-        Vector3 direction = (target.position - transform.position).normalized * hitboxOffset;
-        Vector3 desiredPosition = transform.position + direction;
-        Quaternion rotation = Quaternion.LookRotation(direction);
-        hitboxCenter.rotation = rotation;
-        hitboxCenter.position = new Vector3(desiredPosition.x, hitboxCenter.position.y, desiredPosition.z);
-    }
-
-    public void DrawNormalAttackHitbox()
-    {
-        VisualizeBox.DisplayBox(hitboxCenter.position, normalAttackHitboxSize, Quaternion.LookRotation(lastTargetDir), closeAttackColor);
-    }
-
-    public void DrawChargedAttackHitbox()
-    {
-        VisualizeBox.DisplayBox(hitboxCenter.position, chargedAttackHitboxSize, Quaternion.LookRotation(lastTargetDir), farAttackColor);
-    }
-
-    public void DrawCloseAttackRange()
+    protected void DrawRange(float range, Color color)
     {
         Vector3 center = debugDrawCenter.position;
         float angleIncrement = 360.0f / segments;
 
-        Vector3 prevPoint = center + new Vector3(closeAttackRange, 0, 0); // Start point
+        Vector3 prevPoint = center + new Vector3(range, 0, 0);
 
-        // Draw segments to approximate the circle
         for (int i = 1; i <= segments; i++)
         {
             float angle = i * angleIncrement;
-            Vector3 nextPoint = center + new Vector3(closeAttackRange * Mathf.Cos(angle * Mathf.Deg2Rad), 0, closeAttackRange * Mathf.Sin(angle * Mathf.Deg2Rad));
+            Vector3 nextPoint = center + new Vector3(range * Mathf.Cos(angle * Mathf.Deg2Rad), 0, range * Mathf.Sin(angle * Mathf.Deg2Rad));
 
-            Debug.DrawLine(prevPoint, nextPoint, closeAttackColor); // Draw line segment
+            Debug.DrawLine(prevPoint, nextPoint, color);
             prevPoint = nextPoint;
         }
 
-        // Draw the last segment to close the circle
-        Debug.DrawLine(prevPoint, center + new Vector3(closeAttackRange, 0, 0), closeAttackColor);
-    }
-
-    public void DrawFarAttackRange()
-    {
-        Vector3 center = debugDrawCenter.position;
-        float angleIncrement = 360.0f / segments;
-
-        Vector3 prevPoint = center + new Vector3(farAttackRange, 0, 0); // Start point
-
-        // Draw segments to approximate the circle
-        for (int i = 1; i <= segments; i++)
-        {
-            float angle = i * angleIncrement;
-            Vector3 nextPoint = center + new Vector3(farAttackRange * Mathf.Cos(angle * Mathf.Deg2Rad), 0, farAttackRange * Mathf.Sin(angle * Mathf.Deg2Rad));
-
-            Debug.DrawLine(prevPoint, nextPoint, farAttackColor); // Draw line segment
-            prevPoint = nextPoint;
-        }
-
-        // Draw the last segment to close the circle
-        Debug.DrawLine(prevPoint, center + new Vector3(farAttackRange, 0, 0), farAttackColor);
-    }
-
-    public void DrawAvoidRange()
-    {
-        Vector3 center = debugDrawCenter.position;
-        float angleIncrement = 360.0f / segments;
-
-        Vector3 prevPoint = center + new Vector3(avoidRange, 0, 0); // Start point
-
-        // Draw segments to approximate the circle
-        for (int i = 1; i <= segments; i++)
-        {
-            float angle = i * angleIncrement;
-            Vector3 nextPoint = center + new Vector3(avoidRange * Mathf.Cos(angle * Mathf.Deg2Rad), 0, avoidRange * Mathf.Sin(angle * Mathf.Deg2Rad));
-
-            Debug.DrawLine(prevPoint, nextPoint, avoidRangeColor); // Draw line segment
-            prevPoint = nextPoint;
-        }
-
-        // Draw the last segment to close the circle
-        Debug.DrawLine(prevPoint, center + new Vector3(avoidRange, 0, 0), avoidRangeColor);
-    }
-
-    public void DrawTooCloseRange()
-    {
-        Vector3 center = debugDrawCenter.position;
-        float angleIncrement = 360.0f / segments;
-
-        Vector3 prevPoint = center + new Vector3(tooClose, 0, 0); // Start point
-
-        // Draw segments to approximate the circle
-        for (int i = 1; i <= segments; i++)
-        {
-            float angle = i * angleIncrement;
-            Vector3 nextPoint = center + new Vector3(tooClose * Mathf.Cos(angle * Mathf.Deg2Rad), 0, tooClose * Mathf.Sin(angle * Mathf.Deg2Rad));
-
-            Debug.DrawLine(prevPoint, nextPoint, tooCloseColor); // Draw line segment
-            prevPoint = nextPoint;
-        }
-
-        // Draw the last segment to close the circle
-        Debug.DrawLine(prevPoint, center + new Vector3(tooClose, 0, 0), tooCloseColor);
-    }
-
-    public void DrawWallAvoidance()
-    {
-        // draws a line in the direction of the wall the enemy is avoiding
-        Vector3 direction = targetDir;
-        Debug.DrawRay(transform.position, direction * enemyAvoidanceRange, wallAvoidanceColor);
-    }
-
-    private void DrawRunRange()
-    {
-        Vector3 center = debugDrawCenter.position;
-        float angleIncrement = 360.0f / segments;
-
-        Vector3 prevPoint = center + new Vector3(runRange, 0, 0); // Start point
-
-        // Draw segments to approximate the circle
-        for (int i = 1; i <= segments; i++)
-        {
-            float angle = i * angleIncrement;
-            Vector3 nextPoint = center + new Vector3(runRange * Mathf.Cos(angle * Mathf.Deg2Rad), 0, runRange * Mathf.Sin(angle * Mathf.Deg2Rad));
-
-            Debug.DrawLine(prevPoint, nextPoint, runRageColor); // Draw line segment
-            prevPoint = nextPoint;
-        }
-
-        // Draw the last segment to close the circle
-        Debug.DrawLine(prevPoint, center + new Vector3(runRange, 0, 0), runRageColor);
-    }
-
-    void OnDrawGizmos()
-    {
-        if (debugDrawCenter == null || !debugTools)
-            return;
-
-        if (drawHitboxes && target != null)
-        {
-            if (drawHitboxesOnGameplay)
-            {
-                if (isNormalOverlapAttack)
-                    DrawNormalAttackHitbox();
-
-                if (isChargedOverlapAttack)
-                    DrawChargedAttackHitbox();
-            }
-            else
-            {
-                DrawNormalAttackHitbox();
-                if (hasChargeAttack)
-                    DrawChargedAttackHitbox();
-            }
-        }
-
-        DrawTooCloseRange();
-        DrawWallAvoidance();
-
-        if (canRun)
-            DrawRunRange();
-
-        if (isMelee)
-        {
-            DrawCloseAttackRange();
-
-            if (hasChargeAttack)
-                DrawFarAttackRange();
-        }
-        else if (avoidTarget)
-        {
-            DrawAvoidRange();
-        }
-
-        Gizmos.color = wallAvoidanceColor;
-        Gizmos.DrawWireSphere(transform.position, enemyAvoidanceRange);
+        Debug.DrawLine(prevPoint, center + new Vector3(range, 0, 0), color);
     }
     #endregion
 }

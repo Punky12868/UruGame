@@ -142,7 +142,7 @@ public class WaveSystem : MonoBehaviour
     {
         for (int i = 0; i < enemyBases.Count; i++)
         {
-            if (!enemyBases[i].isDead)
+            if (!enemyBases[i].GetIsDead())
             {
                 return;
             }
