@@ -3925,7 +3925,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 314, y: -204.00002}
+  m_AnchoredPosition: {x: 314, y: -204.00005}
   m_SizeDelta: {x: -786.125, y: -436.21997}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &553431270
@@ -4576,15 +4576,35 @@ MonoBehaviour:
   hitThreshold: 10
   timeAfterRandomNoise: 30
   startGame:
-    allDialogues: []
+    allDialogues:
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: "\xBFQu\xE9 tal algo de magia?"
+      HasChain: 0
+      chainedDialogues: []
   endGame:
     allDialogues: []
   playerLowHealth:
-    allDialogues: []
+    allDialogues:
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: "Oye, \xBFte sientes bien?"
+      HasChain: 0
+      chainedDialogues: []
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: JAAA
+      HasChain: 0
+      chainedDialogues: []
   playerHeal:
     allDialogues: []
   playerLowStamina:
-    allDialogues: []
+    allDialogues:
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: "\xBFYa te cansaste?"
+      HasChain: 0
+      chainedDialogues: []
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: Te ves cansado
+      HasChain: 0
+      chainedDialogues: []
   playerHitEnemy:
     allDialogues: []
   playerKilledEnemy:
@@ -4604,13 +4624,29 @@ MonoBehaviour:
   playerDieToMidFaceBoss:
     allDialogues: []
   parryBoss:
-    allDialogues: []
+    allDialogues:
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: "\xA1\xBFC-C\xF3mo hiciste eso?!"
+      HasChain: 0
+      chainedDialogues: []
   endBoss:
     allDialogues: []
   playerAttack:
-    allDialogues: []
+    allDialogues:
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: Esa espada de papel no es la gran cosa
+      HasChain: 0
+      chainedDialogues: []
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: Malo es quien porta esa espada
+      HasChain: 0
+      chainedDialogues: []
   playerParry:
-    allDialogues: []
+    allDialogues:
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: "Fue un bloqueo de suerte\u2026"
+      HasChain: 0
+      chainedDialogues: []
   playerDodge:
     allDialogues: []
   playerUseItem:
@@ -4626,7 +4662,23 @@ MonoBehaviour:
   playerGotHit:
     allDialogues: []
   playerDies:
-    allDialogues: []
+    allDialogues:
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: "JAAA, yo sab\xEDa"
+      HasChain: 0
+      chainedDialogues: []
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: Ya era hora, cierra el juego
+      HasChain: 0
+      chainedDialogues: []
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: "Ni el primer jugador fue tan malo\u2026"
+      HasChain: 0
+      chainedDialogues: []
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: "Una pena\u2026 pero no pena para mi"
+      HasChain: 0
+      chainedDialogues: []
   victory:
     allDialogues: []
   defeat:
@@ -6365,7 +6417,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.21643591, y: -3.300082e-15, z: 9.745368e-16, w: 0.97629684}
+  m_LocalRotation: {x: 0.21643591, y: 3.300082e-15, z: -9.745368e-16, w: 0.97629684}
   m_LocalPosition: {x: 0, y: 4.1967, z: -18.839}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -7555,7 +7607,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1332516484}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.21643591, y: -3.300082e-15, z: 9.745368e-16, w: 0.97629684}
+  m_LocalRotation: {x: 0.21643591, y: 3.300082e-15, z: -9.745368e-16, w: 0.97629684}
   m_LocalPosition: {x: 0, y: 4.1967, z: -18.839}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -8416,7 +8468,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 314, y: -204.00002}
+  m_AnchoredPosition: {x: 314, y: -204.00005}
   m_SizeDelta: {x: -786.125, y: -436.21997}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1477643645

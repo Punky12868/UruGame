@@ -42,52 +42,65 @@ public class NarrationSystem : MonoBehaviour, IObserver
 
     public void PlaySubs(Dialogue dialogueType, bool hasPriority = false, int fixedDialogue = 0)
     {
-        Subtitles subs = null;
-        bool isFixed = false;
-
-        if (fixedDialogue != 0) isFixed = true;
-        
-        int dialogueSelected = Random.Range(0, dialogueType.allDialogues.Length);
-        
-        if (subtitlesActivated) { if (FindObjectOfType<Subtitles>()) subs = FindObjectOfType<Subtitles>(); }
-        
-        if (isFixed) dialogueSelected = fixedDialogue - 1;
-
-        if (isWaiting && hasPriority)
+        if (dialogueType.allDialogues.Length == 0)
         {
-            int randomInBetween = Random.Range(0, inBetweenNarrationClips.allDialogues.Length);
-            if (dialogueType.allDialogues[dialogueSelected].HasChain) { randomInBetween = startDialogChainIndex; }
-
-            if (subtitlesActivated) chainedDialog = dialogueType.allDialogues[dialogueSelected].Dialog;
-            chainedClip = dialogueType.allDialogues[dialogueSelected].audioClip;
-
-            AudioManager.instance.PlayVoice(dialogueType.allDialogues[randomInBetween].audioClip);
-            if (subtitlesActivated) subs.DisplayOnPlayingSubtitles(dialogueType.allDialogues[dialogueSelected].Dialog, dialogueType.allDialogues[dialogueSelected].audioClip.length);
-            Invoker.InvokeDelayed(ChainedDialog, dialogueType.allDialogues[dialogueSelected].audioClip.length);
+            Debug.Log("No hay Dialogos en la accion");
         }
         else
         {
-            AudioManager.instance.PlayVoice(dialogueType.allDialogues[dialogueSelected].audioClip);
 
-            if (subtitlesActivated)
-            {
-                if (subs == null)
-                    Instantiate(subtitles, subtitlesParent).GetComponentInChildren<Subtitles>().DisplaySubtitles(dialogueType.allDialogues[dialogueSelected].Dialog, dialogueType.allDialogues[dialogueSelected].audioClip.length);
-                else
-                    subs.DisplaySubtitles(dialogueType.allDialogues[dialogueSelected].Dialog, dialogueType.allDialogues[dialogueSelected].audioClip.length);
-            }
 
-            if (dialogueType.allDialogues[dialogueSelected].HasChain)
+
+            Subtitles subs = null;
+            bool isFixed = false;
+
+            if (fixedDialogue != 0) isFixed = true;
+
+            int dialogueSelected = Random.Range(0, dialogueType.allDialogues.Length);
+
+            if (subtitlesActivated) { if (FindObjectOfType<Subtitles>()) subs = FindObjectOfType<Subtitles>(); }
+
+            if (isFixed) dialogueSelected = fixedDialogue - 1;
+
+            if (isWaiting && hasPriority)
             {
-                chainedDialoguesIndex = 0;
-                DelayND(dialogueType.allDialogues[dialogueSelected].audioClip.length, dialogueType.allDialogues[dialogueSelected].chainedDialogues);
+                int randomInBetween = Random.Range(0, inBetweenNarrationClips.allDialogues.Length);
+                if (dialogueType.allDialogues[dialogueSelected].HasChain) { randomInBetween = startDialogChainIndex; }
+
+                if (subtitlesActivated) chainedDialog = dialogueType.allDialogues[dialogueSelected].Dialog;
+                chainedClip = dialogueType.allDialogues[dialogueSelected].audioClip;
+
+                AudioManager.instance.PlayVoice(dialogueType.allDialogues[randomInBetween].audioClip);
+                if (subtitlesActivated) subs.DisplayOnPlayingSubtitles(dialogueType.allDialogues[dialogueSelected].Dialog, dialogueType.allDialogues[dialogueSelected].audioClip.length);
+                Invoker.InvokeDelayed(ChainedDialog, dialogueType.allDialogues[dialogueSelected].audioClip.length);
             }
             else
             {
-                isWaiting = true;
-                Invoker.InvokeDelayed(ResetWait, dialogueType.allDialogues[dialogueSelected].audioClip.length);
+                AudioManager.instance.PlayVoice(dialogueType.allDialogues[dialogueSelected].audioClip);
+
+                if (subtitlesActivated)
+                {
+                    if (subs == null)
+                        Instantiate(subtitles, subtitlesParent).GetComponentInChildren<Subtitles>().DisplaySubtitles(dialogueType.allDialogues[dialogueSelected].Dialog, dialogueType.allDialogues[dialogueSelected].audioClip.length);
+                    else
+                        subs.DisplaySubtitles(dialogueType.allDialogues[dialogueSelected].Dialog, dialogueType.allDialogues[dialogueSelected].audioClip.length);
+                }
+
+                if (dialogueType.allDialogues[dialogueSelected].HasChain)
+                {
+                    chainedDialoguesIndex = 0;
+                    DelayND(dialogueType.allDialogues[dialogueSelected].audioClip.length, dialogueType.allDialogues[dialogueSelected].chainedDialogues);
+                }
+                else
+                {
+                    isWaiting = true;
+                    Invoker.InvokeDelayed(ResetWait, dialogueType.allDialogues[dialogueSelected].audioClip.length);
+                }
             }
+
         }
+        
+
     }
 
     async void DelayND(float delay, ChainedDialogues[] chainedDialogues)

@@ -593,7 +593,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 171756003137294064, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 6.78
+      value: 6.9
       objectReference: {fileID: 0}
     - target: {fileID: 171756003137294064, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
       propertyPath: m_LocalPosition.y
@@ -601,7 +601,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 171756003137294064, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5.94
+      value: 5.37
       objectReference: {fileID: 0}
     - target: {fileID: 171756003137294064, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3741,7 +3741,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 314, y: -204.00002}
+  m_AnchoredPosition: {x: 314, y: -203.99974}
   m_SizeDelta: {x: -786.125, y: -436.21997}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &553431270
@@ -4171,6 +4171,68 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 706076682}
   m_CullTransparentMesh: 1
+--- !u!1001 &738148723
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 543450653664253909}
+    m_Modifications:
+    - target: {fileID: 171756003137294064, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -4.24
+      objectReference: {fileID: 0}
+    - target: {fileID: 171756003137294064, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.008691788
+      objectReference: {fileID: 0}
+    - target: {fileID: 171756003137294064, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.03
+      objectReference: {fileID: 0}
+    - target: {fileID: 171756003137294064, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 171756003137294064, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 171756003137294064, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 171756003137294064, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 171756003137294064, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 171756003137294064, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 171756003137294064, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1244374134406018804, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
+      propertyPath: m_Name
+      value: Barrel (2)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
+--- !u!4 &738148724 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 171756003137294064, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
+  m_PrefabInstance: {fileID: 738148723}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &758127949
 GameObject:
   m_ObjectHideFlags: 0
@@ -4280,15 +4342,80 @@ MonoBehaviour:
   hitThreshold: 10
   timeAfterRandomNoise: 30
   startGame:
-    allDialogues: []
+    allDialogues:
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: No me creo que sigas vivo
+      HasChain: 1
+      chainedDialogues:
+      - Dialog: Tienes que entender
+        audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      - Dialog: "\xA1T\xDA! No deber\xEDas de estar aqu\xED"
+        audioClip: {fileID: 0}
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: Pierdete de una vez
+      HasChain: 0
+      chainedDialogues: []
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: "No narrar\xE9 la historia dos veces\u2026"
+      HasChain: 1
+      chainedDialogues:
+      - Dialog: "\xA1T\xDA! No deber\xEDas de estar aqu\xED"
+        audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      - Dialog: "\xA1Solo mirate! \xA1Ya pierde de una vez!"
+        audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: No me esperaba que vivieras
+      HasChain: 1
+      chainedDialogues:
+      - Dialog: "Tendr\xE1s que tener cuidado con la flora tambi\xE9n si quieres
+          seguir"
+        audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: "Oh, est\xE1s aqu\xED"
+      HasChain: 1
+      chainedDialogues:
+      - Dialog: "Tendr\xE1s que tener cuidado con las plantas"
+        audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: "Oh, a\xFAn est\xE1s aqu\xED"
+      HasChain: 1
+      chainedDialogues:
+      - Dialog: "Fijate a donde est\xE9s golpeando con tu espada esa"
+        audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      - Dialog: Puede que le pegues a alguna planta que sepa defenderse
+        audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: "Oh, a\xFAn est\xE1s aqu\xED"
+      HasChain: 1
+      chainedDialogues:
+      - Dialog: "Fijate a donde est\xE9s golpeando con tu espada esa"
+        audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      - Dialog: Puede que le pegues a alguna planta que sepa defenderse
+        audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
   endGame:
     allDialogues: []
   playerLowHealth:
-    allDialogues: []
+    allDialogues:
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: "Oye, \xBFte sientes bien?"
+      HasChain: 0
+      chainedDialogues: []
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: JAAA
+      HasChain: 0
+      chainedDialogues: []
   playerHeal:
     allDialogues: []
   playerLowStamina:
-    allDialogues: []
+    allDialogues:
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: "\xBFYa te cansaste?"
+      HasChain: 0
+      chainedDialogues: []
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: Te ves cansado
+      HasChain: 0
+      chainedDialogues: []
   playerHitEnemy:
     allDialogues: []
   playerKilledEnemy:
@@ -4308,13 +4435,29 @@ MonoBehaviour:
   playerDieToMidFaceBoss:
     allDialogues: []
   parryBoss:
-    allDialogues: []
+    allDialogues:
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: "\xA1\xBFC-C\xF3mo hiciste eso?!"
+      HasChain: 0
+      chainedDialogues: []
   endBoss:
     allDialogues: []
   playerAttack:
-    allDialogues: []
+    allDialogues:
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: Esa espada de papel no es la gran cosa
+      HasChain: 0
+      chainedDialogues: []
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: Malo es quien porta esa espada
+      HasChain: 0
+      chainedDialogues: []
   playerParry:
-    allDialogues: []
+    allDialogues:
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: Fue un bloqueo de suerte...
+      HasChain: 0
+      chainedDialogues: []
   playerDodge:
     allDialogues: []
   playerUseItem:
@@ -4330,7 +4473,23 @@ MonoBehaviour:
   playerGotHit:
     allDialogues: []
   playerDies:
-    allDialogues: []
+    allDialogues:
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: "JAAA, yo sab\xEDa"
+      HasChain: 0
+      chainedDialogues: []
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: Ya era hora, cierra el juego
+      HasChain: 0
+      chainedDialogues: []
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: "Ni el primer jugador fue tan malo\u2026"
+      HasChain: 0
+      chainedDialogues: []
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: "Una pena\u2026 pero no pena para mi"
+      HasChain: 0
+      chainedDialogues: []
   victory:
     allDialogues: []
   defeat:
@@ -5552,7 +5711,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.2164359, y: 0.000000029095917, z: -0.000000006450293, w: 0.97629684}
+  m_LocalRotation: {x: 0.21643591, y: -8.421053e-17, z: 1.192436e-16, w: 0.97629684}
   m_LocalPosition: {x: 0, y: 4.1967, z: -18.839}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -6668,7 +6827,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1332516484}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.2164359, y: 0.000000029095917, z: -0.000000006450293, w: 0.97629684}
+  m_LocalRotation: {x: 0.21643591, y: -8.421053e-17, z: 1.192436e-16, w: 0.97629684}
   m_LocalPosition: {x: 0, y: 4.1967, z: -18.839}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -7354,6 +7513,68 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1443098649}
   m_CullTransparentMesh: 1
+--- !u!1001 &1452038497
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 543450653664253909}
+    m_Modifications:
+    - target: {fileID: 171756003137294064, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 5.47
+      objectReference: {fileID: 0}
+    - target: {fileID: 171756003137294064, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.008691788
+      objectReference: {fileID: 0}
+    - target: {fileID: 171756003137294064, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -2.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 171756003137294064, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 171756003137294064, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 171756003137294064, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 171756003137294064, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 171756003137294064, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 171756003137294064, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 171756003137294064, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1244374134406018804, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
+      propertyPath: m_Name
+      value: Barrel (1)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
+--- !u!4 &1452038498 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 171756003137294064, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
+  m_PrefabInstance: {fileID: 1452038497}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1452925542
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7529,7 +7750,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 314, y: -204.00002}
+  m_AnchoredPosition: {x: 314, y: -203.99974}
   m_SizeDelta: {x: -786.125, y: -436.21997}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1477643645
@@ -9680,6 +9901,8 @@ Transform:
   - {fileID: 1489811397}
   - {fileID: 448541991}
   - {fileID: 148717788}
+  - {fileID: 1452038498}
+  - {fileID: 738148724}
   m_Father: {fileID: 1760360017}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!114 &598058660714197108
@@ -10207,7 +10430,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!23 &2199397639942802910
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -10698,7 +10921,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3239890935146060360
 Transform:
   m_ObjectHideFlags: 0
@@ -11140,7 +11363,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &5078208601409022546
 GameObject:
   m_ObjectHideFlags: 0

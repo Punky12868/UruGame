@@ -43,7 +43,7 @@ public class Prop : MonoBehaviour
     {
         if (holdedItem != null)
         {
-            Instantiate(holdedItem, transform.position, Quaternion.identity);
+            Instantiate(holdedItem, transform.position + (new Vector3(0,0.1f,0)), Quaternion.identity);
         }
     }
 
