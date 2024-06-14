@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class PlantTrap : EnemyBase
+public class PlantTrap : OldEnemyBase
 {
     // Start is called before the first frame update
     float radius = 2;
@@ -168,7 +168,7 @@ public class PlantTrap : EnemyBase
             PlayAnimation(animationIDs[1], true, true);
             if (goToAttack.gameObject.CompareTag("Enemy") && goToAttack.gameObject != this.gameObject)
             {
-                goToAttack.GetComponent<EnemyBase>().TakeDamage(normalAttackdamage, 0f, new Vector3(0, 0, 0));
+                goToAttack.GetComponent<EnemyBase>().TakeDamageProxy(normalAttackdamage);
             }
             if (goToAttack.gameObject.CompareTag("Player"))
             {

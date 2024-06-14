@@ -382,7 +382,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     {
         Debug.Log("Hit");
 
-        if (hit.GetComponent<EnemyBase>().currentHealth - damage <= 0)
+        if (hit.GetComponent<EnemyBase>().GetCurrentHealth() - damage <= 0)
         {
             ResetHittingKilling("Kill");
             NotifyPlayerObservers(AllPlayerActions.KilledEnemy);
@@ -393,7 +393,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
             NotifyPlayerObservers(AllPlayerActions.HitEnemy);
         }
 
-        hit.GetComponent<EnemyBase>().TakeDamage(damage);
+        hit.GetComponent<EnemyBase>().TakeDamageProxy(damage);
     }
 
     private void HitBoss(Collider hit, int damage)

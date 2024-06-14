@@ -38,9 +38,7 @@ public class AnimationController
 
     public void PlayAnimation(AnimationClip animClip = null, List<AnimationClip> chainedAnimNames = null, bool hasExitTime = false, bool bypassExitTime = false, bool canBeBypassed = false)
     {
-        if (bypassExitTime && !canBeBypassed)
-            isAnimationDone = true;
-
+        if (bypassExitTime && !canBeBypassed) isAnimationDone = true;
         if (!isAnimationDone) return;
 
         if (!NullOrCero.isListNullOrCero(chainedAnimNames))
@@ -91,7 +89,7 @@ public class AnimationController
                             }
                             else
                             {
-                                Invoke(animClipLength, () => { isAnimationDone = true; });
+                                Invoke(animClipLength, () => { isAnimationDone = true;});
                                 isPlayingChainAnim = false;
                                 return;
                             }
