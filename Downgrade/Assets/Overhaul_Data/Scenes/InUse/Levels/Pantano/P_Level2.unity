@@ -3741,7 +3741,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 314, y: -203.99992}
+  m_AnchoredPosition: {x: 314, y: -203.99974}
   m_SizeDelta: {x: -786.125, y: -436.21997}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &553431270
@@ -4349,10 +4349,12 @@ MonoBehaviour:
       chainedDialogues:
       - Dialog: Tienes que entender
         audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
-      - Dialog: Tienes que entender
-        audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
       - Dialog: "\xA1T\xDA! No deber\xEDas de estar aqu\xED"
         audioClip: {fileID: 0}
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: Pierdete de una vez
+      HasChain: 0
+      chainedDialogues: []
     - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
       Dialog: "No narrar\xE9 la historia dos veces\u2026"
       HasChain: 1
@@ -4361,16 +4363,59 @@ MonoBehaviour:
         audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
       - Dialog: "\xA1Solo mirate! \xA1Ya pierde de una vez!"
         audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
-      - Dialog: "\xA1T\xDA! No deber\xEDas de estar aqu\xED"
-        audioClip: {fileID: 0}
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: No me esperaba que vivieras
+      HasChain: 1
+      chainedDialogues:
+      - Dialog: "Tendr\xE1s que tener cuidado con la flora tambi\xE9n si quieres
+          seguir"
+        audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: "Oh, est\xE1s aqu\xED"
+      HasChain: 1
+      chainedDialogues:
+      - Dialog: "Tendr\xE1s que tener cuidado con las plantas"
+        audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: "Oh, a\xFAn est\xE1s aqu\xED"
+      HasChain: 1
+      chainedDialogues:
+      - Dialog: "Fijate a donde est\xE9s golpeando con tu espada esa"
+        audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      - Dialog: Puede que le pegues a alguna planta que sepa defenderse
+        audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: "Oh, a\xFAn est\xE1s aqu\xED"
+      HasChain: 1
+      chainedDialogues:
+      - Dialog: "Fijate a donde est\xE9s golpeando con tu espada esa"
+        audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      - Dialog: Puede que le pegues a alguna planta que sepa defenderse
+        audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
   endGame:
     allDialogues: []
   playerLowHealth:
-    allDialogues: []
+    allDialogues:
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: "Oye, \xBFte sientes bien?"
+      HasChain: 0
+      chainedDialogues: []
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: JAAA
+      HasChain: 0
+      chainedDialogues: []
   playerHeal:
     allDialogues: []
   playerLowStamina:
-    allDialogues: []
+    allDialogues:
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: "\xBFYa te cansaste?"
+      HasChain: 0
+      chainedDialogues: []
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: Te ves cansado
+      HasChain: 0
+      chainedDialogues: []
   playerHitEnemy:
     allDialogues: []
   playerKilledEnemy:
@@ -4390,13 +4435,29 @@ MonoBehaviour:
   playerDieToMidFaceBoss:
     allDialogues: []
   parryBoss:
-    allDialogues: []
+    allDialogues:
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: "\xA1\xBFC-C\xF3mo hiciste eso?!"
+      HasChain: 0
+      chainedDialogues: []
   endBoss:
     allDialogues: []
   playerAttack:
-    allDialogues: []
+    allDialogues:
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: Esa espada de papel no es la gran cosa
+      HasChain: 0
+      chainedDialogues: []
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: Malo es quien porta esa espada
+      HasChain: 0
+      chainedDialogues: []
   playerParry:
-    allDialogues: []
+    allDialogues:
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: Fue un bloqueo de suerte...
+      HasChain: 0
+      chainedDialogues: []
   playerDodge:
     allDialogues: []
   playerUseItem:
@@ -4412,7 +4473,23 @@ MonoBehaviour:
   playerGotHit:
     allDialogues: []
   playerDies:
-    allDialogues: []
+    allDialogues:
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: "JAAA, yo sab\xEDa"
+      HasChain: 0
+      chainedDialogues: []
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: Ya era hora, cierra el juego
+      HasChain: 0
+      chainedDialogues: []
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: "Ni el primer jugador fue tan malo\u2026"
+      HasChain: 0
+      chainedDialogues: []
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: "Una pena\u2026 pero no pena para mi"
+      HasChain: 0
+      chainedDialogues: []
   victory:
     allDialogues: []
   defeat:
@@ -7673,7 +7750,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 314, y: -203.99992}
+  m_AnchoredPosition: {x: 314, y: -203.99974}
   m_SizeDelta: {x: -786.125, y: -436.21997}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1477643645
