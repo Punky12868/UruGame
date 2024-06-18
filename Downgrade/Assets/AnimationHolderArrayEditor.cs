@@ -1,8 +1,8 @@
-using UnityEditorInternal;
+/*using UnityEditorInternal;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(AnimationHolder))]
+//[CustomEditor(typeof(AnimationHolder))]
 public class AnimationHolderArrayEditor : Editor
 {
     private AnimationHolder holder;
@@ -14,7 +14,7 @@ public class AnimationHolderArrayEditor : Editor
         /*if (GUILayout.Button("Open Animation Editor"))
         {
             AnimationEditorWindow.ShowWindow(holder);
-        }*/
+        }
 
         DrawDefaultInspector();
     }
@@ -148,4 +148,4 @@ public class AnimationEditorWindow : EditorWindow
             serializedHolder.ApplyModifiedProperties();
         };
     }
-}
+}*/
