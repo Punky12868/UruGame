@@ -13,6 +13,7 @@ public class NarrationSystem : MonoBehaviour, IObserver
     [SerializeField] bool subtitlesActivated = true;
     [SerializeField] int startDialogChainLength;
     int startDialogChainIndex;
+    ChainedDialogues[] chainedDialogues;
 
     [SerializeField] float aditionalTimeAfterNarration = 1f;
     [SerializeField] float lowHealthThreshold = 10f;
@@ -48,9 +49,6 @@ public class NarrationSystem : MonoBehaviour, IObserver
         }
         else
         {
-
-
-
             Subtitles subs = null;
             bool isFixed = false;
 
@@ -103,12 +101,15 @@ public class NarrationSystem : MonoBehaviour, IObserver
 
     }
 
-    async void DelayND(float delay, ChainedDialogues[] chainedDialogues)
+    private void DelayND(float delay, ChainedDialogues[] chainedDialogues)
     {
-        await Task.Delay((int)((delay + aditionalTimeAfterNarration )* 1000));
-        NextDialoge(chainedDialogues);
+        /*await Task.Delay((int)((delay + aditionalTimeAfterNarration )* 1000));
+        NextDialoge(chainedDialogues);*/
+
+        this.chainedDialogues = chainedDialogues;
+        Invoker.InvokeDelayed(NextDialoge, delay + aditionalTimeAfterNarration);
     }
-    private void NextDialoge(ChainedDialogues[] chainedDialogues)
+    private void NextDialoge()
     {
         Subtitles subs = null;
         AudioManager.instance.PlayVoice(chainedDialogues[chainedDialoguesIndex].audioClip);
