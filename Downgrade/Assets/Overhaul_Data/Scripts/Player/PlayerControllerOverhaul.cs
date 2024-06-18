@@ -157,8 +157,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
         normalSlashVFX.GetComponent<Renderer>().material.SetFloat("_Status", normalVfxTime);
         comboSlashVFX.GetComponent<Renderer>().material.SetFloat("_Status", comboVfxTime);
 
-        if (!canMove || isDead || paralized)
-            return;
+        if (!canMove || isDead || paralized) return;
 
         Inputs();
         //PlayerAnimations();
@@ -300,7 +299,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     #region Roll
     public void Roll()
     {
-        if (isRolling || isAttacking || currentStamina < staminaUsageRoll || direction == Vector3.zero || finiteRolling && rollAmmount <= 0) return;
+        if (isRolling || isAttacking || currentStamina < staminaUsageRoll /*|| direction == Vector3.zero*/ || finiteRolling && rollAmmount <= 0) return;
 
         if (finiteRolling) rollAmmount--;
 

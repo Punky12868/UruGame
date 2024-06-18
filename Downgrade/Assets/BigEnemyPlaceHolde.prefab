@@ -720,6 +720,22 @@ MonoBehaviour:
     invokableEvents: []
   - animClip: {fileID: 7400000, guid: 26e99ff8b372db0479bd215a69faa79c, type: 2}
     invokableEvents:
+    - time: 0.45
+      events:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: -7952684505447414370}
+            m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
+            m_MethodName: MoveOnAttack
+            m_Mode: 4
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 20
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
     - time: 0.65
       events:
         m_PersistentCalls:
@@ -881,6 +897,18 @@ MonoBehaviour:
               m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
               m_IntArgument: 0
               m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 1
+            m_CallState: 2
+          - m_Target: {fileID: -7952684505447414370}
+            m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
+            m_MethodName: MoveOnAttack
+            m_Mode: 4
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 75
               m_StringArgument: 
               m_BoolArgument: 1
             m_CallState: 2
