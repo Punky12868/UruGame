@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int firstLevelIndex = 1;
     [SerializeField] private int downgradeSceneIndex = 11;
     [SerializeField] private int firstLevelDowngradeSelectionIndex = 2;
+    [SerializeField] private int maxLevelPantano = 8;
     [SerializeField] private TransitionSettings transitionSettings;
     [SerializeField] private float transitionDelay;
 
@@ -151,5 +152,18 @@ public class GameManager : MonoBehaviour
     public bool IsSelectingDowngrade()
     {
         return isSelectingDowngrade;
+    }
+
+    public void ResetArenaPantano()
+    {
+        for (int i = 0; i < maxLevelPantano; i++)
+        {
+            if (i <= 1) continue;
+            SimpleSaveLoad.Instance.SaveData(FileType.Gameplay, levelUnlockerKey + i, false);
+        }
+
+        Time.timeScale = 1;
+        TransitionManager.Instance().Transition(downgradeSceneIndex, transitionSettings, transitionDelay);
+
     }
 }
