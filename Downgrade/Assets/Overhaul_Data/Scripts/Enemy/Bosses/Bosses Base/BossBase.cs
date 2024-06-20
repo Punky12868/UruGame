@@ -250,7 +250,7 @@ public class BossBase : Subject, IAnimController
                     float dotProd = Vector3.Dot(hitCollider.GetComponent<PlayerControllerOverhaul>().GetLastDirection(), targetDir);
                     if (dotProd <= -0.45f && dotProd >= -1)
                     {
-                        hitCollider.GetComponent<PlayerControllerOverhaul>().GetParryRewardProxy(false, true);
+                        hitCollider.GetComponent<PlayerControllerOverhaul>().GetParryRewardProxy(EnemyType.Boss);
                         hitCollider.GetComponent<PlayerControllerOverhaul>().TakeDamageProxy(0, parryKnockback, -targetDir);
                         Debug.Log("Player parried hit");
                     }

@@ -50,7 +50,9 @@ public class ProjectileLogic : MonoBehaviour
                 direction *= -1;
                 isParried = true;
                 originalEnemy.GetComponent<EnemyBase>().PlaySoundProxy(parrySounds);
-                other.GetComponent<PlayerControllerOverhaul>().GetParryRewardProxy(false, false, true);
+                other.GetComponent<PlayerControllerOverhaul>().GetParryRewardProxy(EnemyType.None);
+                Vector2 vectorDamage = other.GetComponent<PlayerControllerOverhaul>().GetDamage();
+                damage = Random.Range(vectorDamage.x, vectorDamage.y);
             }
             else
             {

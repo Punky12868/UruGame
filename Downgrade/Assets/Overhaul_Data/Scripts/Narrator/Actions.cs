@@ -22,6 +22,7 @@ public enum AllPlayerActions
 
     Attack,
     Parry,
+    FailedParry,
     SuccesfullParry,
     Dodge,
     useAbility,

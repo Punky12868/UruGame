@@ -413,7 +413,7 @@ public class OldEnemyBase : Subject
                     if (Vector3.Dot(hitCollider.GetComponent<PlayerControllerOverhaul>().GetLastDirection(), targetDir) <= -0.5f && Vector3.Dot(hitCollider.GetComponent<PlayerControllerOverhaul>().GetLastDirection(), targetDir) >= -1)
                     {
                         ParriedEnemy(parryStunTime);
-                        hitCollider.GetComponent<PlayerControllerOverhaul>().GetParryRewardProxy(isBigEnemy, false);
+                        //hitCollider.GetComponent<PlayerControllerOverhaul>().GetParryRewardProxy(isBigEnemy, false);
                         //hitCollider.GetComponent<PlayerControllerOverhaul>().AddEnemyToParryList(this.gameObject);
                         Debug.Log("Player parried hit");
                     }
@@ -460,7 +460,7 @@ public class OldEnemyBase : Subject
                     if (Vector3.Dot(hitCollider.GetComponent<PlayerControllerOverhaul>().GetLastDirection(), targetDir) > 0.5f)
                     {
                         ParriedEnemy(parryStunTime);
-                        hitCollider.GetComponent<PlayerControllerOverhaul>().GetParryRewardProxy(isBigEnemy, true);
+                        //hitCollider.GetComponent<PlayerControllerOverhaul>().GetParryRewardProxy(isBigEnemy, true);
                         //hitCollider.GetComponent<PlayerControllerOverhaul>().AddEnemyToParryList(this.gameObject);
                         Debug.Log("Player parried charged hit");
                     }

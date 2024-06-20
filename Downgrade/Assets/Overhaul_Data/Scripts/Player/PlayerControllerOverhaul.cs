@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Rewired;
+using UnityEngine.Rendering;
 
 [RequireComponent(typeof(PlayerInventory))] [RequireComponent(typeof(PlayerInteraction))]
 [RequireComponent(typeof(AnimationHolder))] [RequireComponent(typeof(Rigidbody))]
@@ -299,7 +300,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     #region Roll
     public void Roll()
     {
-        if (isRolling || isAttacking || currentStamina < staminaUsageRoll /*|| direction == Vector3.zero*/ || finiteRolling && rollAmmount <= 0) return;
+        if (isRolling || isAttacking || currentStamina < staminaUsageRoll || lastDirection == Vector3.zero || finiteRolling && rollAmmount <= 0) return;
 
         if (finiteRolling) rollAmmount--;
 
@@ -435,24 +436,30 @@ public class PlayerControllerOverhaul : Subject, IAnimController
         if (currentStamina > stamina) currentStamina = stamina;
     }
 
-    private void GetParryReward(bool isBigEnemy, bool isBoss, bool isProjectile = false)
+    private void GetParryReward(EnemyType type, bool isProjectile = false)
     {
         NotifyPlayerObservers(AllPlayerActions.SuccesfullParry);
         _parryParticleEmission.enabled = true;
         Invoker.InvokeDelayed(DisableParryParticles, 0.1f);
 
-        if (isBigEnemy)
+        if (isProjectile) return;
+
+        switch (type)
         {
-            GainStamina(staminaBigEnemyReward);
-            GainHealth(healthBigEnemyReward);
+            case EnemyType.Small:
+                GainStamina(staminaNormalReward);
+                break;
+            case EnemyType.Big:
+                GainStamina(staminaBigEnemyReward);
+                GainHealth(healthBigEnemyReward);
+                break;
+            case EnemyType.Boss:
+                GainStamina(staminaBossReward);
+                GainHealth(healthBossReward);
+                break;
+            case EnemyType.None:
+                break;
         }
-        else if (isBoss)
-        {
-            GainStamina(staminaBossReward);
-            GainHealth(healthBossReward);
-            // damage multiplier
-        }
-        else if (!isProjectile) GainStamina(staminaNormalReward);
     }
     #endregion
 
@@ -503,6 +510,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
             canBeDamaged = false;
             Invoker.InvokeDelayed(ResetImmunity, iFrames);
         }
+        PlayAnimation(8, true, true, true);
     }
 
     private void TakeDamage(float damage, float knockbackForce, Vector3 damagePos)
@@ -691,10 +699,11 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     #endregion
 
     #region Proxys
+    public void FailParry() { NotifyPlayerObservers(AllPlayerActions.FailedParry); PlayAnimation(8, true, true, false);}
     public void TakeDamageProxy(float damage, float knockbackForce = 0, Vector3 damagePos = new Vector3()) { TakeDamage(damage, knockbackForce, damagePos);}
     public void GainHealthProxy(float healthReward) { GainHealth(healthReward);}
     public void GainStaminaProxy(float staminaReward) { GainStamina(staminaReward);}
-    public void GetParryRewardProxy(bool isBigEnemy, bool isBoss, bool isProjectile = false) { GetParryReward(isBigEnemy, isBoss, isProjectile);}
+    public void GetParryRewardProxy(EnemyType type, bool isProjectile = false) { GetParryReward(type, isProjectile);}
     #endregion
 
     #region Invoke

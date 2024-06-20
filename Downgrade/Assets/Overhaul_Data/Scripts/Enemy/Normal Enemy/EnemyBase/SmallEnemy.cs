@@ -34,6 +34,7 @@ public class SmallEnemy : EnemyBase
         {
             isAttacking = true; //attackHitboxOn = true;
             PlayAnimation(3, true, true);
+            PlaySound(attackSounds);
         }
         else { if (isAttacking == true) isAttacking = false; }
     }
@@ -58,9 +59,10 @@ public class SmallEnemy : EnemyBase
                     if (Vector3.Dot(player.GetLastDirection(), direction) <= -0.5f && Vector3.Dot(player.GetLastDirection(), direction) >= -1)
                     {
                         GetParried();
-                        //player.GetParryRewardProxy(isBigEnemy, false);
+                        player.GetParryRewardProxy(enemyType);
                         attackHitboxOn = false; return;
                     }
+                    else player.FailParry();
                 }
                 attackHitboxOn = false;
                 player.TakeDamageProxy(damage, knockback, -direction);
@@ -87,7 +89,7 @@ public class SmallEnemy : EnemyBase
     {
         if (!debugTools || debugDrawCenter == null) return;
         
-        DrawRange(tooClose, tooCloseColor);
+        DrawRange(tooCloseRange, tooCloseColor);
         DrawRange(avoidanceRange, avoidRangeColor);
         DrawRange(closeAttackRange, closeAttackColor);
 

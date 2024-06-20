@@ -9,7 +9,9 @@ public class Spikes : MonoBehaviour
     [Header("----------")]
     [SerializeField] private float spawnTime;
     [SerializeField] private float hitboxAppearTime = 0.2f;
+    [SerializeField] private float cooldownOnHit = 0.5f;
     [SerializeField] private float spacing;
+    float cooldownTimer;
 
     [Header("----------")]
     [SerializeField] private Transform hitboxCenter;
@@ -25,6 +27,7 @@ public class Spikes : MonoBehaviour
     private float lifeTime;
     private float timer;
     private bool spawnedAnother;
+    private bool onHitCooldown;
     private bool limitReached;
     private bool lifeTimeReached = true;
     private void ResetLifeTimeReached() { lifeTimeReached = false; }
@@ -37,6 +40,7 @@ public class Spikes : MonoBehaviour
         this.direction = direction.normalized;
         DestroyItself();
         hitboxColor = hitboxAppearColor;
+        cooldownTimer = cooldownOnHit;
     }
 
     private void DestroyItself()
@@ -59,6 +63,9 @@ public class Spikes : MonoBehaviour
         DamagePlayer();
         if (spawnedAnother || limitReached) return;
         if (timer < spawnTime) {timer += Time.deltaTime; return;}
+        if (onHitCooldown) { cooldownTimer -= Time.deltaTime; if (cooldownTimer <= 0) onHitCooldown = false; }
+        else if (!onHitCooldown && cooldownTimer <= 0) cooldownTimer = cooldownOnHit;
+
         SpawnSpike();
     }
 
@@ -113,10 +120,15 @@ public class Spikes : MonoBehaviour
                 else knockbackDirection = (transform.forward - transform.right).normalized;
 
                 hitCollider.GetComponent<PlayerControllerOverhaul>().TakeDamageProxy(damage, knockback, knockbackDirection);
+
+                Spikes[] spikes = FindObjectsOfType<Spikes>();
+                foreach (Spikes spike in spikes) { spike.SetCooldown(true); }
+                onHitCooldown = true;
             }
         }
     }
 
+    public void SetCooldown(bool value) { onHitCooldown = value; }
     private void DrawHitbox() {VisualizeBox.DisplayBox(hitboxCenter.position + hitboxOffset, hitboxSize, Quaternion.LookRotation(direction), hitboxColor);}
     private void OnDrawGizmos() {DrawHitbox(); Debug.DrawRay(transform.position, direction * spacing, Color.blue); }
 }
