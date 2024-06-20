@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class PlantTrap : OldEnemyBase
+/*public class PlantTrap : OldEnemyBase
 {
     // Start is called before the first frame update
     float radius = 2;
@@ -177,7 +177,7 @@ public class PlantTrap : OldEnemyBase
 
 
             /*decidedChargeAttack = true;
-            Invoke("ResetDecitionStatus", chargeDecitionCooldown / 2);*/
+            Invoke("ResetDecitionStatus", chargeDecitionCooldown / 2);
         }
         else
         {
@@ -193,4 +193,4 @@ public class PlantTrap : OldEnemyBase
     //{
     //    Gizmos.DrawWireSphere(transform.position, radius);
     //}
-}
+}*/
