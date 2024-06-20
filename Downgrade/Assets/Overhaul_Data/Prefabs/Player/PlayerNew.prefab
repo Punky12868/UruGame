@@ -10093,18 +10093,20 @@ MonoBehaviour:
   parryParticleEmission: {fileID: 8913781990879266343}
   hitParticleEmission: {fileID: 4929625601647889390}
   attackClips:
-  - {fileID: 8300000, guid: 0b43f3a45f0340b41a94eee9b85514d2, type: 3}
-  - {fileID: 8300000, guid: ee3290ee18f78424ea6ea29282823cbf, type: 3}
+  - {fileID: 8300000, guid: cce49330ede3a4142a4541fdeb520ed4, type: 3}
+  - {fileID: 8300000, guid: cec2ab73d59d6574d83390afb7d28832, type: 3}
+  - {fileID: 8300000, guid: 071803f5a2db8d0438bb659e1210e88a, type: 3}
   abilityClips:
-  - {fileID: 8300000, guid: bd5ce0b70f360584c9ac3401dc732556, type: 3}
+  - {fileID: 8300000, guid: ff8538be9013c2c458c001ab5b64f2f8, type: 3}
   rollClips:
-  - {fileID: 8300000, guid: 7ff529287dbc3204c913884a2435dedb, type: 3}
-  - {fileID: 8300000, guid: f6a78d1fe8b97a0419e26ef34997be3f, type: 3}
+  - {fileID: 8300000, guid: ab43d4a747b383746aa8e679637fe400, type: 3}
+  - {fileID: 8300000, guid: 042aec5d585896248a5dfa74ba4f2ae8, type: 3}
   hitClips:
-  - {fileID: 8300000, guid: caf1a8745f600ed4dbd5b85dbc1d6eac, type: 3}
-  - {fileID: 8300000, guid: a5584ce911a66474a9b835d41225de7e, type: 3}
+  - {fileID: 8300000, guid: bb6b9e6ca5150aa43bd6f8d3bfe26c1b, type: 3}
+  - {fileID: 8300000, guid: 0db0a92fe5e9df14caf5049e131974f0, type: 3}
   deathClips:
-  - {fileID: 8300000, guid: e13cb7152ac1d6e418806a417610e7cb, type: 3}
+  - {fileID: 8300000, guid: dbefeb057f0d54f4fbf4c597ee30a7d7, type: 3}
+  - {fileID: 8300000, guid: 0132b904649bbef43b8b6c11bfe49ceb, type: 3}
   directionThreshold: 0.1
   hitboxPos: {x: 0, y: 0.25, z: 0.05}
   hitboxSize: {x: 0.48, y: 0.2, z: 0.35}
@@ -10386,7 +10388,7 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 1
             m_CallState: 2
-    - time: 0.2
+    - time: 0.1
       events:
         m_PersistentCalls:
           m_Calls:
@@ -10402,7 +10404,7 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 1
             m_CallState: 2
-    - time: 0.5
+    - time: 0.55
       events:
         m_PersistentCalls:
           m_Calls:
@@ -10471,6 +10473,40 @@ MonoBehaviour:
               m_BoolArgument: 0
             m_CallState: 2
     - time: 1
+      events:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 6984008424334954119}
+            m_TargetAssemblyTypeName: PlayerControllerOverhaul, Assembly-CSharp
+            m_MethodName: SetCooldown
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+  - animClip: {fileID: 7400000, guid: a081b99720ee8b346b16e71d9ee6ebe5, type: 2}
+    invokableEvents:
+    - time: 0
+      events:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 6984008424334954119}
+            m_TargetAssemblyTypeName: PlayerControllerOverhaul, Assembly-CSharp
+            m_MethodName: SetCooldown
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 1
+            m_CallState: 2
+    - time: 0.3
       events:
         m_PersistentCalls:
           m_Calls:

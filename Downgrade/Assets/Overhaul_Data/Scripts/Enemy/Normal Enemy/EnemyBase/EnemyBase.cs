@@ -39,7 +39,7 @@ public class EnemyBase : Subject, IAnimController
     protected float cooldown;
 
     [Header("Ranges")]
-    [SerializeField] protected float tooClose = 0.3f;
+    [SerializeField] protected float tooCloseRange = 0.3f;
     //[SerializeField] protected float avoidanceRange = 2;
 
     [Header("Avoidance")]
@@ -110,12 +110,12 @@ public class EnemyBase : Subject, IAnimController
         if (isStunned || isParried || !IsAnimationDone()) return;
         if (isOnCooldown) { PlayAnimation(1, false); if (isMoving) { isMoving = false; } return; }
 
-        if (!isAttacking && DistanceFromTarget() < tooClose)
+        if (!isAttacking && DistanceFromTarget() < tooCloseRange)
         {
             transform.position += -direction * speed * Time.deltaTime;
             isMoving = true; PlayAnimation(2, false);
         } 
-        else if (!isAttacking && DistanceFromTarget() > tooClose)
+        else if (!isAttacking && DistanceFromTarget() > tooCloseRange)
         {
             transform.position += direction * speed * Time.deltaTime;
             isMoving = true; PlayAnimation(2, false);
@@ -126,7 +126,8 @@ public class EnemyBase : Subject, IAnimController
     protected virtual void GetParried() 
     {
         if (canBeParryStunned) { isStunned = true; isParried = true; PlayAnimation(5, true, true); }
-        PlaySound(parriedSounds); 
+        PlaySound(parriedSounds);
+        MoveOnAttack(-attackKnockback);
     }
 
     protected virtual void Death()
@@ -140,7 +141,7 @@ public class EnemyBase : Subject, IAnimController
         healthBar.GetComponentInParent<CanvasGroup>().DOFade(0, 0.5f);
         Destroy(healthBar.GetComponentInParent<CanvasGroup>().gameObject, 0.499f);
         Destroy(GetComponent<Collider>());
-        Destroy(audioSource);
+        //Destroy(audioSource);
         Destroy(this);
     }
 
@@ -163,7 +164,8 @@ public class EnemyBase : Subject, IAnimController
         if (currentHealth <= 0) { Death(); }
         else 
         { 
-            if (hasHitAnimation) { PlayAnimation(4, true, true); } PlaySound(hitSounds); ResetStatusOnHit();
+            PlaySound(hitSounds); ResetStatusOnHit();
+            if (hasHitAnimation) { PlayAnimation(4, true, true); }
             if (GetComponentInChildren<SpriteRenderer>().material) { GetComponentInChildren<SpriteRenderer>().material.SetFloat("_HitFloat", 1); Invoke("HitMaterialReset", 0.2f); }
         }
     }
@@ -181,12 +183,17 @@ public class EnemyBase : Subject, IAnimController
         attackHitboxOn = false;
     }
 
+    protected void OnCooldownEnd()
+    {
+        isOnCooldown = false;
+        isStunned = false;
+        cooldown = attackCooldown;
+    }
+
     protected void OnCooldownTimer()
     {
         if (!isOnCooldown) return;
-
-        if (cooldown > 0) cooldown -= Time.deltaTime;
-        else { isOnCooldown = false; cooldown = attackCooldown; }
+        if (cooldown > 0) cooldown -= Time.deltaTime; else OnCooldownEnd();
     }
 
     #region Direction
@@ -194,7 +201,8 @@ public class EnemyBase : Subject, IAnimController
     {
         Vector3 targetPos = new Vector3(target.position.x, transform.position.y, target.position.z);
         Vector3 currentPos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
-        Vector3 dir = (targetPos - currentPos).normalized; return dir;
+        Vector3 dir = (targetPos - currentPos).normalized;
+        Vector3 fixedDir = new Vector3(dir.x, 0, dir.z); return fixedDir;
     }
     protected Vector3 SetAvoidanceDir()
     {
@@ -214,8 +222,9 @@ public class EnemyBase : Subject, IAnimController
                 }
             }
         }
-        if (nearestAvoidable == null) return Vector3.zero; 
-        return (transform.position - nearestAvoidable.transform.position).normalized;
+        if (nearestAvoidable == null) return Vector3.zero;
+        Vector3 avoidDir = (transform.position - nearestAvoidable.transform.position).normalized;
+        Vector3 fixedDir = new Vector3(avoidDir.x, 0, avoidDir.z); return fixedDir;
     }
     protected float DistanceFromTarget() { return Vector3.Distance(target.position, transform.position); }
 
@@ -270,7 +279,7 @@ public class EnemyBase : Subject, IAnimController
     #region Sounds
     protected void PlaySound(AudioClip[] clip)
     {
-        if (clip == null || clip.Length == 0) { Debug.LogError("No AudioClips set on " + gameObject.name); return; }
+        if (NullOrCero.isArrayNullOrCero(clip)) { Debug.LogError("No AudioClips set on " + gameObject.name); return; }
 
         if (clip.Length == 1) { AudioManager.instance.PlayCustomSFX(clip[0], audioSource); return; }
 
@@ -344,7 +353,7 @@ public class EnemyBase : Subject, IAnimController
     public float GetParryStunTime() { return parryStunTime; }
     public float GetAvoidanceSpeed() { return avoidanceSpeed; }
     public float GetAvoidanceRange() { return avoidanceRange; }
-    public float GetTooClose() { return tooClose; }
+    public float GetTooClose() { return tooCloseRange; }
     public float GetSpeed() { return speed; }
     public float GetAttackCooldown() { return attackCooldown; }
     public bool GetAttackHitboxOn() { return attackHitboxOn; }
@@ -374,7 +383,7 @@ public class EnemyBase : Subject, IAnimController
     public void SetParryStunTime(float value) { parryStunTime = value; }
     public void SetAvoidanceSpeed(float value) { avoidanceSpeed = value; }
     public void SetAvoidanceRange(float value) { avoidanceRange = value; }
-    public void SetTooClose(float value) { tooClose = value; }
+    public void SetTooClose(float value) { tooCloseRange = value; }
     public void SetSpeed(float value) { speed = value; }
     public void SetAttackCooldown(float value) { attackCooldown = value; }
     public void SetAttackHitboxOn(bool value) { attackHitboxOn = value; }

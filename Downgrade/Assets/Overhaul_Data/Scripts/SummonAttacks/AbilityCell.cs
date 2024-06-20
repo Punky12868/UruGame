@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class AbilityCell : MonoBehaviour
@@ -10,6 +11,7 @@ public class AbilityCell : MonoBehaviour
     [SerializeField] private GameObject cellPrefab;
 
     [Header("----------")]
+    [SerializeField] private float damageMultiplier = 1;
     [SerializeField] private float appearTime = 0.2f;
     [SerializeField] private float spawnTime;
     [SerializeField] private float hitboxAppearTime = 0.2f;
@@ -39,12 +41,13 @@ public class AbilityCell : MonoBehaviour
     private bool limitReached;
     private bool lifeTimeReached = true;
     private bool onHitCooldown;
+    private List<GameObject> enemies = new List<GameObject>();
     private void ResetLifeTimeReached() { lifeTimeReached = false; }
 
     private void Awake()
     {
         moveTimer = -0.05f;
-
+        if (damageMultiplier <= 0) damageMultiplier = 1;
         if (cellId == 0)
         {
             if (isLeft || isCenter && isLeft)
@@ -158,6 +161,8 @@ public class AbilityCell : MonoBehaviour
         Collider[] hitColliders = Physics.OverlapBox(hitboxCenter.position + hitboxOffset, hitboxSize, Quaternion.LookRotation(direction));
         foreach (Collider hitCollider in hitColliders)
         {
+            if (!NullOrCero.isListNullOrCero(enemies)) for (int i = 0; i < enemies.Count; i++) { if (hitCollider.gameObject == enemies[i]) return; }
+
             if (hitCollider.CompareTag("Enemy"))
             {
                 Vector3 enemyPos = hitCollider.transform.position;
@@ -170,6 +175,10 @@ public class AbilityCell : MonoBehaviour
 
                 if (hitCollider.GetComponent<EnemyBase>()) HitEnemy(hitCollider, damage);
                 if (hitCollider.GetComponent<BossBase>()) HitBoss(hitCollider, damage);
+
+                enemies.Add(hitCollider.gameObject);
+                AbilityCell[] cells = FindObjectsOfType<AbilityCell>();
+                foreach (AbilityCell cell in cells) { cell.AddEnemy(hitCollider.gameObject); }
 
                 onHitCooldown = true;
                 Invoke("ResetCooldown", hitCooldown);
@@ -232,6 +241,7 @@ public class AbilityCell : MonoBehaviour
     private void HitEnemy(Collider hit, int damage) { hit.GetComponent<EnemyBase>().TakeDamageProxy(damage, knockback, direction); }
     private void HitBoss(Collider hit, int damage) { hit.GetComponent<BossBase>().TakeDamage(damage, knockback, direction); }
     public void SetCellId(int id) { cellId = id; }
+    public void AddEnemy(GameObject enemy) { enemies.Add(enemy); }
     private void DrawHitbox() { VisualizeBox.DisplayBox(hitboxCenter.position + hitboxOffset, hitboxSize, Quaternion.LookRotation(direction), hitboxColor); }
     private void OnDrawGizmos() { DrawHitbox(); Debug.DrawRay(transform.position, direction * spacing, Color.blue); }
 }

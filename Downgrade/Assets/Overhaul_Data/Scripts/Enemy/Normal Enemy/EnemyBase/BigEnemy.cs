@@ -15,6 +15,7 @@ public class BigEnemy : EnemyBase
     [SerializeField] protected float chargeDecitionCooldown = 2.5f;
     [SerializeField] protected bool canParryChargeAttack = true;
     [SerializeField] protected bool hasChargeAttack = true;
+    [SerializeField] protected AudioClip[] chargeAttackSounds;
 
     [Header("BE C_Attack Odds")]
     [SerializeField] protected int maxOdds = 1000;
@@ -50,6 +51,7 @@ public class BigEnemy : EnemyBase
         {
             isAttacking = true; normalAttack = true; //attackHitboxOn = true;
             PlayAnimation(3, true, true);
+            PlaySound(attackSounds);
         }
         else if (DistanceFromTarget() <= farAttackRange && !chargeAttackedConsidered && hasChargeAttack)
         {
@@ -61,6 +63,7 @@ public class BigEnemy : EnemyBase
                 {
                     isAttacking = true; normalAttack = false; //attackHitboxOn = true;
                     PlayAnimation(7, true, true);
+                    PlaySound(chargeAttackSounds);
 
                     decidedChargeAttack = true;
                     Invoke("ResetDecitionStatus", chargeDecitionCooldown);
@@ -92,10 +95,13 @@ public class BigEnemy : EnemyBase
                 {
                     if (Vector3.Dot(player.GetLastDirection(), direction) <= -0.5f && Vector3.Dot(player.GetLastDirection(), direction) >= -1)
                     {
+                        knockback *= 2;
                         GetParried();
-                        //player.GetParryRewardProxy(isBigEnemy, false);
+                        player.GetParryRewardProxy(enemyType);
+                        player.TakeDamageProxy(0, knockback, -lastDirection);
                         attackHitboxOn = false; return;
                     }
+                    else player.FailParry();
                 }
                 attackHitboxOn = false;
                 player.TakeDamageProxy(damage, knockback, -direction);
@@ -131,7 +137,7 @@ public class BigEnemy : EnemyBase
     {
         if (!debugTools || debugDrawCenter == null) return;
 
-        DrawRange(tooClose, tooCloseColor);
+        DrawRange(tooCloseRange, tooCloseColor);
         DrawRange(avoidanceRange, avoidRangeColor);
         DrawRange(closeAttackRange, closeAttackColor);
         DrawRange(farAttackRange, farAttackColor);
