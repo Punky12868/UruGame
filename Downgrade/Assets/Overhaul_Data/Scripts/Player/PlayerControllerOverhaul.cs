@@ -155,6 +155,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
 
     public void Update()
     {
+        if (isRolling && playerState == "Parry") playerState = "";
         NotHittingKillingTimer();
         Stamina();
         SlashVFXProxy();
@@ -448,6 +449,10 @@ public class PlayerControllerOverhaul : Subject, IAnimController
         _parryParticleEmissionTwo.enabled = true;
         
         Invoker.InvokeDelayed(DisableParryParticles, 0.1f);
+        Invoker.InvokeDelayed(InvertVFXColors, 0.033f);
+        Invoker.InvokeDelayed(InvertVFXColors, 0.066f);
+        Invoker.InvokeDelayed(InvertVFXColors, 0.099f);
+        Invoker.InvokeDelayed(DisableVFX, 0.1f);
         if (isProjectile) return;
 
         switch (type)
@@ -662,6 +667,8 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     public bool IsNotHittingEnemy() { return isNotHitting; }
     public bool IsNotKillingEnemy() { return isNotKilling; }
     public bool GetImmunity() { return !canBeDamaged; }
+    public float GetAbilityCooldown() { return abilityCooldown; }
+    public bool GetAbilityCooldownStatus() { return isAbilityOnCooldown; }
     #endregion
 
     #region Set
@@ -685,6 +692,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     public void SetParryState(bool value) { if (value) playerState = "Parry"; else playerState = ""; }
     public void SetParryPressed(bool value) { wasParryPressed = value; }
     public void SetAbilityCooldown(bool value) { isAbilityOnCooldown = value; }
+    
 
 
     public void SetParalisisStatus(bool status, float reset)
@@ -720,9 +728,11 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     #region Invoke
     public void ResetParalisis() {paralized = false;}
     public void DisableHitParticles() { _hitParticleEmission.enabled = false;}
-    public void DisableParryParticles() { _parryParticleEmission.enabled = false; _parryParticleEmissionTwo.enabled = false; inpactVFX.SetFloat("_isOn", 0); }
+    public void DisableParryParticles() { _parryParticleEmission.enabled = false; _parryParticleEmissionTwo.enabled = false;}
     public void ResetImmunity() { canBeDamaged = true;}
     public void ResetAbilityCooldown() { isAbilityOnCooldown = false;}
+    public void InvertVFXColors() { inpactVFX.SetFloat("_InvertColor", inpactVFX.GetFloat("_InvertColor") == 0 ? 1 : 0); }
+    public void DisableVFX() { inpactVFX.SetFloat("_isOn", 0);}
     #endregion
 
     #endregion

@@ -12,7 +12,7 @@ public class UISelector : MonoBehaviour
     [SerializeField] private bool automaticSetPos;
     [SerializeField] private bool addButtonsManually;
     [SerializeField] private List<Button> manualButtons = new List<Button>();
-    [SerializeField] private bool freezeX, freezeY;
+    [SerializeField] private bool freezeX, freezeY, freezeZ;
 
     private Button currentButton;
     private List<Button> buttons = new List<Button>();
@@ -56,7 +56,7 @@ public class UISelector : MonoBehaviour
 
             newPos.x = freezeX ? transform.position.x : currentButton.transform.position.x;
             newPos.y = freezeY ? transform.position.y : currentButton.transform.position.y;
-            newPos.z = currentButton.transform.position.z;
+            newPos.z = freezeZ ? transform.position.z : currentButton.transform.position.z;
 
             transform.DOMove(newPos, duration).SetEase(easeType).SetUpdate(UpdateType.Normal, true);
         }
