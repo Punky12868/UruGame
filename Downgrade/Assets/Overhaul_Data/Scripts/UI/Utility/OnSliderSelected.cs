@@ -39,13 +39,13 @@ public class OnSliderSelected : MonoBehaviour
     {
         if (value)
         {
-            foreach (Image image in images) image.color = selectedColor;
-            foreach (TMPro.TMP_Text text in texts) text.color = selectedColor;
+            if (!NullOrCero.isArrayNullOrCero(images)) foreach (Image image in images) image.color = selectedColor;
+            if (!NullOrCero.isArrayNullOrCero(texts)) foreach (TMPro.TMP_Text text in texts) text.color = selectedColor;
         }
         else
         {
-            foreach (Image image in images) image.color = normalColor;
-            foreach (TMPro.TMP_Text text in texts) text.color = normalColor;
+            if (!NullOrCero.isArrayNullOrCero(images)) foreach (Image image in images) image.color = normalColor;
+            if (!NullOrCero.isArrayNullOrCero(texts)) foreach (TMPro.TMP_Text text in texts) text.color = normalColor;
         }
     }
 

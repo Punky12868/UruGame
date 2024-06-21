@@ -446,9 +446,8 @@ public class PlayerControllerOverhaul : Subject, IAnimController
         
         _parryParticleEmission.enabled = true;
         _parryParticleEmissionTwo.enabled = true;
-        inpactVFX.SetFloat("_isOn", 1);
-        Invoker.InvokeDelayed(DisableParryParticles, 0.2f);
-
+        
+        Invoker.InvokeDelayed(DisableParryParticles, 0.1f);
         if (isProjectile) return;
 
         switch (type)
@@ -458,11 +457,13 @@ public class PlayerControllerOverhaul : Subject, IAnimController
                 GainStamina(staminaNormalReward);               
                 break;
             case EnemyType.Big:
+                inpactVFX.SetFloat("_isOn", 1);
                 NotifyPlayerObservers(AllPlayerActions.SuccesfullParry);
                 GainStamina(staminaBigEnemyReward);
                 GainHealth(healthBigEnemyReward);               
                 break;
             case EnemyType.Boss:
+                inpactVFX.SetFloat("_isOn", 1);
                 GainStamina(staminaBossReward);
                 GainHealth(healthBossReward);
                 NotifyPlayerObservers(AllPlayerActions.ParryBoss);
