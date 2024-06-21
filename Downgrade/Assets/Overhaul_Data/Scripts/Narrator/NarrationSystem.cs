@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 
 public class NarrationSystem : MonoBehaviour, IObserver
 {
@@ -28,7 +29,8 @@ public class NarrationSystem : MonoBehaviour, IObserver
     float timeForRandomNoise;
 
     bool isWaiting = false;
-
+    bool alreadySubs;
+    bool chainedSubsDisplayed = true;
 
     int chainedDialoguesIndex;
 
@@ -41,24 +43,23 @@ public class NarrationSystem : MonoBehaviour, IObserver
 
 
 
-    public void PlaySubs(Dialogue dialogueType, bool hasPriority = false, int fixedDialogue = 0)
+    public void PlaySubs(Dialogue dialogueType, bool hasPriority = false, bool isFixed = false ,int fixedDialogue = 0)
     {
+  
+      
+
         if (dialogueType.allDialogues.Length == 0)
         {
             Debug.Log("No hay Dialogos en la accion");
         }
-        else
+        else if (alreadySubs == false | hasPriority == true)
         {
             Subtitles subs = null;
-            bool isFixed = false;
-
-            if (fixedDialogue != 0) isFixed = true;
 
             int dialogueSelected = Random.Range(0, dialogueType.allDialogues.Length);
-
             if (subtitlesActivated) { if (FindObjectOfType<Subtitles>()) subs = FindObjectOfType<Subtitles>(); }
 
-            if (isFixed) dialogueSelected = fixedDialogue - 1;
+            if (isFixed) dialogueSelected = fixedDialogue;
 
             if (isWaiting && hasPriority)
             {
@@ -86,6 +87,7 @@ public class NarrationSystem : MonoBehaviour, IObserver
 
                 if (dialogueType.allDialogues[dialogueSelected].HasChain)
                 {
+                    chainedSubsDisplayed = false;
                     chainedDialoguesIndex = 0;
                     DelayND(dialogueType.allDialogues[dialogueSelected].audioClip.length, dialogueType.allDialogues[dialogueSelected].chainedDialogues);
                 }
@@ -96,6 +98,10 @@ public class NarrationSystem : MonoBehaviour, IObserver
                 }
             }
 
+        }
+        else
+        {
+            Debug.LogWarning("Se intentó sobreescribir un dialogo");
         }
         
 
@@ -125,9 +131,12 @@ public class NarrationSystem : MonoBehaviour, IObserver
         if (chainedDialogues.Length > chainedDialoguesIndex)
         {
             DelayND(chainedDialogues[chainedDialoguesIndex].audioClip.length, chainedDialogues);
+           
         }
         else
         {
+
+            chainedSubsDisplayed = true;
             isWaiting = true;
             Invoker.InvokeDelayed(ResetWait, chainedDialogues[chainedDialoguesIndex-1].audioClip.length);
         }
@@ -181,6 +190,22 @@ public class NarrationSystem : MonoBehaviour, IObserver
         {
             timeForRandomNoise += Time.unscaledDeltaTime;
         }
+
+
+        if (subtitlesParent.childCount > 0)
+        {
+            alreadySubs = true;
+        }
+        else if (chainedSubsDisplayed == false)
+        {
+            alreadySubs = true;
+        }
+        else
+        {
+            alreadySubs = false;
+        }
+
+
     }
 
     private void OnPause()
@@ -249,15 +274,32 @@ public class NarrationSystem : MonoBehaviour, IObserver
                 Debug.Log("Died to Mid Stage Boss");
                 break;
             case AllPlayerActions.ParryBoss:
-                Debug.Log("Parried Boss Attack");
+                int randomParryBoss = Random.Range(1, 4);
+                if (randomParryBoss <= 1)
+                {
+                    PlaySubs(parryBoss);
+                }
+                    Debug.Log("Parried Boss Attack");
                 break;
             case AllPlayerActions.EndBoss:
                 Debug.Log("Boss Fight Ended");
                 break;
             case AllPlayerActions.Attack: //
-                Debug.Log("Attacked");
+                int randomAttack = Random.Range(1, 101);
+                //Debug.Log("numero random generado para el attack: " + randomAttack);
+                if (randomAttack <= 8)
+                {
+                    PlaySubs(playerAttack);
+                    Debug.Log("Attacked desde narration");
+                }
                 break;
-            case AllPlayerActions.Parry: //
+            case AllPlayerActions.SuccesfullParry: //
+                int randomParry = Random.Range(1, 11);
+                if (randomParry <= 1)
+                {
+                    PlaySubs(playerParry);
+                }
+                
                 Debug.Log("Parried");
                 break;
             case AllPlayerActions.Dodge:

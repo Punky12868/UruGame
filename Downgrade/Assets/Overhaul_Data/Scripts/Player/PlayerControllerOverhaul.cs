@@ -248,6 +248,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
         //rb.AddForce(lastDirection.normalized * attackForce, ForceMode.Impulse);
         PlaySound(attackClips);
         HitboxCall(hitboxCenter.position, hitboxSize);
+        NotifyPlayerObservers(AllPlayerActions.Attack);
     }
 
     private void NotHittingKillingTimer()
@@ -438,7 +439,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
 
     private void GetParryReward(EnemyType type, bool isProjectile = false)
     {
-        NotifyPlayerObservers(AllPlayerActions.SuccesfullParry);
+        
         _parryParticleEmission.enabled = true;
         Invoker.InvokeDelayed(DisableParryParticles, 0.1f);
 
@@ -447,15 +448,18 @@ public class PlayerControllerOverhaul : Subject, IAnimController
         switch (type)
         {
             case EnemyType.Small:
-                GainStamina(staminaNormalReward);
+                NotifyPlayerObservers(AllPlayerActions.SuccesfullParry);
+                GainStamina(staminaNormalReward);               
                 break;
             case EnemyType.Big:
+                NotifyPlayerObservers(AllPlayerActions.SuccesfullParry);
                 GainStamina(staminaBigEnemyReward);
-                GainHealth(healthBigEnemyReward);
+                GainHealth(healthBigEnemyReward);               
                 break;
             case EnemyType.Boss:
                 GainStamina(staminaBossReward);
                 GainHealth(healthBossReward);
+                NotifyPlayerObservers(AllPlayerActions.ParryBoss);
                 break;
             case EnemyType.None:
                 break;
