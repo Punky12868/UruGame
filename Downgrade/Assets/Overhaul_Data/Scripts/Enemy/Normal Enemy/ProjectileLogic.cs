@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ProjectileLogic : MonoBehaviour
 {
+    [SerializeField] private bool invertSprite = false;
+    [SerializeField] private bool faceDir = false;
     private float travelSpeed;
     private float damage;
     private float knockbackForce;
@@ -38,19 +40,22 @@ public class ProjectileLogic : MonoBehaviour
         {
             if (direction.x > 0 && !GetComponent<SpriteRenderer>().flipX)
             {
-                GetComponent<SpriteRenderer>().flipX = true;
+                GetComponent<SpriteRenderer>().flipX = invertSprite ? false : true;
             }
         }
         else
         {
             if (direction.x > 0 && !GetComponentInChildren<SpriteRenderer>().flipX)
             {
-                GetComponentInChildren<SpriteRenderer>().flipX = true;
+                GetComponentInChildren<SpriteRenderer>().flipX = invertSprite ? true : false;
             }
         }
-        
-        transform.Translate(direction.normalized * travelSpeed * Time.deltaTime);
-        child.rotation = Quaternion.FromToRotation(Vector3.right, direction);
+
+        if (faceDir)
+        {
+            transform.Translate(direction.normalized * travelSpeed * Time.deltaTime);
+            child.rotation = Quaternion.FromToRotation(Vector3.right, direction);
+        }
     }
 
     private void OnTriggerEnter(Collider other)

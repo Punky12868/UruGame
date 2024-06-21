@@ -135,13 +135,12 @@ public class EnemyBase : Subject, IAnimController
         isDead = true;
         PlaySound(deathSounds); PlayAnimation(6, false, true);
 
-        if (destroyOnDeath) { Destroy(gameObject, 0.5f); return; }
         if (FindObjectOfType<WaveSystem>()) FindObjectOfType<WaveSystem>().UpdateDeadEnemies();
-
         healthBar.GetComponentInParent<CanvasGroup>().DOFade(0, 0.5f);
         Destroy(healthBar.GetComponentInParent<CanvasGroup>().gameObject, 0.499f);
         Destroy(GetComponent<Collider>());
         //Destroy(audioSource);
+        if (destroyOnDeath) { Destroy(gameObject, 0.5f); return; }
         Destroy(this);
     }
 
