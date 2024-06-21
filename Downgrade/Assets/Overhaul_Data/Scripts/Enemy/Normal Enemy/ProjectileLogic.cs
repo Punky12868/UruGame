@@ -12,6 +12,7 @@ public class ProjectileLogic : MonoBehaviour
     private GameObject originalEnemy;
     private Vector3 direction;
     private AudioClip[] parrySounds;
+    private Transform child;
 
     public void SetVariables(float speed, float dmg, float lftime, float knckbck, bool parry, Vector3 dir, AudioClip[] prrySnd, GameObject orgnlEnemy)
     {
@@ -23,7 +24,7 @@ public class ProjectileLogic : MonoBehaviour
         parrySounds = prrySnd;
         originalEnemy = orgnlEnemy;
 
-        
+        child = GetComponentInChildren<SpriteRenderer>().transform;
 
         Destroy(gameObject, lftime);
     }
@@ -33,12 +34,23 @@ public class ProjectileLogic : MonoBehaviour
         if (GameManager.Instance.IsGamePaused())
             return;
 
-        if (direction.x > 0 && !GetComponent<SpriteRenderer>().flipX)
+        if (GetComponent<SpriteRenderer>())
         {
-            GetComponent<SpriteRenderer>().flipX = true;
+            if (direction.x > 0 && !GetComponent<SpriteRenderer>().flipX)
+            {
+                GetComponent<SpriteRenderer>().flipX = true;
+            }
         }
-
+        else
+        {
+            if (direction.x > 0 && !GetComponentInChildren<SpriteRenderer>().flipX)
+            {
+                GetComponentInChildren<SpriteRenderer>().flipX = true;
+            }
+        }
+        
         transform.Translate(direction.normalized * travelSpeed * Time.deltaTime);
+        child.rotation = Quaternion.FromToRotation(Vector3.right, direction);
     }
 
     private void OnTriggerEnter(Collider other)
