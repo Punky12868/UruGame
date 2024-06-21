@@ -25,14 +25,14 @@ public class PauseMenu : MonoBehaviour
     {
         if (player.GetButtonDown("Pause") && !GameManager.Instance.IsSelectingDowngrade())
         {
-            if (onSlider) { onSlider = false; sliderButtonSelected.Select(); subsButton.interactable = true; return; }
+            if (onSlider) { onSlider = false; sliderButtonSelected.Select(); if (subsButton != null) subsButton.interactable = true; return; }
             if (onConfig) { onConfig = false; pauseMenu.SetActive(!onConfig); configMenu.SetActive(onConfig); optionsButton.Select(); return; }
             GameManager.Instance.PauseGame(!GameManager.Instance.IsGamePaused());
         }
 
-        if (player.GetButtonDown("Submit") && !GameManager.Instance.IsSelectingDowngrade() && onSlider && onConfig)
+        if (player.GetButtonDown("Cancel") && !GameManager.Instance.IsSelectingDowngrade() && onSlider && onConfig)
         {
-            onSlider = false; sliderButtonSelected.Select(); subsButton.interactable = true; return;
+            onSlider = false; sliderButtonSelected.Select(); if (subsButton != null) subsButton.interactable = true; return;
         }
 
         if (!GameManager.Instance.IsSelectingDowngrade())
