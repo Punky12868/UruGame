@@ -22,7 +22,7 @@ public class NewRangedEnemy : EnemyBase
     [SerializeField] protected float projectileSpeed = 5;
 
     [Header("RE Ranges")]
-    [SerializeField] protected float tooFarRange;
+    [SerializeField] protected float tooFarRange = 4;
 
     protected bool canChooseDirection = false;
     protected bool chooseDirection = false;

@@ -7,6 +7,7 @@ public class Spikes : MonoBehaviour
     [SerializeField] private GameObject spikePrefab;
 
     [Header("----------")]
+    [SerializeField] private float customDamage;
     [SerializeField] private float spawnTime;
     [SerializeField] private float hitboxAppearTime = 0.2f;
     [SerializeField] private float cooldownOnHit = 0.5f;
@@ -34,7 +35,7 @@ public class Spikes : MonoBehaviour
 
     public void SetVariables(int damage, float knockback, float lifeTime, Vector3 direction) 
     { 
-        this.damage = damage;
+        if (customDamage <= 0) this.damage = damage;
         this.knockback = knockback;
         this.lifeTime = lifeTime;
         this.direction = direction.normalized;

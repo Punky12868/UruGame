@@ -57,14 +57,16 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     [SerializeField] private float vfxSpeed = 15f;
     [SerializeField] private GameObject normalSlashVFX;
     [SerializeField] private GameObject comboSlashVFX;
+    [SerializeField] private Material inpactVFX;
     private float normalVfxTime, comboVfxTime;
     private bool isNormalVFXPlaying = false;
     private bool isComboVFXPlaying = false;
 
     [Header("Particles")]
     [SerializeField] private ParticleSystem parryParticleEmission;
+    [SerializeField] private ParticleSystem parryParticleEmissionTwo;
     [SerializeField] private ParticleSystem hitParticleEmission;
-    private ParticleSystem.EmissionModule _parryParticleEmission, _hitParticleEmission;
+    private ParticleSystem.EmissionModule _parryParticleEmission, _parryParticleEmissionTwo, _hitParticleEmission;
 
     [Header("AudioClips")]
     [SerializeField] private AudioClip[] attackClips;
@@ -135,6 +137,8 @@ public class PlayerControllerOverhaul : Subject, IAnimController
         DowngradeSystem.Instance.SetPlayer(this);
         _parryParticleEmission = parryParticleEmission.emission;
         _parryParticleEmission.enabled = false;
+        _parryParticleEmissionTwo = parryParticleEmissionTwo.emission;
+        _parryParticleEmissionTwo.enabled = false;
         _hitParticleEmission = hitParticleEmission.emission;
         _hitParticleEmission.enabled = false;
         Invoker.InvokeDelayed(DelayedAwake, 0.1f);
@@ -441,7 +445,9 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     {
         
         _parryParticleEmission.enabled = true;
-        Invoker.InvokeDelayed(DisableParryParticles, 0.1f);
+        _parryParticleEmissionTwo.enabled = true;
+        inpactVFX.SetFloat("_isOn", 1);
+        Invoker.InvokeDelayed(DisableParryParticles, 0.2f);
 
         if (isProjectile) return;
 
@@ -672,7 +678,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     public void SetCooldownOnCombo(bool value) { isOnCooldown = value; }
     public void SetRoll(bool value) { isRolling = value; }
     public void SetImmunity(bool value) { canBeDamaged = !value; }
-    public void SetParryParticles(bool value) { _parryParticleEmission.enabled = value; }
+    public void SetParryParticles(bool value) { _parryParticleEmission.enabled = value; _parryParticleEmissionTwo.enabled = value; }
     public void SetHitParticles(bool value) { _hitParticleEmission.enabled = value; }
     public void ApplyForce(float value) { rb.AddForce(lastDirection.normalized * value, ForceMode.Impulse); }
     public void SetParryState(bool value) { if (value) playerState = "Parry"; else playerState = ""; }
@@ -713,7 +719,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     #region Invoke
     public void ResetParalisis() {paralized = false;}
     public void DisableHitParticles() { _hitParticleEmission.enabled = false;}
-    public void DisableParryParticles() { _parryParticleEmission.enabled = false;}
+    public void DisableParryParticles() { _parryParticleEmission.enabled = false; _parryParticleEmissionTwo.enabled = false; inpactVFX.SetFloat("_isOn", 0); }
     public void ResetImmunity() { canBeDamaged = true;}
     public void ResetAbilityCooldown() { isAbilityOnCooldown = false;}
     #endregion
