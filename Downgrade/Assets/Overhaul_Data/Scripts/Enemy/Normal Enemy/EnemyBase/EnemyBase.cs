@@ -83,6 +83,7 @@ public class EnemyBase : Subject, IAnimController
     protected bool chargeAttackedConsidered;
     protected bool avoidingTarget;
     protected bool hasHealthBar = true;
+    protected float stunnTime;
 
     #endregion
     #endregion
@@ -101,6 +102,12 @@ public class EnemyBase : Subject, IAnimController
         UpdateHealthUI();
         Movement();
         Attack();
+
+        if (isStunned)
+        {
+            stunnTime += Time.deltaTime;
+            if (stunnTime >= 2f) { isStunned = false; stunnTime = 0; }
+        }
     }
     #endregion
 

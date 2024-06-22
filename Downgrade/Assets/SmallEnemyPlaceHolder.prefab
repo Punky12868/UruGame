@@ -461,6 +461,7 @@ GameObject:
   - component: {fileID: 3902854891899135714}
   - component: {fileID: 3334045482419797443}
   - component: {fileID: 6862421462297913029}
+  - component: {fileID: -327295365708540338}
   m_Layer: 6
   m_Name: SmallEnemyPlaceHolder
   m_TagString: Enemy
@@ -658,7 +659,7 @@ MonoBehaviour:
   attackKnockback: 10
   parryStunTime: 3
   canBeParried: 1
-  tooClose: 0.3
+  tooCloseRange: 0.3
   avoidanceRange: 0.65
   avoidanceSpeed: 7.5
   healthBar: {fileID: 6724929713452920535}
@@ -866,6 +867,18 @@ MonoBehaviour:
             m_CallState: 2
   - animClip: {fileID: 7400000, guid: 5c8cce818e9ab924e8f4e3c57b049d21, type: 2}
     invokableEvents: []
+--- !u!114 &-327295365708540338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3664113595333325702}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84d2faf91b718ba4eaa191cb2414cf36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3740739450190283397
 GameObject:
   m_ObjectHideFlags: 0
