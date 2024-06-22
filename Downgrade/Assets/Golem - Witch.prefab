@@ -125,7 +125,7 @@ MonoBehaviour:
   - Dialog #2 (Mid Fase Dialog)
   - Dialog #2 (Ending Dialog)
   hitParticleEmission: {fileID: 8114309003704124487}
-  flipSprite: 0
+  flipSprite: 1
   onHit:
     m_PersistentCalls:
       m_Calls:
@@ -420,10 +420,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.41600618
-  m_Height: 1.9014843
+  m_Radius: 0.8671302
+  m_Height: 2.5707176
   m_Direction: 1
-  m_Center: {x: 0, y: 0.9, z: 0}
+  m_Center: {x: 0, y: 1.2346166, z: 0}
 --- !u!54 &6817595123979358600
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -600,7 +600,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: b39a8d9b4df898645ba9991e1331b330, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

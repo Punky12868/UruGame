@@ -28,6 +28,7 @@ public class EnemyBase : Subject, IAnimController
     [SerializeField] protected bool canBeParryStunned = true;
     [SerializeField] protected bool invertSprite = false;
     [SerializeField] protected bool destroyOnDeath = false;
+    [SerializeField] protected bool isPlaceHolder = false;
     protected float currentHealth;
 
     [Header("Combat")]
@@ -327,7 +328,7 @@ public class EnemyBase : Subject, IAnimController
     {
         isSpawning = true;
         PlaySound(spawnSounds);
-        PlayAnimation(0, true);
+        if(!isPlaceHolder) PlayAnimation(0, true);
 
         DowngradeSystem.Instance.SetEnemy(this);
         NotifyEnemyObservers(AllEnemyActions.Spawned);

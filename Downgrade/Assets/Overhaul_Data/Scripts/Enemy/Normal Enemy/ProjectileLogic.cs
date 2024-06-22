@@ -36,26 +36,13 @@ public class ProjectileLogic : MonoBehaviour
         if (GameManager.Instance.IsGamePaused())
             return;
 
-        if (GetComponent<SpriteRenderer>())
-        {
-            if (direction.x > 0 && !GetComponent<SpriteRenderer>().flipX)
-            {
-                GetComponent<SpriteRenderer>().flipX = invertSprite ? false : true;
-            }
-        }
-        else
-        {
-            if (direction.x > 0 && !GetComponentInChildren<SpriteRenderer>().flipX)
-            {
-                GetComponentInChildren<SpriteRenderer>().flipX = invertSprite ? true : false;
-            }
-        }
+        transform.Translate(direction.normalized * travelSpeed * Time.deltaTime);
 
-        if (faceDir)
-        {
-            transform.Translate(direction.normalized * travelSpeed * Time.deltaTime);
-            child.rotation = Quaternion.FromToRotation(Vector3.right, direction);
-        }
+        if (GetComponent<SpriteRenderer>()) { if (direction.x > 0 && !GetComponent<SpriteRenderer>().flipX); }
+        else { if (direction.x > 0 && !GetComponentInChildren<SpriteRenderer>().flipX) GetComponentInChildren<SpriteRenderer>().flipX = invertSprite ? true : false; }
+
+        if (faceDir) child.rotation = Quaternion.FromToRotation(Vector3.right, direction);
+        else child.rotation = Quaternion.LookRotation(Camera.main.transform.forward, Camera.main.transform.up);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -79,8 +66,6 @@ public class ProjectileLogic : MonoBehaviour
                     Destroy(gameObject);
                 }
             }
-            
-            
         }
 
         if (other.CompareTag("Enemy") && isParried)
