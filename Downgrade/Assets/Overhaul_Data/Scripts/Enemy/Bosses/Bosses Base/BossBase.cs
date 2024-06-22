@@ -282,6 +282,7 @@ public class BossBase : Subject, IAnimController
 
         if (currentHealth <= 0) Death();
         else { if (knockbackForce != 0) rb.AddForce(dir * knockbackForce, ForceMode.Impulse); }
+        if (GetComponentInChildren<SpriteRenderer>().material) { GetComponentInChildren<SpriteRenderer>().material.SetFloat("_HitFloat", 1); Invoke("HitMaterialReset", 0.2f); }
     }
 
     protected virtual void Death()
@@ -503,10 +504,7 @@ public class BossBase : Subject, IAnimController
         Invoker.InvokeDelayed(ResetHitParticle, resetTime);
     }
 
-    public virtual void ChangeFaseUI()
-    {
-        FindObjectOfType<BossUI>().SetChangeFase();
-    }
+    public virtual void ChangeFaseUI() { FindObjectOfType<BossUI>().SetChangeFase(); }
     #endregion
 
     #region Get Variables
@@ -521,14 +519,9 @@ public class BossBase : Subject, IAnimController
 
     #region Invokes
 
-    protected virtual void ResetHitParticle()
-    {
-        _particleEmission.enabled = false;
-    }
-    protected virtual void ResetConsideredFarAttackDecitionStatus()
-    {
-        hasConsideredFarAttack = false;
-    }
+    protected virtual void ResetHitParticle() { _particleEmission.enabled = false; }
+    protected virtual void ResetConsideredFarAttackDecitionStatus() { hasConsideredFarAttack = false; }
+    protected void HitMaterialReset() { GetComponentInChildren<SpriteRenderer>().material.SetFloat("_HitFloat", 0); }
     #endregion
 
     #endregion

@@ -7,20 +7,6 @@ using UnityEditor;
 public class WaveSystem : MonoBehaviour
 {
     [SerializeField] private float timerEnemySpawn;
-    
-    // 0 - Arboles
-    // 1 - SlimeBarro
-    // 2 - Sapo
-    // 3 - ArbolGigante
-    // 4 - Ninfa
-    // 5 - Ciclope
-    // 6 - Macizo
-
-    [SerializeField] private GameObject[] swampEnemies;
-    /*[SerializeField] private GameObject[] circusEnemies;
-    [SerializeField] private GameObject[] dungeonEnemies;
-    [SerializeField] private GameObject[] castleEnemies;*/
-
 
     public List<Wave> waves = new List<Wave>();
 
@@ -58,30 +44,30 @@ public class WaveSystem : MonoBehaviour
         {
             if (currentWave < waves.Count)
             {
-                if (currentWaveData < waves[currentWave].waves.Count)
+                if (currentWaveData < waves[currentWave].enemiesInWave.Count)
                 {
-                    if (waves[currentWave].waves[currentWaveData].hasDelay)
+                    if (waves[currentWave].enemiesInWave[currentWaveData].delayForNextEnemy > 0)
                     {
                         timerEnemySpawn += Time.deltaTime;
-                        if (timerEnemySpawn >= waves[currentWave].waves[currentWaveData].delayForNextEnemy)
+                        if (timerEnemySpawn >= waves[currentWave].enemiesInWave[currentWaveData].delayForNextEnemy)
                         {
                             timerEnemySpawn = 0;
-                            Vector3 pos = new Vector3(waves[currentWave].waves[currentWaveData].position.x, 0.002f, waves[currentWave].waves[currentWaveData].position.y);
+                            Vector3 pos = new Vector3(waves[currentWave].enemiesInWave[currentWaveData].position.x, 0.002f, waves[currentWave].enemiesInWave[currentWaveData].position.y);
                             //GameObject enemy = Instantiate(waves[currentWave].waves[currentWaveData].enemy, pos, Quaternion.identity);
                             //enemyBases.Add(enemy.GetComponent<EnemyBase>());
 
                             // Check the stage and enemy type to spawn the correct enemy
-                            SwitchStatement(pos);
+                            SpawnEnemy(pos);
                             currentWaveData++;
                         }
                     }
                     else
                     {
-                        Vector3 pos = new Vector3(waves[currentWave].waves[currentWaveData].position.x, 0.002f, waves[currentWave].waves[currentWaveData].position.y);
+                        Vector3 pos = new Vector3(waves[currentWave].enemiesInWave[currentWaveData].position.x, 0.002f, waves[currentWave].enemiesInWave[currentWaveData].position.y);
 
                         //GameObject enemy = Instantiate(waves[currentWave].waves[currentWaveData].enemy, pos, Quaternion.identity);
                         //enemyBases.Add(enemy.GetComponent<EnemyBase>());
-                        SwitchStatement(pos);
+                        SpawnEnemy(pos);
                         currentWaveData++;
                     }
                 }
@@ -98,44 +84,10 @@ public class WaveSystem : MonoBehaviour
         }
     }
 
-    public void SwitchStatement(Vector3 pos)
+    public void SpawnEnemy(Vector3 pos)
     {
-        switch (waves[currentWave].waves[currentWaveData].stage)
-        {
-            case WaveData.Stage.Swamp:
-                switch (waves[currentWave].waves[currentWaveData].enemyType)
-                {
-                    case WaveData.EnemyType.Arboles:
-                        GameObject arbolEnemy = Instantiate(swampEnemies[0], pos, Quaternion.identity);
-                        enemyBases.Add(arbolEnemy.GetComponent<EnemyBase>());
-                        break;
-                    case WaveData.EnemyType.SlimeBarro:
-                        GameObject slimeEnemy = Instantiate(swampEnemies[1], pos, Quaternion.identity);
-                        enemyBases.Add(slimeEnemy.GetComponent<EnemyBase>());
-                        break;
-                    case WaveData.EnemyType.Sapo:
-                        GameObject sapoEnemy = Instantiate(swampEnemies[2], pos, Quaternion.identity);
-                        enemyBases.Add(sapoEnemy.GetComponent<EnemyBase>());
-                        break;
-                    case WaveData.EnemyType.ArbolGigante:
-                        GameObject arbolGiganteEnemy = Instantiate(swampEnemies[3], pos, Quaternion.identity);
-                        enemyBases.Add(arbolGiganteEnemy.GetComponent<EnemyBase>());
-                        break;
-                    case WaveData.EnemyType.Ninfa:
-                        GameObject ninfaEnemy = Instantiate(swampEnemies[4], pos, Quaternion.identity);
-                        enemyBases.Add(ninfaEnemy.GetComponent<EnemyBase>());
-                        break;
-                    case WaveData.EnemyType.Ciclope:
-                        GameObject ciclopeEnemy = Instantiate(swampEnemies[5], pos, Quaternion.identity);
-                        enemyBases.Add(ciclopeEnemy.GetComponent<EnemyBase>());
-                        break;
-                    case WaveData.EnemyType.Macizo:
-                        GameObject macizoEnemy = Instantiate(swampEnemies[6], pos, Quaternion.identity);
-                        enemyBases.Add(macizoEnemy.GetComponent<EnemyBase>());
-                        break;
-                }
-                break;
-        }
+        GameObject enemy = Instantiate(waves[currentWave].enemiesInWave[currentWaveData].enemyPrefab, pos, Quaternion.identity);
+        enemyBases.Add(enemy.GetComponent<EnemyBase>());
     }
 
     public void UpdateDeadEnemies()
@@ -155,31 +107,16 @@ public class WaveSystem : MonoBehaviour
 [System.Serializable]
 public class Wave
 {
-    public List<WaveData> waves = new List<WaveData>();
+    public List<WaveData> enemiesInWave = new List<WaveData>();
 }
 
 [System.Serializable]
 public class WaveData
 {
-    public enum EnemyType
-    {
-        None,
-        Arboles,
-        SlimeBarro,
-        Sapo,
-        ArbolGigante,
-        Ninfa,
-        Ciclope,
-        Macizo
-    }
-    public enum Stage
-    {
-        None,
-        Swamp
-    }
-    public EnemyType enemyType;
-    public Stage stage;
+    //public string enemyName;
+    public GameObject enemyPrefab;
+
     public Vector2 position;
-    public bool hasDelay;
+    //public bool hasDelay;
     public float delayForNextEnemy;
 }
