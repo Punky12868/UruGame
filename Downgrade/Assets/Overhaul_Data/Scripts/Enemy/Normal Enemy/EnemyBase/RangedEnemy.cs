@@ -85,7 +85,7 @@ public class RangedEnemy : EnemyBase
     public void SummonProjectile()
     {
         GameObject prjctl = Instantiate(projectile, projectileSpawnPoint.position, projectileSpawnPoint.rotation);
-        prjctl.GetComponent<ProjectileLogic>().SetVariables(projectileSpeed, attackDamage, projectileLifeTime, attackKnockback, projectileCanBeParried, direction, parriedSounds, gameObject);
+        prjctl.GetComponent<ProjectileLogic>().SetVariables(projectileSpeed, attackDamage, projectileLifeTime, attackKnockback, projectileCanBeParried, target.position.normalized, parriedSounds, gameObject);
     }
 
     #region Debug
