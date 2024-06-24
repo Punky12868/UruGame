@@ -1,3 +1,4 @@
+using EasyTransition;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -74,5 +75,10 @@ public class GameManagerProxy : MonoBehaviour
     public bool IsSelectingDowngrade()
     {
         return GameManager.Instance.IsSelectingDowngrade();
+    }
+
+    public void ResetArenaPantano()
+    {
+       GameManager.Instance.ResetArenaPantano();
     }
 }
