@@ -114,7 +114,7 @@ public class BigEnemy : EnemyBase
     #region Utility
     protected void HitboxFaceToTarget()
     {
-        if (isAttacking) return;
+        if (attackHitboxOn) return;
 
         Vector3 direction = (target.position - transform.position).normalized * hitboxOffset;
         Vector3 desiredPosition = transform.position + direction;
@@ -145,7 +145,7 @@ public class BigEnemy : EnemyBase
         Gizmos.color = avoidRangeColor;
         Gizmos.DrawLine(transform.position, transform.position + direction * avoidanceRange);
 
-        if (drawAttackHitboxesDuringAttack && !attackHitboxOn || isOnCooldown) return;
+        if (drawAttackHitboxesDuringAttack && !attackHitboxOn && isOnCooldown) return;
         Vector3 colliderSize = normalAttack ? attackHitboxSize : chargedAttackHitboxSize;
         DrawAttackHitbox(hitboxCenter.position, colliderSize, Color.red);
     }

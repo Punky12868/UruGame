@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class NewRangedEnemy : EnemyBase
+public class RangedEnemy : EnemyBase
 {
     [Header("Debug Colors")]
     [SerializeField] protected Color tooCloseColor = new Color(0, 1, 0, 1);
@@ -31,30 +29,33 @@ public class NewRangedEnemy : EnemyBase
     {
         if (isStunned || !IsAnimationDone()) return;
         if (isOnCooldown && isStatic) { PlayAnimation(1, false); if (isAttacking) { isAttacking = false; } return; }
-        if (isOnCooldown) { if (isAttacking) { isAttacking = false; } }
-        if (canChooseDirection) { int randInt = Random.Range(0, 2); chooseDirection = randInt == 1; Debug.Log(chooseDirection); canChooseDirection = false; }
+        if (isOnCooldown && isAttacking) isAttacking = false;
+        if (canChooseDirection) { int randInt = Random.Range(0, 2); chooseDirection = randInt == 1; canChooseDirection = false; }
 
-        if (!isAttacking && DistanceFromTarget() < tooCloseRange)
+        if (!isAttacking)
         {
-            transform.position += -direction * speed * Time.deltaTime;
-            isMoving = true; PlayAnimation(2, false);
-        }
-        else if (!isAttacking && DistanceFromTarget() > tooFarRange)
-        {
-            transform.position += direction * speed * Time.deltaTime;
-            isMoving = true; PlayAnimation(2, false);
-        }
-        else if (!isAttacking && isOnCooldown)
-        {
-            if (chooseDirection)
+            if (DistanceFromTarget() < tooCloseRange)
+            {
+                transform.position += -direction * speed * Time.deltaTime;
+                isMoving = true; PlayAnimation(2, false);
+            }
+            else if (DistanceFromTarget() > tooFarRange)
             {
                 transform.position += direction * speed * Time.deltaTime;
                 isMoving = true; PlayAnimation(2, false);
             }
-            else
+            else if (isOnCooldown)
             {
-                transform.position += -direction * speed * Time.deltaTime;
-                isMoving = true; PlayAnimation(2, false);
+                if (chooseDirection)
+                {
+                    transform.position += direction * speed * Time.deltaTime;
+                    isMoving = true; PlayAnimation(2, false);
+                }
+                else
+                {
+                    transform.position += -direction * speed * Time.deltaTime;
+                    isMoving = true; PlayAnimation(2, false);
+                }
             }
         }
         else isMoving = false;
@@ -71,7 +72,7 @@ public class NewRangedEnemy : EnemyBase
         }
         else
         {
-            if (DistanceFromTarget() >= tooCloseRange && DistanceFromTarget() <= tooFarRange)
+            if (/*DistanceFromTarget() >= tooCloseRange && */DistanceFromTarget() <= tooFarRange)
             {
                 isAttacking = true;
                 canChooseDirection = true;

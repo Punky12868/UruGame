@@ -61,14 +61,14 @@ AnimatorStateMachine:
     m_State: {fileID: 7058646696864663373}
     m_Position: {x: 30, y: 160, z: 0}
   - serializedVersion: 1
-    m_State: {fileID: 4762815628799209909}
-    m_Position: {x: 30, y: 260, z: 0}
-  - serializedVersion: 1
     m_State: {fileID: 6268543225440658899}
     m_Position: {x: 30, y: 310, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1413386549731698986}
     m_Position: {x: 30, y: 210, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: 5907759022916849806}
+    m_Position: {x: 30, y: 260, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -79,14 +79,14 @@ AnimatorStateMachine:
   m_ExitPosition: {x: 800, y: 120, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
   m_DefaultState: {fileID: 7058646696864663373}
---- !u!1102 &4762815628799209909
+--- !u!1102 &5907759022916849806
 AnimatorState:
   serializedVersion: 6
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: GolemNormalAttack
+  m_Name: GolemNormalAttackV2
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -99,7 +99,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 31ebf0bf44332364687a18f0f780bb52, type: 2}
+  m_Motion: {fileID: 7400000, guid: 5d17b134ca2243042855e9d69974870d, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

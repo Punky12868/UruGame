@@ -1,12 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.UI;
-using UnityEngine;
-using TMPro;
-using DG.Tweening;
-using UnityEngine.EventSystems;
-using EasyTransition;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
+using System.Collections;
+using UnityEngine.UI;
+using EasyTransition;
+using UnityEngine;
+using DG.Tweening;
+using TMPro;
 
 public class Cards : MonoBehaviour
 {

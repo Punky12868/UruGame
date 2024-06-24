@@ -3,7 +3,6 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine;
 using DG.Tweening;
-using System;
 
 public class UISelector : MonoBehaviour
 {
@@ -46,10 +45,7 @@ public class UISelector : MonoBehaviour
 
     private void MoveSelector()
     {
-        if (automaticSetPos)
-        {
-            transform.DOMove(currentButton.transform.position, duration).SetEase(easeType).SetUpdate(UpdateType.Normal, true);
-        }
+        if (automaticSetPos) transform.DOMove(currentButton.transform.position, duration).SetEase(easeType).SetUpdate(UpdateType.Normal, true);
         else
         {
             Vector3 newPos = new Vector3(0, 0, 0);
@@ -60,11 +56,7 @@ public class UISelector : MonoBehaviour
 
             transform.DOMove(newPos, duration).SetEase(easeType).SetUpdate(UpdateType.Normal, true);
         }
-        
     }
 
-    public Button[] GetManualButtons()
-    {
-        return manualButtons.ToArray();
-    }
+    public Button[] GetManualButtons() { return manualButtons.ToArray(); }
 }

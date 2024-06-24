@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine.Events;
-using DG.Tweening;
 using UnityEngine;
-using EasyTransition;
 
 public class BossBase : Subject, IAnimController
 {
@@ -87,7 +85,7 @@ public class BossBase : Subject, IAnimController
 
     [Header("Misc")]
     [SerializeField] protected ParticleSystem hitParticleEmission;
-    [SerializeField] protected bool flipSprite;
+    [SerializeField] protected bool invertSprite;
 
     [Header("Events")]
     [SerializeField] protected UnityEvent onHit;
@@ -145,7 +143,6 @@ public class BossBase : Subject, IAnimController
         Attack();
         Hitbox();
         Movement();
-        
     }
 
     #endregion
@@ -156,30 +153,15 @@ public class BossBase : Subject, IAnimController
     {
         if (!IsAnimationDone() || isAttacking || isSummoningObjects || hasQueuedAnimation) return;
 
-        if (isOnCooldown)
-        {
-            //animHolder.GetAnimationController().PlayAnimation(animationIDs[1]);
-            PlayAnimation(1);
-            return;
-        }
+        if (isOnCooldown) { PlayAnimation(1); return; }
 
-        if (TargetDistance() < tooCloseRange)
-        {
-            //animHolder.GetAnimationController().PlayAnimation(animationIDs[1]);
-            PlayAnimation(1);
-        }
+        if (TargetDistance() < tooCloseRange) PlayAnimation(1);
         else if (Vector3.Distance(target.position, transform.position) > tooCloseRange)
         {
             transform.position += targetDir * moveSpeed * Time.deltaTime;
-
-            isMoving = true;
-            //animHolder.GetAnimationController().PlayAnimation(animationIDs[2]);
-            PlayAnimation(2);
+            isMoving = true; PlayAnimation(2);
         }
-        else
-        {
-            isMoving = false;
-        }
+        else isMoving = false;
     }
 
     #endregion
@@ -192,15 +174,9 @@ public class BossBase : Subject, IAnimController
 
         if (TargetDistance() <= closeAttackRange)
         {
-            isAttacking = true;
-            isOnCooldown = true;
-            //animHolder.GetAnimationController().PlayAnimation(animationIDs[3], null, true);
-            PlayAnimation(3, true);
-
-            // animation event for hitbox activation and deactivation
-            // animation event to apply force to the rigidbody
+            isAttacking = true; isOnCooldown = true; PlayAnimation(3, true);
         }
-        else if (TargetDistance() <= farAttackRange && TargetDistance() > closeAttackRange &&  !hasConsideredFarAttack)
+        else if (TargetDistance() <= farAttackRange && TargetDistance() > closeAttackRange && !hasConsideredFarAttack)
         {
             int random = Random.Range(0, maxOdds + 1);
 
@@ -208,28 +184,17 @@ public class BossBase : Subject, IAnimController
             {
                 if (random < farAttackOdds)
                 {
-                    isAttacking = true;
-                    decidedFarAttack = true;
-                    isOnCooldown = true;
-
-                    //animHolder.GetAnimationController().PlayAnimation(animationIDs[4], null, true); // animation for the far attack
-                    PlayAnimation(4, true);
-                    // animation event to instantiate the spikes
+                    isAttacking = true; decidedFarAttack = true; isOnCooldown = true; PlayAnimation(4, true);
                 }
             }
 
             hasConsideredFarAttack = true;
             Invoke("ResetConsideredFarAttackDecitionStatus", farAttackDecitionCooldown);
         }
-        else
-        {
-            if (isAttacking) isAttacking = false;
-        }
+        else { if (isAttacking) { isAttacking = false; } }
 
         SetTargetDirection(false);
     }
-
-    
 
     public virtual void Hitbox()
     {
@@ -252,19 +217,10 @@ public class BossBase : Subject, IAnimController
                     {
                         hitCollider.GetComponent<PlayerControllerOverhaul>().GetParryRewardProxy(EnemyType.Boss);
                         hitCollider.GetComponent<PlayerControllerOverhaul>().TakeDamageProxy(0, parryKnockback, -targetDir);
-                        Debug.Log("Player parried hit");
                     }
-                    else
-                    {
-                        hitCollider.GetComponent<PlayerControllerOverhaul>().TakeDamageProxy(attackdamage, attackKnockback, -targetDir);
-                        Debug.Log("Player normal hit - Failed Parry");
-                    }
+                    else hitCollider.GetComponent<PlayerControllerOverhaul>().TakeDamageProxy(attackdamage, attackKnockback, -targetDir);
                 }
-                else
-                {
-                    hitCollider.GetComponent<PlayerControllerOverhaul>().TakeDamageProxy(attackdamage, attackKnockback, -targetDir);
-                    Debug.Log("Player normal hit");
-                }
+                else hitCollider.GetComponent<PlayerControllerOverhaul>().TakeDamageProxy(attackdamage, attackKnockback, -targetDir);
 
                 HitboxController(false);
             }
@@ -383,10 +339,7 @@ public class BossBase : Subject, IAnimController
         hitboxCenter.position = new Vector3(desiredPosition.x, hitboxCenter.position.y, desiredPosition.z);
     }
 
-    public virtual void HitboxController(bool value)
-    {
-        isHitboxOn = value;
-    }
+    public virtual void HitboxController(bool value) { isHitboxOn = value; }
 
     #endregion
 
@@ -397,31 +350,13 @@ public class BossBase : Subject, IAnimController
         if (!IsAnimationDone() || isAttacking || isSummoningObjects || hasQueuedAnimation) return;
 
         Vector3 direction = (target.position - transform.position).normalized;
-
-        if (direction.x > 0)
-        {
-            Flip(true);
-        }
-        else
-        {
-            Flip(false);
-        }
+        Flip(Vector3.Dot(direction, transform.right) >= 0);
     }
 
     protected virtual void Flip(bool value)
     {
-        if (flipSprite)
-        {
-            pivot.localScale = value ? new Vector3(-1, 1, 1) : new Vector3(1, 1, 1);
-
-            isSpriteFlipped = value ? true : false;
-        }
-        else
-        {
-            pivot.localScale = value ? new Vector3(1, 1, 1) : new Vector3(-1, 1, 1);
-
-            isSpriteFlipped = value ? false : true;
-        }
+        if (invertSprite) { transform.localScale = value ? new Vector3(1, 1, 1) : new Vector3(-1, 1, 1); isSpriteFlipped = value; }
+        else { transform.localScale = value ? new Vector3(-1, 1, 1) : new Vector3(1, 1, 1); isSpriteFlipped = !value; }
     }
 
     #endregion
@@ -451,15 +386,12 @@ public class BossBase : Subject, IAnimController
 
     protected virtual void PlaySound(AudioClip[] clip)
     {
-        if (clip.Length > 0)
-        {
-            int random = Random.Range(0, clip.Length);
-            AudioManager.instance.PlayCustomSFX(clip[random], audioSource);
-        }
-        else
-        {
-            AudioManager.instance.PlayCustomSFX(clip[0], audioSource);
-        }
+        if (NullOrCero.isArrayNullOrCero(clip)) { Debug.LogError("No AudioClips set on " + gameObject.name); return; }
+
+        if (clip.Length == 1) { AudioManager.instance.PlayCustomSFX(clip[0], audioSource); return; }
+
+        int random = Random.Range(0, clip.Length);
+        AudioManager.instance.PlayCustomSFX(clip[random], audioSource);
     }
 
     #endregion

@@ -94,7 +94,7 @@ public class EnemyBase : Subject, IAnimController
     protected virtual void Update()
     {
         if (GameManager.Instance.IsGamePaused() || isDead) return;
-        if (!isAttacking && !attackHitboxOn) lastDirection = SetTargetDir();
+        if (!attackHitboxOn) lastDirection = SetTargetDir();
         if (isSpawning || IsAnimationDone()) isSpawning = false;
         if (SetAvoidanceDir() != Vector3.zero) { direction = Vector3.Slerp(direction, SetAvoidanceDir().normalized, Time.deltaTime * avoidanceSpeed); }
         else direction = SetTargetDir();
@@ -109,6 +109,7 @@ public class EnemyBase : Subject, IAnimController
             stunnTime += Time.deltaTime;
             if (stunnTime >= 2f) { isStunned = false; stunnTime = 0; }
         }
+        else stunnTime = 0;
     }
     #endregion
 
@@ -158,7 +159,7 @@ public class EnemyBase : Subject, IAnimController
         currentHealth -= damage;
         if (direction != Vector3.zero) rb.AddForce((transform.position + direction).normalized * knockbackForce, ForceMode.Impulse);
         else rb.AddForce((transform.position - target.position).normalized * knockbackForce, ForceMode.Impulse);
-
+        if (GetComponentInChildren<SpriteRenderer>().material) { GetComponentInChildren<SpriteRenderer>().material.SetFloat("_HitFloat", 1); Invoke("HitMaterialReset", 0.2f); }
         _particleEmission.enabled = true;
         Invoker.InvokeDelayed(ResetParticle, 0.1f);
 
@@ -173,7 +174,6 @@ public class EnemyBase : Subject, IAnimController
         { 
             PlaySound(hitSounds); ResetStatusOnHit();
             if (hasHitAnimation) { PlayAnimation(4, true, true); }
-            if (GetComponentInChildren<SpriteRenderer>().material) { GetComponentInChildren<SpriteRenderer>().material.SetFloat("_HitFloat", 1); Invoke("HitMaterialReset", 0.2f); }
         }
     }
 
@@ -253,7 +253,7 @@ public class EnemyBase : Subject, IAnimController
     #region Flip
     protected void FlipFacingLastDir() 
     {
-        if (isStunned || isParried || !IsAnimationDone() || isOnCooldown) return;
+        if (isStunned || isParried /*|| !IsAnimationDone() || isOnCooldown*/) return;
         Flip(Vector3.Dot(lastDirection, Vector3.right) >= 0); 
     }
 
