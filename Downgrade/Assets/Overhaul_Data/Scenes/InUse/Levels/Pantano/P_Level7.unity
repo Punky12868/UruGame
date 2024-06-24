@@ -1070,36 +1070,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timerEnemySpawn: 0
-  swampEnemies:
-  - {fileID: 4680848831808023462, guid: ffe0056bf4e837641aed4498788d6850, type: 3}
-  - {fileID: 6541512594619184199, guid: e034d4732d47fed44b038fbdd4cefccd, type: 3}
-  - {fileID: 0}
-  - {fileID: 4526869880663001187, guid: 53cb6b451fdfafe45830a71698eeba18, type: 3}
-  - {fileID: 734513466168590697, guid: db93257f94efc814791049d8bc4809da, type: 3}
-  - {fileID: 3098396404004596726, guid: 985519ecdc5fa424bae3e00fa785f572, type: 3}
-  - {fileID: 2610436548476913851, guid: 5b35eab16c7a80b4a9cc413a53ffe97e, type: 3}
   waves:
-  - waves:
-    - enemyType: 4
-      stage: 1
-      position: {x: -5.460351, y: -4.055978}
-      hasDelay: 1
-      delayForNextEnemy: 2.5
-    - enemyType: 4
-      stage: 1
-      position: {x: -1.612833, y: 1.759523}
-      hasDelay: 1
-      delayForNextEnemy: 1
-    - enemyType: 4
-      stage: 1
-      position: {x: 2.389469, y: 1.162494}
-      hasDelay: 0
-      delayForNextEnemy: 1
-    - enemyType: 4
-      stage: 1
-      position: {x: 4.202667, y: -3.680071}
-      hasDelay: 1
-      delayForNextEnemy: 3
+  - enemiesInWave: []
 --- !u!1001 &227683830
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4441,7 +4413,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 314, y: -204.00008}
+  m_AnchoredPosition: {x: 314, y: -204.00005}
   m_SizeDelta: {x: -786.125, y: -436.21997}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &553431270
@@ -6218,6 +6190,37 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0be760750a3365e4386fef81e80f8da7, type: 3}
+--- !u!1 &907107858
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 907107859}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &907107859
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 907107858}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.99, y: 0, z: 1.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &912580456
 GameObject:
   m_ObjectHideFlags: 0
@@ -7068,7 +7071,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.2164359, y: -0.000000029095913, z: 0.0000000064502923, w: 0.97629684}
+  m_LocalRotation: {x: 0.21643591, y: 3.300082e-15, z: -9.745368e-16, w: 0.97629684}
   m_LocalPosition: {x: 0, y: 4.1967, z: -18.839}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -8452,7 +8455,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1332516484}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.2164359, y: -0.000000029095913, z: 0.0000000064502923, w: 0.97629684}
+  m_LocalRotation: {x: 0.21643591, y: 3.300082e-15, z: -9.745368e-16, w: 0.97629684}
   m_LocalPosition: {x: 0, y: 4.1967, z: -18.839}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -9437,7 +9440,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 314, y: -204.00008}
+  m_AnchoredPosition: {x: 314, y: -204.00005}
   m_SizeDelta: {x: -786.125, y: -436.21997}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1477643645
@@ -10099,37 +10102,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timerEnemySpawn: 0
-  swampEnemies:
-  - {fileID: 3664113595333325702, guid: 1a775462e06bf9544816a3b59cc5c4f4, type: 3}
-  - {fileID: 3664113595333325702, guid: 1a775462e06bf9544816a3b59cc5c4f4, type: 3}
-  - {fileID: 0}
-  - {fileID: 3664113595333325702, guid: 20038ca91767e0e41a58c80e2d5f244b, type: 3}
-  - {fileID: 3664113595333325702, guid: 1a775462e06bf9544816a3b59cc5c4f4, type: 3}
-  - {fileID: 3664113595333325702, guid: 20038ca91767e0e41a58c80e2d5f244b, type: 3}
-  - {fileID: 3664113595333325702, guid: 1a775462e06bf9544816a3b59cc5c4f4, type: 3}
   waves:
-  - waves:
-    - enemyType: 2
-      stage: 1
-      position: {x: -0.747, y: 3.334}
-      hasDelay: 1
-      delayForNextEnemy: 2.5
-    - enemyType: 2
-      stage: 1
-      position: {x: 3.28, y: 1.07}
-      hasDelay: 1
+  - enemiesInWave:
+    - enemyPrefab: {fileID: 8847890307136253848, guid: 5cac88cf9a3339e43a524b7f7969ecdb, type: 3}
+      position: {x: 0.34, y: 3.04}
+      delayForNextEnemy: 0
+    - enemyPrefab: {fileID: 2465189863394009215, guid: 93f8dae615bc54c46a52f960bcf26d60, type: 3}
+      position: {x: 4.31, y: 0.89}
+      delayForNextEnemy: 0
+    - enemyPrefab: {fileID: 5550828138713571988, guid: 7dd0db773606bf84098aee627943d3c1, type: 3}
+      position: {x: -3.93, y: 1.25}
+      delayForNextEnemy: 0
+  - enemiesInWave:
+    - enemyPrefab: {fileID: 8847890307136253848, guid: 5cac88cf9a3339e43a524b7f7969ecdb, type: 3}
+      position: {x: -3.96, y: -2.58}
       delayForNextEnemy: 1
-  - waves:
-    - enemyType: 4
-      stage: 1
-      position: {x: -0.747, y: 3.334}
-      hasDelay: 1
-      delayForNextEnemy: 2.5
-    - enemyType: 4
-      stage: 1
-      position: {x: 3.28, y: 1.07}
-      hasDelay: 1
+    - enemyPrefab: {fileID: 5550828138713571988, guid: 7dd0db773606bf84098aee627943d3c1, type: 3}
+      position: {x: -3.71, y: 2.04}
+      delayForNextEnemy: 3
+  - enemiesInWave:
+    - enemyPrefab: {fileID: 2465189863394009215, guid: 93f8dae615bc54c46a52f960bcf26d60, type: 3}
+      position: {x: -3.69, y: 0.72}
       delayForNextEnemy: 1
+    - enemyPrefab: {fileID: 5550828138713571988, guid: 7dd0db773606bf84098aee627943d3c1, type: 3}
+      position: {x: 3.99, y: 1.1}
+      delayForNextEnemy: 2
 --- !u!1 &1717454965
 GameObject:
   m_ObjectHideFlags: 0
@@ -13248,7 +13245,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &4814798157148397162
 GameObject:
   m_ObjectHideFlags: 0
@@ -13284,7 +13281,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &4983736579830148883
 GameObject:
   m_ObjectHideFlags: 0
@@ -14553,3 +14550,4 @@ SceneRoots:
   - {fileID: 965092099}
   - {fileID: 844512147}
   - {fileID: 227683830}
+  - {fileID: 907107859}
