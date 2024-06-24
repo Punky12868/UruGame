@@ -1284,12 +1284,14 @@ MonoBehaviour:
   - enemiesInWave:
     - enemyPrefab: {fileID: 6549121937726716039, guid: 8c4c28b6322e0ef42860e0bd46c4437a, type: 3}
       position: {x: 0, y: 0}
-      delayForNextEnemy: 5
-  - enemiesInWave:
-    - enemyPrefab: {fileID: 5550828138713571988, guid: 7dd0db773606bf84098aee627943d3c1, type: 3}
-      position: {x: 0, y: 2}
       delayForNextEnemy: 3
+    - enemyPrefab: {fileID: 6549121937726716039, guid: 8c4c28b6322e0ef42860e0bd46c4437a, type: 3}
+      position: {x: 0, y: 0}
+      delayForNextEnemy: 2
   - enemiesInWave:
+    - enemyPrefab: {fileID: 6549121937726716039, guid: 8c4c28b6322e0ef42860e0bd46c4437a, type: 3}
+      position: {x: -1, y: 2}
+      delayForNextEnemy: 3
     - enemyPrefab: {fileID: 6549121937726716039, guid: 8c4c28b6322e0ef42860e0bd46c4437a, type: 3}
       position: {x: -1, y: 2}
       delayForNextEnemy: 3
@@ -4790,7 +4792,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 307.682, y: -201.746}
+  m_AnchoredPosition: {x: 307.682, y: -201.74599}
   m_SizeDelta: {x: -783.165, y: -433.281}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &553431270
@@ -8201,7 +8203,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.2164359, y: -0.000000029095917, z: 0.000000006450293, w: 0.97629684}
+  m_LocalRotation: {x: 0.2164359, y: 0.000000029095917, z: -0.000000006450293, w: 0.97629684}
   m_LocalPosition: {x: 0, y: 4.1967, z: -18.839}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -10196,7 +10198,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1332516484}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.2164359, y: -0.000000029095917, z: 0.000000006450293, w: 0.97629684}
+  m_LocalRotation: {x: 0.2164359, y: 0.000000029095917, z: -0.000000006450293, w: 0.97629684}
   m_LocalPosition: {x: 0, y: 4.1967, z: -18.839}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -15405,7 +15407,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 630.9999, y: -178.00003}
+  m_AnchoredPosition: {x: 630.9999, y: -178.00002}
   m_SizeDelta: {x: -582.5607, y: -327.69037}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2352644903710932049
