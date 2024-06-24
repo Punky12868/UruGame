@@ -12,6 +12,7 @@ public class DialogueDowngrade : MonoBehaviour
     [SerializeField] float timeToWait = 3f;
     [SerializeField] bool canSkip = true;
     [SerializeField] bool delayAwake = false;
+    [SerializeField] bool hasSpecialEvent = false;
     [SerializeField] int specialEvent;
     [SerializeField] GameObject introPanel;
     [SerializeField] GameObject specialEventObject;
@@ -39,6 +40,7 @@ public class DialogueDowngrade : MonoBehaviour
     {
         if(canSkip){ if (input.GetAnyButtonDown() && !skipped && index <= sentences.Length - 2) { typewriter.SkipTypewriter(); skipped = true; } }
 
+        if (!hasSpecialEvent) return;
         if (specialEventCalled) { if (index > specialEvent) { ResetEvent(); } return; }
         if (index == specialEvent) SpecialEventTrigger();
     }
