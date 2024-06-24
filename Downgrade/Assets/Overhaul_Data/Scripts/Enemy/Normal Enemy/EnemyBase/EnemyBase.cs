@@ -11,6 +11,7 @@ public class EnemyBase : Subject, IAnimController
     protected AnimationHolder animHolder;
 
     protected Rigidbody rb;
+    protected SpriteRenderer sr;
     protected List<AnimationClip> animationIDs;
 
     protected Transform target;
@@ -159,7 +160,8 @@ public class EnemyBase : Subject, IAnimController
         currentHealth -= damage;
         if (direction != Vector3.zero) rb.AddForce((transform.position + direction).normalized * knockbackForce, ForceMode.Impulse);
         else rb.AddForce((transform.position - target.position).normalized * knockbackForce, ForceMode.Impulse);
-        if (GetComponentInChildren<SpriteRenderer>().material) { GetComponentInChildren<SpriteRenderer>().material.SetFloat("_HitFloat", 1); Invoke("HitMaterialReset", 0.2f); }
+        sr.material.SetFloat("_HitFloat", 1);
+        Invoke("HitMaterialReset", 0.2f);
         _particleEmission.enabled = true;
         Invoker.InvokeDelayed(ResetParticle, 0.1f);
 
@@ -231,7 +233,10 @@ public class EnemyBase : Subject, IAnimController
         }
         if (nearestAvoidable == null) return Vector3.zero;
         Vector3 avoidDir = (transform.position - nearestAvoidable.transform.position).normalized;
-        Vector3 fixedDir = new Vector3(avoidDir.x, 0, avoidDir.z); return fixedDir;
+        Vector3 fixedDir = new Vector3(avoidDir.x, 0, avoidDir.z);
+
+        if (nearestAvoidable.CompareTag("Wall") || nearestAvoidable.CompareTag("Limits")) return -fixedDir;
+        return fixedDir;
     }
     protected float DistanceFromTarget() { return Vector3.Distance(target.position, transform.position); }
 
@@ -299,6 +304,7 @@ public class EnemyBase : Subject, IAnimController
     protected void SetAwake()
     {
         hasHealthBar = SimpleSaveLoad.Instance.LoadData(FileType.Config, "hbar", true);
+        sr = GetComponentInChildren<Animator>().gameObject.GetComponent<SpriteRenderer>();
         SetUI();
         SetAnimHolder();
         rb = GetComponent<Rigidbody>();
@@ -408,7 +414,8 @@ public class EnemyBase : Subject, IAnimController
 
     #region Invokes
     protected void ResetParticle() { _particleEmission.enabled = false; }
-    protected void HitMaterialReset() { GetComponentInChildren<SpriteRenderer>().material.SetFloat("_HitFloat", 0); }
+    protected void HitMaterialReset() 
+    { sr.material.SetFloat("_HitFloat", 0); }
     #endregion
 
     #endregion

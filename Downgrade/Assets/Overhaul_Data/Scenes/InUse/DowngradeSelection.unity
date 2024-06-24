@@ -552,6 +552,7 @@ MonoBehaviour:
   - "<size=100><color=red><shake>L\xC1RGATE..."
   timeToWait: 2.5
   introPanel: {fileID: 948405507}
+  typewriter: {fileID: 1411688446}
   onIntroStart:
     m_PersistentCalls:
       m_Calls: []
@@ -570,7 +571,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  typewriter: {fileID: 1411688446}
 --- !u!114 &948405510
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -840,7 +840,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   useTypeWriter: 1
-  startTypewriterMode: 3
+  startTypewriterMode: -1
   hideAppearancesOnSkip: 0
   hideDisappearancesOnSkip: 0
   triggerEventsOnSkip: 0
@@ -863,7 +863,19 @@ MonoBehaviour:
         m_CallState: 2
   onTypewriterStart:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 948405509}
+        m_TargetAssemblyTypeName: DialogueDowngrade, Assembly-CSharp
+        m_MethodName: ResetSkipStatus
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onTextDisappeared:
     m_PersistentCalls:
       m_Calls: []

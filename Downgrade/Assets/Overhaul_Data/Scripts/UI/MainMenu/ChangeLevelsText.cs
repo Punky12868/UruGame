@@ -36,7 +36,7 @@ public class ChangeLevelsText : MonoBehaviour
 
         chapter.text = chapterTexts[0];
         chapterName.text = chapterNameTexts[0];
-        levelID.text = "1-" + chapterButtons[currentChapter].Length.ToString();
+        levelID.text = "1/" + chapterButtons[currentChapter].Length.ToString();
         levelName.text = chapterButtons[0][0].GetComponent<LevelButton>().GetLevelName();
 
         chapter_typewriter.onTextShowed.AddListener(ShowChapterNameAfterChapterIndex);
@@ -70,7 +70,7 @@ public class ChangeLevelsText : MonoBehaviour
             selectedLevel = selectedGameObject.GetComponent<LevelButton>();
             EraseText(levelName);
 
-            levelID.text = selectedLevel.GetLevelID().ToString() + "-" + chapterButtons[currentChapter].Length.ToString();
+            levelID.text = selectedLevel.GetLevelID().ToString() + "/" + chapterButtons[currentChapter].Length.ToString();
             WriteText(selectedLevel.GetLevelName(), levelName, levelName_typewriter);
         }
     }
