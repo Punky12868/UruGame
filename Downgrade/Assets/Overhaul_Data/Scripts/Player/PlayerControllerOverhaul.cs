@@ -42,7 +42,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     [Header("Ability")]
     [SerializeField] private GameObject abilityPrefab;
     [SerializeField] private float abilityCooldown = 3f;
-    [SerializeField] private Vector2 abilityDamage = new Vector2(25f, 35f);
+    [SerializeField] private float abilityDamage = 10;
     [SerializeField] private float abilityKnockback = 10f;
     [SerializeField] private float abilityLifeTime = 3f;
 
@@ -333,8 +333,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
         //if (isAbilityOnCooldown) return;
         Vector3 spawnPos = new Vector3(transform.position.x, -0.05f, transform.position.z);
         GameObject ability = Instantiate(abilityPrefab, spawnPos, Quaternion.LookRotation(lastDirection));
-        int randomDmg = Random.Range((int)abilityDamage.x, (int)abilityDamage.y + 1);
-        ability.GetComponent<AbilityCell>().SetVariables(randomDmg, abilityKnockback, abilityLifeTime, lastDirection, true, false, false);
+        ability.GetComponent<AbilityCell>().SetVariables(abilityDamage, abilityKnockback, abilityLifeTime, lastDirection, true, false, false);
     }
     #endregion
 

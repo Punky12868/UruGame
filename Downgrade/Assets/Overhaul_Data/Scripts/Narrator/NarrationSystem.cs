@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using System.Threading.Tasks;
-using Unity.VisualScripting;
 
 public class NarrationSystem : MonoBehaviour, IObserver
 {

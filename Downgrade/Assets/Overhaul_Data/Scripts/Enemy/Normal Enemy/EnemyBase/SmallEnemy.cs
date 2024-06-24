@@ -41,7 +41,7 @@ public class SmallEnemy : EnemyBase
 
     protected void AttackOverlapCollider()
     {
-        if (!attackHitboxOn || isStunned || isOnCooldown) return;
+        if (!attackHitboxOn /*|| isStunned*/ || isOnCooldown) return;
 
         Vector3 colliderSize = attackHitboxSize;
         float damage = attackDamage;

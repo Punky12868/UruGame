@@ -78,7 +78,7 @@ public class BigEnemy : EnemyBase
 
     protected void AttackOverlapCollider()
     {
-        if (!attackHitboxOn || isStunned || isOnCooldown) return;
+        if (!attackHitboxOn /*|| isStunned*/ || isOnCooldown) return;
 
         Vector3 colliderSize = normalAttack ? attackHitboxSize : chargedAttackHitboxSize;
         float damage = normalAttack ? attackDamage : chargeAttackDamage;

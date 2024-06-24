@@ -29,7 +29,7 @@ public class AbilityCell : MonoBehaviour
     private bool isLeft;
     private Color hitboxColor = new Color(0, 0, 1, 1);
     private Vector3 direction;
-    private int damage;
+    private float damage;
     private float knockback;
     private float lifeTime;
     private float moveTimer;
@@ -61,7 +61,7 @@ public class AbilityCell : MonoBehaviour
         }
     }
 
-    public void SetVariables(int damage, float knockback, float lifeTime, Vector3 direction, bool center, bool right, bool left)
+    public void SetVariables(float damage, float knockback, float lifeTime, Vector3 direction, bool center, bool right, bool left)
     {
         this.damage = damage;
         this.knockback = knockback;
@@ -170,8 +170,8 @@ public class AbilityCell : MonoBehaviour
                 if (crossProduct.y > 0) knockbackDirection = (transform.forward + transform.right).normalized;
                 else knockbackDirection = (transform.forward - transform.right).normalized;
 
-                if (hitCollider.GetComponent<EnemyBase>()) HitEnemy(hitCollider, damage);
-                if (hitCollider.GetComponent<BossBase>()) HitBoss(hitCollider, damage);
+                if (hitCollider.GetComponent<EnemyBase>()) HitEnemy(hitCollider, (int)damage * (int)damageMultiplier);
+                if (hitCollider.GetComponent<BossBase>()) HitBoss(hitCollider, (int)damage * (int)damageMultiplier);
 
                 enemies.Add(hitCollider.gameObject);
                 AbilityCell[] cells = FindObjectsOfType<AbilityCell>();

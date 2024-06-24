@@ -4,6 +4,7 @@ public class ProjectileLogic : MonoBehaviour
 {
     [SerializeField] private bool invertSprite = false;
     [SerializeField] private bool faceDir = false;
+    [SerializeField] private bool destroyOnLimits = false;
     private float travelSpeed;
     private float damage;
     private float knockbackForce;
@@ -54,7 +55,7 @@ public class ProjectileLogic : MonoBehaviour
                 originalEnemy.GetComponent<EnemyBase>().PlaySoundProxy(parrySounds);
                 other.GetComponent<PlayerControllerOverhaul>().GetParryRewardProxy(EnemyType.None);
                 Vector2 vectorDamage = other.GetComponent<PlayerControllerOverhaul>().GetDamage();
-                damage = Random.Range(vectorDamage.x, vectorDamage.y);
+                damage = Random.Range(vectorDamage.x, vectorDamage.y) * 2;
             }
             else
             {
@@ -74,7 +75,7 @@ public class ProjectileLogic : MonoBehaviour
 
         if (other.CompareTag("Wall") || other.CompareTag("Limits"))
         {
-            Destroy(gameObject);
+            if(destroyOnLimits) Destroy(gameObject);
         }
     }
 }
