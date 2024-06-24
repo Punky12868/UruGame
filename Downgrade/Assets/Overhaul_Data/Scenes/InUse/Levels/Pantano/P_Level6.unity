@@ -336,6 +336,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dividedBy: 2
+--- !u!1 &43196788
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 43196789}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &43196789
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 43196788}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.13, y: 0, z: -0.91}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &91387258
 GameObject:
   m_ObjectHideFlags: 0
@@ -1184,36 +1215,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timerEnemySpawn: 0
-  swampEnemies:
-  - {fileID: 4680848831808023462, guid: ffe0056bf4e837641aed4498788d6850, type: 3}
-  - {fileID: 6541512594619184199, guid: e034d4732d47fed44b038fbdd4cefccd, type: 3}
-  - {fileID: 0}
-  - {fileID: 4526869880663001187, guid: 53cb6b451fdfafe45830a71698eeba18, type: 3}
-  - {fileID: 734513466168590697, guid: db93257f94efc814791049d8bc4809da, type: 3}
-  - {fileID: 3098396404004596726, guid: 985519ecdc5fa424bae3e00fa785f572, type: 3}
-  - {fileID: 2610436548476913851, guid: 5b35eab16c7a80b4a9cc413a53ffe97e, type: 3}
   waves:
-  - waves:
-    - enemyType: 5
-      stage: 1
-      position: {x: 3, y: 3}
-      hasDelay: 1
-      delayForNextEnemy: 1
-    - enemyType: 4
-      stage: 1
-      position: {x: -2.922273, y: -2.484888}
-      hasDelay: 1
-      delayForNextEnemy: 2.5
-    - enemyType: 4
-      stage: 1
-      position: {x: 0.1070905, y: 2.291336}
-      hasDelay: 0
-      delayForNextEnemy: 1
-    - enemyType: 5
-      stage: 1
-      position: {x: 0, y: 0}
-      hasDelay: 1
-      delayForNextEnemy: 2
+  - enemiesInWave: []
 --- !u!1001 &219867812
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4123,7 +4126,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 314, y: -204.00008}
+  m_AnchoredPosition: {x: 314, y: -204.00005}
   m_SizeDelta: {x: -786.125, y: -436.21997}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &553431270
@@ -6755,7 +6758,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.21643591, y: -8.421053e-17, z: 1.192436e-16, w: 0.97629684}
+  m_LocalRotation: {x: 0.2164359, y: 0.000000029095913, z: -0.0000000064502923, w: 0.97629684}
   m_LocalPosition: {x: 0, y: 4.1967, z: -18.839}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -8327,7 +8330,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1332516484}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.21643591, y: -8.421053e-17, z: 1.192436e-16, w: 0.97629684}
+  m_LocalRotation: {x: 0.2164359, y: 0.000000029095913, z: -0.0000000064502923, w: 0.97629684}
   m_LocalPosition: {x: 0, y: 4.1967, z: -18.839}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -9250,7 +9253,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 314, y: -204.00008}
+  m_AnchoredPosition: {x: 314, y: -204.00005}
   m_SizeDelta: {x: -786.125, y: -436.21997}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1477643645
@@ -11238,37 +11241,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timerEnemySpawn: 0
-  swampEnemies:
-  - {fileID: 3664113595333325702, guid: 1a775462e06bf9544816a3b59cc5c4f4, type: 3}
-  - {fileID: 3664113595333325702, guid: 1a775462e06bf9544816a3b59cc5c4f4, type: 3}
-  - {fileID: 0}
-  - {fileID: 3664113595333325702, guid: 20038ca91767e0e41a58c80e2d5f244b, type: 3}
-  - {fileID: 3664113595333325702, guid: 1a775462e06bf9544816a3b59cc5c4f4, type: 3}
-  - {fileID: 3664113595333325702, guid: 20038ca91767e0e41a58c80e2d5f244b, type: 3}
-  - {fileID: 3664113595333325702, guid: 1a775462e06bf9544816a3b59cc5c4f4, type: 3}
   waves:
-  - waves:
-    - enemyType: 2
-      stage: 1
-      position: {x: -0.747, y: 3.334}
-      hasDelay: 1
-      delayForNextEnemy: 2.5
-    - enemyType: 2
-      stage: 1
-      position: {x: 3.28, y: 1.07}
-      hasDelay: 1
-      delayForNextEnemy: 1
-  - waves:
-    - enemyType: 4
-      stage: 1
-      position: {x: -0.747, y: 3.334}
-      hasDelay: 1
-      delayForNextEnemy: 2.5
-    - enemyType: 4
-      stage: 1
-      position: {x: 3.28, y: 1.07}
-      hasDelay: 1
-      delayForNextEnemy: 1
+  - enemiesInWave:
+    - enemyPrefab: {fileID: 8847890307136253848, guid: 5cac88cf9a3339e43a524b7f7969ecdb, type: 3}
+      position: {x: -4.05, y: 2.3}
+      delayForNextEnemy: 2
+    - enemyPrefab: {fileID: 8847890307136253848, guid: 5cac88cf9a3339e43a524b7f7969ecdb, type: 3}
+      position: {x: 0.92, y: 2.22}
+      delayForNextEnemy: 3
+    - enemyPrefab: {fileID: 8847890307136253848, guid: 5cac88cf9a3339e43a524b7f7969ecdb, type: 3}
+      position: {x: -0.92, y: -0.38}
+      delayForNextEnemy: 0
+  - enemiesInWave:
+    - enemyPrefab: {fileID: 5550828138713571988, guid: 7dd0db773606bf84098aee627943d3c1, type: 3}
+      position: {x: 5.07, y: -0.91}
+      delayForNextEnemy: 0
+    - enemyPrefab: {fileID: 5550828138713571988, guid: 7dd0db773606bf84098aee627943d3c1, type: 3}
+      position: {x: -2.13, y: -0.91}
+      delayForNextEnemy: 0
 --- !u!1 &2029900453
 GameObject:
   m_ObjectHideFlags: 0
@@ -12699,7 +12689,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!23 &4835075721344555073
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -13767,3 +13757,4 @@ SceneRoots:
   - {fileID: 1414637227}
   - {fileID: 1932598289}
   - {fileID: 1087640432}
+  - {fileID: 43196789}

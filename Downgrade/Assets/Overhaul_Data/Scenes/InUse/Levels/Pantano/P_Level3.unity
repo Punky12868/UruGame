@@ -1038,31 +1038,39 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timerEnemySpawn: 0
-  swampEnemies:
-  - {fileID: 4680848831808023462, guid: ffe0056bf4e837641aed4498788d6850, type: 3}
-  - {fileID: 6541512594619184199, guid: e034d4732d47fed44b038fbdd4cefccd, type: 3}
-  - {fileID: 0}
-  - {fileID: 4526869880663001187, guid: 53cb6b451fdfafe45830a71698eeba18, type: 3}
-  - {fileID: 734513466168590697, guid: db93257f94efc814791049d8bc4809da, type: 3}
-  - {fileID: 3098396404004596726, guid: 985519ecdc5fa424bae3e00fa785f572, type: 3}
-  - {fileID: 2610436548476913851, guid: 5b35eab16c7a80b4a9cc413a53ffe97e, type: 3}
   waves:
-  - waves:
-    - enemyType: 4
-      stage: 1
-      position: {x: -2.520185, y: 1.973958}
-      hasDelay: 1
-      delayForNextEnemy: 1
-    - enemyType: 4
-      stage: 1
-      position: {x: -6.213016, y: -2.058703}
-      hasDelay: 1
-      delayForNextEnemy: 1.5
-    - enemyType: 2
-      stage: 1
-      position: {x: 5.658415, y: -0.2236159}
-      hasDelay: 1
-      delayForNextEnemy: 3
+  - enemiesInWave: []
+--- !u!1 &231691159
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 231691160}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &231691160
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 231691159}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.6, y: 0, z: -2.82}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &234118843
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3942,36 +3950,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timerEnemySpawn: 0
-  swampEnemies:
-  - {fileID: 3664113595333325702, guid: 1a775462e06bf9544816a3b59cc5c4f4, type: 3}
-  - {fileID: 3664113595333325702, guid: 1a775462e06bf9544816a3b59cc5c4f4, type: 3}
-  - {fileID: 0}
-  - {fileID: 3664113595333325702, guid: 20038ca91767e0e41a58c80e2d5f244b, type: 3}
-  - {fileID: 3664113595333325702, guid: 1a775462e06bf9544816a3b59cc5c4f4, type: 3}
-  - {fileID: 3664113595333325702, guid: 20038ca91767e0e41a58c80e2d5f244b, type: 3}
-  - {fileID: 3664113595333325702, guid: 1a775462e06bf9544816a3b59cc5c4f4, type: 3}
   waves:
-  - waves:
-    - enemyType: 2
-      stage: 1
-      position: {x: -0.747, y: 3.334}
-      hasDelay: 1
-      delayForNextEnemy: 2.5
-    - enemyType: 2
-      stage: 1
-      position: {x: 3.28, y: 1.07}
-      hasDelay: 1
+  - enemiesInWave:
+    - enemyPrefab: {fileID: 8847890307136253848, guid: 5cac88cf9a3339e43a524b7f7969ecdb, type: 3}
+      position: {x: -2.56, y: 0.8}
+      delayForNextEnemy: 3
+    - enemyPrefab: {fileID: 2465189863394009215, guid: 93f8dae615bc54c46a52f960bcf26d60, type: 3}
+      position: {x: -2.95, y: -1.66}
       delayForNextEnemy: 1
-  - waves:
-    - enemyType: 4
-      stage: 1
-      position: {x: -0.747, y: 3.334}
-      hasDelay: 1
-      delayForNextEnemy: 2.5
-    - enemyType: 4
-      stage: 1
-      position: {x: 3.28, y: 1.07}
-      hasDelay: 1
+  - enemiesInWave:
+    - enemyPrefab: {fileID: 2465189863394009215, guid: 93f8dae615bc54c46a52f960bcf26d60, type: 3}
+      position: {x: -0.06, y: 1.73}
+      delayForNextEnemy: 3
+    - enemyPrefab: {fileID: 2465189863394009215, guid: 93f8dae615bc54c46a52f960bcf26d60, type: 3}
+      position: {x: 3.7, y: 1.34}
+      delayForNextEnemy: 1
+    - enemyPrefab: {fileID: 5550828138713571988, guid: 7dd0db773606bf84098aee627943d3c1, type: 3}
+      position: {x: 2.6, y: -2.82}
       delayForNextEnemy: 1
 --- !u!1001 &457483016
 PrefabInstance:
@@ -4264,7 +4259,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 314, y: -204.00002}
+  m_AnchoredPosition: {x: 314, y: -204.00003}
   m_SizeDelta: {x: -786.125, y: -436.21997}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &553431270
@@ -6711,7 +6706,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.2164359, y: -0.000000029095917, z: 0.000000006450293, w: 0.97629684}
+  m_LocalRotation: {x: 0.21643591, y: 8.421053e-17, z: -1.192436e-16, w: 0.97629684}
   m_LocalPosition: {x: 0, y: 4.1967, z: -18.839}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -8455,7 +8450,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1332516484}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.2164359, y: -0.000000029095917, z: 0.000000006450293, w: 0.97629684}
+  m_LocalRotation: {x: 0.21643591, y: 8.421053e-17, z: -1.192436e-16, w: 0.97629684}
   m_LocalPosition: {x: 0, y: 4.1967, z: -18.839}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -9411,7 +9406,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 314, y: -204.00002}
+  m_AnchoredPosition: {x: 314, y: -204.00003}
   m_SizeDelta: {x: -786.125, y: -436.21997}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1477643645
@@ -13014,7 +13009,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4499589132378491482
 Transform:
   m_ObjectHideFlags: 0
@@ -14020,3 +14015,4 @@ SceneRoots:
   - {fileID: 234118843}
   - {fileID: 105156207}
   - {fileID: 1246812470}
+  - {fileID: 231691160}
