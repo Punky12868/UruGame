@@ -37,6 +37,7 @@ public class BigEnemy : EnemyBase
     protected override void Update()
     {
         base.Update();
+        if (GameManager.Instance.IsGamePaused() || isDead) return;
         HitboxFaceToTarget();
         AttackOverlapCollider();
     }

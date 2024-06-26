@@ -263,7 +263,7 @@ public class BossBase : Subject, IAnimController
 
     public void SpawnObjectOnAttack()
     {
-        GameObject spikes = Instantiate(spawnable, transform.position, Quaternion.identity);
+        GameObject spikes = Instantiate(spawnable, new Vector3(hitboxCenter.position.x, transform.position.y, hitboxCenter.position.z), Quaternion.identity);
         //spikes.transform.position += spikes.transform.forward * zOffset;
         spikes.GetComponent<Spikes>().SetVariables(specialDamage, specialKnockback, lifeTime, lastTargetDir);
     }

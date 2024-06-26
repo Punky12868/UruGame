@@ -12,6 +12,7 @@ public class Spikes : MonoBehaviour
     [SerializeField] private float hitboxAppearTime = 0.2f;
     [SerializeField] private float cooldownOnHit = 0.5f;
     [SerializeField] private float spacing;
+    [SerializeField] private int maxSpikes = 5;
     float cooldownTimer;
 
     [Header("----------")]
@@ -24,6 +25,7 @@ public class Spikes : MonoBehaviour
     private Color hitboxColor;
     private Vector3 direction;
     private int damage;
+    private int id;
     private float knockback;
     private float lifeTime;
     private float timer;
@@ -33,12 +35,15 @@ public class Spikes : MonoBehaviour
     private bool lifeTimeReached = true;
     private void ResetLifeTimeReached() { lifeTimeReached = false; }
 
-    public void SetVariables(int damage, float knockback, float lifeTime, Vector3 direction) 
+    public void SetVariables(int damage, float knockback, float lifeTime, Vector3 direction, int maxSpikes = 0, int id = 0) 
     { 
         if (customDamage <= 0) this.damage = damage;
         this.knockback = knockback;
         this.lifeTime = lifeTime;
         this.direction = direction.normalized;
+        if (maxSpikes > 0) this.maxSpikes = maxSpikes;
+        //this.maxSpikes = maxSpikes;
+        this.id = id + 1;
         DestroyItself();
         hitboxColor = hitboxAppearColor;
         cooldownTimer = cooldownOnHit;
@@ -67,6 +72,7 @@ public class Spikes : MonoBehaviour
         if (onHitCooldown) { cooldownTimer -= Time.deltaTime; if (cooldownTimer <= 0) onHitCooldown = false; }
         else if (!onHitCooldown && cooldownTimer <= 0) cooldownTimer = cooldownOnHit;
 
+        if (id > maxSpikes + 1) return;
         SpawnSpike();
     }
 
@@ -87,7 +93,7 @@ public class Spikes : MonoBehaviour
 
         Vector3 spawnPoint = ray.origin + ray.direction * spacing;
         GameObject spike = Instantiate(spikePrefab, spawnPoint, Quaternion.identity);
-        spike.GetComponent<Spikes>().SetVariables(damage, knockback, lifeTime, direction);
+        spike.GetComponent<Spikes>().SetVariables(damage, knockback, lifeTime, direction, maxSpikes, id);
 
         spawnedAnother = true;
     }

@@ -462,12 +462,14 @@ public class PlayerControllerOverhaul : Subject, IAnimController
                 break;
             case EnemyType.Big:
                 inpactVFX.SetFloat("_isOn", 1);
+                inpactVFX.SetFloat("_UsingGlitch", 1);
                 NotifyPlayerObservers(AllPlayerActions.SuccesfullParry);
                 GainStamina(staminaBigEnemyReward);
                 GainHealth(healthBigEnemyReward);               
                 break;
             case EnemyType.Boss:
                 inpactVFX.SetFloat("_isOn", 1);
+                inpactVFX.SetFloat("_UsingGlitch", 1);
                 GainStamina(staminaBossReward);
                 GainHealth(healthBossReward);
                 NotifyPlayerObservers(AllPlayerActions.ParryBoss);
@@ -731,7 +733,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     public void ResetImmunity() { canBeDamaged = true;}
     public void ResetAbilityCooldown() { isAbilityOnCooldown = false;}
     public void InvertVFXColors() { inpactVFX.SetFloat("_InvertColor", inpactVFX.GetFloat("_InvertColor") == 0 ? 1 : 0); }
-    public void DisableVFX() { inpactVFX.SetFloat("_isOn", 0);}
+    public void DisableVFX() { inpactVFX.SetFloat("_isOn", 0); inpactVFX.SetFloat("_UsingGlitch", 0); }
     #endregion
 
     #endregion
