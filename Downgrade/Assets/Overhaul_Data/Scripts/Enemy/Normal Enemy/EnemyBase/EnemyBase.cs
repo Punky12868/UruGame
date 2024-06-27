@@ -58,6 +58,8 @@ public class EnemyBase : Subject, IAnimController
 
     [Header("Particles")]
     [SerializeField] protected ParticleSystem hitParticleEmission;
+    [SerializeField] protected bool usingRipple = false;
+    [SerializeField] protected GameObject ripplePrefab;
     protected ParticleSystem.EmissionModule _particleEmission;
 
     [Header("AudioClips")]
@@ -370,6 +372,7 @@ public class EnemyBase : Subject, IAnimController
     public float GetSpeed() { return speed; }
     public float GetAttackCooldown() { return attackCooldown; }
     public bool GetAttackHitboxOn() { return attackHitboxOn; }
+    public bool GetIsUsingRipple() { return usingRipple; }
     public Vector3 GetDirection() { return direction; }
     public Vector3 GetLastDirection() { return lastDirection; }
     public Transform GetTarget() { return target; }

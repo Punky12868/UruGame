@@ -670,6 +670,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     public bool GetImmunity() { return !canBeDamaged; }
     public float GetAbilityCooldown() { return abilityCooldown; }
     public bool GetAbilityCooldownStatus() { return isAbilityOnCooldown; }
+    public bool IsPlayerMoving() { return direction.sqrMagnitude > directionThreshold; }
     #endregion
 
     #region Set

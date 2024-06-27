@@ -8,9 +8,9 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
     private bool isSelectingDowngrade = false;
+    private int downgradeSceneIndex;
     [SerializeField] private string levelUnlockerKey = "level_";
     [SerializeField] private int firstLevelIndex = 1;
-    [SerializeField] private int downgradeSceneIndex = 11;
     [SerializeField] private int firstLevelDowngradeSelectionIndex = 2;
     [SerializeField] private int maxLevelPantano = 8;
     [SerializeField] private TransitionSettings transitionSettings;
@@ -28,6 +28,8 @@ public class GameManager : MonoBehaviour
         }
 
         DontDestroyOnLoad(gameObject);
+
+        downgradeSceneIndex = SceneManager.sceneCountInBuildSettings - 1;
 
         /*Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;*/
