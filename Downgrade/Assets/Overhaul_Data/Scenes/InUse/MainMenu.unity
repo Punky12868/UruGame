@@ -761,10 +761,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rewired Input Manager
       objectReference: {fileID: 0}
-    - target: {fileID: 2323396712446184488, guid: c34a75b3aa05edf478dff5b16d7c9e76, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2758251912441116255, guid: c34a75b3aa05edf478dff5b16d7c9e76, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -803,6 +799,42 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2758251912441116255, guid: c34a75b3aa05edf478dff5b16d7c9e76, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8078535523230048358, guid: c34a75b3aa05edf478dff5b16d7c9e76, type: 3}
+      propertyPath: _userData.configVars.logLevel
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8078535523230048358, guid: c34a75b3aa05edf478dff5b16d7c9e76, type: 3}
+      propertyPath: _userData.configVars.runInEditMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8078535523230048358, guid: c34a75b3aa05edf478dff5b16d7c9e76, type: 3}
+      propertyPath: _userData.actions.Array.data[1]._type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8078535523230048358, guid: c34a75b3aa05edf478dff5b16d7c9e76, type: 3}
+      propertyPath: _userData.configVars.throttleCalibrationMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8078535523230048358, guid: c34a75b3aa05edf478dff5b16d7c9e76, type: 3}
+      propertyPath: _userData.players.Array.data[1]._assignMouseOnStart
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8078535523230048358, guid: c34a75b3aa05edf478dff5b16d7c9e76, type: 3}
+      propertyPath: _userData.configVars.defaultJoystickAxis2DSensitivityType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8078535523230048358, guid: c34a75b3aa05edf478dff5b16d7c9e76, type: 3}
+      propertyPath: _userData.inputBehaviors.Array.data[0]._joystickAxisSensitivity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8078535523230048358, guid: c34a75b3aa05edf478dff5b16d7c9e76, type: 3}
+      propertyPath: _userData.players.Array.data[1]._defaultJoystickMaps.Array.data[0]._categoryId
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8078535523230048358, guid: c34a75b3aa05edf478dff5b16d7c9e76, type: 3}
+      propertyPath: _userData.players.Array.data[1]._defaultKeyboardMaps.Array.data[0]._categoryId
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -9385,8 +9417,8 @@ MonoBehaviour:
   - {fileID: 470656444}
   - {fileID: 341100570}
   keyboardIcons:
-  - {fileID: 21300000, guid: 838a901cc83ed9443bf99a3e4c3e6e7c, type: 3}
-  - {fileID: 21300000, guid: 838a901cc83ed9443bf99a3e4c3e6e7c, type: 3}
+  - {fileID: 21300000, guid: 0635c9b6172fa5e4283b0c8381104c04, type: 3}
+  - {fileID: 21300000, guid: 0635c9b6172fa5e4283b0c8381104c04, type: 3}
   - {fileID: 21300000, guid: dfe702b69507cd54f9f0c9b371b0b234, type: 3}
   - {fileID: 21300000, guid: dfe702b69507cd54f9f0c9b371b0b234, type: 3}
   - {fileID: 21300000, guid: acf00cc0875c4ea43b057bc57a9be63f, type: 3}
@@ -15692,7 +15724,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13c100e1b29457e46b0c84d98093a757, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  eventSystem: {fileID: 1369082849}
+  eventSystem: {fileID: 0}
   target: {fileID: 124975152}
   currentCanvas: {fileID: 650857848}
   firstSelectedButton: {fileID: 1619898754}
@@ -16398,7 +16430,7 @@ MonoBehaviour:
   rewiredPlayerIds: 00000000
   usePlayingPlayersOnly: 0
   playerMice: []
-  moveOneElementPerAxisPress: 0
+  moveOneElementPerAxisPress: 1
   setActionsById: 1
   horizontalActionId: 11
   verticalActionId: 12
@@ -16408,7 +16440,7 @@ MonoBehaviour:
   m_VerticalAxis: V
   m_SubmitButton: Submit
   m_CancelButton: Cancel
-  m_InputActionsPerSecond: 4.5
+  m_InputActionsPerSecond: 1
   m_RepeatDelay: 0
   m_allowMouseInput: 0
   m_allowMouseInputIfTouchSupported: 0
@@ -16431,7 +16463,7 @@ MonoBehaviour:
   m_FirstSelected: {fileID: 1619898752}
   m_sendNavigationEvents: 1
   m_DragThreshold: 5
-  _alwaysUpdate: 1
+  _alwaysUpdate: 0
 --- !u!4 &1369082852
 Transform:
   m_ObjectHideFlags: 0
@@ -39094,19 +39126,19 @@ PrefabInstance:
     - target: {fileID: 957300845555870741, guid: f2e6077a49322964b8c3648538e69c97, type: 3}
       propertyPath: idRef._Values.Array.data[1909]
       value: 
-      objectReference: {fileID: 1369082849}
+      objectReference: {fileID: 0}
     - target: {fileID: 957300845555870741, guid: f2e6077a49322964b8c3648538e69c97, type: 3}
       propertyPath: idRef._Values.Array.data[1910]
       value: 
-      objectReference: {fileID: 1369082852}
+      objectReference: {fileID: 0}
     - target: {fileID: 957300845555870741, guid: f2e6077a49322964b8c3648538e69c97, type: 3}
       propertyPath: idRef._Values.Array.data[1911]
       value: 
-      objectReference: {fileID: 1369082851}
+      objectReference: {fileID: 0}
     - target: {fileID: 957300845555870741, guid: f2e6077a49322964b8c3648538e69c97, type: 3}
       propertyPath: idRef._Values.Array.data[1912]
       value: 
-      objectReference: {fileID: 1369082850}
+      objectReference: {fileID: 0}
     - target: {fileID: 957300845555870741, guid: f2e6077a49322964b8c3648538e69c97, type: 3}
       propertyPath: idRef._Values.Array.data[1913]
       value: 

@@ -5341,7 +5341,7 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 0
   m_IsKinematic: 0
-  m_Interpolate: 1
+  m_Interpolate: 0
   m_Constraints: 116
   m_CollisionDetection: 1
 --- !u!82 &3856749840262555186
@@ -5476,6 +5476,8 @@ MonoBehaviour:
   onHitDisappearSpeed: 5
   onHitBarCooldown: 5
   hitParticleEmission: {fileID: 4513683024979225722}
+  usingRipple: 0
+  ripplePrefab: {fileID: 0}
   spawnSounds:
   - {fileID: 8300000, guid: bd5ce0b70f360584c9ac3401dc732556, type: 3}
   attackSounds:

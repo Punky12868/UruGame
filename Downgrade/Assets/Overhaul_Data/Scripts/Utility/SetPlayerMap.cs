@@ -6,12 +6,12 @@ public class SetPlayerMap : MonoBehaviour
 {
     [SerializeField] private bool loadUiMap;
     [SerializeField] private bool consoleLog;
-    [SerializeField] private int downgradeSelectionIndex;
     ControllerType lastControllerType;
     string lastCategoryLoaded;
+    int downgradeSelectionIndex;
     int currentSceneIndex;
 
-    private void Awake() { LoadMaps(); }
+    private void Awake() { downgradeSelectionIndex = SceneManager.sceneCountInBuildSettings - 1; LoadMaps(); }
 
     private void Update()
     {

@@ -9,6 +9,9 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
     private bool isSelectingDowngrade = false;
     private int downgradeSceneIndex;
+    [SerializeField] private int targetFrameRate = 60;
+    [SerializeField] private bool vSync = true;
+    [SerializeField] private bool displayFps = false;
     [SerializeField] private string levelUnlockerKey = "level_";
     [SerializeField] private int firstLevelIndex = 1;
     [SerializeField] private int firstLevelDowngradeSelectionIndex = 2;
@@ -31,8 +34,21 @@ public class GameManager : MonoBehaviour
 
         downgradeSceneIndex = SceneManager.sceneCountInBuildSettings - 1;
 
+        QualitySettings.vSyncCount = vSync ? 1 : 0;
+        if (!vSync) Application.targetFrameRate = targetFrameRate;
+
         /*Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;*/
+    }
+
+    private void Update()
+    {
+        if (!vSync && QualitySettings.vSyncCount == 1)
+        {
+            QualitySettings.vSyncCount = 0;
+            if (Application.targetFrameRate != targetFrameRate) Application.targetFrameRate = targetFrameRate;
+        }
+        else if (vSync && QualitySettings.vSyncCount == 0) QualitySettings.vSyncCount = 1;
     }
 
     public void StartNewGame()
@@ -167,5 +183,14 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
         TransitionManager.Instance().Transition(downgradeSceneIndex, transitionSettings, transitionDelay);
 
+    }
+
+    private void OnGUI()
+    {
+        if (displayFps)
+        {
+            GUI.color = Color.green;
+            GUI.Label(new Rect(10, 10, 100, 20), "FPS: " + (1.0f / Time.smoothDeltaTime).ToString("0"));
+        }
     }
 }
