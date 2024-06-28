@@ -67,6 +67,16 @@ public class GameManagerProxy : MonoBehaviour
         GameManager.Instance.PauseGame(pause, downgrade);
     }
 
+    public void ForcedPause(bool forced = true)
+    {
+        GameManager.Instance.ForcePauseGame(forced);
+    }
+    public bool IsForcedPause()
+    {
+        return GameManager.Instance.IsForcedPause();
+    }
+
+
     public bool IsGamePaused()
     {
         return GameManager.Instance.IsGamePaused();

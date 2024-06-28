@@ -42,7 +42,7 @@ public class PauseMenu : MonoBehaviour
             pauseMenu.SetActive(GameManager.Instance.IsGamePaused());
         }
 
-        if (GameManager.Instance.IsGamePaused() && !FindObjectOfType<SetPlayerMap>().GetLoadUiMap())
+        if (GameManager.Instance.IsGamePaused() && !FindObjectOfType<SetPlayerMap>().GetLoadUiMap() )
         {
             FindObjectOfType<SetPlayerMap>().SetLoadUiMap(GameManager.Instance.IsGamePaused());
             onPauseSelect.Select();

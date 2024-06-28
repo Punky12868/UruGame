@@ -4919,7 +4919,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 307.682, y: -201.74599}
+  m_AnchoredPosition: {x: 307.682, y: -201.74597}
   m_SizeDelta: {x: -783.165, y: -433.281}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &553431270
@@ -8201,9 +8201,12 @@ MonoBehaviour:
   timeToWait: 3.5
   canSkip: 1
   delayAwake: 0
+  hasSpecialEvent: 0
   specialEvent: 0
   introPanel: {fileID: 1012758478}
   specialEventObject: {fileID: 0}
+  oldFont: {fileID: 0}
+  oldFontSize: 33
   typewriter: {fileID: 544144860}
   onIntroStart:
     m_PersistentCalls:
@@ -14710,7 +14713,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 630.9999, y: -178.00002}
+  m_AnchoredPosition: {x: 630.9999, y: -178}
   m_SizeDelta: {x: -582.5607, y: -327.69037}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &2348425701761094619
@@ -16097,7 +16100,7 @@ MonoBehaviour:
   finalPos: {fileID: 793124802}
   ease: 19
   timeAmmount: 1
-  delayToAppear: 15
+  delayToAppear: 14
   delayToDisappear: 5
 --- !u!33 &4879015434701994634
 MeshFilter:
@@ -17818,7 +17821,7 @@ MonoBehaviour:
   finalPos: {fileID: 982647780}
   ease: 19
   timeAmmount: 1
-  delayToAppear: 20
+  delayToAppear: 22
   delayToDisappear: 5
 --- !u!23 &7602805756364454602
 MeshRenderer:
@@ -18324,7 +18327,7 @@ MonoBehaviour:
   finalPos: {fileID: 1468534635}
   ease: 19
   timeAmmount: 1
-  delayToAppear: 10
+  delayToAppear: 4
   delayToDisappear: 5
 --- !u!114 &8482986865323062060
 MonoBehaviour:

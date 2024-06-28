@@ -616,6 +616,10 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     #region Rotate Sprite
     private void RotateSprite()
     {
+        if (FindObjectOfType<GameManagerProxy>().IsForcedPause())
+        {
+            return;
+        }
         if (isFacingLeft) GetComponent<SpriteRenderer>().flipX = true;
         else GetComponent<SpriteRenderer>().flipX = false;
     }
