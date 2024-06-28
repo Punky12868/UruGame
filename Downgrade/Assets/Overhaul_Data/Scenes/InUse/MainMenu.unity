@@ -12022,11 +12022,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7c010483f3e3a44fa72b55c26523113, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  transitionInClip: {fileID: 7400000, guid: 17e94dfb6e4f89141853360a708c27f5, type: 2}
-  transitionOutClip: {fileID: 7400000, guid: f4e005a714ce89f489a06446cc23c85e, type: 2}
+  transitionInClip: {fileID: 7400000, guid: 919d6064f3cbdcd4bbdfb340bef3dac8, type: 2}
+  transitionOutClip: {fileID: 7400000, guid: c97866b2c1e3ac444a725dc024afa8cb, type: 2}
   subject: {fileID: 2051467603}
   screenCanvas: {fileID: 650857848}
-  transitionDuration: 0.5
+  transitionDuration: 1.5
   OnTransitionInStart:
     m_PersistentCalls:
       m_Calls: []
@@ -12079,7 +12079,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!95 &1021518447
@@ -12115,7 +12115,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}

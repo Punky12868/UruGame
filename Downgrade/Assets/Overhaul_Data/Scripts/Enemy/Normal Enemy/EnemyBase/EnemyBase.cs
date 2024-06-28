@@ -171,8 +171,8 @@ public class EnemyBase : Subject, IAnimController
         if (hasHealthBar)
         {
             healthBar.GetComponentInParent<CanvasGroup>().DOFade(1, onHitAppearSpeed).SetUpdate(UpdateType.Normal, true);
-            Invoker.CancelInvoke(DissapearBar);
-            Invoker.InvokeDelayed(DissapearBar, onHitBarCooldown);
+            //Invoker.CancelInvoke(DissapearBar);
+            Invoke("DissapearBar", onHitBarCooldown);
         }
 
         if (currentHealth <= 0) { Death(); }

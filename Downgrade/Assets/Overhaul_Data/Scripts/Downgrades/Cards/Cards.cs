@@ -76,16 +76,16 @@ public class Cards : MonoBehaviour
 
             if (customTime >= wiggleResetTime)
             {
-                Vector3 newPos;
+                Vector3 newPos = target;
 
-                if (!isSelected)
+                /*if (!isSelected)
                 {
                     newPos = target + new Vector3(Random.Range(wiggleEffect.x, wiggleEffect.y), Random.Range(wiggleEffect.x, wiggleEffect.y), 0);
                 }
                 else
                 {
                     newPos = target + new Vector3(Random.Range(wiggleEffect.x * wiggleEffectMultiplier, wiggleEffect.y * wiggleEffectMultiplier), Random.Range(wiggleEffect.x * wiggleEffectMultiplier, wiggleEffect.y * wiggleEffectMultiplier), 0);
-                }
+                }*/
 
                 cardObject.transform.DOMove(newPos, wiggleResetTime * 3).SetEase(easeType).SetUpdate(UpdateType.Normal, true);
                 customTime = 0;
@@ -95,7 +95,7 @@ public class Cards : MonoBehaviour
         if (isSelected) cardObject.transform.localScale = Vector3.Lerp(cardObject.transform.localScale, new Vector3(growAmmountWhenSelected, growAmmountWhenSelected, growAmmountWhenSelected), Time.unscaledDeltaTime * growSpeed);  
         else cardObject.transform.localScale = Vector3.Lerp(cardObject.transform.localScale, new Vector3(1, 1, 1), Time.unscaledDeltaTime * growSpeed);
 
-        if (rotateCardTime >= rotateCardTimeout)
+        /*if (rotateCardTime >= rotateCardTimeout)
         {
             SetCardRotation();
             rotateCardTime = 0;
@@ -103,7 +103,7 @@ public class Cards : MonoBehaviour
         else
         {
             rotateCardTime += Time.unscaledDeltaTime;
-        }
+        }*/
     }
 
     public void SetDgCard(DowngradeCard dg)
