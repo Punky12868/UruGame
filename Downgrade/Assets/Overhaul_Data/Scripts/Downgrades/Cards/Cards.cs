@@ -6,6 +6,7 @@ using EasyTransition;
 using UnityEngine;
 using DG.Tweening;
 using TMPro;
+using static UnityEditor.PlayerSettings;
 
 public class Cards : MonoBehaviour
 {
@@ -34,7 +35,7 @@ public class Cards : MonoBehaviour
 
     [SerializeField] private int cardMusic;
     [SerializeField] private Vector2 wiggleEffect;
-    [SerializeField] private float wiggleEffectMultiplier;
+    [SerializeField] private float wiggleSpeed;
     [SerializeField] private float growAmmountWhenSelected;
     [SerializeField] private float growSpeed;
     [SerializeField] private float wiggleResetTime;
@@ -52,7 +53,10 @@ public class Cards : MonoBehaviour
     [SerializeField] private TransitionSettings transitionSettings;
     [SerializeField] private float transitionDelay;
 
+    Vector3 newPos;
+    Vector3 startPos;
     bool wiggle;
+    bool wiggleActive;
     bool isSelected;
     float customTime;
     float rotateCardTime;
@@ -74,26 +78,50 @@ public class Cards : MonoBehaviour
         {
             customTime += Time.unscaledDeltaTime;
 
-            if (customTime >= wiggleResetTime)
+            if (customTime >= moveDuration && !wiggleActive)
             {
-                Vector3 newPos = target;
-
-                /*if (!isSelected)
-                {
-                    newPos = target + new Vector3(Random.Range(wiggleEffect.x, wiggleEffect.y), Random.Range(wiggleEffect.x, wiggleEffect.y), 0);
-                }
-                else
-                {
-                    newPos = target + new Vector3(Random.Range(wiggleEffect.x * wiggleEffectMultiplier, wiggleEffect.y * wiggleEffectMultiplier), Random.Range(wiggleEffect.x * wiggleEffectMultiplier, wiggleEffect.y * wiggleEffectMultiplier), 0);
-                }*/
-
-                cardObject.transform.DOMove(newPos, wiggleResetTime * 3).SetEase(easeType).SetUpdate(UpdateType.Normal, true);
+                wiggleActive = true;
                 customTime = 0;
+                newPos = cardObject.transform.position;
+                startPos = newPos;
+            }
+
+            if (wiggleActive)
+            {
+                if (customTime >= wiggleResetTime)
+                {
+                    int randNum = Random.Range(0, 4);
+                    Vector3 pos = Vector3.zero;
+                    if (randNum == 0)
+                    {
+                        pos = startPos + new Vector3(wiggleEffect.x, 0, 0);
+                    }
+                    else if (randNum == 1)
+                    {
+                        pos = startPos + new Vector3(-wiggleEffect.x, 0, 0);
+                    }
+                    else if (randNum == 2)
+                    {
+                        pos = startPos + new Vector3(0, wiggleEffect.x, 0);
+                    }
+                    else if (randNum == 3)
+                    {
+                        pos = startPos + new Vector3(0, -wiggleEffect.x, 0);
+                    }
+
+                    newPos = Vector3.Lerp(newPos, pos, Time.unscaledDeltaTime * wiggleSpeed);
+                    customTime = 0;
+                }
+
+                cardObject.transform.position = Vector3.Lerp(cardObject.transform.position, newPos, Time.unscaledDeltaTime * wiggleSpeed);
             }
         }
 
         if (isSelected) cardObject.transform.localScale = Vector3.Lerp(cardObject.transform.localScale, new Vector3(growAmmountWhenSelected, growAmmountWhenSelected, growAmmountWhenSelected), Time.unscaledDeltaTime * growSpeed);  
         else cardObject.transform.localScale = Vector3.Lerp(cardObject.transform.localScale, new Vector3(1, 1, 1), Time.unscaledDeltaTime * growSpeed);
+
+        //lerp cardObject.transform.rotation to newRot
+        //cardObject.transform.rotation = Quaternion.Lerp(cardObject.transform.rotation, Quaternion.Euler(0, 0, 0), Time.unscaledDeltaTime * growSpeed);
 
         /*if (rotateCardTime >= rotateCardTimeout)
         {
