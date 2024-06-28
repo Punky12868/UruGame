@@ -4,31 +4,13 @@ using UnityEngine;
 
 public class Wiggle : MonoBehaviour
 {
-    public GameObject objectToBob;
+    [SerializeField] float wiggleDistance = 1;
+    [SerializeField] float wiggleSpeed = 1;
 
-    public float amplitudeX = 1f; // set to 0 if no x bob
-    public float frequencyX = 1f; // boobing speed in x
-    public float amplitudeY = 1f; // set to 0 if no y bob
-    public float frequencyY = 1f; // bobbing speed in y
-
-    private Vector3 refPos;
-
-    public void Start()
+    void Update()
     {
-        if (objectToBob == null)
-        {
-            objectToBob = this.gameObject;
-        }
-        refPos = objectToBob.transform.position;
-    }
-
-    public void Update()
-    {
-        float dx = amplitudeX * (Mathf.PerlinNoise(Time.time * frequencyX, 1f) - 0.5f);
-        float dy = amplitudeY * (Mathf.PerlinNoise(1f, Time.time * frequencyY) - 0.5f);
-        Vector3 pos = new Vector3(refPos.x, refPos.y, refPos.z);
-        pos = pos + objectToBob.transform.up * dy;
-        pos = pos + objectToBob.transform.right * dx;
-        objectToBob.transform.position = pos;
+        float yPosition = Mathf.Sin(Time.time * wiggleSpeed) * wiggleDistance;
+        float xPosition = Mathf.Cos(Time.time * wiggleSpeed) * wiggleDistance;
+        transform.localPosition = new Vector3(xPosition, yPosition, 0);
     }
 }
