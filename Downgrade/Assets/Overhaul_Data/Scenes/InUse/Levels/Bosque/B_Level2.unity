@@ -7396,7 +7396,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 307.682, y: -201.74599}
+  m_AnchoredPosition: {x: 307.682, y: -201.74597}
   m_SizeDelta: {x: -783.165, y: -433.281}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &900217683
@@ -7471,7 +7471,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 307.682, y: -201.75002}
+  m_AnchoredPosition: {x: 307.682, y: -201.75}
   m_SizeDelta: {x: -783.165, y: -414.06}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &907744489
@@ -7923,7 +7923,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.21643591, y: -8.421053e-17, z: 1.192436e-16, w: 0.97629684}
+  m_LocalRotation: {x: 0.21643591, y: 3.300082e-15, z: -9.745368e-16, w: 0.97629684}
   m_LocalPosition: {x: 0, y: 4.1967, z: -18.839}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -9294,7 +9294,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1332516484}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.21643591, y: -8.421053e-17, z: 1.192436e-16, w: 0.97629684}
+  m_LocalRotation: {x: 0.21643591, y: 3.300082e-15, z: -9.745368e-16, w: 0.97629684}
   m_LocalPosition: {x: 0, y: 4.1967, z: -18.839}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -12578,7 +12578,7 @@ MonoBehaviour:
   - enemiesInWave:
     - enemyPrefab: {fileID: 6549121937726716039, guid: 8c4c28b6322e0ef42860e0bd46c4437a, type: 3}
       position: {x: -2.71, y: 1.44}
-      delayForNextEnemy: 5
+      delayForNextEnemy: 3
     - enemyPrefab: {fileID: 6549121937726716039, guid: 8c4c28b6322e0ef42860e0bd46c4437a, type: 3}
       position: {x: 2.85, y: 1.56}
       delayForNextEnemy: 1
@@ -13483,7 +13483,7 @@ MonoBehaviour:
   keyboardIcons:
   - {fileID: 21300000, guid: 71cf4a30feeef064a8faaeb310010ed9, type: 3}
   joystickIcons:
-  - {fileID: 21300000, guid: ab44efe72db1e6549bf72ad176a33932, type: 3}
+  - {fileID: 21300000, guid: 8933a916660ca3c4dad5b14e2139e9f8, type: 3}
 --- !u!1 &1355356320763651042
 GameObject:
   m_ObjectHideFlags: 0
@@ -14384,8 +14384,12 @@ MonoBehaviour:
   finalPos: {fileID: 139294443}
   ease: 19
   timeAmmount: 1
-  delayToAppear: 10.5
+  delayToAppear: 5
   delayToDisappear: 5
+  attackTuto: 0
+  rollTuto: 0
+  parryTuto: 0
+  abilityTuto: 1
 --- !u!23 &2656270090250364281
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -14892,7 +14896,7 @@ MonoBehaviour:
   keyboardIcons:
   - {fileID: 21300000, guid: fbb4f72dab4623b4b898b46a236d99b2, type: 3}
   joystickIcons:
-  - {fileID: 21300000, guid: 169ac342e6afd5d42a392a2fffac2267, type: 3}
+  - {fileID: 21300000, guid: a8626b362a1efc846ad14cb5988bb311, type: 3}
 --- !u!33 &3613940081649095760
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -16760,8 +16764,12 @@ MonoBehaviour:
   finalPos: {fileID: 1792729398}
   ease: 19
   timeAmmount: 1
-  delayToAppear: 10
+  delayToAppear: 5
   delayToDisappear: 5
+  attackTuto: 0
+  rollTuto: 0
+  parryTuto: 0
+  abilityTuto: 1
 --- !u!33 &6970108859991287192
 MeshFilter:
   m_ObjectHideFlags: 0

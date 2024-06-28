@@ -16,6 +16,7 @@ public class PopUpController : MonoBehaviour
     public bool attackTuto;
     public bool rollTuto;
     public bool parryTuto;
+    public bool abilityTuto;
     private bool active;
 
 
@@ -88,6 +89,14 @@ public class PopUpController : MonoBehaviour
                     Disappear();
                 }
             }
+            if (abilityTuto)
+            {
+                if (input.GetButtonDown("Use Ability"))
+                {
+                    Disappear();
+                }
+            }
+
         }
         
     }
