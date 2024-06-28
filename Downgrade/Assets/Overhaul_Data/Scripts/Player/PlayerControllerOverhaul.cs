@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Rewired;
-using UnityEngine.Rendering;
 
 [RequireComponent(typeof(PlayerInventory))] [RequireComponent(typeof(PlayerInteraction))]
 [RequireComponent(typeof(AnimationHolder))] [RequireComponent(typeof(Rigidbody))]
