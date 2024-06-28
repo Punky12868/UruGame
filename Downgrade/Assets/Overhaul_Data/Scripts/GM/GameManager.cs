@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int maxLevelPantano = 8;
     [SerializeField] private TransitionSettings transitionSettings;
     [SerializeField] private float transitionDelay;
-
+    private bool forcedPause;
     private void Awake()
     {
         if (Instance == null)
@@ -146,6 +146,7 @@ public class GameManager : MonoBehaviour
     public delegate void OnPauseGame();
     public static event OnPauseGame onPauseGame;
 
+    
     public void PauseGame(bool pause, bool downgrade = false)
     {
         isSelectingDowngrade = downgrade;
@@ -162,6 +163,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void ForcePauseGame(bool forced = true)
+    {
+        forcedPause = forced;
+    }
+
     public bool IsGamePaused()
     {
         return Time.timeScale == 0;
@@ -172,6 +178,10 @@ public class GameManager : MonoBehaviour
         return isSelectingDowngrade;
     }
 
+    public bool IsForcedPause() 
+    {
+        return forcedPause; 
+    }
     public void ResetArenaPantano()
     {
         for (int i = 0; i < maxLevelPantano; i++)

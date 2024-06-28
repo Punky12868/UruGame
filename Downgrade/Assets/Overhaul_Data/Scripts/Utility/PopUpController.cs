@@ -27,7 +27,9 @@ public class PopUpController : MonoBehaviour
         // move and squash
         transform.DOMove(finalPos.position, timeAmmount).SetEase(ease);
         transform.DORotate(finalPos.rotation.eulerAngles, timeAmmount).SetEase(ease);
-
+        
+        //Debug.Log("ForcedPause: "+ FindObjectOfType<GameManagerProxy>().IsForcedPause());
+        Invoker.InvokeDelayed(DelayPause, 1f);
         Invoker.InvokeDelayed(Disappear, timeAmmount + delayToDisappear);
         Debug.Log("Appear");
 
@@ -36,8 +38,18 @@ public class PopUpController : MonoBehaviour
 
     private void Disappear()
     {
+
+        Time.timeScale = 1;
+        FindObjectOfType<GameManagerProxy>().ForcedPause(false);
         transform.DOMove(initialPos.position, timeAmmount).SetEase(ease);
         transform.DORotate(initialPos.rotation.eulerAngles, timeAmmount).SetEase(ease);
+        Debug.Log("ForcedPause: " + FindObjectOfType<GameManagerProxy>().IsForcedPause());
         Debug.Log("Disappear");
+    }
+
+    private void DelayPause()
+    {
+        FindObjectOfType<GameManagerProxy>().ForcedPause(true);
+        Time.timeScale = 0.0001f;
     }
 }

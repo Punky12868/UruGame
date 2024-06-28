@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &4306360893449394339
+--- !u!1001 &6382288810006116063
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -10,15 +10,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 171756003137294064, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.4187365
+      value: 3.127
       objectReference: {fileID: 0}
     - target: {fileID: 171756003137294064, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.008691311
+      value: 0.114
       objectReference: {fileID: 0}
     - target: {fileID: 171756003137294064, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3.9955287
+      value: 1.456
       objectReference: {fileID: 0}
     - target: {fileID: 171756003137294064, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
       propertyPath: m_LocalRotation.w
@@ -50,23 +50,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1244374134406018804, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
       propertyPath: m_Name
-      value: BarrelWithSlow
+      value: BarrelWithSlowTrap Variant
       objectReference: {fileID: 0}
     - target: {fileID: 2652934158498721364, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
       propertyPath: trap
       value: 
       objectReference: {fileID: 5185141533035960013, guid: 3a49debdaed1b694e8cc6e2fbb1fa541, type: 3}
     - target: {fileID: 2652934158498721364, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
-      propertyPath: itemType
-      value: 0
+      propertyPath: boxSize.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652934158498721364, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
+      propertyPath: boxSize.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652934158498721364, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
+      propertyPath: boxSize.z
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2652934158498721364, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
       propertyPath: isHealing
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2652934158498721364, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
-      propertyPath: isRotated90
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7882922901346400846, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
       propertyPath: m_Enabled
