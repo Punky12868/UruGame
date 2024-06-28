@@ -170,6 +170,9 @@ public class AbilityCell : MonoBehaviour
                 if (crossProduct.y > 0) knockbackDirection = (transform.forward + transform.right).normalized;
                 else knockbackDirection = (transform.forward - transform.right).normalized;
 
+                knockbackDirection = (GameObject.FindGameObjectWithTag("Player").transform.position - enemyPos).normalized;
+                knockbackDirection.y = 0;
+
                 if (hitCollider.GetComponent<EnemyBase>()) HitEnemy(hitCollider, (int)damage * (int)damageMultiplier);
                 if (hitCollider.GetComponent<BossBase>()) HitBoss(hitCollider, (int)damage * (int)damageMultiplier);
 
