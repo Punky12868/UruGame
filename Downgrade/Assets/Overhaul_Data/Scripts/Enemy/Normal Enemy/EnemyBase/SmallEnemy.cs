@@ -57,6 +57,8 @@ public class SmallEnemy : EnemyBase
 
                 if (player.GetPlayerState() == "Parry" && canBeParried)
                 {
+                    // if Child(0) Z dir of player
+
                     if (Vector3.Dot(player.GetLastDirection(), direction) <= -0.5f && Vector3.Dot(player.GetLastDirection(), direction) >= -1)
                     {
                         GetParried();

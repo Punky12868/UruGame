@@ -151,6 +151,7 @@ public class EnemyBase : Subject, IAnimController
         healthBar.GetComponentInParent<CanvasGroup>().DOFade(0, 0.5f);
         Destroy(healthBar.GetComponentInParent<CanvasGroup>().gameObject, 0.499f);
         Destroy(GetComponent<Collider>());
+        Invoker.CancelInvoke(DissapearBar);
         //Destroy(audioSource);
         if (destroyOnDeath) { Destroy(gameObject, 0.5f); return; }
         Destroy(this);
@@ -170,7 +171,8 @@ public class EnemyBase : Subject, IAnimController
         if (hasHealthBar)
         {
             healthBar.GetComponentInParent<CanvasGroup>().DOFade(1, onHitAppearSpeed).SetUpdate(UpdateType.Normal, true);
-            Invoke("DissapearBar", onHitBarCooldown);
+            Invoker.CancelInvoke(DissapearBar);
+            Invoker.InvokeDelayed(DissapearBar, onHitBarCooldown);
         }
 
         if (currentHealth <= 0) { Death(); }
@@ -223,7 +225,8 @@ public class EnemyBase : Subject, IAnimController
 
         foreach (Collider c in hitColliders)
         {
-            if (c.CompareTag("Enemy") && c != GetComponent<Collider>() || c.CompareTag("Wall") || c.CompareTag("Destructible") || c.CompareTag("Limits"))
+            if (c.CompareTag("Enemy") && c != GetComponent<Collider>() || c.CompareTag("Wall") || c.CompareTag("Destructible") || c.CompareTag("Limits") ||
+                c.CompareTag("Prop"))
             {
                 float distance = Vector3.Distance(transform.position, c.transform.position);
                 if (distance < minDistance)

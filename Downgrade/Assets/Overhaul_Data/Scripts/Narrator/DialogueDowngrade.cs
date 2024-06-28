@@ -30,7 +30,11 @@ public class DialogueDowngrade : MonoBehaviour
     Player input;
 
     private void Awake() { if (delayAwake) Invoker.InvokeDelayed(DelayedAwake, 0.1f); else { DelayedAwake(); } }
-    private void DelayedAwake() { onIntroStart?.Invoke(); ShowNexSentence(); if (canSkip) input = ReInput.players.GetPlayer(0); }
+    private void DelayedAwake()
+    {
+        if (GameManager.Instance.GetIntroText()) { DeletePanel(); return; }
+        onIntroStart?.Invoke(); ShowNexSentence(); GameManager.Instance.SetIntroText(true); if (canSkip) input = ReInput.players.GetPlayer(0);
+    }
     private void NextSentence() { typewriter.ShowText(sentences[index]); index++; }
     private void DeletePanel() { onIntroEnd?.Invoke(); Destroy(introPanel); }
     public void ResetSkipStatus() { skipped = false; }
