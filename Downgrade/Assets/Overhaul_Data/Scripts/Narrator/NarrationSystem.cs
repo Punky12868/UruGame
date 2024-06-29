@@ -328,7 +328,41 @@ public class NarrationSystem : MonoBehaviour, IObserver
 
     public void OnBossesNotify(AllBossActions actions)
     {
+        switch (actions)
+        {
+            case AllBossActions.Spawned:
+                PlaySubs(startBoss);
+                break;
+            case AllBossActions.LightAttack:
 
+                break;
+            case AllBossActions.HeavyAttack:
+
+                break;
+            case AllBossActions.Avoiding:
+
+                break;
+            case AllBossActions.Parried:
+
+                break;
+            case AllBossActions.Hit:
+
+                break;
+            case AllBossActions.Die:
+
+                break;
+            case AllBossActions.Start:
+
+                break;
+            case AllBossActions.End:
+
+                break;
+            case AllBossActions.None:
+
+                break;
+
+
+        }
     }
 
     public bool GetSubtitlesActivated()

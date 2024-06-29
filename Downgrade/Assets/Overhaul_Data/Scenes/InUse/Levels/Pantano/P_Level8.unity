@@ -253,7 +253,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 17525787}
   serializedVersion: 2
-  m_LocalRotation: {x: -8.421054e-17, y: 0.21643595, z: 0.97629684, w: 1.1924362e-16}
+  m_LocalRotation: {x: 0.000000029095913, y: 0.21643585, z: 0.97629684, w: -0.000000006450291}
   m_LocalPosition: {x: 0, y: -4.1847, z: -9.0000305}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -7159,7 +7159,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.21643591, y: -3.300082e-15, z: 9.745368e-16, w: 0.97629684}
+  m_LocalRotation: {x: 0.2164359, y: -0.000000029095917, z: 0.000000006450293, w: 0.97629684}
   m_LocalPosition: {x: 0, y: 4.1967, z: -18.839}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -8233,7 +8233,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1332516484}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.21643591, y: -3.300082e-15, z: 9.745368e-16, w: 0.97629684}
+  m_LocalRotation: {x: 0.2164359, y: -0.000000029095917, z: 0.000000006450293, w: 0.97629684}
   m_LocalPosition: {x: 0, y: 4.1967, z: -18.839}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -8893,7 +8893,15 @@ MonoBehaviour:
   randomPausedNoise:
     allDialogues: []
   startBoss:
-    allDialogues: []
+    allDialogues:
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: "\xA1\xBFT\xFA eres el que est\xE1 destruyendo mi precioso pantano?!"
+      HasChain: 1
+      chainedDialogues:
+      - Dialog: "\xA1Ya ver\xE1s en qu\xE9 te convertir\xE9!"
+        audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      - Dialog: "\xA1JA JA JA!"
+        audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
   playerDieToFirstFaseBoss:
     allDialogues: []
   midBoss:
@@ -8907,7 +8915,23 @@ MonoBehaviour:
       HasChain: 0
       chainedDialogues: []
   endBoss:
-    allDialogues: []
+    allDialogues:
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: "\xA1WAAAGHHH!"
+      HasChain: 1
+      chainedDialogues:
+      - Dialog: "\xBFAhora qu\xE9 ser\xE1 de mi pantano?"
+        audioClip: {fileID: 0}
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: "\xA1AAAAGGGGHHHH!"
+      HasChain: 0
+      chainedDialogues: []
+    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      Dialog: "\xA1WAAAGHHH!"
+      HasChain: 1
+      chainedDialogues:
+      - Dialog: "N-No\u2026 da\xF1es mi pantan\u2026"
+        audioClip: {fileID: 0}
   playerAttack:
     allDialogues:
     - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
