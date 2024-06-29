@@ -544,6 +544,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
             Invoker.InvokeDelayed(ResetImmunity, iFrames);
         }
         PlayAnimation(8, true, true, true);
+        DoCameraShake();
     }
 
     private void TakeDamage(float damage, float knockbackForce, Vector3 damagePos)
@@ -605,6 +606,8 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     }
     #endregion
 
+    public void DoCameraShake() { GameManager.Instance.CameraShake(0.2f, 1, 1); }
+
     #region RotateHitbox
     public void RotateHitboxCentreToFaceTheDirection()
     {
@@ -639,6 +642,9 @@ public class PlayerControllerOverhaul : Subject, IAnimController
         }
         if (isFacingLeft) GetComponent<SpriteRenderer>().flipX = true;
         else GetComponent<SpriteRenderer>().flipX = false;
+
+        if (isFacingLeft) hitboxCenter.localScale = new Vector3(1, hitboxCenter.localScale.y, hitboxCenter.localScale.z);
+        else hitboxCenter.localScale = new Vector3(-1, hitboxCenter.localScale.y, hitboxCenter.localScale.z);
     }
     #endregion
     #endregion

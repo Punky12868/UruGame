@@ -238,8 +238,8 @@ public class AbilityCell : MonoBehaviour
     public void SetId(int id) { cellId = id; }
     public int GetId() { return cellId; }
     private int GetNewID() { if (isCenter) return cellId + 1; return cellId; }
-    private void HitEnemy(Collider hit, int damage) { hit.GetComponent<EnemyBase>().TakeDamageProxy(damage, knockback, direction); }
-    private void HitBoss(Collider hit, int damage) { hit.GetComponent<BossBase>().TakeDamage(damage, knockback, direction); }
+    private void HitEnemy(Collider hit, int damage) { hit.GetComponent<EnemyBase>().TakeDamageProxy(damage, /*knockback*/0, direction); }
+    private void HitBoss(Collider hit, int damage) { hit.GetComponent<BossBase>().TakeDamage(damage, /*knockback*/0, direction); }
     public void SetCellId(int id) { cellId = id; }
     public void AddEnemy(GameObject enemy) { enemies.Add(enemy); }
     private void DrawHitbox() { VisualizeBox.DisplayBox(hitboxCenter.position + hitboxOffset, hitboxSize, Quaternion.LookRotation(direction), hitboxColor); }

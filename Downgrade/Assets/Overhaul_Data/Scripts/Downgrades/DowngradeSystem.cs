@@ -120,6 +120,7 @@ public class DowngradeSystem : MonoBehaviour, IObserver
     {
         this.dg = dg;
         SimpleSaveLoad.Instance.SaveData(FileType.Gameplay, "Downgrade", dg);
+        SimpleSaveLoad.Instance.SaveData(FileType.Gameplay, "DowngradeIcon", dgIcon);
     }
 
     public void RemoveDowngrade()
@@ -129,7 +130,7 @@ public class DowngradeSystem : MonoBehaviour, IObserver
 
     public Sprite GetIcon()
     {
-        return dgIcon;
+        return SimpleSaveLoad.Instance.LoadData<Sprite>(FileType.Gameplay, "DowngradeIcon", dgIcon);
     }
 
     private void OnDisable()

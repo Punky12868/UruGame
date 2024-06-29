@@ -183,7 +183,7 @@ public class EnemyBase : Subject, IAnimController
         if (currentHealth <= 0) { Death(); }
         else 
         { 
-            PlaySound(hitSounds); ResetStatusOnHit();
+            PlaySound(hitSounds); ResetStatusOnHit(); DoCameraShake();
             if (hasHitAnimation) { PlayAnimation(4, true, true); }
         }
     }
