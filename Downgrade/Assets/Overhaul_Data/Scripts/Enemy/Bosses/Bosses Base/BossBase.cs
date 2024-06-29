@@ -20,6 +20,7 @@ public class BossBase : Subject, IAnimController
     protected bool isDead;
     protected bool isMoving;
     protected bool isAttacking;
+    protected bool isFlying;
     protected bool decidedFarAttack;
     protected bool hasConsideredFarAttack;
     protected bool isHitboxOn;
@@ -54,6 +55,11 @@ public class BossBase : Subject, IAnimController
     [SerializeField] protected float parryKnockback;
     [SerializeField] protected int maxOdds;
     [SerializeField] protected int farAttackOdds;
+
+    [Header("CameraEffects")]
+    [SerializeField] protected float cameraShakeDuration = 0.2f;
+    [SerializeField] protected float cameraShakeMagnitude = 0.5f;
+    [SerializeField] protected float cameraShakeGain = 0.5f;
 
     [Header("Specials")]
     [SerializeField] protected GameObject spawnable;
@@ -141,6 +147,7 @@ public class BossBase : Subject, IAnimController
 
         AllUtilityCallback();
         Attack();
+
         Hitbox();
         Movement();
     }
@@ -278,6 +285,8 @@ public class BossBase : Subject, IAnimController
         FlipPivot();
         RotateHitboxCentreToFaceThePlayer();
     }
+
+    public void DoCameraShake() { GameManager.Instance.CameraShake(cameraShakeDuration, cameraShakeMagnitude, cameraShakeGain); }
 
     #region Targeting
 

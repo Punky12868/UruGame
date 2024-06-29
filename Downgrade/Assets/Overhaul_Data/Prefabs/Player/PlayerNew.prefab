@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &145772837835494307
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2045817387762749232}
+  m_Layer: 3
+  m_Name: ParryPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2045817387762749232
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 145772837835494307}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2199675922928097351}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1570432757897360357
 GameObject:
   m_ObjectHideFlags: 0
@@ -19612,6 +19643,7 @@ Transform:
   m_Children:
   - {fileID: 8603004428508060756}
   - {fileID: 4199958238731386909}
+  - {fileID: 2045817387762749232}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &4341962490204195576
@@ -19743,6 +19775,8 @@ MonoBehaviour:
   staminaUsageAttack: 3
   hitboxCenter: {fileID: 8603004428508060756}
   offset: 0.3
+  parryCenter: {fileID: 2045817387762749232}
+  parryDetectionAngle: 100
   canBeStaggered: 0
   abilityPrefab: {fileID: 2858603775167999615, guid: da9b633d9925f464ba12e50e9b1f1f0e, type: 3}
   abilityCooldown: 5
@@ -19784,6 +19818,11 @@ MonoBehaviour:
   drawHitboxOnGameplay: 0
   attackHitboxTime: 0.2
   attackHitboxColor: {r: 1, g: 0, b: 0, a: 1}
+  forwardLineColor: {r: 0, g: 1, b: 0, a: 1}
+  parryAngleBoundaryColor: {r: 1, g: 0, b: 0, a: 1}
+  parryDetectionColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  lineLength: 1.25
+  lineSegments: 4
 --- !u!114 &6375534499102443961
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20243,7 +20282,7 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 0
   m_IsKinematic: 0
-  m_Interpolate: 1
+  m_Interpolate: 0
   m_Constraints: 116
   m_CollisionDetection: 1
 --- !u!136 &5035776406624827850

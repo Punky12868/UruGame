@@ -40,6 +40,11 @@ public class EnemyBase : Subject, IAnimController
     [SerializeField] protected bool canBeParried = true;
     protected float cooldown;
 
+    [Header("CameraEffects")]
+    [SerializeField] protected float cameraShakeDuration = 0.2f;
+    [SerializeField] protected float cameraShakeMagnitude = 0.5f;
+    [SerializeField] protected float cameraShakeGain = 0.5f;
+
     [Header("Ranges")]
     [SerializeField] protected float tooCloseRange = 0.3f;
     //[SerializeField] protected float avoidanceRange = 2;
@@ -259,6 +264,8 @@ public class EnemyBase : Subject, IAnimController
 
     protected void DissapearBar() { healthBar.GetComponentInParent<CanvasGroup>().DOFade(0, onHitDisappearSpeed).SetUpdate(UpdateType.Normal, true); }
     #endregion
+
+    public void DoCameraShake() { GameManager.Instance.CameraShake(cameraShakeDuration, cameraShakeMagnitude, cameraShakeGain); }
 
     #region Flip
     protected void FlipFacingLastDir() 

@@ -1,3 +1,4 @@
+using Rewired.Data.Mapping;
 using UnityEngine;
 
 public class ProjectileLogic : MonoBehaviour
@@ -5,6 +6,8 @@ public class ProjectileLogic : MonoBehaviour
     [SerializeField] private bool invertSprite = false;
     [SerializeField] private bool faceDir = false;
     [SerializeField] private bool destroyOnLimits = false;
+    [SerializeField] private Vector3 parryDetectionSize = new Vector3(0.5f, 0.5f, 0.5f);
+    [SerializeField] private Color parryDetectionColor = new Color(1, 0, 0, 1);
     private float travelSpeed;
     private float damage;
     private float knockbackForce;
@@ -36,6 +39,7 @@ public class ProjectileLogic : MonoBehaviour
             return;
 
         transform.Translate(direction.normalized * travelSpeed * Time.deltaTime);
+        CheckForPlayerParry();
 
         if (GetComponent<SpriteRenderer>()) { if (direction.x > 0 && !GetComponent<SpriteRenderer>().flipX); }
         else { if (direction.x > 0 && !GetComponentInChildren<SpriteRenderer>().flipX) GetComponentInChildren<SpriteRenderer>().flipX = invertSprite ? true : false; }
@@ -44,26 +48,40 @@ public class ProjectileLogic : MonoBehaviour
         else child.rotation = Quaternion.LookRotation(Camera.main.transform.forward, Camera.main.transform.up);
     }
 
+    private void CheckForPlayerParry()
+    {
+        Collider[] hitColliders = Physics.OverlapBox(transform.position, parryDetectionSize, Quaternion.identity);
+
+        foreach (Collider hitCollider in hitColliders)
+        {
+            if (hitCollider.CompareTag("Player"))
+            {
+                PlayerControllerOverhaul player = hitCollider.GetComponent<PlayerControllerOverhaul>();
+
+                if (player.GetPlayerState() == "Parry" && canBeParried)
+                {
+                    if (player.GetParryAvailable(transform))
+                    {
+                        direction *= -1;
+                        isParried = true;
+                        originalEnemy.GetComponent<EnemyBase>().PlaySoundProxy(parrySounds);
+                        player.GetParryRewardProxy(EnemyType.None);
+                        Vector2 vectorDamage = player.GetDamage();
+                        damage = Random.Range(vectorDamage.x, vectorDamage.y) * 2;
+                    }
+                }
+            }
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player") && !isParried)
         {
-            if (canBeParried && other.GetComponent<PlayerControllerOverhaul>().GetPlayerState() == "Parry")
+            if (!other.GetComponent<PlayerControllerOverhaul>().GetImmunity())
             {
-                direction *= -1;
-                isParried = true;
-                originalEnemy.GetComponent<EnemyBase>().PlaySoundProxy(parrySounds);
-                other.GetComponent<PlayerControllerOverhaul>().GetParryRewardProxy(EnemyType.None);
-                Vector2 vectorDamage = other.GetComponent<PlayerControllerOverhaul>().GetDamage();
-                damage = Random.Range(vectorDamage.x, vectorDamage.y) * 2;
-            }
-            else
-            {
-                if (!other.GetComponent<PlayerControllerOverhaul>().GetImmunity())
-                {
-                    other.GetComponent<PlayerControllerOverhaul>().TakeDamageProxy(damage, knockbackForce, -direction);
-                    Destroy(gameObject);
-                }
+                other.GetComponent<PlayerControllerOverhaul>().TakeDamageProxy(damage, knockbackForce, -direction);
+                Destroy(gameObject);
             }
         }
 
@@ -77,5 +95,15 @@ public class ProjectileLogic : MonoBehaviour
         {
             if(destroyOnLimits) Destroy(gameObject);
         }
+    }
+
+    private void DrawParryDetectionHitbox(Vector3 size, Color color)
+    {
+        VisualizeBox.DisplayBox(transform.position, size, transform.rotation, color);
+    }
+
+    private void OnDrawGizmos()
+    {
+        DrawParryDetectionHitbox(parryDetectionSize, parryDetectionColor);
     }
 }

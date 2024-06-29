@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 using EasyTransition;
+using Cinemachine;
+using DG.Tweening;
 
 public class GameManager : MonoBehaviour
 {
@@ -221,5 +223,32 @@ public class GameManager : MonoBehaviour
     public bool GetIntroText()
     {
         return introTextShowed;
+    }
+
+    public void CameraShake(float duration, float magnitude, float gain)
+    {
+        // cinemachine camera shake
+        //DOTween.To(() amplitude from 0 to magnitude, frequency from 0 to gain, duration)
+        DOTween.To(() => FindObjectOfType<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain, x 
+            => FindObjectOfType<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain = x, magnitude, duration / 2);
+
+        DOTween.To(() => FindObjectOfType<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain, x 
+            => FindObjectOfType<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = x, gain, duration / 2);
+
+        //FindObjectOfType<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain = magnitude;
+        //FindObjectOfType<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = gain;
+        Invoke("StopShake", duration);
+    }
+
+    private void StopShake()
+    {
+        DOTween.To(() => FindObjectOfType<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain, x 
+            => FindObjectOfType<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain = x, 0, 1.5f);
+
+        DOTween.To(() => FindObjectOfType<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain, x
+            => FindObjectOfType<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = x, 0, 1.5f);
+
+        //FindObjectOfType<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain = 0;
+        //FindObjectOfType<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = 0;
     }
 }
