@@ -38,7 +38,7 @@ public class SpawnDowngrades : MonoBehaviour
 
             GameObject card = Instantiate(cardsObject, downgradesMenu.transform);
 
-            card.GetComponent<Cards>().SetCardObjPos();
+            card.GetComponent<Cards>().SetCardObjPos(cardsStartPos.position + new Vector3(0, 500, 0));
             card.GetComponent<Cards>().SetTarget(cardsMidPos.position);
             card.GetComponent<Cards>().SetDgCard(Alldowngrades[selectedDg]);
             card.GetComponent<Cards>().SetCard();

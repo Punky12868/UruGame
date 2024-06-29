@@ -182,6 +182,9 @@ MonoBehaviour:
   parryKnockback: 100
   maxOdds: 1000
   farAttackOdds: 500
+  cameraShakeDuration: 0.2
+  cameraShakeMagnitude: 1
+  cameraShakeGain: 1
   spawnable: {fileID: 8265143328624409262, guid: 70083a02c4e36f4478ee655e0d3127b8, type: 3}
   specialDamage: 30
   specialKnockback: 25
@@ -306,6 +309,18 @@ MonoBehaviour:
             m_TargetAssemblyTypeName: BossBase, Assembly-CSharp
             m_MethodName: SetFarAttackDecision
             m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 1
+            m_CallState: 2
+          - m_Target: {fileID: 4150119534377879683}
+            m_TargetAssemblyTypeName: BossBase, Assembly-CSharp
+            m_MethodName: DoCameraShake
+            m_Mode: 1
             m_Arguments:
               m_ObjectArgument: {fileID: 0}
               m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -485,6 +500,8 @@ MonoBehaviour:
               m_BoolArgument: 0
             m_CallState: 2
   - animClip: {fileID: 7400000, guid: 573f061fb523f3f4db0ffd221a1981db, type: 2}
+    invokableEvents: []
+  - animClip: {fileID: 7400000, guid: b2ff5b325e04a6444ae6d0a032992da5, type: 2}
     invokableEvents: []
 --- !u!136 &2621443810916154782
 CapsuleCollider:

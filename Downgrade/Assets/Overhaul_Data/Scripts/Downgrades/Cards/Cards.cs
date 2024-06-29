@@ -6,7 +6,6 @@ using EasyTransition;
 using UnityEngine;
 using DG.Tweening;
 using TMPro;
-using static UnityEditor.PlayerSettings;
 
 public class Cards : MonoBehaviour
 {
@@ -172,9 +171,9 @@ public class Cards : MonoBehaviour
         Invoker.InvokeDelayed(ChangeTarget, moveDuration);
     }
 
-    public void SetCardObjPos()
+    public void SetCardObjPos(Vector3 pos)
     {
-        cardObject.transform.position += new Vector3(0, 500, 0);
+        cardObject.transform.position = pos;
     }
 
     private void SetCardRotation()
