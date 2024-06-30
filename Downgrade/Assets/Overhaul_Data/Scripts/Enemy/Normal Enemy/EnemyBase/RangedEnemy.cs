@@ -90,6 +90,8 @@ public class RangedEnemy : EnemyBase
             projectileCanBeParried, SetTargetDir().normalized, parriedSounds, gameObject);
     }
 
+    public void SetIsStatic(bool value) { isStatic = value; }
+
     #region Debug
     private void OnDrawGizmos()
     {

@@ -6,6 +6,7 @@ using UnityEditor;
 
 public class WaveSystem : MonoBehaviour
 {
+    [SerializeField] private bool isBossArea;
     [SerializeField] private float timerEnemySpawn;
 
     public List<Wave> waves = new List<Wave>();
@@ -52,7 +53,9 @@ public class WaveSystem : MonoBehaviour
                         if (timerEnemySpawn >= waves[currentWave].enemiesInWave[currentWaveData].delayForNextEnemy)
                         {
                             timerEnemySpawn = 0;
-                            Vector3 pos = new Vector3(waves[currentWave].enemiesInWave[currentWaveData].position.x, 0.002f, waves[currentWave].enemiesInWave[currentWaveData].position.y);
+                            Vector3 pos = new Vector3(waves[currentWave].enemiesInWave[currentWaveData].position.x, 
+                                waves[currentWave].enemiesInWave[currentWaveData].yPositionOffset, 
+                                waves[currentWave].enemiesInWave[currentWaveData].position.y);
                             //GameObject enemy = Instantiate(waves[currentWave].waves[currentWaveData].enemy, pos, Quaternion.identity);
                             //enemyBases.Add(enemy.GetComponent<EnemyBase>());
 
@@ -63,7 +66,9 @@ public class WaveSystem : MonoBehaviour
                     }
                     else
                     {
-                        Vector3 pos = new Vector3(waves[currentWave].enemiesInWave[currentWaveData].position.x, 0.002f, waves[currentWave].enemiesInWave[currentWaveData].position.y);
+                        Vector3 pos = new Vector3(waves[currentWave].enemiesInWave[currentWaveData].position.x, 
+                            waves[currentWave].enemiesInWave[currentWaveData].yPositionOffset, 
+                            waves[currentWave].enemiesInWave[currentWaveData].position.y);
 
                         //GameObject enemy = Instantiate(waves[currentWave].waves[currentWaveData].enemy, pos, Quaternion.identity);
                         //enemyBases.Add(enemy.GetComponent<EnemyBase>());
@@ -79,14 +84,25 @@ public class WaveSystem : MonoBehaviour
                 victory = true;
                 Debug.Log("All waves are finished");
                 AudioManager.instance.PlaySFX(1);
-                GameManager.Instance.Victory();
+                GameManager.Instance.Victory(isBossArea);
             }
         }
     }
 
     public void SpawnEnemy(Vector3 pos)
     {
-        GameObject enemy = Instantiate(waves[currentWave].enemiesInWave[currentWaveData].enemyPrefab, pos, Quaternion.identity);
+        GameObject enemy = null;
+        if (!waves[currentWave].enemiesInWave[currentWaveData].spawnInLastEnemyPosition)
+        {
+            enemy = Instantiate(waves[currentWave].enemiesInWave[currentWaveData].enemyPrefab, pos, Quaternion.identity);
+            Debug.Log("Enemy spawned at: " + enemy.transform.position);
+        }
+        else
+        {
+            Vector3 lastEnemyPos = enemyBases[enemyBases.Count - 1].transform.position;
+            enemy = Instantiate(waves[currentWave].enemiesInWave[currentWaveData].enemyPrefab, lastEnemyPos, Quaternion.identity);
+            Debug.Log("2nd Enemy spawned at: " + enemyBases[enemyBases.Count - 1].transform.position);
+        }
         enemyBases.Add(enemy.GetComponent<EnemyBase>());
     }
 
@@ -94,10 +110,12 @@ public class WaveSystem : MonoBehaviour
     {
         for (int i = 0; i < enemyBases.Count; i++)
         {
-            if (!enemyBases[i].GetIsDead())
+            if (!enemyBases[i].GetIsDead()) return;
+
+            /*if (enemyBases[i].GetEnemyType() == EnemyType.Boss)
             {
-                return;
-            }
+                if(!FindObjectOfType<BossController>().NextFase()) return;
+            }*/
         }
 
         isWaveFinished = true;
@@ -116,7 +134,9 @@ public class WaveData
     //public string enemyName;
     public GameObject enemyPrefab;
 
+    public bool spawnInLastEnemyPosition;
     public Vector2 position;
+    public float yPositionOffset;
     //public bool hasDelay;
     public float delayForNextEnemy;
 }

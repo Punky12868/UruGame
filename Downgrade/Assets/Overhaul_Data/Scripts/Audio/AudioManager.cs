@@ -7,6 +7,7 @@ public class AudioManager : MonoBehaviour
     public static AudioManager instance;
 
     [SerializeField] private bool playOnAwake;
+    [SerializeField] private float musicLoopFadeThreshold = 0.5f;
     [SerializeField] private int musicIndex;
 
     [SerializeField] private float normalLowPassFreq = 22000.00f;
@@ -23,6 +24,8 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip[] sfxClips;
     [SerializeField] private AudioClip[] voiceClips;
 
+    private int currentMusicIndex;
+
     private void Awake()
     {
         if (instance == null) instance = this;
@@ -32,7 +35,7 @@ public class AudioManager : MonoBehaviour
         sfx.outputAudioMixerGroup = mixer.FindMatchingGroups("SFX")[0];
         voice.outputAudioMixerGroup = mixer.FindMatchingGroups("Voice")[0];
 
-        if (playOnAwake) PlayMusic(musicIndex);
+        if (playOnAwake) { PlayMusic(musicIndex); currentMusicIndex = musicIndex; }
         DontDestroyOnLoad(gameObject);
     }
 
@@ -40,21 +43,22 @@ public class AudioManager : MonoBehaviour
     {
         lowPassValue = Mathf.Lerp(lowPassValue, GameManager.Instance.IsGamePaused() ? pausedLowPassFreq : normalLowPassFreq, lowPassFreqLerpSpeed * Time.unscaledDeltaTime);
         mixer.SetFloat("MusicLowPassFreq", lowPassValue);
+
+        if (music.clip == null) return;
+        if (music.time >= music.clip.length - musicLoopFadeThreshold) StartCoroutine(FadeOutMusic(currentMusicIndex));
     }
 
     public void PlayMusic(int musicIndex)
     {
         if (music.isPlaying)
         {
-            if (music.clip == musicClips[musicIndex])
-            {
-                return;
-            }
+            if (music.clip == musicClips[musicIndex]) return;
             StartCoroutine(FadeOutMusic(musicIndex));
         }
         else
         {
             music.clip = musicClips[musicIndex];
+            currentMusicIndex = musicIndex;
             music.Play();
         }
     }
@@ -84,6 +88,7 @@ public class AudioManager : MonoBehaviour
         }
 
         music.clip = musicClips[musicIndex];
+        currentMusicIndex = musicIndex;
         music.Play();
 
         while (music.volume < 1)
@@ -105,4 +110,12 @@ public class AudioManager : MonoBehaviour
         music.clip = null;
         music.volume = 1;
     }
+
+    public float GetCurrentMusicIndex()
+    {
+        if (music.clip == null) return 999;
+        return currentMusicIndex;
+    }
+
+    public void SetCurrentMusicIndex(int index) { currentMusicIndex = index; PlayMusic(index); }
 }

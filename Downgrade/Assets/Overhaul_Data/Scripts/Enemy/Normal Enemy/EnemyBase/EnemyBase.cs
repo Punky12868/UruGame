@@ -22,6 +22,7 @@ public class EnemyBase : Subject, IAnimController
     [SerializeField] protected EnemyBehaviour behaviourType;
 
     [Header("General")]
+    [SerializeField] protected string enemyName;
     [SerializeField] protected float health = 100;
     [SerializeField] protected float speed = 1;
     [SerializeField] protected float attackDamage = 5;
@@ -40,6 +41,11 @@ public class EnemyBase : Subject, IAnimController
     [SerializeField] protected bool canBeParried = true;
     protected float cooldown;
 
+    [Header("CameraEffects")]
+    [SerializeField] protected float cameraShakeDuration = 0.2f;
+    [SerializeField] protected float cameraShakeMagnitude = 0.5f;
+    [SerializeField] protected float cameraShakeGain = 0.5f;
+
     [Header("Ranges")]
     [SerializeField] protected float tooCloseRange = 0.3f;
     //[SerializeField] protected float avoidanceRange = 2;
@@ -49,6 +55,7 @@ public class EnemyBase : Subject, IAnimController
     [SerializeField] protected float avoidanceSpeed = 7.5f;
 
     [Header("UI")]
+    [SerializeField] protected bool isUsingHealthBar = true;
     [SerializeField] protected Slider healthBar;
     [SerializeField] protected Slider healthBarBg;
     [SerializeField] protected float healthBarBgSpeed = 5;
@@ -120,7 +127,7 @@ public class EnemyBase : Subject, IAnimController
     protected virtual void Movement() 
     {
         if (isStunned || isParried || !IsAnimationDone()) return;
-        if (isOnCooldown) { PlayAnimation(1, false); if (isMoving) { isMoving = false; } return; }
+        if (isOnCooldown || isAttacking) { PlayAnimation(1, false); if (isMoving) { isMoving = false; } return; }
 
         if (!isAttacking && DistanceFromTarget() < tooCloseRange)
         {
@@ -148,13 +155,14 @@ public class EnemyBase : Subject, IAnimController
         PlaySound(deathSounds); PlayAnimation(6, false, true);
 
         if (FindObjectOfType<WaveSystem>()) FindObjectOfType<WaveSystem>().UpdateDeadEnemies();
-        healthBar.GetComponentInParent<CanvasGroup>().DOFade(0, 0.5f);
-        Destroy(healthBar.GetComponentInParent<CanvasGroup>().gameObject, 0.499f);
+        if (hasHealthBar) healthBar.GetComponentInParent<CanvasGroup>().DOFade(0, 0.5f);
+        if (hasHealthBar) Destroy(healthBar.GetComponentInParent<CanvasGroup>().gameObject, 0.499f);
         Destroy(GetComponent<Collider>());
         Invoker.CancelInvoke(DissapearBar);
         //Destroy(audioSource);
         if (destroyOnDeath) { Destroy(gameObject, 0.5f); return; }
-        Destroy(this);
+        //Destroy(this);
+        this.enabled = false;
     }
 
     protected virtual void TakeDamage(float damage, float knockbackForce = 0, Vector3 direction = new Vector3()) 
@@ -178,7 +186,7 @@ public class EnemyBase : Subject, IAnimController
         if (currentHealth <= 0) { Death(); }
         else 
         { 
-            PlaySound(hitSounds); ResetStatusOnHit();
+            PlaySound(hitSounds); ResetStatusOnHit(); DoCameraShake();
             if (hasHitAnimation) { PlayAnimation(4, true, true); }
         }
     }
@@ -217,7 +225,8 @@ public class EnemyBase : Subject, IAnimController
         Vector3 dir = (targetPos - currentPos).normalized;
         Vector3 fixedDir = new Vector3(dir.x, 0, dir.z); return fixedDir;
     }
-    protected Vector3 SetAvoidanceDir()
+
+    /*protected Vector3 SetAvoidanceDir()
     {
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, avoidanceRange);
         Collider nearestAvoidable = null;
@@ -242,7 +251,36 @@ public class EnemyBase : Subject, IAnimController
 
         if (nearestAvoidable.CompareTag("Wall") || nearestAvoidable.CompareTag("Limits")) return -fixedDir;
         return fixedDir;
+    }*/
+
+    protected Vector3 SetAvoidanceDir()
+    {
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, avoidanceRange);
+        Vector3 avoidanceDir = Vector3.zero;
+
+        // Variable para la dirección hacia el jugador
+        Vector3 playerDir = (target.position - transform.position).normalized;
+
+        foreach (Collider c in hitColliders)
+        {
+            if ((c.CompareTag("Enemy") && c != GetComponent<Collider>()) || c.CompareTag("Wall") || c.CompareTag("Destructible") || c.CompareTag("Limits") || c.CompareTag("Prop"))
+            {
+                Vector3 avoidDir = (transform.position - c.transform.position).normalized;
+
+                if (c.CompareTag("Wall") || c.CompareTag("Limits")) avoidDir = -avoidDir;
+                avoidanceDir += avoidDir;
+            }
+        }
+
+        if (avoidanceDir == Vector3.zero) return playerDir;
+
+        Vector3 fixedAvoidDir = new Vector3(avoidanceDir.x, 0, avoidanceDir.z).normalized;
+        Vector3 moveDir = (playerDir + fixedAvoidDir).normalized;
+
+        return moveDir;
     }
+
+
     protected float DistanceFromTarget() { return Vector3.Distance(target.position, transform.position); }
 
     public void MoveOnAttack(float value) { rb.velocity = lastDirection * value; }
@@ -259,6 +297,8 @@ public class EnemyBase : Subject, IAnimController
 
     protected void DissapearBar() { healthBar.GetComponentInParent<CanvasGroup>().DOFade(0, onHitDisappearSpeed).SetUpdate(UpdateType.Normal, true); }
     #endregion
+
+    public void DoCameraShake() { GameManager.Instance.CameraShake(cameraShakeDuration, cameraShakeMagnitude, cameraShakeGain); }
 
     #region Flip
     protected void FlipFacingLastDir() 
@@ -308,7 +348,8 @@ public class EnemyBase : Subject, IAnimController
     #region Awake Variables
     protected void SetAwake()
     {
-        hasHealthBar = SimpleSaveLoad.Instance.LoadData(FileType.Config, "hbar", true);
+        if (isUsingHealthBar) hasHealthBar = SimpleSaveLoad.Instance.LoadData(FileType.Config, "hbar", true);
+        else hasHealthBar = false;
         sr = GetComponentInChildren<Animator>().gameObject.GetComponent<SpriteRenderer>();
         SetUI();
         SetAnimHolder();
@@ -326,6 +367,7 @@ public class EnemyBase : Subject, IAnimController
     {
         if (!hasHealthBar)
         {
+            if (healthBar == null) return;
             healthBar.GetComponentInParent<CanvasGroup>().alpha = 0;
             healthBar.GetComponentInParent<Canvas>().gameObject.SetActive(false); return;
         }
@@ -379,6 +421,7 @@ public class EnemyBase : Subject, IAnimController
     public Vector3 GetDirection() { return direction; }
     public Vector3 GetLastDirection() { return lastDirection; }
     public Transform GetTarget() { return target; }
+    public string GetName() { return enemyName; }
 
     #endregion
 
@@ -416,15 +459,12 @@ public class EnemyBase : Subject, IAnimController
     #endregion Proxys
     public void TakeDamageProxy(float damage, float knockbackForce = 0, Vector3 dir = new Vector3()) { TakeDamage(damage, knockbackForce, dir); }
     public void PlaySoundProxy(AudioClip[] clip) { PlaySound(clip); }
-    #region
 
     #region Invokes
     protected void ResetParticle() { _particleEmission.enabled = false; }
-    protected void HitMaterialReset() 
-    { sr.material.SetFloat("_HitFloat", 0); }
+    protected void HitMaterialReset() { sr.material.SetFloat("_HitFloat", 0); }
     #endregion
 
-    #endregion
     #endregion
 
     #region Debug

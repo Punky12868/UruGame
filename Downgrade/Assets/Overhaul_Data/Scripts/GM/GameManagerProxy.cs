@@ -52,9 +52,9 @@ public class GameManagerProxy : MonoBehaviour
         GameManager.Instance.UnlockLevel(i);
     }
 
-    public void Victory()
+    public void Victory(bool value = false)
     {
-        GameManager.Instance.Victory();
+        GameManager.Instance.Victory(value);
     }
 
     public void PauseGame(bool pause)

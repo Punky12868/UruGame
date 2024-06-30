@@ -6,12 +6,12 @@ public class SetPlayerMap : MonoBehaviour
 {
     [SerializeField] private bool loadUiMap;
     [SerializeField] private bool consoleLog;
-    ControllerType lastControllerType;
     string lastCategoryLoaded;
     int downgradeSelectionIndex;
     int currentSceneIndex;
+    bool sceneChange;
 
-    private void Awake() { downgradeSelectionIndex = SceneManager.sceneCountInBuildSettings - 1; LoadMaps(); }
+    private void Awake() { downgradeSelectionIndex = SceneManager.sceneCountInBuildSettings - 1; LoadAllMaps(); }
 
     private void Update()
     {
@@ -20,15 +20,15 @@ public class SetPlayerMap : MonoBehaviour
         if (SceneManager.GetActiveScene().buildIndex == 0 && !loadUiMap ||
             SceneManager.GetActiveScene().buildIndex == downgradeSelectionIndex && !loadUiMap) loadUiMap = true;
 
-        if (lastControllerType != GetCurrentController.GetLastActiveController().type) LoadMaps();
+        if (lastCategoryLoaded != "UI" && loadUiMap) LoadAllMaps();
+        if (lastCategoryLoaded != "Default" && !loadUiMap) LoadAllMaps();
 
-        if (lastCategoryLoaded != "UI" && loadUiMap) LoadMaps();
-        if (lastCategoryLoaded != "Default" && !loadUiMap) LoadMaps();
-
-        if (currentSceneIndex != SceneManager.GetActiveScene().buildIndex)
+        if (currentSceneIndex != SceneManager.GetActiveScene().buildIndex && !sceneChange)
         {
-            currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
-            LoadMaps();
+            Log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaa");
+            sceneChange = true;
+            Invoker.InvokeDelayed(LoadAllMaps, 0.1f);
+            //LoadAllMaps();
         }
     }
 
@@ -37,44 +37,10 @@ public class SetPlayerMap : MonoBehaviour
         currentSceneIndex--;
     }
 
-    private void LoadMaps()
-    {
-        LoadAllMaps();
-
-        /*if (GetCurrentController.GetLastActiveController() == null) ChangeControllerType(ControllerType.Joystick);
-        else
-        {
-            LoadAllMaps();
-
-            /*if (GetCurrentController.GetLastActiveController().type == ControllerType.Joystick) ChangeControllerType(ControllerType.Joystick);
-            if (GetCurrentController.GetLastActiveController().type == ControllerType.Keyboard) ChangeControllerType(ControllerType.Keyboard);
-        }
-
-        Log("Loaded maps for " + lastControllerType + " controller");*/
-    }
-
-    private void ChangeControllerType(ControllerType type)
-    {
-        if (loadUiMap)
-        {
-            ReInput.players.GetPlayer(0).controllers.maps.LoadMap(type, 0, "Default", "Default", false);
-            ReInput.players.GetPlayer(0).controllers.maps.LoadMap(type, 0, "UI", "Default", true);
-            lastCategoryLoaded = "UI";
-            Log("Loaded UI maps for " + lastControllerType + " controller");
-        }
-        else
-        {
-            ReInput.players.GetPlayer(0).controllers.maps.LoadMap(type, 0, "UI", "Default", false);
-            ReInput.players.GetPlayer(0).controllers.maps.LoadMap(type, 0, "Default", "Default", true);
-            lastCategoryLoaded = "Default";
-            Log("Loaded Default maps for " + lastControllerType + " controller");
-        }
-
-        lastControllerType = type;
-    }
-
     private void LoadAllMaps()
     {
+        currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        sceneChange = false;
         if (SceneManager.GetActiveScene().buildIndex == 0 && !loadUiMap) loadUiMap = true;
 
         if (loadUiMap)
@@ -85,7 +51,7 @@ public class SetPlayerMap : MonoBehaviour
             ReInput.players.GetPlayer(0).controllers.maps.LoadMap(ControllerType.Keyboard, 0, "Default", "Default", false);
             ReInput.players.GetPlayer(0).controllers.maps.LoadMap(ControllerType.Keyboard, 0, "UI", "Default", true);
             lastCategoryLoaded = "UI";
-            Log("Loaded UI maps for " + lastControllerType + " controller");
+            Log("Loaded UI maps");
         }
         else
         {
@@ -95,7 +61,7 @@ public class SetPlayerMap : MonoBehaviour
             ReInput.players.GetPlayer(0).controllers.maps.LoadMap(ControllerType.Keyboard, 0, "UI", "Default", false);
             ReInput.players.GetPlayer(0).controllers.maps.LoadMap(ControllerType.Keyboard, 0, "Default", "Default", true);
             lastCategoryLoaded = "Default";
-            Log("Loaded Default maps for " + lastControllerType + " controller");
+            Log("Loaded Default maps");
         }
     }
 

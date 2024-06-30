@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 using EasyTransition;
+using Cinemachine;
+using DG.Tweening;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,9 +12,9 @@ public class GameManager : MonoBehaviour
     private bool isSelectingDowngrade = false;
     private bool introTextShowed = false;
     private int downgradeSceneIndex;
+    private bool displayFps = false;
     [SerializeField] private int targetFrameRate = 60;
     [SerializeField] private bool vSync = true;
-    [SerializeField] private bool displayFps = false;
     [SerializeField] private string levelUnlockerKey = "level_";
     [SerializeField] private int firstLevelIndex = 1;
     [SerializeField] private int firstLevelDowngradeSelectionIndex = 2;
@@ -32,18 +34,20 @@ public class GameManager : MonoBehaviour
         }
 
         DontDestroyOnLoad(gameObject);
-
+        displayFps = false;
         downgradeSceneIndex = SceneManager.sceneCountInBuildSettings - 1;
 
         QualitySettings.vSyncCount = vSync ? 1 : 0;
         if (!vSync) { Application.targetFrameRate = targetFrameRate; }
 
-        /*Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;*/
+        
     }
 
-    private void Update()
+    private void Update() { FrameRate(); CursorHandler(); }
+
+    private void FrameRate()
     {
+        if (Input.GetKeyDown(KeyCode.F) && Input.GetKey(KeyCode.LeftAlt) && Input.GetKey(KeyCode.LeftControl)) displayFps = !displayFps;
         if (vSync && QualitySettings.vSyncCount == 0) { QualitySettings.vSyncCount = 1; return; }
 
         if (!vSync)
@@ -51,6 +55,12 @@ public class GameManager : MonoBehaviour
             if (QualitySettings.vSyncCount == 1) { QualitySettings.vSyncCount = 0; }
             if (Application.targetFrameRate != targetFrameRate) { Application.targetFrameRate = targetFrameRate; }
         }
+    }
+
+    private void CursorHandler()
+    {
+        if (Cursor.lockState != CursorLockMode.Locked) Cursor.lockState = CursorLockMode.Locked;
+        if (Cursor.visible) Cursor.visible = false;
     }
 
     public void StartNewGame()
@@ -135,9 +145,12 @@ public class GameManager : MonoBehaviour
         // victory and then loads next scene
     }
 
-    public void Victory()
+    public void Victory(bool isBossArea)
     {
-        int sceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
+        FindObjectOfType<PauseMenu>().gameObject.SetActive(false);
+        int sceneIndex = 0;
+        if (!isBossArea) sceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
+        else sceneIndex = 0;
         FindObjectOfType<TextScreens>().OnVictory();
         SimpleSaveLoad.Instance.SaveData<bool>(FileType.Gameplay, levelUnlockerKey + SceneManager.GetActiveScene().buildIndex, true);
 
@@ -209,7 +222,8 @@ public class GameManager : MonoBehaviour
         if (displayFps)
         {
             GUI.color = Color.green;
-            GUI.Label(new Rect(10, 10, 100, 20), "FPS: " + (1.0f / Time.smoothDeltaTime).ToString("0"));
+            GUI.skin.label.fontSize = 20;
+            GUI.Label(new Rect(10, 10, 200, 40), "FPS: " + (1.0f / Time.deltaTime).ToString("0"));
         }
     }
 
@@ -221,5 +235,39 @@ public class GameManager : MonoBehaviour
     public bool GetIntroText()
     {
         return introTextShowed;
+    }
+
+    public void CameraShake(float duration, float magnitude, float gain, bool fadeOnStop = false)
+    {
+        // cinemachine camera shake
+        //DOTween.To(() amplitude from 0 to magnitude, frequency from 0 to gain, duration)
+        DOTween.To(() => FindObjectOfType<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain, x 
+            => FindObjectOfType<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain = x, magnitude, duration / 2);
+
+        DOTween.To(() => FindObjectOfType<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain, x 
+            => FindObjectOfType<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = x, gain, duration / 2);
+
+        //FindObjectOfType<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain = magnitude;
+        //FindObjectOfType<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = gain;
+        if (fadeOnStop) { Invoke("StopShakeWFade", duration); return; }
+        Invoke("StopShake", duration);
+    }
+
+    private void StopShake()
+    {
+        FindObjectOfType<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain = 0;
+        FindObjectOfType<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = 0;
+    }
+
+    private void StopShakeWFade()
+    {
+        DOTween.To(() => FindObjectOfType<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain, x
+            => FindObjectOfType<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain = x, 0, 1.5f);
+
+        DOTween.To(() => FindObjectOfType<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain, x
+            => FindObjectOfType<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = x, 0, 1.5f);
+
+        //FindObjectOfType<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain = 0;
+        //FindObjectOfType<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = 0;
     }
 }

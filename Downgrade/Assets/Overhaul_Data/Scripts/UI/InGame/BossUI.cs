@@ -1,54 +1,68 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using DG.Tweening;
+using Febucci.UI;
 using TMPro;
 
 public class BossUI : MonoBehaviour
 {
-    private BossBase boss;
+    private EnemyBase enemyBase;
     private bool initialized;
     private bool faseChanged;
+    private bool isChangingValues;
     [SerializeField] private float barAppearingTime;
     [SerializeField] private TMP_Text bossName;
+    [SerializeField] private TypewriterByCharacter typewriter;
     [SerializeField] private Slider healthBar;
     [SerializeField] private Slider healthBarBg;
     [SerializeField] private float healthBarRegenSpeed;
     [SerializeField] private float healthBarBgSpeed;
 
-    public void SetUI(BossBase boss)
+    public void SetUI(EnemyBase boss)
     {
-        this.boss = boss;
-        bossName.text = boss.GetBossName();
-        healthBar.maxValue = boss.GetHealth();
-        healthBarBg.maxValue = boss.GetHealth();
+        this.enemyBase = boss;
 
-        healthBar.value = boss.GetHealth();
-        healthBarBg.value = boss.GetHealth();
-        initialized = true;
+        if (!initialized)
+        {
+            bossName.text = ""; //boss.GetName();
+            typewriter.ShowText(boss.GetName());
+            healthBar.maxValue = boss.GetCurrentHealth();
+            healthBarBg.maxValue = boss.GetCurrentHealth();
+
+            healthBar.value = boss.GetCurrentHealth();
+            healthBarBg.value = boss.GetCurrentHealth();
+            initialized = true; return;
+        }
+
+        isChangingValues = true;
+        //SetChangeFase();
+        typewriter.onTextDisappeared.AddListener(() => { typewriter.ShowText(boss.GetName()); });
+        typewriter.StartDisappearingText();
+        DOTween.To(() => healthBar.value, x => healthBar.value = x, boss.GetCurrentHealth(), 2);
+        DOTween.To(() => healthBarBg.value, x => healthBarBg.value = x, boss.GetCurrentHealth(), 2).onComplete += () => isChangingValues = false;
     }
 
     private void Update()
     {
-        if (!initialized) return;
-
+        if (!initialized || isChangingValues) return;
         UpdateHealthUI();
 
-        if (!faseChanged) return;
-        SetChangeFase();
+
+        /*if (!faseChanged) return;
+        SetChangeFase();*/
     }
 
     private void UpdateHealthUI()
     {
-        if (faseChanged) return;
+        //if (faseChanged) return;
 
         if (GetComponent<CanvasGroup>().alpha != 1)
         {
             GetComponent<CanvasGroup>().alpha += Time.deltaTime * barAppearingTime;
         }
 
-        if (healthBar.value != boss.GetCurrentHealth()) healthBar.value = boss.GetCurrentHealth();
-        healthBarBg.value = Mathf.Lerp(healthBarBg.value, boss.GetCurrentHealth(), Time.deltaTime * healthBarBgSpeed);
+        if (healthBar.value != enemyBase.GetCurrentHealth()) healthBar.value = enemyBase.GetCurrentHealth();
+        healthBarBg.value = Mathf.Lerp(healthBarBg.value, enemyBase.GetCurrentHealth(), Time.deltaTime * healthBarBgSpeed);
     }
 
     public void SetChangeFase()
@@ -58,10 +72,10 @@ public class BossUI : MonoBehaviour
             faseChanged = true;
         }
 
-        healthBar.maxValue = boss.GetHealth();
-        healthBarBg.maxValue = boss.GetHealth();
+        healthBar.maxValue = enemyBase.GetCurrentHealth();
+        healthBarBg.maxValue = enemyBase.GetCurrentHealth();
 
-        if (healthBar.value != boss.GetHealth())
+        if (healthBar.value != enemyBase.GetCurrentHealth())
         {
             healthBar.value += Time.deltaTime * healthBarRegenSpeed;
             healthBarBg.value = healthBar.value;

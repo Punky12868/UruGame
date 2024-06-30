@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Rewired;
+using static UnityEngine.Rendering.HableCurve;
 
 [RequireComponent(typeof(PlayerInventory))] [RequireComponent(typeof(PlayerInteraction))]
 [RequireComponent(typeof(AnimationHolder))] [RequireComponent(typeof(Rigidbody))]
@@ -13,7 +14,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     private AnimationHolder animHolder;
 
     private Rigidbody rb;
-    private Vector3 direction, lastDirection;
+    private Vector3 inputDir, direction, lastDirection;
     private List<AnimationClip> animationIDs;
 
     [Header("General")]
@@ -36,6 +37,8 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     [Header("Fighting")]
     [SerializeField] private Transform hitboxCenter;
     [SerializeField] private float offset = 0.3f;
+    [SerializeField] private Transform parryCenter;
+    [SerializeField] private float parryDetectionAngle = 45f;
     [SerializeField] private bool canBeStaggered = false;
 
     [Header("Ability")]
@@ -87,12 +90,19 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     [SerializeField] private float attackHitboxTime = 0.2f;
     [SerializeField] private Color attackHitboxColor = new Color(1, 0, 0, 1);
 
+    [SerializeField] private Color forwardLineColor = Color.blue;
+    [SerializeField] private Color parryAngleBoundaryColor = Color.green;
+    [SerializeField] private Color parryDetectionColor = Color.yellow;
+    [SerializeField] private float lineLength = 5f;
+    [SerializeField] private int lineSegments = 10;
+
     #region States
     private bool isDead = false;
     private bool isFacingLeft;
     private bool isAttacking = false;
     private bool isComboAttack = false;
     private bool isRolling = false;
+    private bool isStunned = false;
     private bool isOnCooldown = false;
     private bool isAbilityOnCooldown = false;
     private bool canMove = true;
@@ -159,10 +169,21 @@ public class PlayerControllerOverhaul : Subject, IAnimController
         Stamina();
         SlashVFXProxy();
 
+        if (isAttacking || wasParryPressed || isOnCooldown) inputDir = Vector3.zero;
+        else inputDir = new Vector3(input.GetAxisRaw("Horizontal"), 0, input.GetAxisRaw("Vertical"));
+        direction = inputDir.sqrMagnitude > directionThreshold ? inputDir : Vector3.zero;
+
         normalSlashVFX.GetComponent<Renderer>().material.SetFloat("_Status", normalVfxTime);
         comboSlashVFX.GetComponent<Renderer>().material.SetFloat("_Status", comboVfxTime);
 
-        if (!canMove || isDead || paralized) return;
+        if (!canMove || isDead || paralized || isRolling || wasParryPressed) return;
+
+        if (isStunned)
+        {
+            // stunnedAnim
+            PlayAnimation(9);
+            return;
+        }
 
         Inputs();
         //PlayerAnimations();
@@ -173,7 +194,9 @@ public class PlayerControllerOverhaul : Subject, IAnimController
 
     public void FixedUpdate()
     {
-        if (!canMove || isAttacking || paralized || isOnCooldown) return;
+        RotateHitboxCentreToFaceTheDirection();
+
+        if (!canMove || isAttacking || paralized || isOnCooldown || isStunned) return;
 
         if (isRolling)
         {
@@ -183,7 +206,6 @@ public class PlayerControllerOverhaul : Subject, IAnimController
         }
         else moveDuration = 0;
 
-        RotateHitboxCentreToFaceTheDirection();
 
         if (direction.sqrMagnitude > directionThreshold)
         {
@@ -199,9 +221,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     #region Actions
     public void Inputs()
     {
-        if (isAttacking || wasParryPressed || isOnCooldown) direction = Vector3.zero;
-        else direction = new Vector3(input.GetAxisRaw("Horizontal"), 0, input.GetAxisRaw("Vertical"));
-
+        
         if (input.GetButtonDown("Attack")) OverlapAttack();
         if (input.GetButtonDown("Parry")) ParryLogic();
         if (input.GetButtonDown("Roll")) Roll();
@@ -442,7 +462,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
 
     private void GetParryReward(EnemyType type, bool isProjectile = false)
     {
-        
+        DoCameraShake();
         _parryParticleEmission.enabled = true;
         _parryParticleEmissionTwo.enabled = true;
         
@@ -527,6 +547,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
             Invoker.InvokeDelayed(ResetImmunity, iFrames);
         }
         PlayAnimation(8, true, true, true);
+        DoCameraShake();
     }
 
     private void TakeDamage(float damage, float knockbackForce, Vector3 damagePos)
@@ -588,6 +609,8 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     }
     #endregion
 
+    public void DoCameraShake() { GameManager.Instance.CameraShake(0.2f, 1, 1); }
+
     #region RotateHitbox
     public void RotateHitboxCentreToFaceTheDirection()
     {
@@ -597,6 +620,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
         Vector3 desiredPosition = transform.position + direction * offset;
         Quaternion rotation = Quaternion.LookRotation(direction);
         hitboxCenter.rotation = rotation;
+        parryCenter.rotation = rotation;
         hitboxCenter.position = new Vector3(desiredPosition.x, hitboxCenter.position.y, desiredPosition.z);
     }
     #endregion
@@ -621,6 +645,9 @@ public class PlayerControllerOverhaul : Subject, IAnimController
         }
         if (isFacingLeft) GetComponent<SpriteRenderer>().flipX = true;
         else GetComponent<SpriteRenderer>().flipX = false;
+
+        if (isFacingLeft) hitboxCenter.localScale = new Vector3(1, hitboxCenter.localScale.y, hitboxCenter.localScale.z);
+        else hitboxCenter.localScale = new Vector3(-1, hitboxCenter.localScale.y, hitboxCenter.localScale.z);
     }
     #endregion
     #endregion
@@ -674,6 +701,18 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     public float GetAbilityCooldown() { return abilityCooldown; }
     public bool GetAbilityCooldownStatus() { return isAbilityOnCooldown; }
     public bool IsPlayerMoving() { return direction.sqrMagnitude > directionThreshold; }
+    public bool IsPlayerStunned() { return isStunned; }
+    public bool GetParryAvailable(Transform objectB)
+    {
+        if (offset == 0) offset = 1;
+
+        Vector3 forwardA = parryCenter.forward;
+        Vector3 directionToB = (objectB.position - parryCenter.position).normalized;
+        float angle = Vector3.Angle(forwardA, directionToB);
+
+        if (angle < parryDetectionAngle / 2) return true;
+        else return false;
+    }
     #endregion
 
     #region Set
@@ -697,6 +736,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     public void SetParryState(bool value) { if (value) playerState = "Parry"; else playerState = ""; }
     public void SetParryPressed(bool value) { wasParryPressed = value; }
     public void SetAbilityCooldown(bool value) { isAbilityOnCooldown = value; }
+    public void SetStunStatus(bool value) { isStunned = value; }
     
 
 
@@ -751,12 +791,54 @@ public class PlayerControllerOverhaul : Subject, IAnimController
         else VisualizeBox.DisplayBox(hitboxPos + hitboxCenter.position, hitboxSize, Quaternion.LookRotation(lastDirection), attackHitboxColor);
     }
 
+    private void DrawParryDetection()
+    {
+        if (parryCenter != null)
+        {
+            // Dirección adelante del hitbox
+            Vector3 forwardA = parryCenter.forward;
+            Gizmos.color = forwardLineColor;
+            Gizmos.DrawLine(parryCenter.position, parryCenter.position + forwardA * lineLength);
+
+            // Ángulo de detección de parry
+            Vector3 rightBoundary = Quaternion.Euler(0, parryDetectionAngle / 2, 0) * forwardA;
+            Vector3 leftBoundary = Quaternion.Euler(0, -parryDetectionAngle / 2, 0) * forwardA;
+            Gizmos.color = parryAngleBoundaryColor;
+            Gizmos.DrawLine(parryCenter.position, parryCenter.position + rightBoundary * lineLength);
+            Gizmos.DrawLine(parryCenter.position, parryCenter.position + leftBoundary * lineLength);
+
+            // Dibujar el semicírculo de detección de parry
+            DrawParryArc(parryCenter.position, forwardA, parryDetectionAngle, lineLength, lineSegments);
+        }
+    }
+
+    private void DrawParryArc(Vector3 center, Vector3 forward, float angle, float radius, int segments)
+    {
+        float deltaAngle = angle / segments;
+        Vector3 previousPoint = center + Quaternion.Euler(0, -angle / 2, 0) * forward * radius;
+
+        for (int i = 1; i <= segments; i++)
+        {
+            float currentAngle = -angle / 2 + i * deltaAngle;
+            Vector3 currentPoint = center + Quaternion.Euler(0, currentAngle, 0) * forward * radius;
+            Gizmos.DrawLine(previousPoint, currentPoint);
+            previousPoint = currentPoint;
+        }
+    }
+
     private void OnDrawGizmos()
     {
         if (drawHitbox)
         {
-            if (drawHitboxOnGameplay) {if (drawingAttackHitbox) DrawAttackHitbox();}
-            else DrawAttackHitbox();
+            if (drawHitboxOnGameplay) 
+            {
+                if (drawingAttackHitbox) DrawAttackHitbox();
+                if (playerState == "Parry") DrawParryDetection();
+                return; 
+            }
+
+            DrawAttackHitbox();
+            DrawParryDetection();
         }
     }
     

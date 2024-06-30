@@ -94,7 +94,7 @@ public class BigEnemy : EnemyBase
 
                 if (player.GetPlayerState() == "Parry" && canBeParried)
                 {
-                    if (Vector3.Dot(player.GetLastDirection(), direction) <= -0.5f && Vector3.Dot(player.GetLastDirection(), direction) >= -1)
+                    if (player.GetParryAvailable(transform))
                     {
                         knockback *= 2;
                         GetParried();

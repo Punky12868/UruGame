@@ -406,11 +406,11 @@ MonoBehaviour:
   rotationDuration: 0.5
   fadeDuration: 0.5
   cardMusic: 0
-  wiggleEffect: {x: 5, y: 5}
-  wiggleSpeed: 2
+  wiggleEffect: {x: 100, y: 5}
+  wiggleSpeed: 1
   growAmmountWhenSelected: 1.1
   growSpeed: 5
-  wiggleResetTime: 0.1
+  wiggleResetTime: 0
   easeType: 6
   rotEaseType: 30
   rotateCardTimeout: 0.2
@@ -473,7 +473,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -138.02527}
+  m_AnchoredPosition: {x: 0, y: -121.7}
   m_SizeDelta: {x: 0, y: -362.2608}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8130479799107991140
@@ -754,7 +754,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 182.2581, y: 25}
+  m_SizeDelta: {x: 261.0422, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8130479799718401050
 CanvasRenderer:

@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using Rewired;
-using Unity.VisualScripting;
-using UnityEngine.Windows;
 
 public class PopUpController : MonoBehaviour
 {
@@ -27,7 +25,8 @@ public class PopUpController : MonoBehaviour
         input = ReInput.players.GetPlayer(0);
 
 
-        Invoker.InvokeDelayed(Appear, delayToAppear);
+        //Invoker.InvokeDelayed(Appear, delayToAppear);
+        Invoke("Appear", delayToAppear);
         
     }
 
@@ -41,11 +40,14 @@ public class PopUpController : MonoBehaviour
         // move and squash
         transform.DOMove(finalPos.position, timeAmmount).SetEase(ease);
         transform.DORotate(finalPos.rotation.eulerAngles, timeAmmount).SetEase(ease);
-        Invoker.InvokeDelayed(CooldownActive, 1);
-        Invoker.InvokeDelayed(Disappear, timeAmmount + delayToDisappear);
-        Debug.Log("Appear");
+        //Invoker.InvokeDelayed(CooldownActive, 1);
+        //Invoker.InvokeDelayed(Disappear, timeAmmount + delayToDisappear);
 
-        
+        Invoke("CooldownActive", 1);
+        Invoke("Disappear", timeAmmount + delayToDisappear);
+        //Debug.Log("Appear");
+
+
     }
 
     private void Disappear()
@@ -54,8 +56,8 @@ public class PopUpController : MonoBehaviour
         FindObjectOfType<GameManagerProxy>().ForcedPause(false);
         transform.DOMove(initialPos.position, timeAmmount).SetEase(ease);
         transform.DORotate(initialPos.rotation.eulerAngles, timeAmmount).SetEase(ease);
-        Debug.Log("ForcedPause: " + FindObjectOfType<GameManagerProxy>().IsForcedPause());
-        Debug.Log("Disappear");
+        //Debug.Log("ForcedPause: " + FindObjectOfType<GameManagerProxy>().IsForcedPause());
+        //Debug.Log("Disappear");
     }
 
     private void CooldownActive()
