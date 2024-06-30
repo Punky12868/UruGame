@@ -225,7 +225,8 @@ public class EnemyBase : Subject, IAnimController
         Vector3 dir = (targetPos - currentPos).normalized;
         Vector3 fixedDir = new Vector3(dir.x, 0, dir.z); return fixedDir;
     }
-    protected Vector3 SetAvoidanceDir()
+
+    /*protected Vector3 SetAvoidanceDir()
     {
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, avoidanceRange);
         Collider nearestAvoidable = null;
@@ -250,7 +251,36 @@ public class EnemyBase : Subject, IAnimController
 
         if (nearestAvoidable.CompareTag("Wall") || nearestAvoidable.CompareTag("Limits")) return -fixedDir;
         return fixedDir;
+    }*/
+
+    protected Vector3 SetAvoidanceDir()
+    {
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, avoidanceRange);
+        Vector3 avoidanceDir = Vector3.zero;
+
+        // Variable para la dirección hacia el jugador
+        Vector3 playerDir = (target.position - transform.position).normalized;
+
+        foreach (Collider c in hitColliders)
+        {
+            if ((c.CompareTag("Enemy") && c != GetComponent<Collider>()) || c.CompareTag("Wall") || c.CompareTag("Destructible") || c.CompareTag("Limits") || c.CompareTag("Prop"))
+            {
+                Vector3 avoidDir = (transform.position - c.transform.position).normalized;
+
+                if (c.CompareTag("Wall") || c.CompareTag("Limits")) avoidDir = -avoidDir;
+                avoidanceDir += avoidDir;
+            }
+        }
+
+        if (avoidanceDir == Vector3.zero) return playerDir;
+
+        Vector3 fixedAvoidDir = new Vector3(avoidanceDir.x, 0, avoidanceDir.z).normalized;
+        Vector3 moveDir = (playerDir + fixedAvoidDir).normalized;
+
+        return moveDir;
     }
+
+
     protected float DistanceFromTarget() { return Vector3.Distance(target.position, transform.position); }
 
     public void MoveOnAttack(float value) { rb.velocity = lastDirection * value; }

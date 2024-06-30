@@ -147,6 +147,7 @@ public class GameManager : MonoBehaviour
 
     public void Victory(bool isBossArea)
     {
+        FindObjectOfType<PauseMenu>().gameObject.SetActive(false);
         int sceneIndex = 0;
         if (!isBossArea) sceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
         else sceneIndex = 0;

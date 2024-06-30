@@ -169,10 +169,14 @@ public class PlayerControllerOverhaul : Subject, IAnimController
         Stamina();
         SlashVFXProxy();
 
+        if (isAttacking || wasParryPressed || isOnCooldown) inputDir = Vector3.zero;
+        else inputDir = new Vector3(input.GetAxisRaw("Horizontal"), 0, input.GetAxisRaw("Vertical"));
+        direction = inputDir.sqrMagnitude > directionThreshold ? inputDir : Vector3.zero;
+
         normalSlashVFX.GetComponent<Renderer>().material.SetFloat("_Status", normalVfxTime);
         comboSlashVFX.GetComponent<Renderer>().material.SetFloat("_Status", comboVfxTime);
 
-        if (!canMove || isDead || paralized) return;
+        if (!canMove || isDead || paralized || isRolling || wasParryPressed) return;
 
         if (isStunned)
         {
@@ -190,6 +194,8 @@ public class PlayerControllerOverhaul : Subject, IAnimController
 
     public void FixedUpdate()
     {
+        RotateHitboxCentreToFaceTheDirection();
+
         if (!canMove || isAttacking || paralized || isOnCooldown || isStunned) return;
 
         if (isRolling)
@@ -200,7 +206,6 @@ public class PlayerControllerOverhaul : Subject, IAnimController
         }
         else moveDuration = 0;
 
-        RotateHitboxCentreToFaceTheDirection();
 
         if (direction.sqrMagnitude > directionThreshold)
         {
@@ -216,10 +221,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     #region Actions
     public void Inputs()
     {
-        if (isAttacking || wasParryPressed || isOnCooldown) inputDir = Vector3.zero;
-        else inputDir = new Vector3(input.GetAxisRaw("Horizontal"), 0, input.GetAxisRaw("Vertical"));
-
-        direction = inputDir.sqrMagnitude > directionThreshold ? inputDir : Vector3.zero;
+        
         if (input.GetButtonDown("Attack")) OverlapAttack();
         if (input.GetButtonDown("Parry")) ParryLogic();
         if (input.GetButtonDown("Roll")) Roll();
