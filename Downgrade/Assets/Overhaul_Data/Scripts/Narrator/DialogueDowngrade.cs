@@ -69,5 +69,6 @@ public class DialogueDowngrade : MonoBehaviour
         objct.SetActive(false);
         typewriter.GetComponent<TMP_Text>().fontSize = oldFontSize;
         Debug.Log("Special event reset");
+        specialEventCalled = false;
     }
 }

@@ -22,6 +22,7 @@ public class EnemyBase : Subject, IAnimController
     [SerializeField] protected EnemyBehaviour behaviourType;
 
     [Header("General")]
+    [SerializeField] protected string enemyName;
     [SerializeField] protected float health = 100;
     [SerializeField] protected float speed = 1;
     [SerializeField] protected float attackDamage = 5;
@@ -54,6 +55,7 @@ public class EnemyBase : Subject, IAnimController
     [SerializeField] protected float avoidanceSpeed = 7.5f;
 
     [Header("UI")]
+    [SerializeField] protected bool isUsingHealthBar = true;
     [SerializeField] protected Slider healthBar;
     [SerializeField] protected Slider healthBarBg;
     [SerializeField] protected float healthBarBgSpeed = 5;
@@ -125,7 +127,7 @@ public class EnemyBase : Subject, IAnimController
     protected virtual void Movement() 
     {
         if (isStunned || isParried || !IsAnimationDone()) return;
-        if (isOnCooldown) { PlayAnimation(1, false); if (isMoving) { isMoving = false; } return; }
+        if (isOnCooldown || isAttacking) { PlayAnimation(1, false); if (isMoving) { isMoving = false; } return; }
 
         if (!isAttacking && DistanceFromTarget() < tooCloseRange)
         {
@@ -153,13 +155,14 @@ public class EnemyBase : Subject, IAnimController
         PlaySound(deathSounds); PlayAnimation(6, false, true);
 
         if (FindObjectOfType<WaveSystem>()) FindObjectOfType<WaveSystem>().UpdateDeadEnemies();
-        healthBar.GetComponentInParent<CanvasGroup>().DOFade(0, 0.5f);
-        Destroy(healthBar.GetComponentInParent<CanvasGroup>().gameObject, 0.499f);
+        if (hasHealthBar) healthBar.GetComponentInParent<CanvasGroup>().DOFade(0, 0.5f);
+        if (hasHealthBar) Destroy(healthBar.GetComponentInParent<CanvasGroup>().gameObject, 0.499f);
         Destroy(GetComponent<Collider>());
         Invoker.CancelInvoke(DissapearBar);
         //Destroy(audioSource);
         if (destroyOnDeath) { Destroy(gameObject, 0.5f); return; }
-        Destroy(this);
+        //Destroy(this);
+        this.enabled = false;
     }
 
     protected virtual void TakeDamage(float damage, float knockbackForce = 0, Vector3 direction = new Vector3()) 
@@ -315,7 +318,8 @@ public class EnemyBase : Subject, IAnimController
     #region Awake Variables
     protected void SetAwake()
     {
-        hasHealthBar = SimpleSaveLoad.Instance.LoadData(FileType.Config, "hbar", true);
+        if (isUsingHealthBar) hasHealthBar = SimpleSaveLoad.Instance.LoadData(FileType.Config, "hbar", true);
+        else hasHealthBar = false;
         sr = GetComponentInChildren<Animator>().gameObject.GetComponent<SpriteRenderer>();
         SetUI();
         SetAnimHolder();
@@ -333,6 +337,7 @@ public class EnemyBase : Subject, IAnimController
     {
         if (!hasHealthBar)
         {
+            if (healthBar == null) return;
             healthBar.GetComponentInParent<CanvasGroup>().alpha = 0;
             healthBar.GetComponentInParent<Canvas>().gameObject.SetActive(false); return;
         }
@@ -386,6 +391,7 @@ public class EnemyBase : Subject, IAnimController
     public Vector3 GetDirection() { return direction; }
     public Vector3 GetLastDirection() { return lastDirection; }
     public Transform GetTarget() { return target; }
+    public string GetName() { return enemyName; }
 
     #endregion
 
@@ -423,15 +429,12 @@ public class EnemyBase : Subject, IAnimController
     #endregion Proxys
     public void TakeDamageProxy(float damage, float knockbackForce = 0, Vector3 dir = new Vector3()) { TakeDamage(damage, knockbackForce, dir); }
     public void PlaySoundProxy(AudioClip[] clip) { PlaySound(clip); }
-    #region
 
     #region Invokes
     protected void ResetParticle() { _particleEmission.enabled = false; }
-    protected void HitMaterialReset() 
-    { sr.material.SetFloat("_HitFloat", 0); }
+    protected void HitMaterialReset() { sr.material.SetFloat("_HitFloat", 0); }
     #endregion
 
-    #endregion
     #endregion
 
     #region Debug

@@ -116,4 +116,6 @@ public class AudioManager : MonoBehaviour
         if (music.clip == null) return 999;
         return currentMusicIndex;
     }
+
+    public void SetCurrentMusicIndex(int index) { currentMusicIndex = index; PlayMusic(index); }
 }

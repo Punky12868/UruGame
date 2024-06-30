@@ -145,9 +145,11 @@ public class GameManager : MonoBehaviour
         // victory and then loads next scene
     }
 
-    public void Victory()
+    public void Victory(bool isBossArea)
     {
-        int sceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
+        int sceneIndex = 0;
+        if (!isBossArea) sceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
+        else sceneIndex = 0;
         FindObjectOfType<TextScreens>().OnVictory();
         SimpleSaveLoad.Instance.SaveData<bool>(FileType.Gameplay, levelUnlockerKey + SceneManager.GetActiveScene().buildIndex, true);
 

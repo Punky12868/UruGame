@@ -13,12 +13,15 @@ public class DowngradeSystem : MonoBehaviour, IObserver
     Subject player;
     List<Subject> enemies = new List<Subject>();
 
-    //[SerializeField] private Slime slimeDg;
-    //[SerializeField] private Paralisis paralisisDg;
-    //[SerializeField] private Rodillas rodillasDg;
-    //[SerializeField] private Moneda monedaDg;
-    //[SerializeField] private Esqueleto esqueletoDg;
-    //[SerializeField] private Debil debilDg;
+    [SerializeField] private Dados dadosDg;
+    [SerializeField] private Daga dagaDg;
+    [SerializeField] private Debil debilDg;
+    [SerializeField] private Esqueleto esqueletoDg;
+    [SerializeField] private Moneda monedaDg;
+    [SerializeField] private Paralisis paralisisDg;
+    [SerializeField] private Rodillas rodillasDg;
+    [SerializeField] private Slime slimeDg;
+    [SerializeField] private StaminaDg StaminaDg;
 
     //[Header("Stamina")]
     private float staminaLossAmmount;
@@ -94,22 +97,31 @@ public class DowngradeSystem : MonoBehaviour, IObserver
             case SelectedDowngrade.None:
                 break;
             case SelectedDowngrade.Debil:
+                debilDg.CardEffect();
                 break;
             case SelectedDowngrade.Stamina:
+                StaminaDg.CardEffect();
                 break;
             case SelectedDowngrade.Esqueleto:
+                esqueletoDg.CardEffect();
                 break;
             case SelectedDowngrade.Daga:
+                dagaDg.CardEffect();
                 break;
             case SelectedDowngrade.Dados:
+                dadosDg.CardEffect();
                 break;
             case SelectedDowngrade.Paralisis:
+                paralisisDg.CardEffect();
                 break;
             case SelectedDowngrade.Slime:
+                slimeDg.CardEffect();
                 break;
             case SelectedDowngrade.Rodilla:
+                rodillasDg.CardEffect();
                 break;
             case SelectedDowngrade.Moneda:
+                monedaDg.CardEffect();
                 break;
             default:
                 break;
@@ -120,7 +132,6 @@ public class DowngradeSystem : MonoBehaviour, IObserver
     {
         this.dg = dg;
         SimpleSaveLoad.Instance.SaveData(FileType.Gameplay, "Downgrade", dg);
-        SimpleSaveLoad.Instance.SaveData(FileType.Gameplay, "DowngradeIcon", dgIcon);
     }
 
     public void RemoveDowngrade()
@@ -130,7 +141,7 @@ public class DowngradeSystem : MonoBehaviour, IObserver
 
     public Sprite GetIcon()
     {
-        return SimpleSaveLoad.Instance.LoadData<Sprite>(FileType.Gameplay, "DowngradeIcon", dgIcon);
+        return dgIcon;
     }
 
     private void OnDisable()

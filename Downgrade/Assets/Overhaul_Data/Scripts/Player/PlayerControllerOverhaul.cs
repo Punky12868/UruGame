@@ -14,7 +14,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     private AnimationHolder animHolder;
 
     private Rigidbody rb;
-    private Vector3 direction, lastDirection;
+    private Vector3 inputDir, direction, lastDirection;
     private List<AnimationClip> animationIDs;
 
     [Header("General")]
@@ -216,9 +216,10 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     #region Actions
     public void Inputs()
     {
-        if (isAttacking || wasParryPressed || isOnCooldown) direction = Vector3.zero;
-        else direction = new Vector3(input.GetAxisRaw("Horizontal"), 0, input.GetAxisRaw("Vertical"));
+        if (isAttacking || wasParryPressed || isOnCooldown) inputDir = Vector3.zero;
+        else inputDir = new Vector3(input.GetAxisRaw("Horizontal"), 0, input.GetAxisRaw("Vertical"));
 
+        direction = inputDir.sqrMagnitude > directionThreshold ? inputDir : Vector3.zero;
         if (input.GetButtonDown("Attack")) OverlapAttack();
         if (input.GetButtonDown("Parry")) ParryLogic();
         if (input.GetButtonDown("Roll")) Roll();
@@ -459,7 +460,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
 
     private void GetParryReward(EnemyType type, bool isProjectile = false)
     {
-        
+        DoCameraShake();
         _parryParticleEmission.enabled = true;
         _parryParticleEmissionTwo.enabled = true;
         
