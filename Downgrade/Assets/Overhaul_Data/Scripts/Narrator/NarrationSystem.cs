@@ -343,6 +343,14 @@ public class NarrationSystem : MonoBehaviour, IObserver
 
                 break;
             case AllBossActions.Parried:
+                int randomAttack = Random.Range(1, 3);
+                //Debug.Log("numero random generado para el attack: " + randomAttack);
+                if (randomAttack <= 1)
+                {
+                    PlaySubs(parryBoss);
+                    Debug.Log("ParriedBoss desde narration");
+                }
+                
 
                 break;
             case AllBossActions.Hit:
