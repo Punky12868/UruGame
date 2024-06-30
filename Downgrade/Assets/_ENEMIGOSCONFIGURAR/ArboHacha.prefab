@@ -5747,6 +5747,9 @@ MonoBehaviour:
   attackKnockback: 10
   parryStunTime: 3
   canBeParried: 1
+  cameraShakeDuration: 0.2
+  cameraShakeMagnitude: 0.5
+  cameraShakeGain: 0.5
   tooCloseRange: 0.3
   avoidanceRange: 0.65
   avoidanceSpeed: 7.5
@@ -5787,8 +5790,8 @@ MonoBehaviour:
   avoidRangeColor: {r: 1, g: 1, b: 0, a: 1}
   closeAttackColor: {r: 1, g: 0, b: 0, a: 1}
   hitboxCenter: {fileID: 6255377774839263146}
-  attackHitboxSize: {x: 0.35, y: 0.35, z: 0.3}
-  hitboxOffset: 0.24
+  attackHitboxSize: {x: 0.35, y: 0.35, z: 0.35}
+  hitboxOffset: 0.35
   closeAttackRange: 0.8
 --- !u!114 &5024359385813657886
 MonoBehaviour:

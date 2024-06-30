@@ -49,7 +49,7 @@ public class BossRipBases : MonoBehaviour
         StunPlayer(true);
         Vector3 newPos = new Vector3(posOffset.x, transform.position.y, posOffset.y);
         transform.DOMove(transform.position + newPos, moveTime).onComplete += () => StunPlayer(false);
-        GameManager.Instance.CameraShake(moveTime, 1.5f, 1.5f);
+        GameManager.Instance.CameraShake(moveTime, 1.5f, 1.5f, true);
     }
 
     public void MoveInwards()
@@ -59,7 +59,7 @@ public class BossRipBases : MonoBehaviour
         StunPlayer(true);
         Vector3 newPos = new Vector3(posOffset.x, transform.position.y, posOffset.y);
         transform.DOMove(transform.position - newPos, moveTime).onComplete += () => StunPlayer(false, true);
-        GameManager.Instance.CameraShake(moveTime, 1.5f, 1.5f);
+        GameManager.Instance.CameraShake(moveTime, 1.5f, 1.5f, true);
     }
 
     private void StunPlayer(bool value, bool bigLimit = false)

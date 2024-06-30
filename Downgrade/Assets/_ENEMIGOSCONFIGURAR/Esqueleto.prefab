@@ -613,6 +613,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 1
   behaviourType: 1
+  enemyName: 
   health: 80
   speed: 1.3
   attackDamage: 12
@@ -625,9 +626,13 @@ MonoBehaviour:
   attackKnockback: 10
   parryStunTime: 3
   canBeParried: 1
+  cameraShakeDuration: 0.2
+  cameraShakeMagnitude: 0.5
+  cameraShakeGain: 0.5
   tooCloseRange: 0.3
-  avoidanceRange: 0.65
+  avoidanceRange: 1.5
   avoidanceSpeed: 7.5
+  isUsingHealthBar: 1
   healthBar: {fileID: 4393807334884028286}
   healthBarBg: {fileID: 689483610682954976}
   healthBarBgSpeed: 5

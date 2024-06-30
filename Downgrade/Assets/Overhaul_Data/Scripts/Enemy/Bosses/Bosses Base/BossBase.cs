@@ -9,6 +9,7 @@ public class BossBase : Subject, IAnimController
     #region Hidden Variables
 
     protected AnimationHolder animHolder;
+    protected SpriteRenderer sr;
     protected List<AnimationClip> animationIDs;
     protected Rigidbody rb;
     protected Transform pivot;
@@ -120,7 +121,7 @@ public class BossBase : Subject, IAnimController
         pivot = GetComponentInParent<Transform>();
         audioSource = GetComponent<AudioSource>();
         target = GameObject.FindGameObjectWithTag("Player").transform;
-
+        sr = GetComponentInChildren<Animator>().gameObject.GetComponent<SpriteRenderer>();
         if (hitboxOffset == 0) hitboxOffset = 1;
         currentHealth = health;
         currentFase = 1;
@@ -128,7 +129,7 @@ public class BossBase : Subject, IAnimController
         _particleEmission = hitParticleEmission.emission;
         _particleEmission.enabled = false;
 
-        if (FindObjectOfType<BossUI>()) FindObjectOfType<BossUI>().SetUI(this);
+        //if (FindObjectOfType<BossUI>()) FindObjectOfType<BossUI>().SetUI(this);
         if (debugDrawCenter == null) debugDrawCenter = this.transform;
 
         //animHolder.GetAnimationController().PlayAnimation(animationIDs[0], null, false);
@@ -245,7 +246,7 @@ public class BossBase : Subject, IAnimController
 
         if (currentHealth <= 0) Death();
         else { if (knockbackForce != 0) rb.AddForce(dir * knockbackForce, ForceMode.Impulse); }
-        if (GetComponentInChildren<SpriteRenderer>().material) { GetComponentInChildren<SpriteRenderer>().material.SetFloat("_HitFloat", 1); Invoke("HitMaterialReset", 0.2f); }
+        if (GetComponentInChildren<SpriteRenderer>().material) { sr.material.SetFloat("_HitFloat", 1); ; Invoke("HitMaterialReset", 0.2f); }
     }
 
     protected virtual void Death()
@@ -462,7 +463,7 @@ public class BossBase : Subject, IAnimController
 
     protected virtual void ResetHitParticle() { _particleEmission.enabled = false; }
     protected virtual void ResetConsideredFarAttackDecitionStatus() { hasConsideredFarAttack = false; }
-    protected void HitMaterialReset() { GetComponentInChildren<SpriteRenderer>().material.SetFloat("_HitFloat", 0); }
+    protected void HitMaterialReset() { sr.material.SetFloat("_HitFloat", 0); }
     #endregion
 
     #endregion

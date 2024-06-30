@@ -14,7 +14,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     private AnimationHolder animHolder;
 
     private Rigidbody rb;
-    private Vector3 direction, lastDirection;
+    private Vector3 inputDir, direction, lastDirection;
     private List<AnimationClip> animationIDs;
 
     [Header("General")]
@@ -169,10 +169,14 @@ public class PlayerControllerOverhaul : Subject, IAnimController
         Stamina();
         SlashVFXProxy();
 
+        if (isAttacking || wasParryPressed || isOnCooldown) inputDir = Vector3.zero;
+        else inputDir = new Vector3(input.GetAxisRaw("Horizontal"), 0, input.GetAxisRaw("Vertical"));
+        direction = inputDir.sqrMagnitude > directionThreshold ? inputDir : Vector3.zero;
+
         normalSlashVFX.GetComponent<Renderer>().material.SetFloat("_Status", normalVfxTime);
         comboSlashVFX.GetComponent<Renderer>().material.SetFloat("_Status", comboVfxTime);
 
-        if (!canMove || isDead || paralized) return;
+        if (!canMove || isDead || paralized || isRolling || wasParryPressed) return;
 
         if (isStunned)
         {
@@ -190,6 +194,8 @@ public class PlayerControllerOverhaul : Subject, IAnimController
 
     public void FixedUpdate()
     {
+        RotateHitboxCentreToFaceTheDirection();
+
         if (!canMove || isAttacking || paralized || isOnCooldown || isStunned) return;
 
         if (isRolling)
@@ -200,7 +206,6 @@ public class PlayerControllerOverhaul : Subject, IAnimController
         }
         else moveDuration = 0;
 
-        RotateHitboxCentreToFaceTheDirection();
 
         if (direction.sqrMagnitude > directionThreshold)
         {
@@ -216,9 +221,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     #region Actions
     public void Inputs()
     {
-        if (isAttacking || wasParryPressed || isOnCooldown) direction = Vector3.zero;
-        else direction = new Vector3(input.GetAxisRaw("Horizontal"), 0, input.GetAxisRaw("Vertical"));
-
+        
         if (input.GetButtonDown("Attack")) OverlapAttack();
         if (input.GetButtonDown("Parry")) ParryLogic();
         if (input.GetButtonDown("Roll")) Roll();
@@ -459,7 +462,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
 
     private void GetParryReward(EnemyType type, bool isProjectile = false)
     {
-        
+        DoCameraShake();
         _parryParticleEmission.enabled = true;
         _parryParticleEmissionTwo.enabled = true;
         
@@ -544,6 +547,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
             Invoker.InvokeDelayed(ResetImmunity, iFrames);
         }
         PlayAnimation(8, true, true, true);
+        DoCameraShake();
     }
 
     private void TakeDamage(float damage, float knockbackForce, Vector3 damagePos)
@@ -605,6 +609,8 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     }
     #endregion
 
+    public void DoCameraShake() { GameManager.Instance.CameraShake(0.2f, 1, 1); }
+
     #region RotateHitbox
     public void RotateHitboxCentreToFaceTheDirection()
     {
@@ -639,6 +645,9 @@ public class PlayerControllerOverhaul : Subject, IAnimController
         }
         if (isFacingLeft) GetComponent<SpriteRenderer>().flipX = true;
         else GetComponent<SpriteRenderer>().flipX = false;
+
+        if (isFacingLeft) hitboxCenter.localScale = new Vector3(1, hitboxCenter.localScale.y, hitboxCenter.localScale.z);
+        else hitboxCenter.localScale = new Vector3(-1, hitboxCenter.localScale.y, hitboxCenter.localScale.z);
     }
     #endregion
     #endregion
