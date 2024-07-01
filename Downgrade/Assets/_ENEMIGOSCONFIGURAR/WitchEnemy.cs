@@ -1,4 +1,3 @@
-using Rewired.Data.Mapping;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +5,8 @@ using DG.Tweening;
 
 public class WitchEnemy : EnemyBase
 {
+    [Header("Starting Conditions")]
+    [SerializeField] protected float startingTime = 2;
     [Header("Debug Colors")]
     [SerializeField] protected bool drawAttackHitboxesDuringAttack = true;
     [SerializeField] protected Color tooCloseColor = new Color(0, 1, 0, 1);
@@ -22,6 +23,13 @@ public class WitchEnemy : EnemyBase
     [SerializeField] protected bool hasChargeAttack = true;
     [SerializeField] protected AudioClip[] chargeAttackSounds;
 
+    [Header("RE Projectile")]
+    [SerializeField] protected GameObject projectile;
+    [SerializeField] protected Transform projectileSpawnPoint;
+    [SerializeField] protected bool projectileCanBeParried = true;
+    [SerializeField] protected float projectileLifeTime = 5;
+    [SerializeField] protected float projectileSpeed = 5;
+
     [Header("Witch C_Attack Odds")]
     [SerializeField] protected int maxOdds = 1000;
     [SerializeField] protected int oddsToChargeAttack = 250;
@@ -37,13 +45,15 @@ public class WitchEnemy : EnemyBase
     [SerializeField] protected float farAttackRange = 2;
 
     [Header("Witch Specials")]
-    [SerializeField] protected GameObject spawnable;
-    [SerializeField] protected int specialDamage;
-    [SerializeField] protected float specialKnockback;
-    [SerializeField] protected float lifeTime;
-    [SerializeField] protected float zOffset;
+    [SerializeField] protected float offset = 0.05f;
+    [SerializeField] protected Transform centerAirPoint;
 
     protected bool normalAttack;
+    protected bool witchStarting;
+    protected bool witchStarted;
+    protected int storedOdds;
+    protected float storedMeleeRange;
+    protected bool isOnSpecial;
 
     #region Unity Methods
     protected override void Awake()
@@ -55,14 +65,111 @@ public class WitchEnemy : EnemyBase
 
     protected override void Update()
     {
-        base.Update();
         if (GameManager.Instance.IsGamePaused() || isDead) return;
+
+        if (witchStarting && !witchStarted)
+        {
+            if (!attackHitboxOn) lastDirection = SetTargetDir();
+            MoveOnStarting();
+            FlipFacingLastDir();
+            return;
+        }
+
+        if (!attackHitboxOn) lastDirection = SetTargetDir();
+        if (isSpawning || IsAnimationDone()) isSpawning = false;
+        if (SetAvoidanceDir() != Vector3.zero) { direction = Vector3.Slerp(direction, SetAvoidanceDir().normalized, Time.deltaTime * avoidanceSpeed); }
+        else direction = SetTargetDir();
+        OnCooldownTimer();
+        FlipFacingLastDir();
+        UpdateHealthUI();
+        Movement();
+        Attack();
+
+        if (isStunned)
+        {
+            stunnTime += Time.deltaTime;
+            if (stunnTime >= 2f) { isStunned = false; stunnTime = 0; }
+        }
+
+        else stunnTime = 0;
         HitboxFaceToTarget();
         AttackOverlapCollider();
     }
     #endregion
 
     #region Logic
+    protected override void Movement()
+    {
+        if (isStunned || isParried || !IsAnimationDone()) return;
+
+        if (isOnSpecial && transform.position.y != centerAirPoint.position.y 
+            && transform.position.x > centerAirPoint.position.x - offset && transform.position.x < centerAirPoint.position.x + offset
+            && transform.position.z > centerAirPoint.position.z - offset && transform.position.z < centerAirPoint.position.z + offset)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, centerAirPoint.position, speed * Time.deltaTime);
+            //PlayAnimation(2, false);
+        }
+        if (isOnSpecial)
+        {
+            if (!isAttacking || isOnCooldown)
+            {
+                PlayAnimation(1, false);
+            }
+            return;
+        }
+        if (isOnCooldown || isAttacking) { PlayAnimation(1, false); if (isMoving) { isMoving = false; } return; }
+
+        if (!isAttacking && DistanceFromTarget() < tooCloseRange)
+        {
+            transform.position += -direction * speed * Time.deltaTime;
+            isMoving = true; PlayAnimation(2, false);
+        }
+        else if (!isAttacking && DistanceFromTarget() > tooCloseRange)
+        {
+            transform.position += direction * speed * Time.deltaTime;
+            isMoving = true; PlayAnimation(2, false);
+        }
+        else isMoving = false;
+    }
+
+    protected override void SpawningSequence()
+    {
+        base.SpawningSequence();
+        
+        Invoke("StartWitch", startingTime);
+    }
+
+    protected void StartWitch() 
+    { 
+        centerAirPoint = FindObjectOfType<PartirEscenarioManager>().transform;
+        target = centerAirPoint;
+        witchStarting = true; 
+        //isOnSpecial = true;
+    }
+
+    protected void MoveOnStarting()
+    {
+        if (witchStarted) return;
+        Vector3 pos = new Vector3(centerAirPoint.position.x, 0, centerAirPoint.position.z);
+        if (witchStarting && !witchStarted)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, pos, speed * Time.deltaTime);
+            PlayAnimation(2);
+        }
+
+        if (transform.position == pos)
+        {
+            witchStarted = true;
+            storedMeleeRange = closeAttackRange;
+            storedOdds = oddsToChargeAttack;
+            closeAttackRange = 0;
+            oddsToChargeAttack = maxOdds;
+            target = FindObjectOfType<PlayerControllerOverhaul>().transform;
+            Attack();
+            Debug.Log("Witch Started");
+        }
+    }
+
     protected override void Attack()
     {
         if (isOnCooldown || attackHitboxOn || isStunned || isParried || isAttacking) return;
@@ -73,7 +180,7 @@ public class WitchEnemy : EnemyBase
             PlayAnimation(3, true, true);
             PlaySound(attackSounds);
         }
-        else if (DistanceFromTarget() <= farAttackRange && !chargeAttackedConsidered && hasChargeAttack)
+        else if (DistanceFromTarget() <= farAttackRange && !chargeAttackedConsidered && hasChargeAttack && !isOnSpecial)
         {
             int random = Random.Range(0, maxOdds + 1);
 
@@ -87,13 +194,30 @@ public class WitchEnemy : EnemyBase
 
                     decidedChargeAttack = true;
                     Invoke("ResetDecitionStatus", chargeDecitionCooldown);
+                    if (oddsToChargeAttack == maxOdds) oddsToChargeAttack = storedOdds;
+                    if (closeAttackRange == 0) closeAttackRange = storedMeleeRange;
+                    isOnSpecial = true;
                 }
             }
 
             chargeAttackedConsidered = true;
             Invoke("ResetConsideredDecitionStatus", chargeDecitionCooldown);
         }
+        else if (isOnSpecial && transform.position == centerAirPoint.position)
+        {
+            isAttacking = true; normalAttack = true; //attackHitboxOn = true;
+            PlayAnimation(3, true, true);
+            PlaySound(attackSounds);
+        }
         else { if (isAttacking == true) isAttacking = false; }
+    }
+
+    public void SummonProjectile()
+    {
+        GameObject prjctl = Instantiate(projectile, projectileSpawnPoint.position, projectileSpawnPoint.rotation);
+        prjctl.GetComponent<ProjectileLogic>().SetVariables
+            (projectileSpeed, attackDamage, projectileLifeTime, attackKnockback,
+            projectileCanBeParried, SetTargetDir().normalized, parriedSounds, gameObject);
     }
 
     protected void AttackOverlapCollider()
@@ -150,9 +274,7 @@ public class WitchEnemy : EnemyBase
 
     public void SpawnObjectOnAttack()
     {
-        GameObject spikes = Instantiate(spawnable, new Vector3(hitboxCenter.position.x, transform.position.y, hitboxCenter.position.z), Quaternion.identity);
-        //spikes.transform.position += spikes.transform.forward * zOffset;
-        spikes.GetComponent<Spikes>().SetVariables(specialDamage, specialKnockback, lifeTime, lastDirection);
+        FindObjectOfType<PartirEscenarioManager>().PartirEscenario();
     }
 
     #endregion
