@@ -5,6 +5,7 @@ public class BossRipBases : MonoBehaviour
 {
     [SerializeField] Vector2 posOffset;
     [SerializeField] float moveTime;
+    [SerializeField] GameObject spawner;
     [SerializeField] GameObject bigLimit;
     Transform player;
     BossRipBases[] bases;
@@ -13,14 +14,11 @@ public class BossRipBases : MonoBehaviour
 
     private void Awake() { bases = FindObjectsOfType<BossRipBases>(); }
 
-    /*private void Update()
+    public void RipBase()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            if (!moveOut) { MoveTowards(); return; }
-            MoveInwards();
-        }
-    }*/
+        if (!moveOut) { MoveOutwards(); return; }
+        MoveInwards();
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -30,6 +28,12 @@ public class BossRipBases : MonoBehaviour
 
             player = other.transform;
             player.SetParent(transform);
+            spawner.SetActive(true);
+        }
+
+        if(other.GetComponent<EnemyBase>() && other.GetComponent<EnemyBase>().GetEnemyType() != EnemyType.Boss)
+        {
+            other.transform.SetParent(transform);
         }
     }
 
@@ -37,18 +41,19 @@ public class BossRipBases : MonoBehaviour
     {
         player.SetParent(null);
         player = null;
+        spawner.SetActive(false);
     }
 
     public bool HasPlayer() { return player != null; }
 
-    public void MoveTowards()
+    public void MoveOutwards()
     {
         moveOut = true;
         bigLimit.SetActive(false);
         transform.GetChild(0).gameObject.SetActive(true);
         StunPlayer(true);
         Vector3 newPos = new Vector3(posOffset.x, transform.position.y, posOffset.y);
-        transform.DOMove(transform.position + newPos, moveTime).onComplete += () => StunPlayer(false);
+        transform.DOMove(transform.position + newPos, moveTime).onComplete += () => { StunPlayer(false); FindObjectOfType<PartirEscenarioManager>().TransitionCompleted(this, true); };
         GameManager.Instance.CameraShake(moveTime, 1.5f, 1.5f, true);
     }
 
@@ -58,7 +63,7 @@ public class BossRipBases : MonoBehaviour
         transform.GetChild(0).gameObject.SetActive(false);
         StunPlayer(true);
         Vector3 newPos = new Vector3(posOffset.x, transform.position.y, posOffset.y);
-        transform.DOMove(transform.position - newPos, moveTime).onComplete += () => StunPlayer(false, true);
+        transform.DOMove(transform.position - newPos, moveTime).onComplete += () => { StunPlayer(false, true); FindObjectOfType<PartirEscenarioManager>().TransitionCompleted(this, false); };
         GameManager.Instance.CameraShake(moveTime, 1.5f, 1.5f, true);
     }
 
@@ -70,4 +75,5 @@ public class BossRipBases : MonoBehaviour
     }
 
     public bool GetIsMoving() { return isMoving; }
+    public Transform GetSpawner() { return spawner.transform; }
 }
