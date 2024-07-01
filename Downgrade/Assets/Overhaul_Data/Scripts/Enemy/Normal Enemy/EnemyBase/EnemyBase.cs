@@ -20,6 +20,7 @@ public class EnemyBase : Subject, IAnimController
     [Header("Type")]
     [SerializeField] protected EnemyType enemyType;
     [SerializeField] protected EnemyBehaviour behaviourType;
+    [SerializeField] protected bool summoned;
 
     [Header("General")]
     [SerializeField] protected string enemyName;
@@ -154,7 +155,8 @@ public class EnemyBase : Subject, IAnimController
         isDead = true;
         PlaySound(deathSounds); PlayAnimation(6, false, true);
 
-        if (FindObjectOfType<WaveSystem>()) FindObjectOfType<WaveSystem>().UpdateDeadEnemies();
+        if (!summoned) { if (FindObjectOfType<WaveSystem>()) FindObjectOfType<WaveSystem>().UpdateDeadEnemies(); }
+        else FindObjectOfType<PartirEscenarioManager>().EnemyKilled();
         if (hasHealthBar) healthBar.GetComponentInParent<CanvasGroup>().DOFade(0, 0.5f);
         if (hasHealthBar) Destroy(healthBar.GetComponentInParent<CanvasGroup>().gameObject, 0.499f);
         Destroy(GetComponent<Collider>());
@@ -377,7 +379,7 @@ public class EnemyBase : Subject, IAnimController
         healthBar.maxValue = health; healthBarBg.maxValue = health;
         healthBar.value = health; healthBarBg.value = health;
     }
-    protected void SpawningSequence()
+    protected virtual void SpawningSequence()
     {
         isSpawning = true;
         PlaySound(spawnSounds);
