@@ -281,7 +281,7 @@ public class NarrationSystem : MonoBehaviour, IObserver
                 Debug.Log("Boss Fight Ended");
                 break;
             case AllPlayerActions.Attack: //
-                int randomAttack = Random.Range(1, 101);
+                int randomAttack = Random.Range(1, 2);
                 //Debug.Log("numero random generado para el attack: " + randomAttack);
                 if (randomAttack <= 8)
                 {

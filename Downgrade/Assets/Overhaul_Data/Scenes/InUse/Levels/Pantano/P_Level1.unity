@@ -4330,11 +4330,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 171756003137294064, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.022767797
+      value: 0.107
       objectReference: {fileID: 0}
     - target: {fileID: 171756003137294064, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3.041
+      value: 2.957
       objectReference: {fileID: 0}
     - target: {fileID: 171756003137294064, guid: eb1322cda5d4f6046a5bc79276d06bb8, type: 3}
       propertyPath: m_LocalRotation.w
@@ -20355,6 +20355,14 @@ MonoBehaviour:
         audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
       - Dialog: "Ser\xE1 mejor que te prepares"
         audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+    - audioClip: {fileID: 8300000, guid: 18d5011f87eb46c4d9b0d78a78823957, type: 3}
+      Dialog: "\xBFQue hago yo aqu\xED?"
+      HasChain: 1
+      chainedDialogues:
+      - Dialog: "\xBFEl jugador nuevo?"
+        audioClip: {fileID: 8300000, guid: ee7bcaed707bd564498b19987f6e5e79, type: 3}
+      - Dialog: Considera esto un regalo de bienvenida
+        audioClip: {fileID: 8300000, guid: 081453ed1130e9d49899ebab7d08f591, type: 3}
   endGame:
     allDialogues: []
   playerLowHealth:
