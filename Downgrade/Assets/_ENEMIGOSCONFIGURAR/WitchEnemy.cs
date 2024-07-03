@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using Unity.VisualScripting;
 
 public class WitchEnemy : EnemyBase
 {
@@ -45,15 +46,25 @@ public class WitchEnemy : EnemyBase
     [SerializeField] protected float farAttackRange = 2;
 
     [Header("Witch Specials")]
+    [SerializeField] protected float bouncingSpeedMultiplier = 3;
     [SerializeField] protected float offset = 0.05f;
+    [SerializeField] protected float yOffset = -1; 
     [SerializeField] protected Transform centerAirPoint;
 
     protected bool normalAttack;
+    protected bool canAttack;
     protected bool witchStarting;
     protected bool witchStarted;
     protected int storedOdds;
     protected float storedMeleeRange;
     protected bool isOnSpecial;
+    protected bool stoppingSpecial;
+    protected bool wasOnSpecialOnce;
+    protected bool isBouncing;
+    protected bool bounced;
+    protected float bounceTimer;
+
+    protected Vector3 bounceDir;
 
     #region Unity Methods
     protected override void Awake()
@@ -61,6 +72,7 @@ public class WitchEnemy : EnemyBase
         base.Awake();
         if (FindObjectOfType<BossUI>()) FindObjectOfType<BossUI>().SetUI(this);
         NotifyBossesObservers(AllBossActions.Spawned);
+        FindAnyObjectByType<PartirEscenarioManager>().OnJuntarAddListener(GoBackWitch);
     }
 
     protected override void Update()
@@ -85,28 +97,35 @@ public class WitchEnemy : EnemyBase
         Movement();
         Attack();
 
+        if (bounced)
+        {
+            bounceTimer += Time.deltaTime;
+            if (bounceTimer >= 0.5f) { bounced = false; bounceTimer = 0; }
+        }
+
         if (isStunned)
         {
             stunnTime += Time.deltaTime;
             if (stunnTime >= 2f) { isStunned = false; stunnTime = 0; }
         }
 
+        
+
         else stunnTime = 0;
         HitboxFaceToTarget();
-        AttackOverlapCollider();
     }
     #endregion
 
     #region Logic
     protected override void Movement()
     {
-        if (isStunned || isParried || !IsAnimationDone()) return;
+        if (isStunned || isParried /*|| !IsAnimationDone()*/) return;
 
-        if (isOnSpecial && transform.position.y != centerAirPoint.position.y 
+        if (isOnSpecial && !stoppingSpecial && transform.position.y != centerAirPoint.position.y 
             && transform.position.x > centerAirPoint.position.x - offset && transform.position.x < centerAirPoint.position.x + offset
             && transform.position.z > centerAirPoint.position.z - offset && transform.position.z < centerAirPoint.position.z + offset)
         {
-            transform.position = Vector3.MoveTowards(transform.position, centerAirPoint.position, speed * Time.deltaTime);
+            transform.DOMoveY(centerAirPoint.position.y, 3).onComplete += () => { /*transform.DOMove(centerAirPoint.position, 1);*/ canAttack = true; };
             //PlayAnimation(2, false);
         }
         if (isOnSpecial)
@@ -117,19 +136,52 @@ public class WitchEnemy : EnemyBase
             }
             return;
         }
-        if (isOnCooldown || isAttacking) { PlayAnimation(1, false); if (isMoving) { isMoving = false; } return; }
+        else if (witchStarted)
+        {
+            if (!isBouncing)
+            {
+                bounceDir = direction;
+                isBouncing = true;
+            }
+            else
+            {
+                if (!wasOnSpecialOnce) return;
+                Vector3 fixedBounceDir = new Vector3(bounceDir.x, 0, bounceDir.z);
+                transform.position = Vector3.MoveTowards(transform.position, transform.position + fixedBounceDir.normalized, speed * bouncingSpeedMultiplier* Time.deltaTime);
+                //BouncingWallCollision();
+            }
+        }
+    }
+    /*private void BouncingWallCollision()
+    {
+        if (!isBouncing || bounced) return;
+        Collider[] hitColliders = Physics.OverlapBox(transform.position, new Vector3(2, 2, 2));
+        
+        foreach (Collider hitCollider in hitColliders)
+        {
+            if (hitCollider.CompareTag("Limits"))
+            {
+                Debug.Log("Bouncing from " + direction);
+                bounceDir = Reflect(rb.velocity, hitCollider.contactOffset);
+                bounced = true;
+                Debug.Log("Bouncing to " + bounceDir);
+            }
+        }
+    }*/
 
-        if (!isAttacking && DistanceFromTarget() < tooCloseRange)
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Limits"))
         {
-            transform.position += -direction * speed * Time.deltaTime;
-            isMoving = true; PlayAnimation(2, false);
+            bounceDir = Reflect(bounceDir, collision.GetContact(0).normal);
+            bounced = true;
         }
-        else if (!isAttacking && DistanceFromTarget() > tooCloseRange)
-        {
-            transform.position += direction * speed * Time.deltaTime;
-            isMoving = true; PlayAnimation(2, false);
-        }
-        else isMoving = false;
+    }
+
+    Vector3 Reflect(Vector3 direction, Vector3 normal)
+    {
+        // Calcular la dirección reflejada
+        return direction - 2 * Vector3.Dot(direction, normal) * normal;
     }
 
     protected override void SpawningSequence()
@@ -145,6 +197,12 @@ public class WitchEnemy : EnemyBase
         target = centerAirPoint;
         witchStarting = true; 
         //isOnSpecial = true;
+    }
+
+    protected void GoBackWitch()
+    {
+        stoppingSpecial = true;
+        transform.DOMove(Vector3.zero, 3).onComplete += () => { isOnSpecial = false; stoppingSpecial = false; };
     }
 
     protected void MoveOnStarting()
@@ -172,15 +230,22 @@ public class WitchEnemy : EnemyBase
 
     protected override void Attack()
     {
-        if (isOnCooldown || attackHitboxOn || isStunned || isParried || isAttacking) return;
+        if (attackHitboxOn || isStunned || isParried || isAttacking) return;
 
-        if (DistanceFromTarget() <= closeAttackRange)
+        if (!isOnSpecial && witchStarted && canAttack)
         {
+            if (isOnCooldown)
+            {
+                PlayAnimation(1);
+                if (isAttacking == true) isAttacking = false;
+                return;
+            }
             isAttacking = true; normalAttack = true; //attackHitboxOn = true;
             PlayAnimation(3, true, true);
             PlaySound(attackSounds);
         }
-        else if (DistanceFromTarget() <= farAttackRange && !chargeAttackedConsidered && hasChargeAttack && !isOnSpecial)
+
+        if (!chargeAttackedConsidered && hasChargeAttack && !isOnSpecial)
         {
             int random = Random.Range(0, maxOdds + 1);
 
@@ -188,23 +253,35 @@ public class WitchEnemy : EnemyBase
             {
                 if (random < oddsToChargeAttack)
                 {
+                    if (wasOnSpecialOnce)
+                    {
+                        DoSpecial();
+                        return;
+                    }
                     isAttacking = true; normalAttack = false; //attackHitboxOn = true;
                     PlayAnimation(4, true, true);
                     PlaySound(chargeAttackSounds);
 
                     decidedChargeAttack = true;
                     Invoke("ResetDecitionStatus", chargeDecitionCooldown);
-                    if (oddsToChargeAttack == maxOdds) oddsToChargeAttack = storedOdds;
+                    if (oddsToChargeAttack == maxOdds) oddsToChargeAttack = storedOdds + 250;
                     if (closeAttackRange == 0) closeAttackRange = storedMeleeRange;
                     isOnSpecial = true;
+                    if (!wasOnSpecialOnce) wasOnSpecialOnce = true;
                 }
             }
 
             chargeAttackedConsidered = true;
             Invoke("ResetConsideredDecitionStatus", chargeDecitionCooldown);
         }
-        else if (isOnSpecial && transform.position == centerAirPoint.position)
+        else if (isOnSpecial && transform.position == centerAirPoint.position && canAttack)
         {
+            if (isOnCooldown)
+            {
+                if (isAttacking == true) isAttacking = false;
+                PlayAnimation(1);
+                return;
+            }
             isAttacking = true; normalAttack = true; //attackHitboxOn = true;
             PlayAnimation(3, true, true);
             PlaySound(attackSounds);
@@ -212,45 +289,35 @@ public class WitchEnemy : EnemyBase
         else { if (isAttacking == true) isAttacking = false; }
     }
 
+    private void DoSpecial()
+    {
+        canAttack = false;
+        Vector3 vector3 = new Vector3(centerAirPoint.position.x, 0, centerAirPoint.position.z);
+        transform.DOMove(vector3, 1).onComplete += () => {  Special(); };
+    }
+
+    private void Special()
+    {
+        canAttack = true;
+        isAttacking = true; normalAttack = false; //attackHitboxOn = true;
+        PlayAnimation(4, true, true);
+        PlaySound(chargeAttackSounds);
+
+        decidedChargeAttack = true;
+        Invoke("ResetDecitionStatus", chargeDecitionCooldown);
+        if (oddsToChargeAttack == maxOdds) oddsToChargeAttack = storedOdds + 250;
+        if (closeAttackRange == 0) closeAttackRange = storedMeleeRange;
+        isOnSpecial = true;
+    }
+
     public void SummonProjectile()
     {
+        if (isOnCooldown) return;
+        isOnCooldown = true;
         GameObject prjctl = Instantiate(projectile, projectileSpawnPoint.position, projectileSpawnPoint.rotation);
         prjctl.GetComponent<ProjectileLogic>().SetVariables
             (projectileSpeed, attackDamage, projectileLifeTime, attackKnockback,
-            projectileCanBeParried, SetTargetDir().normalized, parriedSounds, gameObject);
-    }
-
-    protected void AttackOverlapCollider()
-    {
-        if (!attackHitboxOn /*|| isStunned*/ || isOnCooldown) return;
-
-        Vector3 colliderSize = normalAttack ? attackHitboxSize : chargedAttackHitboxSize;
-        float damage = normalAttack ? attackDamage : specialAttackDamage;
-        float knockback = normalAttack ? attackKnockback : chargeAttackKnockback;
-
-        Collider[] hitColliders = Physics.OverlapBox(hitboxCenter.position, colliderSize, Quaternion.LookRotation(lastDirection));
-        foreach (Collider hitCollider in hitColliders)
-        {
-            if (hitCollider.CompareTag("Player"))
-            {
-                PlayerControllerOverhaul player = hitCollider.GetComponent<PlayerControllerOverhaul>();
-
-                if (player.GetPlayerState() == "Parry" && canBeParried)
-                {
-                    if (player.GetParryAvailable(transform))
-                    {
-                        knockback *= 2;
-                        GetParried();
-                        player.GetParryRewardProxy(enemyType);
-                        player.TakeDamageProxy(0, knockback, -lastDirection);
-                        attackHitboxOn = false; return;
-                    }
-                    else player.FailParry();
-                }
-                attackHitboxOn = false;
-                player.TakeDamageProxy(damage, knockback, -direction);
-            }
-        }
+            projectileCanBeParried, SetTargetDirWithYPos(), parriedSounds, gameObject);
     }
 
     protected override void Death()
@@ -304,7 +371,7 @@ public class WitchEnemy : EnemyBase
     private void OnDrawGizmos()
     {
         if (!debugTools || debugDrawCenter == null) return;
-
+        DrawAttackHitbox(transform.position, new Vector3(2, 2, 2), Color.blue);
         DrawRange(tooCloseRange, tooCloseColor);
         DrawRange(avoidanceRange, avoidRangeColor);
         DrawRange(closeAttackRange, closeAttackColor);

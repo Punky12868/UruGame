@@ -6387,9 +6387,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 119e927f4c367c04688b830c9bc691b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelID: 9
-  levelLockID: 9
-  levelName: Nivel 10
+  levelID: 8
+  levelLockID: 8
+  levelName: Jefe
   newGameButton: 0
   unlocked: 0
   canBeUnlocked: 1
@@ -7221,7 +7221,6 @@ RectTransform:
   - {fileID: 1795559407}
   - {fileID: 1347703821}
   - {fileID: 1348977585}
-  - {fileID: 593706846}
   - {fileID: 2025922298}
   - {fileID: 1044897439}
   - {fileID: 747368351}
@@ -7331,7 +7330,6 @@ MonoBehaviour:
   - {fileID: 1795559404}
   - {fileID: 1347703822}
   - {fileID: 1348977586}
-  - {fileID: 593706847}
   - {fileID: 2025922299}
   - {fileID: 1044897440}
   - {fileID: 747368352}
@@ -7801,148 +7799,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1 &593706845
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 593706846}
-  - component: {fileID: 593706849}
-  - component: {fileID: 593706848}
-  - component: {fileID: 593706847}
-  - component: {fileID: 593706850}
-  m_Layer: 0
-  m_Name: Button (3)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &593706846
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 593706845}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1587901818}
-  m_Father: {fileID: 538095146}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -197.5, y: 126.6}
-  m_SizeDelta: {x: 89.86, y: 89.86}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &593706847
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 593706845}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 4
-    m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 2025922299}
-    m_SelectOnLeft: {fileID: 1348977586}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 593706848}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &593706848
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 593706845}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 7d5de90d41e8bd647a7b2d04e3cc4a4a, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &593706849
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 593706845}
-  m_CullTransparentMesh: 1
---- !u!114 &593706850
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 593706845}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 119e927f4c367c04688b830c9bc691b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  levelID: 3
-  levelLockID: 3
-  levelName: Nivel 4
-  newGameButton: 0
-  unlocked: 0
-  canBeUnlocked: 1
-  transitionSettings: {fileID: 11400000, guid: b0126e1e0c6c2a04895d564bd230dfb9, type: 2}
-  startDelay: 0
 --- !u!1 &605455703
 GameObject:
   m_ObjectHideFlags: 0
@@ -8384,9 +8240,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 119e927f4c367c04688b830c9bc691b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelID: 7
-  levelLockID: 7
-  levelName: Nivel 8
+  levelID: 6
+  levelLockID: 6
+  levelName: Nivel 7
   newGameButton: 0
   unlocked: 0
   canBeUnlocked: 1
@@ -9434,9 +9290,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 119e927f4c367c04688b830c9bc691b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelID: 6
-  levelLockID: 6
-  levelName: Nivel 7
+  levelID: 5
+  levelLockID: 5
+  levelName: Nivel 6
   newGameButton: 0
   unlocked: 0
   canBeUnlocked: 1
@@ -12396,9 +12252,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 119e927f4c367c04688b830c9bc691b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelID: 5
-  levelLockID: 5
-  levelName: Nivel 6
+  levelID: 4
+  levelLockID: 4
+  levelName: Nivel 5
   newGameButton: 0
   unlocked: 0
   canBeUnlocked: 1
@@ -13840,7 +13696,7 @@ MonoBehaviour:
   - {fileID: 1795559404}
   - {fileID: 1347703822}
   - {fileID: 1348977586}
-  - {fileID: 593706847}
+  - {fileID: 0}
   - {fileID: 2025922299}
   - {fileID: 1044897440}
   - {fileID: 747368352}
@@ -16273,7 +16129,6 @@ MonoBehaviour:
   - {fileID: 1795559404}
   - {fileID: 1347703822}
   - {fileID: 1348977586}
-  - {fileID: 593706847}
   - {fileID: 2025922299}
   - {fileID: 1044897440}
   - {fileID: 747368352}
@@ -16627,7 +16482,7 @@ MonoBehaviour:
     m_SelectOnUp: {fileID: 1347703822}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 593706847}
+    m_SelectOnRight: {fileID: 2025922299}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -19756,81 +19611,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1 &1587901817
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1587901818}
-  - component: {fileID: 1587901820}
-  - component: {fileID: 1587901819}
-  m_Layer: 0
-  m_Name: LockedOrNah
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1587901818
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1587901817}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.9974411, y: 0.9974413, z: 0.9974414}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 593706846}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 68.07, y: 68.07}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1587901819
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1587901817}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 1b28e01e393e36f44a07ecd38852d08f, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 1
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &1587901820
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1587901817}
-  m_CullTransparentMesh: 1
 --- !u!1 &1607755544 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2323396712446184488, guid: c34a75b3aa05edf478dff5b16d7c9e76, type: 3}
@@ -21498,9 +21278,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 119e927f4c367c04688b830c9bc691b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelID: 8
-  levelLockID: 8
-  levelName: Nivel 9
+  levelID: 7
+  levelLockID: 7
+  levelName: Nivel 8
   newGameButton: 0
   unlocked: 0
   canBeUnlocked: 1
@@ -24613,7 +24393,7 @@ MonoBehaviour:
   m_Navigation:
     m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 593706847}
+    m_SelectOnUp: {fileID: 1348977586}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 1044897440}
     m_SelectOnRight: {fileID: 0}
@@ -24692,9 +24472,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 119e927f4c367c04688b830c9bc691b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelID: 4
-  levelLockID: 4
-  levelName: Nivel 5
+  levelID: 3
+  levelLockID: 3
+  levelName: Nivel 4
   newGameButton: 0
   unlocked: 0
   canBeUnlocked: 1
@@ -39577,7 +39357,7 @@ PrefabInstance:
     - target: {fileID: 957300845555870741, guid: f2e6077a49322964b8c3648538e69c97, type: 3}
       propertyPath: idRef._Values.Array.data[2618]
       value: 
-      objectReference: {fileID: 1587901819}
+      objectReference: {fileID: 0}
     - target: {fileID: 957300845555870741, guid: f2e6077a49322964b8c3648538e69c97, type: 3}
       propertyPath: idRef._Values.Array.data[2619]
       value: 
@@ -40309,7 +40089,7 @@ PrefabInstance:
     - target: {fileID: 957300845555870741, guid: f2e6077a49322964b8c3648538e69c97, type: 3}
       propertyPath: idRef._Values.Array.data[2811]
       value: 
-      objectReference: {fileID: 593706846}
+      objectReference: {fileID: 0}
     - target: {fileID: 957300845555870741, guid: f2e6077a49322964b8c3648538e69c97, type: 3}
       propertyPath: idRef._Values.Array.data[2812]
       value: 
@@ -43853,7 +43633,7 @@ PrefabInstance:
     - target: {fileID: 957300845555870741, guid: f2e6077a49322964b8c3648538e69c97, type: 3}
       propertyPath: idRef._Values.Array.data[3981]
       value: 
-      objectReference: {fileID: 593706847}
+      objectReference: {fileID: 0}
     - target: {fileID: 957300845555870741, guid: f2e6077a49322964b8c3648538e69c97, type: 3}
       propertyPath: idRef._Values.Array.data[3982]
       value: 
@@ -43985,23 +43765,23 @@ PrefabInstance:
     - target: {fileID: 957300845555870741, guid: f2e6077a49322964b8c3648538e69c97, type: 3}
       propertyPath: idRef._Values.Array.data[4014]
       value: 
-      objectReference: {fileID: 593706845}
+      objectReference: {fileID: 0}
     - target: {fileID: 957300845555870741, guid: f2e6077a49322964b8c3648538e69c97, type: 3}
       propertyPath: idRef._Values.Array.data[4015]
       value: 
-      objectReference: {fileID: 593706849}
+      objectReference: {fileID: 0}
     - target: {fileID: 957300845555870741, guid: f2e6077a49322964b8c3648538e69c97, type: 3}
       propertyPath: idRef._Values.Array.data[4016]
       value: 
-      objectReference: {fileID: 593706848}
+      objectReference: {fileID: 0}
     - target: {fileID: 957300845555870741, guid: f2e6077a49322964b8c3648538e69c97, type: 3}
       propertyPath: idRef._Values.Array.data[4017]
       value: 
-      objectReference: {fileID: 593706850}
+      objectReference: {fileID: 0}
     - target: {fileID: 957300845555870741, guid: f2e6077a49322964b8c3648538e69c97, type: 3}
       propertyPath: idRef._Values.Array.data[4018]
       value: 
-      objectReference: {fileID: 1587901818}
+      objectReference: {fileID: 0}
     - target: {fileID: 957300845555870741, guid: f2e6077a49322964b8c3648538e69c97, type: 3}
       propertyPath: idRef._Values.Array.data[4019]
       value: 
@@ -45185,11 +44965,11 @@ PrefabInstance:
     - target: {fileID: 957300845555870741, guid: f2e6077a49322964b8c3648538e69c97, type: 3}
       propertyPath: idRef._Values.Array.data[4314]
       value: 
-      objectReference: {fileID: 1587901817}
+      objectReference: {fileID: 0}
     - target: {fileID: 957300845555870741, guid: f2e6077a49322964b8c3648538e69c97, type: 3}
       propertyPath: idRef._Values.Array.data[4315]
       value: 
-      objectReference: {fileID: 1587901820}
+      objectReference: {fileID: 0}
     - target: {fileID: 957300845555870741, guid: f2e6077a49322964b8c3648538e69c97, type: 3}
       propertyPath: idRef._Values.Array.data[4316]
       value: 
@@ -47802,6 +47582,14 @@ PrefabInstance:
       propertyPath: idRef._Values.Array.data[4974]
       value: 
       objectReference: {fileID: 2003211022}
+    - target: {fileID: 2806369054057046193, guid: f2e6077a49322964b8c3648538e69c97, type: 3}
+      propertyPath: vSync
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2806369054057046193, guid: f2e6077a49322964b8c3648538e69c97, type: 3}
+      propertyPath: targetFrameRate
+      value: 999
+      objectReference: {fileID: 0}
     - target: {fileID: 4925695415570704438, guid: f2e6077a49322964b8c3648538e69c97, type: 3}
       propertyPath: m_Name
       value: ----- Managers -----

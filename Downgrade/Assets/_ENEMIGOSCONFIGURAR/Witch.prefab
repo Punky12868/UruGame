@@ -319,14 +319,14 @@ MonoBehaviour:
   summoned: 0
   enemyName: Witch
   health: 450
-  speed: 1.5
+  speed: 3
   attackDamage: 15
   hasHitAnimation: 0
   canBeParryStunned: 0
   invertSprite: 0
   destroyOnDeath: 0
   isPlaceHolder: 1
-  attackCooldown: 1.5
+  attackCooldown: 0.5
   attackKnockback: 35
   parryStunTime: 3
   canBeParried: 1
@@ -383,11 +383,11 @@ MonoBehaviour:
   hasChargeAttack: 1
   chargeAttackSounds:
   - {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
-  projectile: {fileID: 0}
-  projectileSpawnPoint: {fileID: 0}
+  projectile: {fileID: 7879769305815110127, guid: c79406082e79266459195dbf5ec16cb6, type: 3}
+  projectileSpawnPoint: {fileID: 5629848907784323329}
   projectileCanBeParried: 1
   projectileLifeTime: 5
-  projectileSpeed: 5
+  projectileSpeed: 10
   maxOdds: 1000
   oddsToChargeAttack: 0
   hitboxCenter: {fileID: 5800207430045569620}
@@ -396,6 +396,9 @@ MonoBehaviour:
   hitboxOffset: 0.7
   closeAttackRange: 2
   farAttackRange: 10
+  bouncingSpeedMultiplier: 2
+  offset: 0.05
+  yOffset: -0.2
   centerAirPoint: {fileID: 0}
 --- !u!114 &7083601060748340363
 MonoBehaviour:
@@ -423,20 +426,8 @@ MonoBehaviour:
         m_PersistentCalls:
           m_Calls:
           - m_Target: {fileID: 8988016895151997845}
-            m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
-            m_MethodName: SetAttackHitboxOn
-            m_Mode: 6
-            m_Arguments:
-              m_ObjectArgument: {fileID: 0}
-              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-              m_IntArgument: 0
-              m_FloatArgument: 0
-              m_StringArgument: 
-              m_BoolArgument: 1
-            m_CallState: 2
-          - m_Target: {fileID: 8988016895151997845}
-            m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
-            m_MethodName: DoCameraShake
+            m_TargetAssemblyTypeName: WitchEnemy, Assembly-CSharp
+            m_MethodName: SummonProjectile
             m_Mode: 1
             m_Arguments:
               m_ObjectArgument: {fileID: 0}
@@ -458,53 +449,13 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 1
             m_CallState: 2
-    - time: 0.9
+    - time: 0.85
       events:
         m_PersistentCalls:
           m_Calls:
-          - m_Target: {fileID: 8988016895151997845}
-            m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
-            m_MethodName: SetAttackHitboxOn
-            m_Mode: 6
-            m_Arguments:
-              m_ObjectArgument: {fileID: 0}
-              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-              m_IntArgument: 0
-              m_FloatArgument: 0
-              m_StringArgument: 
-              m_BoolArgument: 0
-            m_CallState: 2
-    - time: 1.3
-      events:
-        m_PersistentCalls:
-          m_Calls:
-          - m_Target: {fileID: 8988016895151997845}
-            m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
-            m_MethodName: SetIsOnCooldown
-            m_Mode: 6
-            m_Arguments:
-              m_ObjectArgument: {fileID: 0}
-              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-              m_IntArgument: 0
-              m_FloatArgument: 0
-              m_StringArgument: 
-              m_BoolArgument: 1
-            m_CallState: 2
           - m_Target: {fileID: 8988016895151997845}
             m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
             m_MethodName: SetIsAttacking
-            m_Mode: 6
-            m_Arguments:
-              m_ObjectArgument: {fileID: 0}
-              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-              m_IntArgument: 0
-              m_FloatArgument: 0
-              m_StringArgument: 
-              m_BoolArgument: 0
-            m_CallState: 2
-          - m_Target: {fileID: 8988016895151997845}
-            m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
-            m_MethodName: SetAttackHitboxOn
             m_Mode: 6
             m_Arguments:
               m_ObjectArgument: {fileID: 0}

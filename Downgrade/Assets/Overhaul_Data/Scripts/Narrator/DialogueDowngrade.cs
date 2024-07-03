@@ -60,7 +60,7 @@ public class DialogueDowngrade : MonoBehaviour
         specialEventCalled = true;
         typewriter.GetComponent<TMP_Text>().font = oldFont;
         objct = Instantiate(specialEventObject, transform);
-        objct.GetComponent<TypewriterByCharacter>().ShowText(sentences[index]);
+        objct.GetComponent<TypewriterByCharacter>().ShowText("<shake>" + sentences[index - 2]);
         //objct.GetComponent<TMPro.TMP_Text>().text = sentences[index];
     }
 
