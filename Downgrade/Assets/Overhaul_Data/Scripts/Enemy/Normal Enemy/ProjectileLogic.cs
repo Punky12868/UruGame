@@ -22,7 +22,8 @@ public class ProjectileLogic : MonoBehaviour
     {
         travelSpeed = speed;
         damage = dmg;
-        direction = dir;
+        //direction = dir;
+        direction = (GameObject.FindGameObjectWithTag("Player").transform.position - transform.position).normalized;
         canBeParried = parry;
         knockbackForce = knckbck;
         parrySounds = prrySnd;
@@ -38,7 +39,7 @@ public class ProjectileLogic : MonoBehaviour
         if (GameManager.Instance.IsGamePaused())
             return;
 
-        transform.Translate(direction.normalized * travelSpeed * Time.deltaTime);
+        transform.Translate(direction * travelSpeed * Time.deltaTime);
         CheckForPlayerParry();
 
         if (GetComponent<SpriteRenderer>()) { if (direction.x > 0 && !GetComponent<SpriteRenderer>().flipX); }

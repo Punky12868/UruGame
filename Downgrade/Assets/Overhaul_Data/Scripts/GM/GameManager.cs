@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
     private bool isSelectingDowngrade = false;
     private bool introTextShowed = false;
+    private bool showedBossCinematic = false;
     private int downgradeSceneIndex;
     private bool displayFps = false;
     [SerializeField] private int targetFrameRate = 60;
@@ -76,6 +77,7 @@ public class GameManager : MonoBehaviour
         }
 
         if(introTextShowed == true) SetIntroText(false);
+        if(showedBossCinematic == true) SetBossCinematic(false);
     }
 
     public void GoToDowngrade()
@@ -86,6 +88,7 @@ public class GameManager : MonoBehaviour
             Debug.Log("Downgrade Started");
         }
         if (introTextShowed == true) SetIntroText(false);
+        if(showedBossCinematic == true) SetBossCinematic(false);
     }
 
     public void NewGameErasedProgress()
@@ -94,6 +97,7 @@ public class GameManager : MonoBehaviour
         TransitionManager.Instance().Transition(firstLevelIndex, transitionSettings, transitionDelay);
         Debug.Log("Erased Game Started");
         if (introTextShowed == true) SetIntroText(false);
+        if(showedBossCinematic == true) SetBossCinematic(false);
     }
 
     private bool EraseProgressOnNewGame()
@@ -106,6 +110,7 @@ public class GameManager : MonoBehaviour
         FindObjectOfType<TextScreens>().OnVictory();
         TransitionManager.Instance().Transition(0, transitionSettings, transitionDelay + 0.5f);
         if (introTextShowed == true) SetIntroText(false);
+        if(showedBossCinematic == true) SetBossCinematic(false);
     }
 
     public void LoadScene(int id)
@@ -113,6 +118,7 @@ public class GameManager : MonoBehaviour
         // Load scnene by id
         SceneManager.LoadScene(id);
         if (introTextShowed == true) SetIntroText(false);
+        if(showedBossCinematic == true) SetBossCinematic(false);
     }
 
     public void RestartGame()
@@ -163,6 +169,7 @@ public class GameManager : MonoBehaviour
             TransitionManager.Instance().Transition(sceneIndex, transitionSettings, transitionDelay);
         }
         if (introTextShowed == true) SetIntroText(false);
+        if(showedBossCinematic == true) SetBossCinematic(false);
     }
 
     public delegate void OnPauseGame();
@@ -215,6 +222,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
         TransitionManager.Instance().Transition(downgradeSceneIndex, transitionSettings, transitionDelay);
         if (introTextShowed == true) SetIntroText(false);
+        if(showedBossCinematic == true) SetBossCinematic(false);
     }
 
     private void OnGUI()
@@ -222,7 +230,7 @@ public class GameManager : MonoBehaviour
         if (displayFps)
         {
             GUI.color = Color.green;
-            GUI.skin.label.fontSize = 20;
+            GUI.skin.label.fontSize = 15;
             GUI.Label(new Rect(10, 10, 200, 40), "FPS: " + (1.0f / Time.deltaTime).ToString("0"));
         }
     }
@@ -232,9 +240,19 @@ public class GameManager : MonoBehaviour
         introTextShowed = value;
     }
 
+    public void SetBossCinematic(bool value)
+    {
+        showedBossCinematic = value;
+    }
+
     public bool GetIntroText()
     {
         return introTextShowed;
+    }
+
+    public bool GetBossCinematic()
+    {
+        return showedBossCinematic;
     }
 
     public void CameraShake(float duration, float magnitude, float gain, bool fadeOnStop = false)

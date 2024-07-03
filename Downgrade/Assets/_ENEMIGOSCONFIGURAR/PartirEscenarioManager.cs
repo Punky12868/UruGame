@@ -24,7 +24,7 @@ public class PartirEscenarioManager : MonoBehaviour
         bossBases = FindObjectsOfType<BossRipBases>(); 
         OnPartirEscenario.AddListener(ScenarioHandler);
         OnJuntarEscenario.AddListener(ScenarioHandler);
-        OnJuntarEscenario.AddListener(ScenarioHandler);
+        //OnJuntarEscenario.AddListener(ScenarioHandler);
     }
     public void PartirEscenario() { OnPartirEscenario.Invoke(); isOn = true; }
     public void JuntarEscenario() { OnJuntarEscenario.Invoke(); isOn = false; }
@@ -66,4 +66,5 @@ public class PartirEscenarioManager : MonoBehaviour
     }
 
     public void EnemyKilled() { spawnedEnemiesKilled++; }
+    public void OnJuntarAddListener(UnityAction action) { OnJuntarEscenario.AddListener(action); }
 }

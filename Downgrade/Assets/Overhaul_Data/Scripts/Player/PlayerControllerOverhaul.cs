@@ -164,6 +164,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
 
     public void Update()
     {
+        if (isDead) return;
         if (isRolling && playerState == "Parry") playerState = "";
         NotHittingKillingTimer();
         Stamina();
@@ -176,7 +177,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
         normalSlashVFX.GetComponent<Renderer>().material.SetFloat("_Status", normalVfxTime);
         comboSlashVFX.GetComponent<Renderer>().material.SetFloat("_Status", comboVfxTime);
 
-        if (!canMove || isDead || paralized || isRolling || wasParryPressed) return;
+        if (!canMove || paralized || isRolling || wasParryPressed) return;
 
         if (isStunned)
         {
@@ -194,6 +195,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
 
     public void FixedUpdate()
     {
+        if (isDead) return;
         RotateHitboxCentreToFaceTheDirection();
 
         if (!canMove || isAttacking || paralized || isOnCooldown || isStunned) return;

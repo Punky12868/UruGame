@@ -222,10 +222,18 @@ public class EnemyBase : Subject, IAnimController
     #region Direction
     protected Vector3 SetTargetDir()
     {
-        Vector3 targetPos = new Vector3(target.position.x, transform.position.y, target.position.z);
-        Vector3 currentPos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
-        Vector3 dir = (targetPos - currentPos).normalized;
+        Vector3 dir = (target.position - transform.position).normalized;
         Vector3 fixedDir = new Vector3(dir.x, 0, dir.z); return fixedDir;
+    }
+
+    protected Vector3 SetTargetDirWithYPos()
+    {
+        Vector3 dir = (target.position - transform.position).normalized; return dir;
+    }
+
+    protected Vector3 SetTargetDirWithYPosOffset(float offset)
+    {
+        Vector3 dir = (target.position - transform.position).normalized; return new Vector3(dir.x, dir.y + offset, dir.z);
     }
 
     /*protected Vector3 SetAvoidanceDir()
