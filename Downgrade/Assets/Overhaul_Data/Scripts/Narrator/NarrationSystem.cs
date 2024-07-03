@@ -232,11 +232,15 @@ public class NarrationSystem : MonoBehaviour, IObserver
                 Debug.Log("Game Ended");
                 break;
             case AllPlayerActions.LowHealth: //
-                if (FindObjectOfType<PlayerControllerOverhaul>().GetHealth() < lowHealthThreshold && !lowHealthTriggered)
+                if (FindObjectOfType<PlayerControllerOverhaul>().GetHealth() <= lowHealthThreshold && !lowHealthTriggered)
                 {
                     lowHealthTriggered = true;
                     PlaySubs(playerLowHealth);
                     Debug.Log("Low Health");
+                }
+                else
+                {
+                    print("Vida restante: " + FindObjectOfType<PlayerControllerOverhaul>().GetHealth());
                 }
                 break;
             case AllPlayerActions.LowStamina: //
@@ -281,7 +285,7 @@ public class NarrationSystem : MonoBehaviour, IObserver
                 Debug.Log("Boss Fight Ended");
                 break;
             case AllPlayerActions.Attack: //
-                int randomAttack = Random.Range(1, 2);
+                int randomAttack = Random.Range(1, 101);
                 //Debug.Log("numero random generado para el attack: " + randomAttack);
                 if (randomAttack <= 8)
                 {

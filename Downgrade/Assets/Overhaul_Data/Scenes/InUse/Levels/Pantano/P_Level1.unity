@@ -4407,7 +4407,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 314, y: -204}
+  m_AnchoredPosition: {x: 314, y: -203.9999}
   m_SizeDelta: {x: -786.125, y: -436.21997}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &553431270
@@ -9941,7 +9941,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 313.99988, y: -203.99988}
+  m_AnchoredPosition: {x: 313.99988, y: -203.99977}
   m_SizeDelta: {x: -786.125, y: -436.21997}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &745669572
@@ -11231,7 +11231,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.2164359, y: 0.000000029095917, z: -0.000000006450293, w: 0.97629684}
+  m_LocalRotation: {x: 0.21643591, y: 8.421053e-17, z: -1.192436e-16, w: 0.97629684}
   m_LocalPosition: {x: 0, y: 4.1967, z: -18.839}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -12614,7 +12614,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1332516484}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.2164359, y: 0.000000029095917, z: -0.000000006450293, w: 0.97629684}
+  m_LocalRotation: {x: 0.21643591, y: 8.421053e-17, z: -1.192436e-16, w: 0.97629684}
   m_LocalPosition: {x: 0, y: 4.1967, z: -18.839}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -13475,7 +13475,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 271.8, y: -204}
+  m_AnchoredPosition: {x: 271.8, y: -203.9999}
   m_SizeDelta: {x: -776.559, y: -436.22}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1477643645
@@ -13745,7 +13745,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1508897150}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.000000029095913, y: 0.21643585, z: 0.97629684, w: 0.000000006450291}
+  m_LocalRotation: {x: -3.2870655e-15, y: 0.21643595, z: 0.97629684, w: 9.774228e-16}
   m_LocalPosition: {x: -0.0000000018626451, y: -4.0147, z: -9.0000305}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -20276,8 +20276,8 @@ MonoBehaviour:
   subtitlesActivated: 1
   startDialogChainLength: 0
   aditionalTimeAfterNarration: 1
-  lowHealthThreshold: 10
-  lowStaminaThreshold: 10
+  lowHealthThreshold: 18
+  lowStaminaThreshold: 18
   attackThresshold: 15
   parryThreshold: 3
   dodgeThreshold: 5
@@ -20285,105 +20285,31 @@ MonoBehaviour:
   timeAfterRandomNoise: 30
   startGame:
     allDialogues:
-    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
-      Dialog: "Que hago aqu\xED."
+    - audioClip: {fileID: 8300000, guid: 3753b6d33ead1d145aad33de9cd0a2bc, type: 3}
+      Dialog: "Ojal\xE1 te haya gustado la sorpresa"
       HasChain: 1
       chainedDialogues:
-      - Dialog: "\xA1Ah! \xBFQui\xE9n eres t\xFA?"
-        audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
-      - Dialog: No me digas que eres nuevo
-        audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
-      - Dialog: "No me importa qui\xE9n eres"
-        audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
-      - Dialog: "\xA1\xC1rboles, Slimes! \xA1Enc\xE1rguense de este tipo!"
-        audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
-    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
-      Dialog: "\xA1Oye! \xA1\xBFT\xFA qui\xE9n eres?!"
-      HasChain: 1
-      chainedDialogues:
-      - Dialog: Oh, eres nuevo
-        audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+      - Dialog: "Nos har\xE1 el trabajo m\xE1s sencillo"
+        audioClip: {fileID: 8300000, guid: 60c46a45674c2954e920cffe61be33f3, type: 3}
       - Dialog: "\xA1Slimes! Maten a este tipo"
-        audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
-    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
-      Dialog: "\xA1Oye! \xA1T\xFA no perteneces aqu\xED!"
-      HasChain: 1
-      chainedDialogues:
-      - Dialog: Oh, eres un nuevo jugador
-        audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
-      - Dialog: "\xA1Slimes! Maten a este tipo"
-        audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
-    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
-      Dialog: "\xA1\xBFUn nuevo jugador?!"
-      HasChain: 1
-      chainedDialogues:
-      - Dialog: "\xA1T\xFA no perteneces aqu\xED!"
-        audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
-      - Dialog: "Ser\xE1 mejor que te prepares"
-        audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
-    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
-      Dialog: "\xA1T\xFA no perteneces aqu\xED!"
-      HasChain: 1
-      chainedDialogues:
-      - Dialog: "\xA1\xC1rboles, Slimes! Maten al mejorado"
-        audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
-    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
-      Dialog: "\xA1AH!"
-      HasChain: 1
-      chainedDialogues:
-      - Dialog: "\u201COh, aah"
-        audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
-      - Dialog: "\xBFY t\xFA qui\xE9n eres?"
-        audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
-    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
-      Dialog: "\xA1AAH!"
-      HasChain: 1
-      chainedDialogues:
-      - Dialog: "Ah, s\xED"
-        audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
-      - Dialog: "\xBFT\xFA eres el jugador?"
-        audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
-      - Dialog: Mmm, ah
-        audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
-      - Dialog: "\xA1Ah s\xED! Necesito que mates a tus peligrosos enemigos"
-        audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
-    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
-      Dialog: "\xA1Oye! \xA1\xBFT\xFA qui\xE9n eres?!"
-      HasChain: 1
-      chainedDialogues:
-      - Dialog: "No perteneces aqu\xED \xBFNo?"
-        audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
-      - Dialog: "Ser\xE1 mejor que te prepares"
-        audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
-    - audioClip: {fileID: 8300000, guid: 18d5011f87eb46c4d9b0d78a78823957, type: 3}
-      Dialog: "\xBFQue hago yo aqu\xED?"
-      HasChain: 1
-      chainedDialogues:
-      - Dialog: "\xBFEl jugador nuevo?"
-        audioClip: {fileID: 8300000, guid: ee7bcaed707bd564498b19987f6e5e79, type: 3}
-      - Dialog: Considera esto un regalo de bienvenida
-        audioClip: {fileID: 8300000, guid: 081453ed1130e9d49899ebab7d08f591, type: 3}
+        audioClip: {fileID: 8300000, guid: 2af332a9ba40db44985cb2ff464087d8, type: 3}
   endGame:
     allDialogues: []
   playerLowHealth:
     allDialogues:
-    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+    - audioClip: {fileID: 8300000, guid: 03c036fa390827c4daf4356a7e056d35, type: 3}
       Dialog: "Oye, \xBFte sientes bien?"
-      HasChain: 0
-      chainedDialogues: []
-    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
-      Dialog: JAAA
       HasChain: 0
       chainedDialogues: []
   playerHeal:
     allDialogues: []
   playerLowStamina:
     allDialogues:
-    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+    - audioClip: {fileID: 8300000, guid: 0e6def07a4ff5c84ebb7f6d54fc54c48, type: 3}
       Dialog: "\xBFYa te cansaste?"
       HasChain: 0
       chainedDialogues: []
-    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+    - audioClip: {fileID: 8300000, guid: d613f5a40f3bfa34c833b91fa2d06117, type: 3}
       Dialog: Te ves cansado
       HasChain: 0
       chainedDialogues: []
@@ -20415,18 +20341,18 @@ MonoBehaviour:
     allDialogues: []
   playerAttack:
     allDialogues:
-    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+    - audioClip: {fileID: 8300000, guid: 773bf6f466244db4f90db66774686399, type: 3}
       Dialog: Esa espada de papel no es la gran cosa
-      HasChain: 0
-      chainedDialogues: []
-    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
-      Dialog: Malo es quien porta esa espada
       HasChain: 0
       chainedDialogues: []
   playerParry:
     allDialogues:
-    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+    - audioClip: {fileID: 8300000, guid: 6f11bd8879d7b884193ddda63439df44, type: 3}
       Dialog: "Fue un bloqueo de suerte\u2026"
+      HasChain: 0
+      chainedDialogues: []
+    - audioClip: {fileID: 8300000, guid: 77f26f96ac2709f468f54906c2982e88, type: 3}
+      Dialog: Uhh, ese bloqueo estuvo bueno
       HasChain: 0
       chainedDialogues: []
   playerDodge:
@@ -20445,20 +20371,16 @@ MonoBehaviour:
     allDialogues: []
   playerDies:
     allDialogues:
-    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+    - audioClip: {fileID: 8300000, guid: 0fbaf61a3fa07cd41ba5df69aa433338, type: 3}
       Dialog: "JAAA, yo sab\xEDa"
       HasChain: 0
       chainedDialogues: []
-    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+    - audioClip: {fileID: 8300000, guid: d026e6867fd80b84b8e5ab55acb391c6, type: 3}
       Dialog: Ya era hora, cierra el juego
       HasChain: 0
       chainedDialogues: []
-    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
+    - audioClip: {fileID: 8300000, guid: d5a199fc607931d48b42dcf0b5090499, type: 3}
       Dialog: "Ni el primer jugador fue tan malo\u2026"
-      HasChain: 0
-      chainedDialogues: []
-    - audioClip: {fileID: 8300000, guid: 6d7b31f77dc501c4ea944be64cd9a1be, type: 3}
-      Dialog: "Una pena\u2026 pero no pena para mi"
       HasChain: 0
       chainedDialogues: []
   victory:
