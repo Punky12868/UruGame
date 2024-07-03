@@ -47,6 +47,8 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     [SerializeField] private float abilityDamage = 10;
     [SerializeField] private float abilityKnockback = 10f;
     [SerializeField] private float abilityLifeTime = 3f;
+    [SerializeField] private float abilityConsecutiveMax = 3f;
+    private float abilityConsecutiveCount = 0;
 
     [Header("Rewards")]
     [SerializeField] private float healthBigEnemyReward = 5f;
@@ -275,6 +277,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
         PlaySound(attackClips);
         HitboxCall(hitboxCenter.position, hitboxSize);
         NotifyPlayerObservers(AllPlayerActions.Attack);
+        abilityConsecutiveCount = 0;
     }
 
     private void NotHittingKillingTimer()
@@ -318,7 +321,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
         if (!wasParryPressed)
         {
             Debug.Log("Parry Pressed");
-
+            abilityConsecutiveCount = 0;
             PlayAnimation(5, true);
         }
     }
@@ -341,7 +344,8 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     #region Ability
     private void UseAbility()
     {
-        if (isAbilityOnCooldown) { NotifyPlayerObservers(AllPlayerActions.useAbilityOnCooldown); return; }
+        if (isAbilityOnCooldown && abilityConsecutiveCount <= abilityConsecutiveMax) { NotifyPlayerObservers(AllPlayerActions.useAbilityOnCooldown); return; }
+        abilityConsecutiveCount++;
         PlayAnimation(7, true);
         PlaySound(abilityClips);
         isAbilityOnCooldown = true;
@@ -797,19 +801,19 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     {
         if (parryCenter != null)
         {
-            // Dirección adelante del hitbox
+            // Direcciï¿½n adelante del hitbox
             Vector3 forwardA = parryCenter.forward;
             Gizmos.color = forwardLineColor;
             Gizmos.DrawLine(parryCenter.position, parryCenter.position + forwardA * lineLength);
 
-            // Ángulo de detección de parry
+            // ï¿½ngulo de detecciï¿½n de parry
             Vector3 rightBoundary = Quaternion.Euler(0, parryDetectionAngle / 2, 0) * forwardA;
             Vector3 leftBoundary = Quaternion.Euler(0, -parryDetectionAngle / 2, 0) * forwardA;
             Gizmos.color = parryAngleBoundaryColor;
             Gizmos.DrawLine(parryCenter.position, parryCenter.position + rightBoundary * lineLength);
             Gizmos.DrawLine(parryCenter.position, parryCenter.position + leftBoundary * lineLength);
 
-            // Dibujar el semicírculo de detección de parry
+            // Dibujar el semicï¿½rculo de detecciï¿½n de parry
             DrawParryArc(parryCenter.position, forwardA, parryDetectionAngle, lineLength, lineSegments);
         }
     }
