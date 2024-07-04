@@ -54,8 +54,8 @@ public class GolemEnemy : EnemyBase
 
     protected override void Update()
     {
+        if (GameManager.Instance.IsGamePaused() || isDead || !started) return;
         base.Update();
-        if (GameManager.Instance.IsGamePaused() || isDead) return;
         HitboxFaceToTarget();
         AttackOverlapCollider();
     }

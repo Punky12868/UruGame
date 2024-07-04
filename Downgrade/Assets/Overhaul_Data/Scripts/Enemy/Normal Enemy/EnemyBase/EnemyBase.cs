@@ -32,6 +32,7 @@ public class EnemyBase : Subject, IAnimController
     [SerializeField] protected bool invertSprite = false;
     [SerializeField] protected bool destroyOnDeath = false;
     [SerializeField] protected bool isPlaceHolder = false;
+    [SerializeField] protected bool usingStartedThroughAnimation = false; 
     protected float currentHealth;
 
     [Header("Combat")]
@@ -96,6 +97,7 @@ public class EnemyBase : Subject, IAnimController
     protected bool avoidingTarget;
     protected bool hasHealthBar = true;
     protected float stunnTime;
+    protected bool started;
 
     #endregion
     #endregion
@@ -104,7 +106,7 @@ public class EnemyBase : Subject, IAnimController
     protected virtual void Awake() { SetAwake(); }
     protected virtual void Update()
     {
-        if (GameManager.Instance.IsGamePaused() || isDead) return;
+        if (GameManager.Instance.IsGamePaused() || isDead || !started) return;
         if (!attackHitboxOn) lastDirection = SetTargetDir();
         if (isSpawning || IsAnimationDone()) isSpawning = false;
         if (SetAvoidanceDir() != Vector3.zero) { direction = Vector3.Slerp(direction, SetAvoidanceDir().normalized, Time.deltaTime * avoidanceSpeed); }
@@ -392,7 +394,7 @@ public class EnemyBase : Subject, IAnimController
         isSpawning = true;
         PlaySound(spawnSounds);
         if(!isPlaceHolder) PlayAnimation(0, true);
-
+        if (!usingStartedThroughAnimation) started = true;
         DowngradeSystem.Instance.SetEnemy(this);
         NotifyEnemyObservers(AllEnemyActions.Spawned);
     }
@@ -432,6 +434,7 @@ public class EnemyBase : Subject, IAnimController
     public Vector3 GetLastDirection() { return lastDirection; }
     public Transform GetTarget() { return target; }
     public string GetName() { return enemyName; }
+    public bool GetStarted() { return started; }
 
     #endregion
 
@@ -464,6 +467,7 @@ public class EnemyBase : Subject, IAnimController
     public void SetTransformDirection(Transform value) { direction = value.position.normalized; }
     public void SetLastTransformDirection(Transform value) { lastDirection = value.position.normalized; }
     public void SetTarget(Transform value) { target = value; }
+    public void SetStarted(bool value) { started = value; }
     #endregion
 
     #endregion Proxys
