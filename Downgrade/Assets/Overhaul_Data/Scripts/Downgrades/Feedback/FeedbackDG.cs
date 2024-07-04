@@ -20,7 +20,8 @@ public class FeedbackDG : MonoBehaviour
     private Color imageColor = new Color(0, 0, 0, 0.7f);
     void Start()
     {
-        Invoker.InvokeDelayed(DelayAwake, 0.2f);
+        //Invoker.InvokeDelayed(DelayAwake, 0.2f);
+        DelayAwake();
     }
 
     // Update is called once per frame

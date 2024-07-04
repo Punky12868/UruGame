@@ -208,11 +208,15 @@ public class DowngradeSystem : MonoBehaviour, IObserver
                     float newDamage = enemy.GetComponent<EnemyBase>().GetAttackDamage();
                     enemy.GetComponent<EnemyBase>().SetAttackDamage(newDamage + enemyBoostDamageAmmount);
                 }
+                feedbackRef.PlayAnimation(enemyBoostTimeThresshold);
                 enemyBoostTime = 0;
                 Debug.Log("EnemyBoost");
             }
         }
 
+
+        //Efectos de dongrades
+        if (SceneManager.GetActiveScene().buildIndex == 10) return;
         if (dg == SelectedDowngrade.Debil)
         {
             if (weaknessTime < weaknessCooldownTime)
@@ -241,6 +245,7 @@ public class DowngradeSystem : MonoBehaviour, IObserver
             }
             else
             {
+
                 FindObjectOfType<PlayerControllerOverhaul>().SetSpeed(stored_PlayerSpeed);
             }
         }
@@ -268,7 +273,10 @@ public class DowngradeSystem : MonoBehaviour, IObserver
         }
 
         FindObjectOfType<PlayerUI>().SetUI();
-
+        if (actions == AllPlayerActions.Start)
+        {
+            enemies.Clear();
+        }
         switch (dg)
         {
             case SelectedDowngrade.Stamina:
@@ -347,7 +355,7 @@ public class DowngradeSystem : MonoBehaviour, IObserver
 
                 if (actions == AllPlayerActions.NotKilling)
                 {
-                    feedbackRef.PlayAnimation(enemyBoostTimeThresshold);
+                    
                     isNotKilling = true;
                 }
                 break;
