@@ -529,7 +529,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     #region Damage
     private void TakeDamage(float damage)
     {
-        if (isDead || !canBeDamaged) return;
+        if (isDead || !canBeDamaged || isStunned) return;
 
         if (canBeStaggered)
         {

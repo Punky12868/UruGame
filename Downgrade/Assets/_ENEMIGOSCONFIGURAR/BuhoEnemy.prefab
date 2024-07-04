@@ -1,111 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &309236371921514504
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7496677530522793154}
-  - component: {fileID: 7200119201182583110}
-  - component: {fileID: 6537819949198241707}
-  m_Layer: 0
-  m_Name: Renderer
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7496677530522793154
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 309236371921514504}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.092, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 8589423854956874464}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &7200119201182583110
-SpriteRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 309236371921514504}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: b39a8d9b4df898645ba9991e1331b330, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 1996778646, guid: 47c37fd17842ac544817a6e596092435, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 0.695, y: 1.045}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
---- !u!95 &6537819949198241707
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 309236371921514504}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 77134aa8b78782542ad83364ea609da1, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &420624109452340049
 GameObject:
   m_ObjectHideFlags: 0
@@ -282,7 +176,7 @@ GameObject:
   - component: {fileID: 9189129678610853541}
   - component: {fileID: 6474051912641564088}
   - component: {fileID: 1440385415531654779}
-  - component: {fileID: 8230222371545809367}
+  - component: {fileID: 1168074368522230855}
   - component: {fileID: 6288626522393904421}
   m_Layer: 6
   m_Name: BuhoEnemy
@@ -305,7 +199,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3318759670438554938}
-  - {fileID: 7496677530522793154}
+  - {fileID: 27579786188090668}
   - {fileID: 4936884438582068453}
   - {fileID: 2913026873335381701}
   - {fileID: 7898881535604593000}
@@ -457,7 +351,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &8230222371545809367
+--- !u!114 &1168074368522230855
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -466,20 +360,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 2126887418884723181}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2cdd85102b3c01046916ceddf7aec4f6, type: 3}
+  m_Script: {fileID: 11500000, guid: 02cc66f5ac8dca14ba5505f720323a15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   enemyType: 2
-  behaviourType: 2
+  behaviourType: 1
+  summoned: 0
   enemyName: 
   health: 140
   speed: 1
   attackDamage: 20
-  hasHitAnimation: 1
+  hasHitAnimation: 0
   canBeParryStunned: 0
   invertSprite: 0
-  destroyOnDeath: 1
-  isPlaceHolder: 1
+  destroyOnDeath: 0
+  isPlaceHolder: 0
+  usingStartedThroughAnimation: 1
   attackCooldown: 1.5
   attackKnockback: 10
   parryStunTime: 3
@@ -495,8 +391,8 @@ MonoBehaviour:
   healthBarBg: {fileID: 1487708785754936230}
   healthBarBgSpeed: 5
   onHitAppearSpeed: 1
-  onHitDisappearSpeed: 10
-  onHitBarCooldown: 10
+  onHitDisappearSpeed: 5
+  onHitBarCooldown: 5
   hitParticleEmission: {fileID: 1869456743557047624}
   usingRipple: 0
   ripplePrefab: {fileID: 0}
@@ -519,9 +415,22 @@ MonoBehaviour:
   isStatic: 0
   projectile: {fileID: 7879769305815110127, guid: 4e7c9ba8e47188145ba1d4b152482095, type: 3}
   projectileSpawnPoint: {fileID: 4936884438582068453}
+  chargeAttackDamage: 5
+  chargeAttackKnockback: 15
+  chargeDecitionCooldown: 2.5
+  canParryChargeAttack: 1
+  hasChargeAttack: 1
   projectileCanBeParried: 1
   projectileLifeTime: 5
   projectileSpeed: 5
+  chargeAttackSounds: []
+  hitboxCenter: {fileID: 4936884438582068453}
+  attackHitboxSize: {x: 0.5, y: 0.5, z: 0.5}
+  chargedAttackHitboxSize: {x: 1, y: 1, z: 1}
+  hitboxOffset: 0.5
+  maxOdds: 1000
+  oddsToChargeAttack: 250
+  closeAttackRange: 2
   tooFarRange: 4
 --- !u!114 &6288626522393904421
 MonoBehaviour:
@@ -536,19 +445,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animations:
-  - animClip: {fileID: 7400000, guid: 8c33994dd7275094299483defdae84e7, type: 2}
-    invokableEvents: []
+  - animClip: {fileID: 7400000, guid: 7a7ab57b19b3aa346a3e4bbb6e72a67a, type: 2}
+    invokableEvents:
+    - time: 1
+      events:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 1168074368522230855}
+            m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
+            m_MethodName: SetStarted
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 1
+            m_CallState: 2
   - animClip: {fileID: 7400000, guid: 906222b10a842264b91d3640aeef71ae, type: 2}
     invokableEvents: []
-  - animClip: {fileID: 7400000, guid: 14aa2b0f503fee7459754f86385db2aa, type: 2}
+  - animClip: {fileID: 7400000, guid: c3a731ab75d5f5343a262f316a3007b0, type: 2}
     invokableEvents: []
-  - animClip: {fileID: 7400000, guid: 07ef9b41fcda2e8419d105d9605bfb5c, type: 2}
+  - animClip: {fileID: 7400000, guid: 6fac74f872776884888129cb97375ba3, type: 2}
     invokableEvents:
     - time: 0.96
       events:
         m_PersistentCalls:
           m_Calls:
-          - m_Target: {fileID: 8230222371545809367}
+          - m_Target: {fileID: 1168074368522230855}
             m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
             m_MethodName: SetIsAttacking
             m_Mode: 6
@@ -560,7 +485,7 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 1
             m_CallState: 2
-          - m_Target: {fileID: 8230222371545809367}
+          - m_Target: {fileID: 1168074368522230855}
             m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
             m_MethodName: MoveOnAttack
             m_Mode: 4
@@ -572,8 +497,8 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 1
             m_CallState: 2
-          - m_Target: {fileID: 8230222371545809367}
-            m_TargetAssemblyTypeName: NewRangedEnemy, Assembly-CSharp
+          - m_Target: {fileID: 1168074368522230855}
+            m_TargetAssemblyTypeName: RangedMeleeEnemy, Assembly-CSharp
             m_MethodName: SummonProjectile
             m_Mode: 1
             m_Arguments:
@@ -588,7 +513,7 @@ MonoBehaviour:
       events:
         m_PersistentCalls:
           m_Calls:
-          - m_Target: {fileID: 8230222371545809367}
+          - m_Target: {fileID: 1168074368522230855}
             m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
             m_MethodName: SetIsOnCooldown
             m_Mode: 6
@@ -600,7 +525,7 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 1
             m_CallState: 2
-          - m_Target: {fileID: 8230222371545809367}
+          - m_Target: {fileID: 1168074368522230855}
             m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
             m_MethodName: SetIsAttacking
             m_Mode: 6
@@ -618,7 +543,7 @@ MonoBehaviour:
       events:
         m_PersistentCalls:
           m_Calls:
-          - m_Target: {fileID: 8230222371545809367}
+          - m_Target: {fileID: 1168074368522230855}
             m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
             m_MethodName: SetIsOnCooldown
             m_Mode: 6
@@ -630,8 +555,8 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 1
             m_CallState: 2
-          - m_Target: {fileID: 8230222371545809367}
-            m_TargetAssemblyTypeName: RangedEnemy, Assembly-CSharp
+          - m_Target: {fileID: 1168074368522230855}
+            m_TargetAssemblyTypeName: RangedMeleeEnemy, Assembly-CSharp
             m_MethodName: SetIsStatic
             m_Mode: 6
             m_Arguments:
@@ -646,7 +571,7 @@ MonoBehaviour:
       events:
         m_PersistentCalls:
           m_Calls:
-          - m_Target: {fileID: 8230222371545809367}
+          - m_Target: {fileID: 1168074368522230855}
             m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
             m_MethodName: SetIsStunned
             m_Mode: 6
@@ -658,8 +583,8 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 0
             m_CallState: 2
-          - m_Target: {fileID: 8230222371545809367}
-            m_TargetAssemblyTypeName: RangedEnemy, Assembly-CSharp
+          - m_Target: {fileID: 1168074368522230855}
+            m_TargetAssemblyTypeName: RangedMeleeEnemy, Assembly-CSharp
             m_MethodName: SetIsStatic
             m_Mode: 6
             m_Arguments:
@@ -672,8 +597,90 @@ MonoBehaviour:
             m_CallState: 2
   - animClip: {fileID: 7400000, guid: c82d7d6ca14d9bd4e90031325db2ce02, type: 2}
     invokableEvents: []
-  - animClip: {fileID: 7400000, guid: 5c8cce818e9ab924e8f4e3c57b049d21, type: 2}
+  - animClip: {fileID: 7400000, guid: e367d39ded2b2e247ba8c5182c16ed9c, type: 2}
     invokableEvents: []
+  - animClip: {fileID: 7400000, guid: e5b38f5207956e945bc3d7cf9f691b79, type: 2}
+    invokableEvents:
+    - time: 0.55
+      events:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 1168074368522230855}
+            m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
+            m_MethodName: SetAttackHitboxOn
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 1
+            m_CallState: 2
+          - m_Target: {fileID: 1168074368522230855}
+            m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
+            m_MethodName: SetIsAttacking
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 1
+            m_CallState: 2
+          - m_Target: {fileID: 1168074368522230855}
+            m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
+            m_MethodName: MoveOnAttack
+            m_Mode: 4
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 10
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+    - time: 0.7
+      events:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 1168074368522230855}
+            m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
+            m_MethodName: SetIsOnCooldown
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 1
+            m_CallState: 2
+          - m_Target: {fileID: 1168074368522230855}
+            m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
+            m_MethodName: SetAttackHitboxOn
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: 1168074368522230855}
+            m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
+            m_MethodName: SetIsAttacking
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
 --- !u!1 &2648948502865166722
 GameObject:
   m_ObjectHideFlags: 0
@@ -5959,6 +5966,112 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!1 &6562543096009284491
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 27579786188090668}
+  - component: {fileID: 1429606355921003930}
+  - component: {fileID: 791782768298469317}
+  m_Layer: 0
+  m_Name: Renderer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &27579786188090668
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6562543096009284491}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.092, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8589423854956874464}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &1429606355921003930
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6562543096009284491}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: b39a8d9b4df898645ba9991e1331b330, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 1546307801, guid: e42a0f12ba0f3854d9259c3ff06e15fc, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 0.695, y: 1.045}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!95 &791782768298469317
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6562543096009284491}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 4c0a63bf194a0dc4abe02f7b3e114de6, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &8190129312318481331
 GameObject:
   m_ObjectHideFlags: 0

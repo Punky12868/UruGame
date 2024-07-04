@@ -37,7 +37,8 @@ public class Spikes : MonoBehaviour
 
     public void SetVariables(int damage, float knockback, float lifeTime, Vector3 direction, int maxSpikes = 0, int id = 0) 
     { 
-        if (customDamage <= 0) this.damage = damage;
+        //if (customDamage <= 0) this.damage = damage;
+        this.damage = (int)customDamage;
         this.knockback = knockback;
         this.lifeTime = lifeTime;
         this.direction = direction.normalized;

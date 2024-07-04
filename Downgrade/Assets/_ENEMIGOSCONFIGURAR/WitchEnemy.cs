@@ -46,6 +46,8 @@ public class WitchEnemy : EnemyBase
     [SerializeField] protected float farAttackRange = 2;
 
     [Header("Witch Specials")]
+    [SerializeField] protected int mortarsToSpawn = 3;
+    [SerializeField] protected int mortarsSpawnRate = 1;
     [SerializeField] protected float bouncingSpeedMultiplier = 3;
     [SerializeField] protected float offset = 0.05f;
     [SerializeField] protected float yOffset = -1; 
@@ -63,8 +65,10 @@ public class WitchEnemy : EnemyBase
     protected bool isBouncing;
     protected bool bounced;
     protected float bounceTimer;
-    protected bool onMortero;
+    protected bool onMortar;
     protected bool onGroundChange;
+    protected int mortarsSpawned;
+    protected float mortarTimer;
 
     protected Vector3 bounceDir;
 
@@ -99,6 +103,7 @@ public class WitchEnemy : EnemyBase
         FlipFacingLastDir();
         UpdateHealthUI();
         Movement();
+        Mortar();
         Attack();
 
         if (bounced)
@@ -123,7 +128,16 @@ public class WitchEnemy : EnemyBase
     #region Logic
     protected override void Movement()
     {
-        if (isStunned || isParried /*|| !IsAnimationDone()*/ || onMortero) return;
+        if (isStunned || isParried /*|| !IsAnimationDone()*/ || onGroundChange) return;
+        if (onMortar)
+        {
+            if (mortarsSpawned >= mortarsToSpawn)
+            {
+                onMortar = false;
+                mortarsSpawned = 0;
+            }
+            return;
+        }
 
         if (isOnSpecial && !stoppingSpecial && transform.position.y != centerAirPoint.position.y 
             && transform.position.x > centerAirPoint.position.x - offset && transform.position.x < centerAirPoint.position.x + offset
@@ -236,7 +250,7 @@ public class WitchEnemy : EnemyBase
     {
         if (attackHitboxOn || isStunned || isParried || isAttacking) return;
 
-        if (!isOnSpecial && witchStarted && canAttack)
+        if (!isOnSpecial && witchStarted && canAttack && !onMortar)
         {
             if (isOnCooldown)
             {
@@ -252,39 +266,42 @@ public class WitchEnemy : EnemyBase
         if (!chargeAttackedConsidered && hasChargeAttack && !isOnSpecial)
         {
             int random = Random.Range(0, maxOdds + 1);
+            int randomAttackSelection = !wasOnSpecialOnce ? 0 : Random.Range(0, maxOdds + 1);
+            Debug.Log("Random Attack Selection: " + randomAttackSelection);
 
-            int randomAttackSelection = Random.Range(0, 3);
-            if (randomAttackSelection == 0)
+            if (decidedChargeAttack) return;
+
+            if (random < oddsToSpecialAttack)
             {
-                if (!decidedChargeAttack)
+                if (randomAttackSelection <= 150)
                 {
-                    if (random < oddsToSpecialAttack)
+                    if (wasOnSpecialOnce)
                     {
-                        if (wasOnSpecialOnce)
-                        {
-                            DoSpecial();
-                            return;
-                        }
-                        isAttacking = true; normalAttack = false; //attackHitboxOn = true;
-                        PlayAnimation(4, true, true);
-                        PlaySound(chargeAttackSounds);
-
-                        decidedChargeAttack = true;
-                        Invoke("ResetDecitionStatus", chargeDecitionCooldown);
-                        if (oddsToSpecialAttack == maxOdds) oddsToSpecialAttack = storedOdds + 250;
-                        if (closeAttackRange == 0) closeAttackRange = storedMeleeRange;
-                        isOnSpecial = true;
-                        if (!wasOnSpecialOnce) wasOnSpecialOnce = true;
+                        DoSpecial(); return;
                     }
+                    isAttacking = true; normalAttack = false; //attackHitboxOn = true;
+                    PlayAnimation(4, true, true);
+                    PlaySound(chargeAttackSounds);
+
+                    decidedChargeAttack = true;
+                    Invoke("ResetDecitionStatus", chargeDecitionCooldown);
+                    if (oddsToSpecialAttack == maxOdds) oddsToSpecialAttack = 450;
+                    if (closeAttackRange == 0) closeAttackRange = storedMeleeRange;
+                    isOnSpecial = true;
+                    if (!wasOnSpecialOnce) wasOnSpecialOnce = true;
                 }
-            }
-            else if (randomAttackSelection == 1)
-            {
+                else if (randomAttackSelection > 150 /*&& randomAttackSelection < 666*/)
+                {
+                    //if (decidedChargeAttack) return;
+                    onMortar = true;
+                }
+                /*else if (randomAttackSelection > 666)
+                {
+                    if (decidedChargeAttack) return;
 
-            }
-            else if (randomAttackSelection == 2)
-            {
-
+                    onGroundChange = true;
+                    PlayAnimation(8);
+                }*/
             }
 
             chargeAttackedConsidered = true;
@@ -305,8 +322,26 @@ public class WitchEnemy : EnemyBase
         else { if (isAttacking == true) isAttacking = false; }
     }
 
+    private void Mortar()
+    {
+        if (!onMortar) return;
+        if (mortarTimer >= mortarsSpawnRate)
+        {
+            mortarTimer = 0;
+            SummonMortarProjectile();
+            mortarsSpawned++;
+            PlayAnimation(7, true, true);
+        }
+        else mortarTimer += Time.deltaTime;
+        isBouncing = false;
+    }
+
     private void DoSpecial()
     {
+        if (isOnSpecial) return;
+        isBouncing = false;
+        isOnSpecial = true;
+        stoppingSpecial = false;
         canAttack = false;
         Vector3 vector3 = new Vector3(centerAirPoint.position.x, 0, centerAirPoint.position.z);
         transform.DOMove(vector3, 1).onComplete += () => {  Special(); };
@@ -323,17 +358,28 @@ public class WitchEnemy : EnemyBase
         Invoke("ResetDecitionStatus", chargeDecitionCooldown);
         if (oddsToSpecialAttack == maxOdds) oddsToSpecialAttack = storedOdds + 250;
         if (closeAttackRange == 0) closeAttackRange = storedMeleeRange;
-        isOnSpecial = true;
     }
 
     public void SummonProjectile()
     {
-        if (isOnCooldown) return;
+        if (isOnCooldown || onMortar) return;
         isOnCooldown = true;
         GameObject prjctl = Instantiate(projectile, projectileSpawnPoint.position, projectileSpawnPoint.rotation);
         prjctl.GetComponent<ProjectileLogic>().SetVariables
             (projectileSpeed, attackDamage, projectileLifeTime, attackKnockback,
             projectileCanBeParried, SetTargetDirWithYPos(), parriedSounds, gameObject);
+    }
+
+    public void SummonMortarProjectile()
+    {
+        //if (isOnCooldown) return;
+        //isOnCooldown = true;
+        GameObject prjctl = Instantiate(projectile, projectileSpawnPoint.position, Quaternion.identity);
+        prjctl.GetComponent<ProjectileLogic>().SetVariables
+            (projectileSpeed, attackDamage, projectileLifeTime, attackKnockback,
+            false, Vector3.down, parriedSounds, gameObject, true);
+
+        Debug.Log("Mortar Spawned");
     }
 
     protected override void TakeDamage(float damage, float knockbackForce = 0, Vector3 direction = new Vector3())
@@ -406,6 +452,10 @@ public class WitchEnemy : EnemyBase
     protected void ResetConsideredDecitionStatus() { chargeAttackedConsidered = false; }
 
     #endregion
+
+    public void SetOnGroundChange(bool value) { onGroundChange = value; }
+
+    public void IncrementMortarsSpawned() { mortarsSpawned++; }
 
     #endregion
 
