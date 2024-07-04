@@ -719,6 +719,8 @@ public class PlayerControllerOverhaul : Subject, IAnimController
         if (angle < parryDetectionAngle / 2) return true;
         else return false;
     }
+    public float GetRemainingsRolls() { return rollAmmount; }
+
     #endregion
 
     #region Set
@@ -774,6 +776,8 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     public void GainHealthProxy(float healthReward) { GainHealth(healthReward);}
     public void GainStaminaProxy(float staminaReward) { GainStamina(staminaReward);}
     public void GetParryRewardProxy(EnemyType type, bool isProjectile = false) { GetParryReward(type, isProjectile);}
+
+    
     #endregion
 
     #region Invoke

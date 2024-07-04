@@ -12,6 +12,7 @@ public class DowngradeSystem : MonoBehaviour, IObserver
     [SerializeField] private Sprite dgNoIcon;
     Subject player;
     List<Subject> enemies = new List<Subject>();
+    private FeedbackDG feedbackRef;
 
     [SerializeField] private Dados dadosDg;
     [SerializeField] private Daga dagaDg;
@@ -173,6 +174,12 @@ public class DowngradeSystem : MonoBehaviour, IObserver
     private void DelayedAwake()
     {
         LoadDg();
+        if (FindObjectOfType<FeedbackDG>())
+        {
+            feedbackRef = FindObjectOfType<FeedbackDG>();
+            feedbackRef.downgrade = dg;
+        }
+       
         //RemoveDowngrade();
     }
 
@@ -220,6 +227,7 @@ public class DowngradeSystem : MonoBehaviour, IObserver
             {
                 dgIcon = dgNoIcon;
                 FindObjectOfType<PlayerUI>().SetUI();
+                
             }
             return;
         }
@@ -238,7 +246,9 @@ public class DowngradeSystem : MonoBehaviour, IObserver
                 if (actions == AllPlayerActions.useAbility)
                 {
                     FindObjectOfType<PlayerControllerOverhaul>().UseStamina(staminaLossAmmount);
+                    feedbackRef.PlayAnimation(0, 5f);
                     Debug.Log("StaminaUsed");
+
                 }
                 break;
             case SelectedDowngrade.Slime:
@@ -246,6 +256,7 @@ public class DowngradeSystem : MonoBehaviour, IObserver
                 {
                     FindObjectOfType<PlayerControllerOverhaul>().SetSpeed(fatrollSpeedAmmount);
                     Invoke("ResetFatRoll", fatrollTime);
+                    feedbackRef.PlayAnimation(fatrollTime);
                     Debug.Log("Fatroll");
                 }
                 break;
@@ -255,6 +266,7 @@ public class DowngradeSystem : MonoBehaviour, IObserver
                     if (FindObjectOfType<PlayerControllerOverhaul>().GetStamina() <= asthmaStaminaThresshold)
                     {
                         FindObjectOfType<PlayerControllerOverhaul>().TakeDamageProxy(asthmaHealthLossPercentage);
+                        feedbackRef.PlayAnimation(0, 5f);
                         Debug.Log("Asthma");
                     }
                 }
@@ -269,7 +281,7 @@ public class DowngradeSystem : MonoBehaviour, IObserver
                     {
                         if (enemy.GetIsParried()) enemy.TakeDamageProxy(damageAmmount);
                     }
-
+                    feedbackRef.PlayAnimation(paralysisTime);
                     Debug.Log("Paralysis");
                 }
                 break;
@@ -287,6 +299,7 @@ public class DowngradeSystem : MonoBehaviour, IObserver
                     {
                         FindObjectOfType<PlayerControllerOverhaul>().TakeDamageProxy(badLuckHealthLossAmmount);
                         FindObjectOfType<PlayerControllerOverhaul>().MonedaUseItem(false);
+                        feedbackRef.PlayAnimation(0,5f);
                         Debug.Log("BadLuck");
                     }
                     else
@@ -304,6 +317,7 @@ public class DowngradeSystem : MonoBehaviour, IObserver
 
                 if (actions == AllPlayerActions.NotKilling)
                 {
+                    feedbackRef.PlayAnimation(enemyBoostTimeThresshold);
                     isNotKilling = true;
                 }
                 break;
@@ -312,6 +326,7 @@ public class DowngradeSystem : MonoBehaviour, IObserver
                 {
                     FindObjectOfType<PlayerControllerOverhaul>().SetDamage(weaknessDamageAmmount);
                     weaknessTime = 0;
+                    feedbackRef.PlayAnimation(weaknessCooldownTime);
                     Debug.Log("Weakness");
                 }
                 break;
@@ -320,6 +335,7 @@ public class DowngradeSystem : MonoBehaviour, IObserver
                 {
                     onSwitch = !onSwitch;
                     FindObjectOfType<PlayerControllerOverhaul>().SetCanAttack(onSwitch);
+                    feedbackRef.SwitchIcon(onSwitch);
                     Debug.Log("Attack is: " + onSwitch);
                 }
                 break;
@@ -327,7 +343,14 @@ public class DowngradeSystem : MonoBehaviour, IObserver
                 if (actions == AllPlayerActions.Start)
                 {
                     FindObjectOfType<PlayerControllerOverhaul>().SetRollQuantity(true, diceRolls);
+                    feedbackRef.maxRolls = diceRolls;
                     Debug.Log("DiceRolls");
+                }
+                if (actions == AllPlayerActions.Dodge)
+                {
+
+                    feedbackRef.image.fillAmount = (FindObjectOfType<PlayerControllerOverhaul>().GetRemainingsRolls() / diceRolls);
+                    //print("Rolls en fillAmount: " + FindObjectOfType<PlayerControllerOverhaul>().GetRemainingsRolls() / diceRolls);
                 }
                 break;
 
