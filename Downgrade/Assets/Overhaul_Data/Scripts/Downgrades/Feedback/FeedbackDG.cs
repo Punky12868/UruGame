@@ -58,9 +58,9 @@ public class FeedbackDG : MonoBehaviour
     }
     public void PlayAnimation(float Value, float SecondValue = 0)
     {
+        image.fillAmount = 1;
         timeToDisapear = Value;
-        animPlay = true;
-        
+        animPlay = true;  
     }
     public void SetInitial()
     {

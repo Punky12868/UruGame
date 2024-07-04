@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.XR;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -30,7 +31,9 @@ public class DowngradeSystem : MonoBehaviour, IObserver
     //[Header("Slime")]
     private float fatrollSpeedAmmount;
     private float fatrollTime;
+    private float fatrollTimeLeft;
     private float stored_PlayerSpeed;
+    private bool runTimerSlime;
 
     //[Header("Rodillas")]
     private float asthmaStaminaThresshold;
@@ -215,6 +218,26 @@ public class DowngradeSystem : MonoBehaviour, IObserver
                 FindObjectOfType<PlayerControllerOverhaul>().SetDamage(stored_PlayerDamage);
             }
         }
+
+        if(dg == SelectedDowngrade.Slime)
+        {
+            if (runTimerSlime)
+            {
+                if (fatrollTimeLeft <= 0)
+                {
+                    runTimerSlime = false;
+                }
+                else if (fatrollTimeLeft >=0)
+                {
+                    fatrollTimeLeft -= Time.deltaTime;
+                }
+                
+            }
+            else
+            {
+                FindObjectOfType<PlayerControllerOverhaul>().SetSpeed(stored_PlayerSpeed);
+            }
+        }
     }
     #endregion
 
@@ -254,8 +277,9 @@ public class DowngradeSystem : MonoBehaviour, IObserver
             case SelectedDowngrade.Slime:
                 if (actions == AllPlayerActions.Dodge)
                 {
+                    ResetFatRoll();
                     FindObjectOfType<PlayerControllerOverhaul>().SetSpeed(fatrollSpeedAmmount);
-                    Invoke("ResetFatRoll", fatrollTime);
+                    
                     feedbackRef.PlayAnimation(fatrollTime);
                     Debug.Log("Fatroll");
                 }
@@ -455,7 +479,8 @@ public class DowngradeSystem : MonoBehaviour, IObserver
     #region Cooldown Invoke Values
     public void ResetFatRoll()
     {
-        FindObjectOfType<PlayerControllerOverhaul>().SetSpeed(stored_PlayerSpeed);
+        fatrollTimeLeft = fatrollTime;
+        runTimerSlime = true;
     }
     #endregion
 
