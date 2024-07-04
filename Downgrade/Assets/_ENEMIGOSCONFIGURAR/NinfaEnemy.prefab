@@ -5265,7 +5265,7 @@ GameObject:
   - component: {fileID: 5940861848648888824}
   - component: {fileID: 188634978509638669}
   - component: {fileID: 3856749840262555186}
-  - component: {fileID: 5466536034692141917}
+  - component: {fileID: -3814151151902202127}
   - component: {fileID: 1856009804989595497}
   m_Layer: 6
   m_Name: NinfaEnemy
@@ -5313,10 +5313,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.13914365
-  m_Height: 0.6493261
+  m_Radius: 0.2949564
+  m_Height: 1.1556337
   m_Direction: 1
-  m_Center: {x: 0, y: 0.27466297, z: 0}
+  m_Center: {x: 0, y: 0.5278168, z: 0}
 --- !u!54 &188634978509638669
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5440,7 +5440,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &5466536034692141917
+--- !u!114 &-3814151151902202127
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5449,11 +5449,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 5550828138713571988}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2cdd85102b3c01046916ceddf7aec4f6, type: 3}
+  m_Script: {fileID: 11500000, guid: 02cc66f5ac8dca14ba5505f720323a15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   enemyType: 2
-  behaviourType: 2
+  behaviourType: 1
+  summoned: 0
+  enemyName: 
   health: 110
   speed: 1
   attackDamage: 5
@@ -5462,20 +5464,25 @@ MonoBehaviour:
   invertSprite: 0
   destroyOnDeath: 1
   isPlaceHolder: 1
+  usingStartedThroughAnimation: 0
   attackCooldown: 1.5
   attackKnockback: 10
   parryStunTime: 3
   canBeParried: 1
+  cameraShakeDuration: 0.2
+  cameraShakeMagnitude: 0.5
+  cameraShakeGain: 0.5
   tooCloseRange: 1.7
   avoidanceRange: 0.65
   avoidanceSpeed: 7.5
+  isUsingHealthBar: 1
   healthBar: {fileID: 662255833317582580}
   healthBarBg: {fileID: 8707237161844548415}
   healthBarBgSpeed: 5
   onHitAppearSpeed: 1
-  onHitDisappearSpeed: 10
-  onHitBarCooldown: 10
-  hitParticleEmission: {fileID: 4513683024979225722}
+  onHitDisappearSpeed: 5
+  onHitBarCooldown: 5
+  hitParticleEmission: {fileID: 0}
   usingRipple: 0
   ripplePrefab: {fileID: 0}
   spawnSounds:
@@ -5497,9 +5504,22 @@ MonoBehaviour:
   isStatic: 0
   projectile: {fileID: 7879769305815110127, guid: b7b46edc46331cf478f90474fb6640b3, type: 3}
   projectileSpawnPoint: {fileID: 6620008180499796429}
+  chargeAttackDamage: 5
+  chargeAttackKnockback: 15
+  chargeDecitionCooldown: 2.5
+  canParryChargeAttack: 1
+  hasChargeAttack: 1
   projectileCanBeParried: 1
   projectileLifeTime: 5
   projectileSpeed: 5
+  chargeAttackSounds: []
+  hitboxCenter: {fileID: 6620008180499796429}
+  attackHitboxSize: {x: 0.5, y: 0.5, z: 0.5}
+  chargedAttackHitboxSize: {x: 1, y: 1, z: 1}
+  hitboxOffset: 0.5
+  maxOdds: 1000
+  oddsToChargeAttack: 250
+  closeAttackRange: 2
   tooFarRange: 4
 --- !u!114 &1856009804989595497
 MonoBehaviour:
@@ -5526,7 +5546,7 @@ MonoBehaviour:
       events:
         m_PersistentCalls:
           m_Calls:
-          - m_Target: {fileID: 5466536034692141917}
+          - m_Target: {fileID: -3814151151902202127}
             m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
             m_MethodName: SetIsAttacking
             m_Mode: 6
@@ -5538,7 +5558,7 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 1
             m_CallState: 2
-          - m_Target: {fileID: 5466536034692141917}
+          - m_Target: {fileID: -3814151151902202127}
             m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
             m_MethodName: MoveOnAttack
             m_Mode: 4
@@ -5550,8 +5570,8 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 1
             m_CallState: 2
-          - m_Target: {fileID: 5466536034692141917}
-            m_TargetAssemblyTypeName: NewRangedEnemy, Assembly-CSharp
+          - m_Target: {fileID: -3814151151902202127}
+            m_TargetAssemblyTypeName: RangedMeleeEnemy, Assembly-CSharp
             m_MethodName: SummonProjectile
             m_Mode: 1
             m_Arguments:
@@ -5566,7 +5586,7 @@ MonoBehaviour:
       events:
         m_PersistentCalls:
           m_Calls:
-          - m_Target: {fileID: 5466536034692141917}
+          - m_Target: {fileID: -3814151151902202127}
             m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
             m_MethodName: SetIsOnCooldown
             m_Mode: 6
@@ -5578,7 +5598,7 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 1
             m_CallState: 2
-          - m_Target: {fileID: 5466536034692141917}
+          - m_Target: {fileID: -3814151151902202127}
             m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
             m_MethodName: SetIsAttacking
             m_Mode: 6
@@ -5596,7 +5616,7 @@ MonoBehaviour:
       events:
         m_PersistentCalls:
           m_Calls:
-          - m_Target: {fileID: 5466536034692141917}
+          - m_Target: {fileID: -3814151151902202127}
             m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
             m_MethodName: SetIsOnCooldown
             m_Mode: 6
@@ -5612,7 +5632,7 @@ MonoBehaviour:
       events:
         m_PersistentCalls:
           m_Calls:
-          - m_Target: {fileID: 5466536034692141917}
+          - m_Target: {fileID: -3814151151902202127}
             m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
             m_MethodName: SetIsStunned
             m_Mode: 6

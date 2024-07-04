@@ -6,6 +6,8 @@ public class ProjectileLogic : MonoBehaviour
     [SerializeField] private bool invertSprite = false;
     [SerializeField] private bool faceDir = false;
     [SerializeField] private bool destroyOnLimits = false;
+    [SerializeField] private float mortarHeightLimit = 5;
+    [SerializeField] private float mortarGroundLimit = 0.2f;
     [SerializeField] private Vector3 parryDetectionSize = new Vector3(0.5f, 0.5f, 0.5f);
     [SerializeField] private Color parryDetectionColor = new Color(1, 0, 0, 1);
     private float travelSpeed;
@@ -17,8 +19,9 @@ public class ProjectileLogic : MonoBehaviour
     private Vector3 direction;
     private AudioClip[] parrySounds;
     private Transform child;
+    private bool isFromMortar;
 
-    public void SetVariables(float speed, float dmg, float lftime, float knckbck, bool parry, Vector3 dir, AudioClip[] prrySnd, GameObject orgnlEnemy)
+    public void SetVariables(float speed, float dmg, float lftime, float knckbck, bool parry, Vector3 dir, AudioClip[] prrySnd, GameObject orgnlEnemy, bool fromMortar = false, bool spawnedMortar = false)
     {
         travelSpeed = speed;
         damage = dmg;
@@ -28,6 +31,17 @@ public class ProjectileLogic : MonoBehaviour
         knockbackForce = knckbck;
         parrySounds = prrySnd;
         originalEnemy = orgnlEnemy;
+        isFromMortar = fromMortar;
+        if (isFromMortar)
+        {
+            direction = spawnedMortar ? Vector3.down.normalized : Vector3.up.normalized;
+        }
+
+        if (spawnedMortar)
+        {
+            Transform target = GameObject.FindGameObjectWithTag("Player").transform;
+            transform.position = new Vector3(target.position.x, transform.position.y, target.position.z);
+        }
 
         child = GetComponentInChildren<SpriteRenderer>().transform;
 
@@ -47,6 +61,27 @@ public class ProjectileLogic : MonoBehaviour
 
         if (faceDir) child.rotation = Quaternion.FromToRotation(Vector3.right, direction);
         else child.rotation = Quaternion.LookRotation(Camera.main.transform.forward, Camera.main.transform.up);
+
+        if (isFromMortar)
+        {
+            if (transform.position.y >= mortarHeightLimit)
+            {
+                SpawnAnotherProjectile();
+                Destroy(gameObject);
+            }
+
+            if (transform.position.y <= mortarGroundLimit)
+            {
+                Destroy(gameObject);
+                //ChangeGround
+            }
+        }
+    }
+
+    private void SpawnAnotherProjectile()
+    {
+        GameObject prjctl = Instantiate(gameObject, transform.position, transform.rotation);
+        prjctl.GetComponent<ProjectileLogic>().SetVariables(travelSpeed, damage, 5, knockbackForce, false, direction, parrySounds, originalEnemy, true, true);
     }
 
     private void CheckForPlayerParry()

@@ -31,10 +31,10 @@ public class BossRipBases : MonoBehaviour
             spawner.SetActive(true);
         }
 
-        if(other.GetComponent<EnemyBase>() && other.GetComponent<EnemyBase>().GetEnemyType() != EnemyType.Boss)
+        /*if(other.GetComponent<EnemyBase>() && other.GetComponent<EnemyBase>().GetEnemyType() != EnemyType.Boss)
         {
             other.transform.SetParent(transform);
-        }
+        }*/
     }
 
     public void RemovePlayer()

@@ -326,6 +326,7 @@ MonoBehaviour:
   invertSprite: 0
   destroyOnDeath: 0
   isPlaceHolder: 1
+  usingStartedThroughAnimation: 0
   attackCooldown: 0.5
   attackKnockback: 35
   parryStunTime: 3
@@ -389,15 +390,17 @@ MonoBehaviour:
   projectileLifeTime: 5
   projectileSpeed: 10
   maxOdds: 1000
-  oddsToChargeAttack: 0
+  oddsToSpecialAttack: 500
   hitboxCenter: {fileID: 5800207430045569620}
   attackHitboxSize: {x: 0.65, y: 0.5, z: 0.7}
   chargedAttackHitboxSize: {x: 0.65, y: 1, z: 0.7}
   hitboxOffset: 0.7
   closeAttackRange: 2
   farAttackRange: 10
+  mortarsToSpawn: 5
+  mortarsSpawnRate: 1
   bouncingSpeedMultiplier: 2
-  offset: 0.05
+  offset: 0.2
   yOffset: -0.2
   centerAirPoint: {fileID: 0}
 --- !u!114 &7083601060748340363
@@ -576,6 +579,10 @@ MonoBehaviour:
               m_BoolArgument: 0
             m_CallState: 2
   - animClip: {fileID: 7400000, guid: 573f061fb523f3f4db0ffd221a1981db, type: 2}
+    invokableEvents: []
+  - animClip: {fileID: 7400000, guid: b2ff5b325e04a6444ae6d0a032992da5, type: 2}
+    invokableEvents: []
+  - animClip: {fileID: 7400000, guid: 78113dbb653bca043bd328327946a7bc, type: 2}
     invokableEvents: []
   - animClip: {fileID: 7400000, guid: b2ff5b325e04a6444ae6d0a032992da5, type: 2}
     invokableEvents: []

@@ -61,6 +61,7 @@ public class AnimationController
             {
                 if (hasExitTime) anim.Play(animClip.name, 0, 0);
                 else anim.Play(animClip.name);
+
                 /*if (!GetCurrentAnimationName(animClip.name)) anim.Play(animClip.name);
                 else anim.Play(animClip.name, 0, 0);*/
 
