@@ -59,7 +59,10 @@ public class AnimationController
         {
             if (animClip == animationIDs[i])
             {
-                anim.Play(animClip.name);
+                if (hasExitTime) anim.Play(animClip.name, 0, 0);
+                else anim.Play(animClip.name);
+                /*if (!GetCurrentAnimationName(animClip.name)) anim.Play(animClip.name);
+                else anim.Play(animClip.name, 0, 0);*/
 
                 InvokeEvents(animationIDs[i]);
 
@@ -115,15 +118,13 @@ public class AnimationController
         }
     }
 
-    public void UsingDeltaTime(bool useDeltaTime)
-    {
-        timer.SetTimeSettings(useDeltaTime);
-    }
+    public void UsingDeltaTime(bool useDeltaTime) { timer.SetTimeSettings(useDeltaTime); }
+    private void PlayChainedAnimation() { if (chainedAnimCount > 0) PlayAnimation(chainedAnimNames[0], null, true); }
 
-    private void PlayChainedAnimation()
+    private bool GetCurrentAnimationName(string clipName)
     {
-        if (chainedAnimCount > 0)
-            PlayAnimation(chainedAnimNames[0], null, true);
+        AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
+        return stateInfo.IsName(clipName);
     }
 
     public void Invoke(float delay, Action actionToInvoke)
@@ -149,8 +150,5 @@ public class AnimationController
         }
     }
 
-    public float GetElapsedTime()
-    {
-        return elapsedTime;
-    }
+    public float GetElapsedTime() { return elapsedTime; }
 }

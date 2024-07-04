@@ -33,7 +33,7 @@ public class WitchEnemy : EnemyBase
 
     [Header("Witch C_Attack Odds")]
     [SerializeField] protected int maxOdds = 1000;
-    [SerializeField] protected int oddsToChargeAttack = 250;
+    [SerializeField] protected int oddsToSpecialAttack = 500;
 
     [Header("Witch Hitbox")]
     [SerializeField] protected Transform hitboxCenter;
@@ -63,6 +63,8 @@ public class WitchEnemy : EnemyBase
     protected bool isBouncing;
     protected bool bounced;
     protected float bounceTimer;
+    protected bool onMortero;
+    protected bool onGroundChange;
 
     protected Vector3 bounceDir;
 
@@ -86,6 +88,8 @@ public class WitchEnemy : EnemyBase
             FlipFacingLastDir();
             return;
         }
+
+        if (!witchStarted) return;
 
         if (!attackHitboxOn) lastDirection = SetTargetDir();
         if (isSpawning || IsAnimationDone()) isSpawning = false;
@@ -119,7 +123,7 @@ public class WitchEnemy : EnemyBase
     #region Logic
     protected override void Movement()
     {
-        if (isStunned || isParried /*|| !IsAnimationDone()*/) return;
+        if (isStunned || isParried /*|| !IsAnimationDone()*/ || onMortero) return;
 
         if (isOnSpecial && !stoppingSpecial && transform.position.y != centerAirPoint.position.y 
             && transform.position.x > centerAirPoint.position.x - offset && transform.position.x < centerAirPoint.position.x + offset
@@ -219,9 +223,9 @@ public class WitchEnemy : EnemyBase
         {
             witchStarted = true;
             storedMeleeRange = closeAttackRange;
-            storedOdds = oddsToChargeAttack;
+            storedOdds = oddsToSpecialAttack;
             closeAttackRange = 0;
-            oddsToChargeAttack = maxOdds;
+            oddsToSpecialAttack = maxOdds;
             target = FindObjectOfType<PlayerControllerOverhaul>().transform;
             Attack();
             Debug.Log("Witch Started");
@@ -249,26 +253,38 @@ public class WitchEnemy : EnemyBase
         {
             int random = Random.Range(0, maxOdds + 1);
 
-            if (!decidedChargeAttack)
+            int randomAttackSelection = Random.Range(0, 3);
+            if (randomAttackSelection == 0)
             {
-                if (random < oddsToChargeAttack)
+                if (!decidedChargeAttack)
                 {
-                    if (wasOnSpecialOnce)
+                    if (random < oddsToSpecialAttack)
                     {
-                        DoSpecial();
-                        return;
-                    }
-                    isAttacking = true; normalAttack = false; //attackHitboxOn = true;
-                    PlayAnimation(4, true, true);
-                    PlaySound(chargeAttackSounds);
+                        if (wasOnSpecialOnce)
+                        {
+                            DoSpecial();
+                            return;
+                        }
+                        isAttacking = true; normalAttack = false; //attackHitboxOn = true;
+                        PlayAnimation(4, true, true);
+                        PlaySound(chargeAttackSounds);
 
-                    decidedChargeAttack = true;
-                    Invoke("ResetDecitionStatus", chargeDecitionCooldown);
-                    if (oddsToChargeAttack == maxOdds) oddsToChargeAttack = storedOdds + 250;
-                    if (closeAttackRange == 0) closeAttackRange = storedMeleeRange;
-                    isOnSpecial = true;
-                    if (!wasOnSpecialOnce) wasOnSpecialOnce = true;
+                        decidedChargeAttack = true;
+                        Invoke("ResetDecitionStatus", chargeDecitionCooldown);
+                        if (oddsToSpecialAttack == maxOdds) oddsToSpecialAttack = storedOdds + 250;
+                        if (closeAttackRange == 0) closeAttackRange = storedMeleeRange;
+                        isOnSpecial = true;
+                        if (!wasOnSpecialOnce) wasOnSpecialOnce = true;
+                    }
                 }
+            }
+            else if (randomAttackSelection == 1)
+            {
+
+            }
+            else if (randomAttackSelection == 2)
+            {
+
             }
 
             chargeAttackedConsidered = true;
@@ -305,7 +321,7 @@ public class WitchEnemy : EnemyBase
 
         decidedChargeAttack = true;
         Invoke("ResetDecitionStatus", chargeDecitionCooldown);
-        if (oddsToChargeAttack == maxOdds) oddsToChargeAttack = storedOdds + 250;
+        if (oddsToSpecialAttack == maxOdds) oddsToSpecialAttack = storedOdds + 250;
         if (closeAttackRange == 0) closeAttackRange = storedMeleeRange;
         isOnSpecial = true;
     }
@@ -318,6 +334,32 @@ public class WitchEnemy : EnemyBase
         prjctl.GetComponent<ProjectileLogic>().SetVariables
             (projectileSpeed, attackDamage, projectileLifeTime, attackKnockback,
             projectileCanBeParried, SetTargetDirWithYPos(), parriedSounds, gameObject);
+    }
+
+    protected override void TakeDamage(float damage, float knockbackForce = 0, Vector3 direction = new Vector3())
+    {
+        if (isDead) return;
+        currentHealth -= damage;
+        /*if (direction != Vector3.zero) rb.AddForce((transform.position + direction).normalized * knockbackForce, ForceMode.Impulse);
+        else rb.AddForce((transform.position - target.position).normalized * knockbackForce, ForceMode.Impulse);*/
+        sr.material.SetFloat("_HitFloat", 1);
+        Invoke("HitMaterialReset", 0.2f);
+        _particleEmission.enabled = true;
+        Invoker.InvokeDelayed(ResetParticle, 0.1f);
+
+        if (hasHealthBar)
+        {
+            healthBar.GetComponentInParent<CanvasGroup>().DOFade(1, onHitAppearSpeed).SetUpdate(UpdateType.Normal, true);
+            //Invoker.CancelInvoke(DissapearBar);
+            Invoke("DissapearBar", onHitBarCooldown);
+        }
+
+        if (currentHealth <= 0) { Death(); }
+        else
+        {
+            PlaySound(hitSounds); /*ResetStatusOnHit();*/ DoCameraShake();
+            if (hasHitAnimation) { PlayAnimation(4, true, true); }
+        }
     }
 
     protected override void Death()

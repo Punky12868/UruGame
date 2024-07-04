@@ -325,7 +325,8 @@ MonoBehaviour:
   canBeParryStunned: 0
   invertSprite: 0
   destroyOnDeath: 0
-  isPlaceHolder: 1
+  isPlaceHolder: 0
+  usingStartedThroughAnimation: 1
   attackCooldown: 1.5
   attackKnockback: 35
   parryStunTime: 3
@@ -408,13 +409,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animations:
-  - animClip: {fileID: 7400000, guid: 9321ad50eb5ce414eabf745358fedbc8, type: 2}
+  - animClip: {fileID: 7400000, guid: 57cc4ade5ec45114f8ee5df6af618005, type: 2}
+    invokableEvents:
+    - time: 1.3
+      events:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: -5497472160228915752}
+            m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
+            m_MethodName: SetStarted
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 1
+            m_CallState: 2
+  - animClip: {fileID: 7400000, guid: 5a030073b96c9474fa8d97fda8200442, type: 2}
     invokableEvents: []
-  - animClip: {fileID: 7400000, guid: c3409e5e1e8fdbe408acffb18fb53cef, type: 2}
+  - animClip: {fileID: 7400000, guid: dac00c115c2035142a84860e3c67cd09, type: 2}
     invokableEvents: []
-  - animClip: {fileID: 7400000, guid: 41c413b4fbf6c7e47a7e9d477e1f49e5, type: 2}
-    invokableEvents: []
-  - animClip: {fileID: 7400000, guid: 5d17b134ca2243042855e9d69974870d, type: 2}
+  - animClip: {fileID: 7400000, guid: 7034cfb8901b70043a42e177ddba83bf, type: 2}
     invokableEvents:
     - time: 0.75
       events:
@@ -646,7 +663,7 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 0
             m_CallState: 2
-  - animClip: {fileID: 7400000, guid: 573f061fb523f3f4db0ffd221a1981db, type: 2}
+  - animClip: {fileID: 7400000, guid: c6b0a66b7aaa34e41b34ff287641f031, type: 2}
     invokableEvents: []
   - animClip: {fileID: 7400000, guid: b2ff5b325e04a6444ae6d0a032992da5, type: 2}
     invokableEvents: []
@@ -724,7 +741,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 978179965, guid: bfbdd0e349b4dbc46b31b5d25798ccfb, type: 3}
+  m_Sprite: {fileID: 1162923360, guid: cf7a7a4466064b44ba95f36372c61054, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -745,7 +762,7 @@ Animator:
   m_GameObject: {fileID: 5559705339100546194}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 99095d4f443a7e741ad1fb4d2783b9da, type: 2}
+  m_Controller: {fileID: 9100000, guid: 7268a9811c52da444871ad8854fa7490, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
