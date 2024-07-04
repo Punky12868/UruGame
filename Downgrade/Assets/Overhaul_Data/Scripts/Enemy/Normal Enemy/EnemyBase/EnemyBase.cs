@@ -270,7 +270,7 @@ public class EnemyBase : Subject, IAnimController
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, avoidanceRange);
         Vector3 avoidanceDir = Vector3.zero;
 
-        // Variable para la dirección hacia el jugador
+        // Variable para la direcciï¿½n hacia el jugador
         Vector3 playerDir = (target.position - transform.position).normalized;
 
         foreach (Collider c in hitColliders)

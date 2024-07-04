@@ -350,6 +350,10 @@ public class PlayerControllerOverhaul : Subject, IAnimController
         PlaySound(abilityClips);
         isAbilityOnCooldown = true;
         Invoker.InvokeDelayed(ResetAbilityCooldown, abilityCooldown);
+        if (FindObjectOfType<AbilityCDFeedback>())
+        {
+            FindObjectOfType<AbilityCDFeedback>().ActiveAnim();
+        }
         NotifyPlayerObservers(AllPlayerActions.useAbility);
     }
 
