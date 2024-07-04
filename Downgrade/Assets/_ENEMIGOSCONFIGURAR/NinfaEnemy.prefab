@@ -5459,10 +5459,10 @@ MonoBehaviour:
   health: 110
   speed: 1
   attackDamage: 5
-  hasHitAnimation: 1
+  hasHitAnimation: 0
   canBeParryStunned: 0
   invertSprite: 0
-  destroyOnDeath: 1
+  destroyOnDeath: 0
   isPlaceHolder: 1
   usingStartedThroughAnimation: 0
   attackCooldown: 1.5
@@ -5472,7 +5472,7 @@ MonoBehaviour:
   cameraShakeDuration: 0.2
   cameraShakeMagnitude: 0.5
   cameraShakeGain: 0.5
-  tooCloseRange: 1.7
+  tooCloseRange: 0.7
   avoidanceRange: 0.65
   avoidanceSpeed: 7.5
   isUsingHealthBar: 1
@@ -5482,7 +5482,7 @@ MonoBehaviour:
   onHitAppearSpeed: 1
   onHitDisappearSpeed: 5
   onHitBarCooldown: 5
-  hitParticleEmission: {fileID: 0}
+  hitParticleEmission: {fileID: 4513683024979225722}
   usingRipple: 0
   ripplePrefab: {fileID: 0}
   spawnSounds:
@@ -5512,13 +5512,14 @@ MonoBehaviour:
   projectileCanBeParried: 1
   projectileLifeTime: 5
   projectileSpeed: 5
-  chargeAttackSounds: []
+  chargeAttackSounds:
+  - {fileID: 8300000, guid: bd5ce0b70f360584c9ac3401dc732556, type: 3}
   hitboxCenter: {fileID: 6620008180499796429}
   attackHitboxSize: {x: 0.5, y: 0.5, z: 0.5}
   chargedAttackHitboxSize: {x: 1, y: 1, z: 1}
   hitboxOffset: 0.5
   maxOdds: 1000
-  oddsToChargeAttack: 250
+  oddsToChargeAttack: 750
   closeAttackRange: 2
   tooFarRange: 4
 --- !u!114 &1856009804989595497
@@ -5538,7 +5539,7 @@ MonoBehaviour:
     invokableEvents: []
   - animClip: {fileID: 7400000, guid: b8b74b4815b12ef46b8d3a8d9cedda61, type: 2}
     invokableEvents: []
-  - animClip: {fileID: 7400000, guid: b8b74b4815b12ef46b8d3a8d9cedda61, type: 2}
+  - animClip: {fileID: 7400000, guid: 890ccc6f952a7064bb69fe8f0b1b89d7, type: 2}
     invokableEvents: []
   - animClip: {fileID: 7400000, guid: 8df780d5d80eef7409735fc4588b56aa, type: 2}
     invokableEvents:
@@ -5646,8 +5647,126 @@ MonoBehaviour:
             m_CallState: 2
   - animClip: {fileID: 7400000, guid: c82d7d6ca14d9bd4e90031325db2ce02, type: 2}
     invokableEvents: []
-  - animClip: {fileID: 7400000, guid: 5c8cce818e9ab924e8f4e3c57b049d21, type: 2}
+  - animClip: {fileID: 7400000, guid: 2148afd6e57ecd248b3013d819d50567, type: 2}
     invokableEvents: []
+  - animClip: {fileID: 7400000, guid: 98cd917396c622f44b28b0762088936b, type: 2}
+    invokableEvents:
+    - time: 0.55
+      events:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: -3814151151902202127}
+            m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
+            m_MethodName: SetAttackHitboxOn
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 1
+            m_CallState: 2
+          - m_Target: {fileID: -3814151151902202127}
+            m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
+            m_MethodName: SetIsAttacking
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 1
+            m_CallState: 2
+          - m_Target: {fileID: -3814151151902202127}
+            m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
+            m_MethodName: MoveOnAttack
+            m_Mode: 4
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 10
+              m_StringArgument: 
+              m_BoolArgument: 1
+            m_CallState: 2
+    - time: 0.7
+      events:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: -3814151151902202127}
+            m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
+            m_MethodName: SetIsOnCooldown
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 1
+            m_CallState: 2
+          - m_Target: {fileID: -3814151151902202127}
+            m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
+            m_MethodName: SetAttackHitboxOn
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: -3814151151902202127}
+            m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
+            m_MethodName: SetIsAttacking
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: -3814151151902202127}
+            m_TargetAssemblyTypeName: RangedMeleeEnemy, Assembly-CSharp
+            m_MethodName: SetMeleeAttack
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: -3814151151902202127}
+            m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
+            m_MethodName: SetIsChargedAttack
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: -3814151151902202127}
+            m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
+            m_MethodName: SetDecidedChargeAttack
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
 --- !u!1 &6191799406898304005
 GameObject:
   m_ObjectHideFlags: 0

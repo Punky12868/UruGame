@@ -41,6 +41,8 @@ public class RangedMeleeEnemy : EnemyBase
 
     protected bool canChooseDirection = false;
     protected bool chooseDirection = false;
+    protected bool meleeAttack = false;
+    protected bool rangedAttack = false;
 
     protected bool normalAttack;
 
@@ -105,12 +107,12 @@ public class RangedMeleeEnemy : EnemyBase
 
                 if (!decidedChargeAttack)
                 {
-                    if (random < oddsToChargeAttack)
+                    if (random < oddsToChargeAttack && !rangedAttack)
                     {
                         isAttacking = true; normalAttack = false; //attackHitboxOn = true;
                         PlayAnimation(7, true, true);
                         PlaySound(chargeAttackSounds);
-
+                        meleeAttack = true;
                         decidedChargeAttack = true;
                         Invoke("ResetDecitionStatus", chargeDecitionCooldown);
                     }
@@ -119,8 +121,9 @@ public class RangedMeleeEnemy : EnemyBase
                 chargeAttackedConsidered = true;
                 Invoke("ResetConsideredDecitionStatus", chargeDecitionCooldown);
             }
-            if (DistanceFromTarget() >= tooCloseRange && DistanceFromTarget() <= tooFarRange)
+            if (DistanceFromTarget() >= tooCloseRange && DistanceFromTarget() <= tooFarRange && !meleeAttack)
             {
+                rangedAttack = true;
                 isAttacking = true;
                 canChooseDirection = true;
                 PlayAnimation(3, true, true);
@@ -182,6 +185,8 @@ public class RangedMeleeEnemy : EnemyBase
     }
 
     public void SetIsStatic(bool value) { isStatic = value; }
+    public void SetMeleeAttack(bool value) { meleeAttack = value; }
+    public void SetRangedAttack(bool value) { rangedAttack = value; }
 
     #region Debug
     private void OnDrawGizmos()

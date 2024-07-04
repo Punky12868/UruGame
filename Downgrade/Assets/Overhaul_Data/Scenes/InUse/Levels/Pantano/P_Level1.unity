@@ -1200,7 +1200,18 @@ MonoBehaviour:
   isBossArea: 0
   timerEnemySpawn: 0
   waves:
-  - enemiesInWave: []
+  - enemiesInWave:
+    - enemyPrefab: {fileID: 2126887418884723181, guid: ffa63623806c5554bb3fd6ba6d0850b9, type: 3}
+      spawnInLastEnemyPosition: 0
+      position: {x: 0, y: 0}
+      yPositionOffset: 0
+      delayForNextEnemy: 8
+  - enemiesInWave:
+    - enemyPrefab: {fileID: 5550828138713571988, guid: 7dd0db773606bf84098aee627943d3c1, type: 3}
+      spawnInLastEnemyPosition: 0
+      position: {x: 0, y: 0}
+      yPositionOffset: 0
+      delayForNextEnemy: 3
 --- !u!1001 &283152163
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -31422,9 +31433,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   image: {fileID: 378472883}
   downgrade: 0
-  calculationDivision: 0
-  timeToDisapear: 0
-  animPlay: 0
   maxRolls: 0
   holder:
     vacio: {fileID: 21300000, guid: 2e1e3f5cac4499b4984f484d15f06cf2, type: 3}
