@@ -177,13 +177,19 @@ public class DowngradeSystem : MonoBehaviour, IObserver
     private void DelayedAwake()
     {
         LoadDg();
-        if (FindObjectOfType<FeedbackDG>())
+        /*if (FindObjectOfType<FeedbackDG>())
         {
             feedbackRef = FindObjectOfType<FeedbackDG>();
             feedbackRef.downgrade = dg;
-        }
+        }*/
        
         //RemoveDowngrade();
+    }
+
+    public void SetDowngradeFeedback(FeedbackDG script)
+    {
+        feedbackRef = script;
+        feedbackRef.downgrade = dg;
     }
 
     private void Update()

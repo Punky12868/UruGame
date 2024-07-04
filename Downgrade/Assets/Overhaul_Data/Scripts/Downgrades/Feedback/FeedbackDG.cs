@@ -16,6 +16,8 @@ public class FeedbackDG : MonoBehaviour
 
     private bool notBosque = true;
     public IconHolder holder;
+
+    private Color imageColor = new Color(0, 0, 0, 0.7f);
     void Start()
     {
         Invoker.InvokeDelayed(DelayAwake, 0.2f);
@@ -91,6 +93,8 @@ public class FeedbackDG : MonoBehaviour
         }
         else
         {
+            FindObjectOfType<DowngradeSystem>().SetDowngradeFeedback(this);
+            image.color = imageColor;
             SelectDGType(downgrade);
             SetInitial();
         }
