@@ -118,7 +118,9 @@ public class GolemEnemy : EnemyBase
                         GetParried();
                         player.GetParryRewardProxy(enemyType);
                         player.TakeDamageProxy(0, knockback, -lastDirection);
+                        player.NotifyBossesObservers(AllBossActions.Parried);
                         attackHitboxOn = false; return;
+                        
                     }
                     else player.FailParry();
                 }
