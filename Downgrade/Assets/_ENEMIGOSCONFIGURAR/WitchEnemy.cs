@@ -150,7 +150,7 @@ public class WitchEnemy : EnemyBase
         {
             if (!isAttacking || isOnCooldown)
             {
-                PlayAnimation(1, false);
+                PlayAnimation(0, false);
             }
             return;
         }
@@ -230,7 +230,7 @@ public class WitchEnemy : EnemyBase
         if (witchStarting && !witchStarted)
         {
             transform.position = Vector3.MoveTowards(transform.position, pos, speed * Time.deltaTime);
-            PlayAnimation(2);
+            PlayAnimation(0);
         }
 
         if (transform.position == pos)
@@ -254,12 +254,12 @@ public class WitchEnemy : EnemyBase
         {
             if (isOnCooldown)
             {
-                PlayAnimation(1);
+                PlayAnimation(0);
                 if (isAttacking == true) isAttacking = false;
                 return;
             }
             isAttacking = true; normalAttack = true; //attackHitboxOn = true;
-            PlayAnimation(3, true, true);
+            PlayAnimation(1, true, true);
             PlaySound(attackSounds);
         }
 
@@ -280,7 +280,7 @@ public class WitchEnemy : EnemyBase
                         DoSpecial(); return;
                     }
                     isAttacking = true; normalAttack = false; //attackHitboxOn = true;
-                    PlayAnimation(4, true, true);
+                    PlayAnimation(2, true, true);
                     PlaySound(chargeAttackSounds);
 
                     decidedChargeAttack = true;
@@ -312,7 +312,7 @@ public class WitchEnemy : EnemyBase
             if (isOnCooldown)
             {
                 if (isAttacking == true) isAttacking = false;
-                PlayAnimation(1);
+                PlayAnimation(0);
                 return;
             }
             isAttacking = true; normalAttack = true; //attackHitboxOn = true;
@@ -330,7 +330,7 @@ public class WitchEnemy : EnemyBase
             mortarTimer = 0;
             SummonMortarProjectile();
             mortarsSpawned++;
-            PlayAnimation(7, true, true);
+            PlayAnimation(4, true, true);
         }
         else mortarTimer += Time.deltaTime;
         isBouncing = false;
@@ -351,7 +351,7 @@ public class WitchEnemy : EnemyBase
     {
         canAttack = true;
         isAttacking = true; normalAttack = false; //attackHitboxOn = true;
-        PlayAnimation(4, true, true);
+        PlayAnimation(2, true, true);
         PlaySound(chargeAttackSounds);
 
         decidedChargeAttack = true;
@@ -411,7 +411,7 @@ public class WitchEnemy : EnemyBase
     protected override void Death()
     {
         isDead = true;
-        PlaySound(deathSounds); PlayAnimation(5, false, true);
+        PlaySound(deathSounds); PlayAnimation(7, false, true);
 
         if (FindObjectOfType<WaveSystem>()) FindObjectOfType<WaveSystem>().UpdateDeadEnemies();
         if (hasHealthBar) healthBar.GetComponentInParent<CanvasGroup>().DOFade(0, 0.5f);
