@@ -214,9 +214,9 @@ public class DowngradeSystem : MonoBehaviour, IObserver
             }
         }
 
-
-        //Efectos de dongrades
-        if (SceneManager.GetActiveScene().buildIndex == 10) return;
+        
+        //Efectos de downgrades
+        if (SceneManager.GetActiveScene().buildIndex == SceneManager.sceneCountInBuildSettings) return;
         if (dg == SelectedDowngrade.Debil)
         {
             if (weaknessTime < weaknessCooldownTime)
