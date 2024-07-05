@@ -59,4 +59,5 @@ public class UISelector : MonoBehaviour
     }
 
     public Button[] GetManualButtons() { return manualButtons.ToArray(); }
+    public Button GetCurrentButton() { if (currentButton == null) return null; return currentButton; }
 }

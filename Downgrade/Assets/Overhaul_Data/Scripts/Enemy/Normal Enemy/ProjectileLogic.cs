@@ -26,6 +26,7 @@ public class ProjectileLogic : MonoBehaviour
         travelSpeed = speed;
         damage = dmg;
         //direction = dir;
+        transform.rotation = Quaternion.identity;
         direction = (GameObject.FindGameObjectWithTag("Player").transform.position - transform.position).normalized;
         canBeParried = parry;
         knockbackForce = knckbck;

@@ -170,7 +170,7 @@ public class RangedMeleeEnemy : EnemyBase
         GameObject prjctl = Instantiate(projectile, projectileSpawnPoint.position, projectileSpawnPoint.rotation);
         prjctl.GetComponent<ProjectileLogic>().SetVariables
             (projectileSpeed, attackDamage, projectileLifeTime, attackKnockback, 
-            projectileCanBeParried, SetTargetDir().normalized, parriedSounds, gameObject);
+            projectileCanBeParried, SetTargetDirWithYPos(), parriedSounds, gameObject);
     }
 
     protected void HitboxFaceToTarget()
