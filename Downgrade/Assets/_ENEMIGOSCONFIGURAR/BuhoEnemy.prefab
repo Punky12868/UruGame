@@ -383,7 +383,7 @@ MonoBehaviour:
   cameraShakeDuration: 0.2
   cameraShakeMagnitude: 0.5
   cameraShakeGain: 0.5
-  tooCloseRange: 1.7
+  tooCloseRange: 0.7
   avoidanceRange: 0.65
   avoidanceSpeed: 7.5
   isUsingHealthBar: 1
@@ -423,13 +423,14 @@ MonoBehaviour:
   projectileCanBeParried: 1
   projectileLifeTime: 5
   projectileSpeed: 5
-  chargeAttackSounds: []
+  chargeAttackSounds:
+  - {fileID: 8300000, guid: bd5ce0b70f360584c9ac3401dc732556, type: 3}
   hitboxCenter: {fileID: 4936884438582068453}
   attackHitboxSize: {x: 0.5, y: 0.5, z: 0.5}
   chargedAttackHitboxSize: {x: 1, y: 1, z: 1}
   hitboxOffset: 0.5
   maxOdds: 1000
-  oddsToChargeAttack: 250
+  oddsToChargeAttack: 750
   closeAttackRange: 2
   tooFarRange: 4
 --- !u!114 &6288626522393904421
@@ -528,6 +529,18 @@ MonoBehaviour:
           - m_Target: {fileID: 1168074368522230855}
             m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
             m_MethodName: SetIsAttacking
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: 1168074368522230855}
+            m_TargetAssemblyTypeName: RangedMeleeEnemy, Assembly-CSharp
+            m_MethodName: SetRangedAttack
             m_Mode: 6
             m_Arguments:
               m_ObjectArgument: {fileID: 0}
@@ -672,6 +685,42 @@ MonoBehaviour:
           - m_Target: {fileID: 1168074368522230855}
             m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
             m_MethodName: SetIsAttacking
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: 1168074368522230855}
+            m_TargetAssemblyTypeName: RangedMeleeEnemy, Assembly-CSharp
+            m_MethodName: SetMeleeAttack
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: 1168074368522230855}
+            m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
+            m_MethodName: SetChargeAttackedConsidered
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: 1168074368522230855}
+            m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
+            m_MethodName: SetDecidedChargeAttack
             m_Mode: 6
             m_Arguments:
               m_ObjectArgument: {fileID: 0}

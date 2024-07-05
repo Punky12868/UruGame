@@ -1200,7 +1200,18 @@ MonoBehaviour:
   isBossArea: 0
   timerEnemySpawn: 0
   waves:
-  - enemiesInWave: []
+  - enemiesInWave:
+    - enemyPrefab: {fileID: 2126887418884723181, guid: ffa63623806c5554bb3fd6ba6d0850b9, type: 3}
+      spawnInLastEnemyPosition: 0
+      position: {x: 0, y: 0}
+      yPositionOffset: 0
+      delayForNextEnemy: 8
+  - enemiesInWave:
+    - enemyPrefab: {fileID: 5550828138713571988, guid: 7dd0db773606bf84098aee627943d3c1, type: 3}
+      spawnInLastEnemyPosition: 0
+      position: {x: 0, y: 0}
+      yPositionOffset: 0
+      delayForNextEnemy: 3
 --- !u!1001 &283152163
 PrefabInstance:
   m_ObjectHideFlags: 0
