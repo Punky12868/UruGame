@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,6 +13,9 @@ public class CutOutObject : MonoBehaviour
     private void Awake()
     {
         mainCamera = GetComponent<Camera>();
+
+        Transform obj = FindObjectOfType<CinemachineVirtualCamera>().transform;
+        //obj.position = new Vector3(obj.position.x, 3.37f, obj.position.z + 2);
     }
 
     public void AddTarget(Transform target)

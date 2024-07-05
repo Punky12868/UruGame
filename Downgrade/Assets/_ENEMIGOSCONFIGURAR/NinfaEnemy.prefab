@@ -5463,8 +5463,8 @@ MonoBehaviour:
   canBeParryStunned: 0
   invertSprite: 0
   destroyOnDeath: 0
-  isPlaceHolder: 1
-  usingStartedThroughAnimation: 0
+  isPlaceHolder: 0
+  usingStartedThroughAnimation: 1
   attackCooldown: 1.5
   attackKnockback: 10
   parryStunTime: 3
@@ -5535,8 +5535,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animations:
-  - animClip: {fileID: 7400000, guid: 8c33994dd7275094299483defdae84e7, type: 2}
-    invokableEvents: []
+  - animClip: {fileID: 7400000, guid: a1250d2d208ff3944b384f841ce51815, type: 2}
+    invokableEvents:
+    - time: 1
+      events:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: -3814151151902202127}
+            m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
+            m_MethodName: SetStarted
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 1
+            m_CallState: 2
   - animClip: {fileID: 7400000, guid: b8b74b4815b12ef46b8d3a8d9cedda61, type: 2}
     invokableEvents: []
   - animClip: {fileID: 7400000, guid: 890ccc6f952a7064bb69fe8f0b1b89d7, type: 2}
