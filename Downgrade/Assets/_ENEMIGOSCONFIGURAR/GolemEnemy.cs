@@ -139,7 +139,7 @@ public class GolemEnemy : EnemyBase
         if (hasHealthBar) healthBar.GetComponentInParent<CanvasGroup>().DOFade(0, 0.5f);
         if (hasHealthBar) Destroy(healthBar.GetComponentInParent<CanvasGroup>().gameObject, 0.499f);
         Destroy(GetComponent<Collider>());
-        Invoker.CancelInvoke(DissapearBar);
+        //Invoker.CancelInvoke(DissapearBar);
         //Destroy(audioSource);
         if (destroyOnDeath) { Destroy(gameObject, 0.5f); return; }
         this.enabled = false;

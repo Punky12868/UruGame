@@ -5740,11 +5740,12 @@ MonoBehaviour:
   health: 100
   speed: 1.3
   attackDamage: 15
-  hasHitAnimation: 0
+  hasHitAnimation: 1
   canBeParryStunned: 1
   invertSprite: 0
-  destroyOnDeath: 1
-  isPlaceHolder: 1
+  destroyOnDeath: 0
+  isPlaceHolder: 0
+  usingStartedThroughAnimation: 1
   attackCooldown: 1.5
   attackKnockback: 10
   parryStunTime: 3
@@ -5809,8 +5810,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animations:
-  - animClip: {fileID: 7400000, guid: 8c33994dd7275094299483defdae84e7, type: 2}
-    invokableEvents: []
+  - animClip: {fileID: 7400000, guid: 072cc06a0802c1a41bf00a2e1d1d4b78, type: 2}
+    invokableEvents:
+    - time: 1
+      events:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 146464653774177883}
+            m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
+            m_MethodName: SetStarted
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 1
+            m_CallState: 2
   - animClip: {fileID: 7400000, guid: 9ae063d50bbba26428c0ab8c72b60cc6, type: 2}
     invokableEvents: []
   - animClip: {fileID: 7400000, guid: ad52158b0b25d0444986ea0f5d2fd7cc, type: 2}
@@ -5897,7 +5914,7 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 0
             m_CallState: 2
-  - animClip: {fileID: 7400000, guid: eed96735346199546b6a4c89904f2d62, type: 2}
+  - animClip: {fileID: 7400000, guid: 24394f2fd5f4ee74186a052994d62fb2, type: 2}
     invokableEvents:
     - time: 0
       events:
@@ -5931,7 +5948,7 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 0
             m_CallState: 2
-  - animClip: {fileID: 7400000, guid: c82d7d6ca14d9bd4e90031325db2ce02, type: 2}
+  - animClip: {fileID: 7400000, guid: 66f9ed5990cca6b4693fd18190eeea4d, type: 2}
     invokableEvents:
     - time: 2
       events:
@@ -5961,7 +5978,7 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 0
             m_CallState: 2
-  - animClip: {fileID: 7400000, guid: 5c8cce818e9ab924e8f4e3c57b049d21, type: 2}
+  - animClip: {fileID: 7400000, guid: e46dde6bc0c21e64e8209987235e47ce, type: 2}
     invokableEvents: []
 --- !u!1 &9177404646879940553
 GameObject:
@@ -6037,12 +6054,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -859874625, guid: 0d3c2d84ec4b2924cb8e58fce957550d, type: 3}
+  m_Sprite: {fileID: 532546254, guid: a8a2cc7e96276e543ab026f2f97bce0c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.68, y: 0.83}
+  m_Size: {x: 0.7, y: 0.72}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1

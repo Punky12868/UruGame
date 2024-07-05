@@ -52,6 +52,8 @@ public class WitchEnemy : EnemyBase
     [SerializeField] protected float offset = 0.05f;
     [SerializeField] protected float yOffset = -1; 
     [SerializeField] protected Transform centerAirPoint;
+    [SerializeField] protected GameObject changeGroundPrefab;
+    [SerializeField] protected GameObject mortarIndicator;
 
     protected bool normalAttack;
     protected bool canAttack;
@@ -273,7 +275,7 @@ public class WitchEnemy : EnemyBase
 
             if (random < oddsToSpecialAttack)
             {
-                if (randomAttackSelection <= 150)
+                if (randomAttackSelection <= 50)
                 {
                     if (wasOnSpecialOnce)
                     {
@@ -285,23 +287,29 @@ public class WitchEnemy : EnemyBase
 
                     decidedChargeAttack = true;
                     Invoke("ResetDecitionStatus", chargeDecitionCooldown);
-                    if (oddsToSpecialAttack == maxOdds) oddsToSpecialAttack = 450;
+                    if (oddsToSpecialAttack == maxOdds) oddsToSpecialAttack = 650;
                     if (closeAttackRange == 0) closeAttackRange = storedMeleeRange;
                     isOnSpecial = true;
                     if (!wasOnSpecialOnce) wasOnSpecialOnce = true;
                 }
-                else if (randomAttackSelection > 150 /*&& randomAttackSelection < 666*/)
+                else if (randomAttackSelection > 50 && randomAttackSelection < 666)
                 {
-                    //if (decidedChargeAttack) return;
-                    onMortar = true;
+                    if (!onGroundChange)
+                    {
+                        onMortar = true;
+                        PlayAnimation(4);
+                    }
                 }
-                /*else if (randomAttackSelection > 666)
+                else if (randomAttackSelection > 666)
                 {
-                    if (decidedChargeAttack) return;
-
-                    onGroundChange = true;
-                    PlayAnimation(8);
-                }*/
+                    if (!onMortar)
+                    {
+                        Debug.Log("Ground ChangeWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
+                        onGroundChange = true;
+                        PlayAnimation(6);
+                        Invoke("SpawnGroundChange", 1);
+                    }
+                }
             }
 
             chargeAttackedConsidered = true;
@@ -322,9 +330,31 @@ public class WitchEnemy : EnemyBase
         else { if (isAttacking == true) isAttacking = false; }
     }
 
+    public void SpawnGroundChange()
+    {
+        GameObject indicatorSpawned = Instantiate(mortarIndicator, transform.position, Quaternion.Euler(-90, 0, 0));
+        indicatorSpawned.transform.position = FindObjectOfType<PlayerControllerOverhaul>().transform.position + new Vector3(0, 0.1f, 0);
+        Invoke("GroundChange", 1);
+    }
+
+    private void GroundChange()
+    {
+        GameObject indicatorSpawned = Instantiate(changeGroundPrefab, transform.position, Quaternion.identity);
+        Vector3 vector3 = FindObjectOfType<DeleteItself>().transform.position;
+        vector3.y = -0.5f;
+        indicatorSpawned.transform.position = vector3;
+
+        Invoke("GroundChangeReset", 1);
+    }
+
+    private void GroundChangeReset()
+    {
+        onGroundChange = false;
+    }
+
     private void Mortar()
     {
-        if (!onMortar) return;
+        if (!onMortar || onGroundChange) return;
         if (mortarTimer >= mortarsSpawnRate)
         {
             mortarTimer = 0;
@@ -362,7 +392,7 @@ public class WitchEnemy : EnemyBase
 
     public void SummonProjectile()
     {
-        if (isOnCooldown || onMortar) return;
+        if (isOnCooldown || onMortar || onGroundChange) return;
         isOnCooldown = true;
         GameObject prjctl = Instantiate(projectile, projectileSpawnPoint.position, projectileSpawnPoint.rotation);
         prjctl.GetComponent<ProjectileLogic>().SetVariables
@@ -372,7 +402,7 @@ public class WitchEnemy : EnemyBase
 
     public void SummonMortarProjectile()
     {
-        //if (isOnCooldown) return;
+        if (onGroundChange) return;
         //isOnCooldown = true;
         GameObject prjctl = Instantiate(projectile, projectileSpawnPoint.position, Quaternion.identity);
         prjctl.GetComponent<ProjectileLogic>().SetVariables
@@ -417,7 +447,7 @@ public class WitchEnemy : EnemyBase
         if (hasHealthBar) healthBar.GetComponentInParent<CanvasGroup>().DOFade(0, 0.5f);
         if (hasHealthBar) Destroy(healthBar.GetComponentInParent<CanvasGroup>().gameObject, 0.499f);
         Destroy(GetComponent<Collider>());
-        Invoker.CancelInvoke(DissapearBar);
+        //Invoker.CancelInvoke(DissapearBar);
         //Destroy(audioSource);
         if (destroyOnDeath) { Destroy(gameObject, 0.5f); return; }
         this.enabled = false;
