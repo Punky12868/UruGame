@@ -15311,7 +15311,15 @@ MonoBehaviour:
   hitThreshold: 10
   timeAfterRandomNoise: 30
   startGame:
-    allDialogues: []
+    allDialogues:
+    - audioClip: {fileID: 8300000, guid: 972d3a74d5e47de4ab1291e516fd0c76, type: 3}
+      Dialog: "No narrar\xE9 la historia dos veces\u2026"
+      HasChain: 1
+      chainedDialogues:
+      - Dialog: Tienes que entender
+        audioClip: {fileID: 8300000, guid: 62441246296e0eb458ef5c6381052ce4, type: 3}
+      - Dialog: "\xA1T\xDA! No deber\xEDas de estar aqu\xED"
+        audioClip: {fileID: 8300000, guid: fbaa08fd95d41c542b4d1c972a5eda00, type: 3}
   endGame:
     allDialogues: []
   playerLowHealth:
@@ -15366,7 +15374,7 @@ MonoBehaviour:
       chainedDialogues: []
   playerParry:
     allDialogues:
-    - audioClip: {fileID: 8300000, guid: 6f11bd8879d7b884193ddda63439df44, type: 3}
+    - audioClip: {fileID: 8300000, guid: 35491c602f9bcaf4e852ed5aa917aa1d, type: 3}
       Dialog: "Fue un bloqueo de suerte\u2026"
       HasChain: 0
       chainedDialogues: []
@@ -15398,7 +15406,7 @@ MonoBehaviour:
       Dialog: Ya era hora, cierra el juego
       HasChain: 0
       chainedDialogues: []
-    - audioClip: {fileID: 8300000, guid: d5a199fc607931d48b42dcf0b5090499, type: 3}
+    - audioClip: {fileID: 8300000, guid: 305325d6e104feb419fe7c91366ed65b, type: 3}
       Dialog: "Ni el primer jugador fue tan malo\u2026"
       HasChain: 0
       chainedDialogues: []
@@ -16057,7 +16065,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.24222328, y: 0.000000018664435, z: -0.0000000046597255, w: 0.97022057}
+  m_LocalRotation: {x: 0.2422233, y: -0.000000018664444, z: 0.000000004659727, w: 0.97022057}
   m_LocalPosition: {x: 0, y: 4.1967, z: -17.72}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -17028,7 +17036,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1250584742}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.00000001866444, y: 0.24222337, z: 0.97022057, w: -0.0000000046597264}
+  m_LocalRotation: {x: -0.00000001866445, y: 0.24222337, z: 0.97022057, w: 0.0000000046597277}
   m_LocalPosition: {x: 0, y: -4.1967, z: -7.8810287}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -17495,7 +17503,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1332516484}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.24222328, y: 0.000000018664435, z: -0.0000000046597255, w: 0.97022057}
+  m_LocalRotation: {x: 0.2422233, y: -0.000000018664444, z: 0.000000004659727, w: 0.97022057}
   m_LocalPosition: {x: 0, y: 4.1967, z: -17.72}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
