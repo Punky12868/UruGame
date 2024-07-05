@@ -17,49 +17,6 @@ MonoBehaviour:
   injectionPoint: 600
   requirements: 4
   passIndex: 0
---- !u!114 &-6294715095707873089
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d26b8cda2614cfd49b62617c9c17c63c, type: 3}
-  m_Name: CRTRendererFeature
-  m_EditorClassIdentifier: 
-  m_Active: 1
-  shader: {fileID: 4800000, guid: 6f2fcdc189458914eb8a323f19e3a27b, type: 3}
-  preset: 6
-  pixelResolutionX: 389
-  pixelResolutionY: 323
-  screenBend: 6.12
-  screenOverscan: 0
-  blur: 0
-  bleed: 0
-  smidge: 0
-  scanlinesStrength: 3.96
-  apertureStrength: 0
-  shadowlines: 0
-  shadowlinesSpeed: -5
-  shadowlinesAlpha: 0
-  noiseSize: 12.9
-  noiseSpeed: 0.91
-  noiseAlpha: 0.009
-  vignetteSize: 5.69
-  vignetteSmooth: 6.89
-  vignetteRound: 36.6
-  brightness: 0
-  contrast: 1
-  gamma: 1
-  red: 1
-  green: 1
-  blue: 1
-  chromaticAberration: 0.35
-  redOffset: {x: 0.035, y: 0.035}
-  blueOffset: {x: 0, y: -0.049}
-  greenOffset: {x: -0.035, y: 0.035}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -77,8 +34,7 @@ MonoBehaviour:
     hdrDebugViewPS: {fileID: 4800000, guid: 573620ae32aec764abd4d728906d2587, type: 3}
   m_RendererFeatures:
   - {fileID: -8046872282941106482}
-  - {fileID: -6294715095707873089}
-  m_RendererFeatureMap: ced65bf64ac45390bf100ba6f8ada4a8
+  m_RendererFeatureMap: ced65bf64ac45390
   m_UseNativeRenderPass: 0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
