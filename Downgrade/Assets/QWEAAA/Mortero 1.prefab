@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8265143328624409262
+--- !u!1 &8994202777934471981
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,39 +8,39 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7759844352706563527}
-  - component: {fileID: 2610204883020368929}
-  - component: {fileID: 1458867239843564595}
-  - component: {fileID: 2017498576889103710}
+  - component: {fileID: 8466696212111032753}
+  - component: {fileID: 4772588068456821806}
+  - component: {fileID: 6282264183046442272}
+  - component: {fileID: 4867005263071615449}
   m_Layer: 0
-  m_Name: Spike
+  m_Name: Mortero 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7759844352706563527
+--- !u!4 &8466696212111032753
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8265143328624409262}
+  m_GameObject: {fileID: 8994202777934471981}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.9538324, y: 0.030403316, z: 0.7453635}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
-  m_ConstrainProportionsScale: 1
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0.032, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &2610204883020368929
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+--- !u!212 &4772588068456821806
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8265143328624409262}
+  m_GameObject: {fileID: 8994202777934471981}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -75,28 +75,28 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 68501407, guid: 8e20f02fbf86f1d43a955bf6b4a95852, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: 2140520247, guid: 00a79f97639da8e439301f90eacd9bd8, type: 3}
+  m_Color: {r: 0.7764706, g: 0.3002791, b: 0.27058822, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.49, y: 0.07}
+  m_Size: {x: 1.92, y: 1.92}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!95 &1458867239843564595
+--- !u!95 &6282264183046442272
 Animator:
   serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8265143328624409262}
+  m_GameObject: {fileID: 8994202777934471981}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: c42db59b55f14174293bf6c383bf94b6, type: 2}
+  m_Controller: {fileID: 9100000, guid: 3235bb5fd851e3c4e87d05c1b54d4439, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -107,28 +107,16 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &2017498576889103710
+--- !u!114 &4867005263071615449
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8265143328624409262}
+  m_GameObject: {fileID: 8994202777934471981}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d866a115f38608445a90d6bb52b0d374, type: 3}
+  m_Script: {fileID: 11500000, guid: c67fd1be7914bf445b511cd743d01d98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spikeOutClip: {fileID: 7400000, guid: 851b42930ec57a44ea8e39446f1cc11d, type: 2}
-  spikePrefab: {fileID: 8265143328624409262}
-  customDamage: 20
-  spawnTime: 0.03
-  hitboxAppearTime: 0.15
-  cooldownOnHit: 0.5
-  spacing: 0.5
-  maxSpikes: 10
-  hitboxCenter: {fileID: 7759844352706563527}
-  hitboxSize: {x: 0.25, y: 0.2, z: 0.25}
-  hitboxOffset: {x: 0, y: 0.2, z: 0}
-  hitboxAppearColor: {r: 0, g: 0, b: 1, a: 1}
-  hitboxNormalColor: {r: 0, g: 1, b: 0, a: 1}
+  timeToLive: 2

@@ -317,7 +317,7 @@ MonoBehaviour:
   enemyType: 3
   behaviourType: 1
   summoned: 0
-  enemyName: Witch
+  enemyName: Yaga
   health: 450
   speed: 3
   attackDamage: 15
@@ -388,7 +388,7 @@ MonoBehaviour:
   projectileSpawnPoint: {fileID: 5629848907784323329}
   projectileCanBeParried: 1
   projectileLifeTime: 5
-  projectileSpeed: 10
+  projectileSpeed: 5
   maxOdds: 1000
   oddsToSpecialAttack: 500
   hitboxCenter: {fileID: 5800207430045569620}
@@ -403,6 +403,8 @@ MonoBehaviour:
   offset: 0.2
   yOffset: -0.2
   centerAirPoint: {fileID: 0}
+  changeGroundPrefab: {fileID: 3263342103215625896, guid: fa269b7e9dcd1764aba0dcc8c6d9f46c, type: 3}
+  mortarIndicator: {fileID: 8994202777934471981, guid: 87175086318d8a5489aee68d882956bc, type: 3}
 --- !u!114 &7083601060748340363
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -416,13 +418,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animations:
-  - animClip: {fileID: 7400000, guid: 9321ad50eb5ce414eabf745358fedbc8, type: 2}
+  - animClip: {fileID: 7400000, guid: caa402cdb61f0224ab42dc0814647467, type: 2}
     invokableEvents: []
-  - animClip: {fileID: 7400000, guid: c3409e5e1e8fdbe408acffb18fb53cef, type: 2}
-    invokableEvents: []
-  - animClip: {fileID: 7400000, guid: 41c413b4fbf6c7e47a7e9d477e1f49e5, type: 2}
-    invokableEvents: []
-  - animClip: {fileID: 7400000, guid: 5d17b134ca2243042855e9d69974870d, type: 2}
+  - animClip: {fileID: 7400000, guid: e3bdfd05edace004f995afea19587e19, type: 2}
     invokableEvents:
     - time: 0.75
       events:
@@ -438,7 +436,7 @@ MonoBehaviour:
               m_IntArgument: 0
               m_FloatArgument: 0
               m_StringArgument: 
-              m_BoolArgument: 1
+              m_BoolArgument: 0
             m_CallState: 2
           - m_Target: {fileID: 8988016895151997845}
             m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
@@ -468,9 +466,9 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 0
             m_CallState: 2
-  - animClip: {fileID: 7400000, guid: b2ff5b325e04a6444ae6d0a032992da5, type: 2}
+  - animClip: {fileID: 7400000, guid: fb777103276b1584c98311b069575e7f, type: 2}
     invokableEvents:
-    - time: 0.7
+    - time: 0.2
       events:
         m_PersistentCalls:
           m_Calls:
@@ -496,7 +494,7 @@ MonoBehaviour:
               m_IntArgument: 0
               m_FloatArgument: 0
               m_StringArgument: 
-              m_BoolArgument: 1
+              m_BoolArgument: 0
             m_CallState: 2
           - m_Target: {fileID: 8988016895151997845}
             m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
@@ -508,7 +506,7 @@ MonoBehaviour:
               m_IntArgument: 0
               m_FloatArgument: 0
               m_StringArgument: 
-              m_BoolArgument: 1
+              m_BoolArgument: 0
             m_CallState: 2
           - m_Target: {fileID: 8988016895151997845}
             m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
@@ -522,7 +520,7 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 1
             m_CallState: 2
-    - time: 0.8
+    - time: 0
       events:
         m_PersistentCalls:
           m_Calls:
@@ -550,7 +548,7 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 1
             m_CallState: 2
-    - time: 1.3
+    - time: 1
       events:
         m_PersistentCalls:
           m_Calls:
@@ -578,13 +576,59 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 0
             m_CallState: 2
-  - animClip: {fileID: 7400000, guid: 573f061fb523f3f4db0ffd221a1981db, type: 2}
+  - animClip: {fileID: 7400000, guid: 0a717d2c4059e1e46a48153c39c39e82, type: 2}
+    invokableEvents:
+    - time: 0.75
+      events:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 8988016895151997845}
+            m_TargetAssemblyTypeName: WitchEnemy, Assembly-CSharp
+            m_MethodName: SummonProjectile
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: 8988016895151997845}
+            m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
+            m_MethodName: SetIsAttacking
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 1
+            m_CallState: 2
+    - time: 0.85
+      events:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 8988016895151997845}
+            m_TargetAssemblyTypeName: EnemyBase, Assembly-CSharp
+            m_MethodName: SetIsAttacking
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+  - animClip: {fileID: 7400000, guid: acc28bf48a486a8468e5d38d355483ef, type: 2}
     invokableEvents: []
-  - animClip: {fileID: 7400000, guid: b2ff5b325e04a6444ae6d0a032992da5, type: 2}
+  - animClip: {fileID: 7400000, guid: 522852dce7817db40bff04b0addbf0ac, type: 2}
     invokableEvents: []
-  - animClip: {fileID: 7400000, guid: 78113dbb653bca043bd328327946a7bc, type: 2}
+  - animClip: {fileID: 7400000, guid: a29917e1e93a53f4db398e6f96cc3216, type: 2}
     invokableEvents: []
-  - animClip: {fileID: 7400000, guid: b2ff5b325e04a6444ae6d0a032992da5, type: 2}
+  - animClip: {fileID: 7400000, guid: 772d9fec8c556fe4ea75ec49952e6e32, type: 2}
     invokableEvents: []
 --- !u!1 &5559705339100546194
 GameObject:
