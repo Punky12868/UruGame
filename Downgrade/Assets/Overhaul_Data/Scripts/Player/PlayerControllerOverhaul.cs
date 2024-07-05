@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Rewired;
-using static UnityEngine.Rendering.HableCurve;
 
 [RequireComponent(typeof(PlayerInventory))] [RequireComponent(typeof(PlayerInteraction))]
 [RequireComponent(typeof(AnimationHolder))] [RequireComponent(typeof(Rigidbody))]
@@ -543,6 +542,12 @@ public class PlayerControllerOverhaul : Subject, IAnimController
         _hitParticleEmission.enabled = true;
         Invoker.InvokeDelayed(DisableHitParticles, 0.1f);
 
+        if (CeckMaterialFloat("_HitFloat", 0))
+        {
+            GetComponent<SpriteRenderer>().material.SetFloat("_HitFloat", 1);
+            Invoke("HitMaterialReset", 0.2f);
+        }
+
         if (currentHealth <= 0) Die();
         else
         {
@@ -656,6 +661,12 @@ public class PlayerControllerOverhaul : Subject, IAnimController
         else hitboxCenter.localScale = new Vector3(-1, hitboxCenter.localScale.y, hitboxCenter.localScale.z);
     }
     #endregion
+
+    private bool CeckMaterialFloat(string name, float value)
+    {
+        if (GetComponent<SpriteRenderer>().material.GetFloat(name) == value) return true;
+        else return false;
+    }
     #endregion
 
     #region VFX
@@ -788,6 +799,7 @@ public class PlayerControllerOverhaul : Subject, IAnimController
     public void ResetAbilityCooldown() { isAbilityOnCooldown = false;}
     public void InvertVFXColors() { inpactVFX.SetFloat("_InvertColor", inpactVFX.GetFloat("_InvertColor") == 0 ? 1 : 0); }
     public void DisableVFX() { inpactVFX.SetFloat("_isOn", 0); inpactVFX.SetFloat("_UsingGlitch", 0); }
+    public void HitMaterialReset() { GetComponent<SpriteRenderer>().material.SetFloat("_HitFloat", 0); }
     #endregion
 
     #endregion
