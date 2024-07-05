@@ -19751,7 +19751,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: b39a8d9b4df898645ba9991e1331b330, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -19868,6 +19868,7 @@ MonoBehaviour:
   abilityDamage: 10
   abilityKnockback: 15
   abilityLifeTime: 2
+  abilityConsecutiveMax: 3
   healthBigEnemyReward: 5
   healthBossReward: 10
   staminaNormalReward: 25
