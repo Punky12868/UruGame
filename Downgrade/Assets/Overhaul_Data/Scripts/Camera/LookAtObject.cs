@@ -13,6 +13,7 @@ public class LookAtObject : MonoBehaviour
 
     private void Awake()
     {
+        transform.position = new Vector3(0, -0.5f, 0);
         player = GameObject.FindGameObjectWithTag("Player").transform;
         scenario = GameObject.FindGameObjectWithTag("Scenario").transform;
     }
