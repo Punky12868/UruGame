@@ -10,6 +10,8 @@ public class ProjectileLogic : MonoBehaviour
     [SerializeField] private float mortarGroundLimit = 0.2f;
     [SerializeField] private Vector3 parryDetectionSize = new Vector3(0.5f, 0.5f, 0.5f);
     [SerializeField] private Color parryDetectionColor = new Color(1, 0, 0, 1);
+    [SerializeField] private GameObject indicator;
+    GameObject previousIndicator;
     private float travelSpeed;
     private float damage;
     private float knockbackForce;
@@ -21,7 +23,7 @@ public class ProjectileLogic : MonoBehaviour
     private Transform child;
     private bool isFromMortar;
 
-    public void SetVariables(float speed, float dmg, float lftime, float knckbck, bool parry, Vector3 dir, AudioClip[] prrySnd, GameObject orgnlEnemy, bool fromMortar = false, bool spawnedMortar = false)
+    public void SetVariables(float speed, float dmg, float lftime, float knckbck, bool parry, Vector3 dir, AudioClip[] prrySnd, GameObject orgnlEnemy, bool fromMortar = false, bool spawnedMortar = false, GameObject prevInd = null)
     {
         travelSpeed = speed;
         damage = dmg;
@@ -42,6 +44,7 @@ public class ProjectileLogic : MonoBehaviour
         {
             Transform target = GameObject.FindGameObjectWithTag("Player").transform;
             transform.position = new Vector3(target.position.x, transform.position.y, target.position.z);
+            previousIndicator = prevInd;
         }
 
         child = GetComponentInChildren<SpriteRenderer>().transform;
@@ -73,6 +76,7 @@ public class ProjectileLogic : MonoBehaviour
 
             if (transform.position.y <= mortarGroundLimit)
             {
+                Destroy(previousIndicator);
                 Destroy(gameObject);
                 //ChangeGround
             }
@@ -82,7 +86,9 @@ public class ProjectileLogic : MonoBehaviour
     private void SpawnAnotherProjectile()
     {
         GameObject prjctl = Instantiate(gameObject, transform.position, transform.rotation);
-        prjctl.GetComponent<ProjectileLogic>().SetVariables(travelSpeed, damage, 5, knockbackForce, false, direction, parrySounds, originalEnemy, true, true);
+        GameObject a = Instantiate(indicator, FindObjectOfType<PlayerControllerOverhaul>().transform.position + new Vector3(0, 0.1f, 0), Quaternion.Euler(-90, 0, 0));
+        prjctl.GetComponent<ProjectileLogic>().SetVariables(travelSpeed, damage, 5, knockbackForce, false, direction, parrySounds, originalEnemy, true, true, a);
+
     }
 
     private void CheckForPlayerParry()
@@ -118,6 +124,8 @@ public class ProjectileLogic : MonoBehaviour
             if (!other.GetComponent<PlayerControllerOverhaul>().GetImmunity())
             {
                 other.GetComponent<PlayerControllerOverhaul>().TakeDamageProxy(damage, knockbackForce, -direction);
+
+                if (isFromMortar) Destroy(previousIndicator);
                 Destroy(gameObject);
             }
         }
@@ -125,12 +133,14 @@ public class ProjectileLogic : MonoBehaviour
         if (other.CompareTag("Enemy") && isParried)
         {
             other.GetComponent<EnemyBase>().TakeDamageProxy(damage);
+            if (isFromMortar) Destroy(previousIndicator);
             Destroy(gameObject);
         }
 
         if (other.CompareTag("Wall") || other.CompareTag("Limits"))
         {
-            if(destroyOnLimits) Destroy(gameObject);
+            if (isFromMortar) return;
+            if (destroyOnLimits) Destroy(gameObject);
         }
     }
 

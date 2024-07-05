@@ -84,9 +84,14 @@ public class WaveSystem : MonoBehaviour
                 victory = true;
                 Debug.Log("All waves are finished");
                 AudioManager.instance.PlaySFX(1);
-                GameManager.Instance.Victory(isBossArea);
+                Invoke("Victory", 2.0f);
             }
         }
+    }
+
+    private void Victory()
+    {
+        GameManager.Instance.Victory(isBossArea);
     }
 
     public void SpawnEnemy(Vector3 pos)

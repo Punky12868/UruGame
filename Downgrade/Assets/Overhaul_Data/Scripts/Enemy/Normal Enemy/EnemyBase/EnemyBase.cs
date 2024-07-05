@@ -162,7 +162,7 @@ public class EnemyBase : Subject, IAnimController
         if (hasHealthBar) healthBar.GetComponentInParent<CanvasGroup>().DOFade(0, 0.5f);
         if (hasHealthBar) Destroy(healthBar.GetComponentInParent<CanvasGroup>().gameObject, 0.499f);
         Destroy(GetComponent<Collider>());
-        Invoker.CancelInvoke(DissapearBar);
+        //Invoker.CancelInvoke(DissapearBar);
         //Destroy(audioSource);
         if (destroyOnDeath) { Destroy(gameObject, 0.5f); return; }
         //Destroy(this);
@@ -184,7 +184,7 @@ public class EnemyBase : Subject, IAnimController
         {
             healthBar.GetComponentInParent<CanvasGroup>().DOFade(1, onHitAppearSpeed).SetUpdate(UpdateType.Normal, true);
             //Invoker.CancelInvoke(DissapearBar);
-            Invoke("DissapearBar", onHitBarCooldown);
+            //Invoke("DissapearBar", onHitBarCooldown);
         }
 
         if (currentHealth <= 0) { Death(); }
@@ -307,7 +307,7 @@ public class EnemyBase : Subject, IAnimController
         healthBarBg.value = Mathf.Lerp(healthBarBg.value, currentHealth, Time.deltaTime * healthBarBgSpeed);
     }
 
-    protected void DissapearBar() { healthBar.GetComponentInParent<CanvasGroup>().DOFade(0, onHitDisappearSpeed).SetUpdate(UpdateType.Normal, true); }
+    //protected void DissapearBar() { healthBar.GetComponentInParent<CanvasGroup>().DOFade(0, onHitDisappearSpeed).SetUpdate(UpdateType.Normal, true); }
     #endregion
 
     public void DoCameraShake() { GameManager.Instance.CameraShake(cameraShakeDuration, cameraShakeMagnitude, cameraShakeGain); }
