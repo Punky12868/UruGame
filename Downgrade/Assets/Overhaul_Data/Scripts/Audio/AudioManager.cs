@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine.Audio;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class AudioManager : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private float pausedLowPassFreq = 500.00f;
     [SerializeField] private float lowPassFreqLerpSpeed = 0.5f;
     private float lowPassValue;
+    bool lowpass;
 
     [SerializeField] private AudioMixer mixer;
     [SerializeField] private AudioSource music;
@@ -41,7 +43,7 @@ public class AudioManager : MonoBehaviour
 
     private void Update()
     {
-        lowPassValue = Mathf.Lerp(lowPassValue, GameManager.Instance.IsGamePaused() ? pausedLowPassFreq : normalLowPassFreq, lowPassFreqLerpSpeed * Time.unscaledDeltaTime);
+        lowPassValue = Mathf.Lerp(lowPassValue, lowpass ? pausedLowPassFreq : normalLowPassFreq, lowPassFreqLerpSpeed * Time.unscaledDeltaTime);
         mixer.SetFloat("MusicLowPassFreq", lowPassValue);
 
         if (music.clip == null) return;
@@ -118,4 +120,16 @@ public class AudioManager : MonoBehaviour
     }
 
     public void SetCurrentMusicIndex(int index) { currentMusicIndex = index; PlayMusic(index); }
+    private void DoLowPass() 
+    { 
+        if (GameManager.Instance.IsGamePaused())
+        {
+            lowpass = true;
+        }
+        else if (SceneManager.GetActiveScene().buildIndex != GameManager.Instance.GetDowngradeSceneIndex() && !GameManager.Instance.IsGamePaused())
+        {
+            lowpass = false;
+        }
+    }
+    public void SetLowPass(bool value) { lowpass = value; }
 }

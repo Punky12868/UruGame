@@ -25,7 +25,7 @@ public class SetPlayerMap : MonoBehaviour
 
         if (currentSceneIndex != SceneManager.GetActiveScene().buildIndex && !sceneChange)
         {
-            Log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaa");
+            //Log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaa");
             sceneChange = true;
             Invoker.InvokeDelayed(LoadAllMaps, 0.1f);
             //LoadAllMaps();
@@ -45,21 +45,23 @@ public class SetPlayerMap : MonoBehaviour
 
         if (loadUiMap)
         {
+            ReInput.players.GetPlayer(0).controllers.maps.LoadMap(ControllerType.Keyboard, 0, "Default", "Default", false);
+            ReInput.players.GetPlayer(0).controllers.maps.LoadMap(ControllerType.Keyboard, 0, "UI", "Default", true);
+
             ReInput.players.GetPlayer(0).controllers.maps.LoadMap(ControllerType.Joystick, 0, "Default", "Default", false);
             ReInput.players.GetPlayer(0).controllers.maps.LoadMap(ControllerType.Joystick, 0, "UI", "Default", true);
 
-            ReInput.players.GetPlayer(0).controllers.maps.LoadMap(ControllerType.Keyboard, 0, "Default", "Default", false);
-            ReInput.players.GetPlayer(0).controllers.maps.LoadMap(ControllerType.Keyboard, 0, "UI", "Default", true);
             lastCategoryLoaded = "UI";
             Log("Loaded UI maps");
         }
         else
         {
-            ReInput.players.GetPlayer(0).controllers.maps.LoadMap(ControllerType.Joystick, 0, "UI", "Default", false);
-            ReInput.players.GetPlayer(0).controllers.maps.LoadMap(ControllerType.Joystick, 0, "Default", "Default", true);
-
             ReInput.players.GetPlayer(0).controllers.maps.LoadMap(ControllerType.Keyboard, 0, "UI", "Default", false);
             ReInput.players.GetPlayer(0).controllers.maps.LoadMap(ControllerType.Keyboard, 0, "Default", "Default", true);
+
+            ReInput.players.GetPlayer(0).controllers.maps.LoadMap(ControllerType.Joystick, 0, "UI", "Default", false);
+            ReInput.players.GetPlayer(0).controllers.maps.LoadMap(ControllerType.Joystick, 0, "Default", "Default", true);
+            
             lastCategoryLoaded = "Default";
             Log("Loaded Default maps");
         }

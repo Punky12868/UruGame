@@ -11,6 +11,7 @@ public class ProjectileLogic : MonoBehaviour
     [SerializeField] private Vector3 parryDetectionSize = new Vector3(0.5f, 0.5f, 0.5f);
     [SerializeField] private Color parryDetectionColor = new Color(1, 0, 0, 1);
     [SerializeField] private GameObject indicator;
+    [SerializeField] private GameObject vfx;
     GameObject previousIndicator;
     private float travelSpeed;
     private float damage;
@@ -77,6 +78,7 @@ public class ProjectileLogic : MonoBehaviour
             if (transform.position.y <= mortarGroundLimit)
             {
                 Destroy(previousIndicator);
+                Instantiate(vfx, transform.position, Quaternion.identity);
                 Destroy(gameObject);
                 //ChangeGround
             }
@@ -125,7 +127,11 @@ public class ProjectileLogic : MonoBehaviour
             {
                 other.GetComponent<PlayerControllerOverhaul>().TakeDamageProxy(damage, knockbackForce, -direction);
 
-                if (isFromMortar) Destroy(previousIndicator);
+                if (isFromMortar)
+                {
+                    Destroy(previousIndicator);
+                    Instantiate(vfx, transform.position, Quaternion.identity);
+                }
                 Destroy(gameObject);
             }
         }
@@ -133,7 +139,11 @@ public class ProjectileLogic : MonoBehaviour
         if (other.CompareTag("Enemy") && isParried)
         {
             other.GetComponent<EnemyBase>().TakeDamageProxy(damage);
-            if (isFromMortar) Destroy(previousIndicator);
+            if (isFromMortar)
+            {
+                Destroy(previousIndicator);
+                Instantiate(vfx, transform.position, Quaternion.identity);
+            }
             Destroy(gameObject);
         }
 

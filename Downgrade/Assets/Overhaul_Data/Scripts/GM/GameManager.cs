@@ -255,6 +255,11 @@ public class GameManager : MonoBehaviour
         return showedBossCinematic;
     }
 
+    public int GetDowngradeSceneIndex()
+    {
+        return downgradeSceneIndex;
+    }
+
     public void CameraShake(float duration, float magnitude, float gain, bool fadeOnStop = false)
     {
         // cinemachine camera shake

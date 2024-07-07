@@ -107,6 +107,11 @@ public class MenuController : MonoBehaviour
         InvokeMethods();
     }
 
+    public void CancelButtonSim()
+    {
+        LoadHistory();
+    }
+
     #endregion
 
     #region Lists History

@@ -29,9 +29,10 @@ public class DialogueDowngrade : MonoBehaviour
     bool specialEventCalled;
     Player input;
 
-    private void Awake() { if (delayAwake) Invoker.InvokeDelayed(DelayedAwake, 0.1f); else { DelayedAwake(); } }
+    private void Awake() { if (delayAwake) Invoker.InvokeDelayed(DelayedAwake, 0.2f); else { DelayedAwake(); } }
     private void DelayedAwake()
     {
+        AudioManager.instance.SetLowPass(true);
         if (GameManager.Instance.GetIntroText()) { DeletePanel(); return; }
         onIntroStart?.Invoke(); ShowNexSentence(); GameManager.Instance.SetIntroText(true); if (canSkip) input = ReInput.players.GetPlayer(0);
     }
